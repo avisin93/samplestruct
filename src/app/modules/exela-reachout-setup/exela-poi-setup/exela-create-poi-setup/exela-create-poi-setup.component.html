@@ -1,0 +1,218 @@
+<div class="section-wrap">
+    <div class="top-section row-10">
+        <div class="hidden-xs col-xs-12 col-sm-6">
+            <app-heading-section [heading]="heading">
+                <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+            </app-heading-section>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="middle-section client-setup-tabs-wrap">
+        <!-- <div class="create-poi-information"> -->
+        <mat-card>
+
+            <form [formGroup]="createPoiForm" novalidate>
+                <div class="form-wrap row">
+
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="First Name*" formControlName="firstName" maxlength="50">
+                                    <mat-error i18n *ngIf="createPoiForm.controls['firstName'].hasError('required')">
+                                        First Name is
+                                        <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error i18n *ngIf="createPoiForm.controls['firstName'].hasError('pattern')">
+                                        Only characters are
+                                        <strong>Allowed</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="Middle Name" formControlName="middleName" maxlength="50">
+                                    <mat-error i18n *ngIf="createPoiForm.controls['middleName'].hasError('pattern')">
+                                        Only characters are
+                                        <strong>Allowed</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <!--<textarea mdInput placeholder="Address*" formControlName="add1"></textarea>-->
+                                    <input i18n-placeholder matInput placeholder="Last Name*" formControlName="lastName" maxlength="50">
+                                    <mat-error  i18n *ngIf="createPoiForm.controls['lastName'].hasError('required')">
+                                        Last Name is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error i18n  *ngIf="createPoiForm.controls['lastName'].hasError('pattern')">
+                                        Only characters are <strong>Allowed</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="User Name" formControlName="userName" maxlength="30">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput readonly [matDatepicker]="picker" placeholder="DOB" formControlName="dob" [max]="maxDate">
+                                    <mat-datepicker-toggle  matSuffix [for]="picker">
+                                        <mat-icon matDatepickerToggleIcon class="fa fa-calendar"></mat-icon>
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="radio-cols">
+                                    <label class="fontSize" i18n> Sex*</label>  
+                                    <mat-radio-group formControlName="gender" [ngStyle]="{'marginLeft.rem': 1}">
+                                        <mat-radio-button i18n (click)="addGender($event)" value="Male">Male</mat-radio-button>
+                                        <mat-radio-button i18n (click)="addGender($event)" value="Female">Female</mat-radio-button>
+                                    </mat-radio-group>
+                                    <mat-error i18n *ngIf="selectGender" class="font-smaller">
+                                          Gender is <strong>required</strong>
+                                     </mat-error>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="Age" formControlName="age" maxlength="2">
+                                    <mat-error i18n *ngIf="createPoiForm.controls['age'].hasError('pattern')">
+                                        Age should be only a
+                                        <strong>number</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder  matInput placeholder="Address 1*" formControlName="addr1">
+                                    <mat-error i18n *ngIf="createPoiForm.controls['addr1'].hasError('required')">
+                                        Address is
+                                        <strong>required</strong>
+                                    </mat-error>
+                                </mat-form-field>
+
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="Address 2" formControlName="addr2">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="City" formControlName="city" maxlength="50">
+                                    <mat-error i18n *ngIf="createPoiForm.controls['city'].hasError('pattern')">
+                                        Only characters are
+                                        <strong>Allowed</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="State" formControlName="state" maxlength="50">
+                                    <mat-error i18n *ngIf="createPoiForm.controls['state'].hasError('pattern')">
+                                        Only characters are
+                                        <strong>Allowed</strong>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="Zip*" formControlName="zip" maxlength="30" (keypress)="restrictNumeric($event)">
+                                    <mat-error i18n *ngIf="createPoiForm.controls['zip'].hasError('required')">
+                                        Zip code is
+                                        <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error i18n *ngIf="createPoiForm.controls['zip'].hasError('pattern')">
+                                        Please enter a valid zip code.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="Home Phone" [textMask]="{mask: phoneMask}"   type="text" formControlName="homePhone">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput [textMask]="{mask: phoneMask}" placeholder="Work Phone" type="text"  formControlName="workPhone" >                                
+                                </mat-form-field>    
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                             <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="Cell Phone*" [textMask]="{mask: phoneMask}" type="text"  formControlName="cellPhone"  (focusout)="hide()" (focusin)="focusFunction()" >
+                                    <mat-error i18n *ngIf="createPoiForm.controls['cellPhone'].hasError('required')">
+                                        Cell Phone is <strong>required</strong>
+                                    </mat-error>
+                              </mat-form-field>
+                              <label i18n class="font-type" *ngIf="showInstruction">Add Number in this format(Countrycode-PhoneNumber)</label>                             
+                               
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="full-width-input-wrap margin-bottom-10">
+                                    <input i18n-placeholder matInput placeholder="Email*" formControlName="email">
+                                    <mat-error *ngIf="createPoiForm.controls['email'].hasError('required')">
+                                        Email Id is <strong>required</strong>
+                                      </mat-error>
+                                      <mat-error *ngIf="createPoiForm.controls['email'].hasError('pattern')">
+                                        Please enter a valid email id.
+                                      </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="mat-select-full-width">
+                                    <mat-select  i18n-placeholder placeholder="Language" formControlName="language" (selectionChange)="langaugeSelect($event)">
+                                        <mat-option *ngFor="let lang of language" [value]="lang.value">
+                                            {{ lang.text }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="mat-select-full-width">
+                                    <mat-select i18n-placeholder placeholder="Alternate Language" formControlName="alternateLanguage">
+                                        <mat-option *ngFor="let lang of alternateLanguage" [value]="lang.value">
+                                            {{ lang.text }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-4 col-xs-12">
+                                <mat-form-field class="mat-select-full-width">
+                                    <mat-select i18n-placeholder placeholder="Customer Group" formControlName="customerGroup">
+                                        <mat-option *ngFor="let escalationmethodname of records" [value]="escalationmethodname.customer_segment">
+                                            {{ escalationmethodname.customer_segment }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-2 col-xs-2 top_mar_20">
+                                <div class="full-width-input-wrap ">
+                                    <a (click)="createCustomeGroupPopup()" class="fontText" style="cursor:pointer;">
+                                        <i i18n-title class="fa fa-plus-circle rule_group_icon fa-2x" aria-hidden="true" title="Add New Rule Group"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-wrap">
+                    <div class="text-right">
+                        <button i18n type="button" mat-button class="app-btn" id="cancel" (click)="gotoPoiSetup()">Cancel</button>
+                        <button i18n type="submit" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="savePoi(createPoiForm)">Save</button>
+                    </div>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+</div>

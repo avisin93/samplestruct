@@ -1,0 +1,120 @@
+<div class="general-terms" [formGroup]="formGroup">
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Billing Frequency" formControlName="billingFrequencyType" required="false">
+            <mat-option *ngFor="let tf of arrayTimeFrequencies" [value]="tf.code" name="billingFrequencyType" ngDefaultControl>
+              {{tf.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('billingFrequencyType').invalid">
+            {{getErrorMessage(formGroup.get('billingFrequencyType'))}}
+          </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-3">
+      <mat-form-field class="col-md-12">
+        <input matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+        placeholder="Credit Period" aria-invalid="false" aria-required="false" formControlName="creditPeriod"
+        name="creditPeriod" required="false">
+        <mat-error *ngIf="formGroup.get('creditPeriod').invalid">
+          {{getErrorMessage(formGroup.get('creditPeriod'), {"pattern" : "Enter Numeric, non-decimal value"})}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-3">
+      <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" formControlName="creditPeriodType">
+              <ng-container *ngFor="let timePeriod of arrayTimePeriod">
+                <mat-option *ngIf="['MONTHS', 'DAYS'].indexOf(timePeriod.code) != -1" [value]="timePeriod.code" name="noticePeriodType" ngDefaultControl>
+                  {{timePeriod.name}}
+                </mat-option>
+              </ng-container>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('creditPeriodType').invalid">
+            {{getErrorMessage(formGroup.get('creditPeriodType'))}}
+          </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field class="col-md-12 mat-form-field-has-prefix">
+        <input 
+          matInput 
+          readonly
+          class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+          placeholder="Billing Start Date" 
+          
+          aria-invalid="false" 
+          aria-required="false" 
+          formControlName="billingStartDate"
+          name="billingStartDate" 
+          [matDatepicker]="billingStartDatePicker"  
+          required="false"
+          (dateChange)="bilingStartDateChanged($event)"
+          (click)="billingStartDatePicker.open()"
+          >
+        <mat-datepicker-toggle matPrefix [for]="billingStartDatePicker">
+          <mat-icon matDatepickerToggleIcon class="fa fa-calendar">
+          </mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #billingStartDatePicker></mat-datepicker>
+        <mat-error *ngIf="formGroup.get('billingStartDate').invalid">
+          {{getErrorMessage(formGroup.get('billingStartDate'))}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-form-field class="col-md-12 mat-form-field-has-prefix">
+        <input 
+          matInput 
+          readonly
+          class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+          placeholder="Billing End Date" 
+          
+          aria-invalid="false" 
+          aria-required="false" 
+          formControlName="billingEndDate"
+          name="billingEndDate" 
+          [matDatepicker]="billingEndDatePicker" 
+          [min]="billingMinEndDate"
+          required="false" 
+          (click)="billingEndDatePicker.open()" 
+          >
+        <mat-datepicker-toggle matPrefix [for]="billingEndDatePicker">
+          <mat-icon matDatepickerToggleIcon class="fa fa-calendar">
+          </mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #billingEndDatePicker></mat-datepicker>
+        <mat-error *ngIf="formGroup.get('billingEndDate').invalid">
+          {{getErrorMessage(formGroup.get('billingEndDate'), {'matDatepickerMin': 'End date should be after start date'})}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Billing Currency" (selectionChange)="saveBillingCurrency($event.value)" formControlName="billingCurrency">
+            <mat-option *ngFor="let cur of arrayCurrencies" [value]="cur.code" name="billingCurrency" ngDefaultControl>
+              {{cur.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('billingCurrency').invalid">
+            {{getErrorMessage(formGroup.get('billingCurrency'))}}
+          </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <mat-form-field class="col-md-12">
+        <textarea matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+        placeholder="Clause" aria-invalid="false" aria-required="false" formControlName="clause"
+        name="clause">
+        </textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

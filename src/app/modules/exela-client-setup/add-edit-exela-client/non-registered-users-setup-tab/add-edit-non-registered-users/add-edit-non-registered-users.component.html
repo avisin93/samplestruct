@@ -1,0 +1,47 @@
+<div class="component-wrap add-edit-dealcode-wrap">
+  <div class="heading-wrap">
+    <div class="inner">
+      <div class="popup-heading">{{heading }}</div>
+      <div class="popup-close" (click)="closePopup()"><i class="material-icons">close</i></div>
+    </div>
+  </div>
+
+  <form [formGroup]="addEditRecipientForm" novalidate>
+    <div class="form-wrap row">
+      <div class="col-sm-4 col-xs-12">
+        <mat-form-field class="full-width-input-wrap">
+          <input i18n-placeholder matInput placeholder="First Name*" maxlength="50" formControlName="firstname">
+          <mat-error i18n *ngIf="addEditRecipientForm.controls['firstname'].hasError('required')">
+            First Name <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-4 col-xs-12">
+        <mat-form-field class="full-width-input-wrap">
+          <input i18n-placeholder matInput placeholder="Last Name*" maxlength="50" formControlName="lastname">
+          <mat-error i18n *ngIf="addEditRecipientForm.controls['lastname'].hasError('required')">
+            Last Name <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-4 col-xs-12">
+        <mat-form-field class="full-width-input-wrap">
+          <input i18n-placeholder matInput placeholder="Email Id*" maxlength="100" formControlName="email">
+          <mat-error i18n *ngIf="addEditRecipientForm.controls['email'].hasError('required')">
+            Email Id <strong>required</strong>
+          </mat-error>
+          <mat-error i18n *ngIf="addEditRecipientForm.controls['email'].hasError('pattern')">
+              Please enter a valid email id.
+            </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  
+  <div class="action-wrap">
+      <div class="text-right">
+        <button i18n type="button" mat-button class="app-btn" id="cancel" (click)="closePopup()">Cancel</button>
+        <button i18n type="submit" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="saveNonRegisterUser(addEditRecipientForm)">{{saveBtnTitle }}</button>
+      </div>
+    </div>
+  </form>
+</div>

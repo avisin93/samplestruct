@@ -1,0 +1,25 @@
+<div [ngClass]="oneSubtab ? 'col-md-4' : 'col-md-6'" style="padding-top: 1.5rem;" [formGroup]="formGroup">
+  <mat-form-field class="col-md-12 mat-form-field-has-prefix">
+    <input
+      matInput
+      readonly
+      class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+      [placeholder]="field.name"
+      aria-invalid="false"
+      aria-required="false"
+      [formControl]="formGroup.controls[field.database_column_name]"
+      name="formGroup.controls[field.database_column_name]"
+      [matDatepicker]="picker"
+      required="false"
+      (click)="picker.open()"
+    />
+    <mat-datepicker-toggle matPrefix [for]="picker">
+      <mat-icon matDatepickerToggleIcon class="fa fa-calendar">
+      </mat-icon>
+    </mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="formGroup.controls[field.database_column_name].invalid">
+      {{ getErrorMessage(formGroup.controls[field.database_column_name]) }}
+    </mat-error>
+  </mat-form-field>
+</div>

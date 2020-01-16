@@ -1,0 +1,181 @@
+<div class="component-wrap add-edit-facilities-wrap">
+  <div class="heading-wrap">
+    <div class="inner">
+      <div class="popup-heading">{{heading}}</div>
+      <div class="popup-close" (click)="closePopup()"><i class="material-icons">close</i></div>
+    </div>
+  </div>
+
+  <form [formGroup]="addEditFacilityForm" novalidate>
+    <div class="form-wrap row">
+      <div class="col-sm-6 col-xs-6">
+        <mat-form-field class="full-width-input-wrap">
+          <input matInput placeholder="Facility Name" formControlName="facilityName">
+          <mat-error *ngIf="addEditFacilityForm.controls['facilityName'].hasError('required')">
+            *Facility Name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="addEditFacilityForm.controls['facilityName'].hasError('minlength')">
+            *Minimum length should be 3 characters
+          </mat-error>
+          <mat-error *ngIf="addEditFacilityForm.controls['facilityName'].hasError('maxlength')">
+            *Maximum Character Length Exceeded
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-xs-6">
+        <mat-form-field class="full-width-input-wrap">
+          <input matInput placeholder="Phone Number" formControlName="phoneNumber">
+          <mat-error *ngIf="addEditFacilityForm.controls['phoneNumber'].hasError('required')">
+            Phone Number is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="addEditFacilityForm.controls['phoneNumber'].hasError('pattern')">
+            *Only Numbers are allowed
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12 col-xs-12">
+        <mat-form-field class="full-width-input-wrap">
+          <input matInput placeholder="Address Line 1" formControlName="address1">
+          <mat-error *ngIf="addEditFacilityForm.controls['address1'].hasError('required')">
+            Address1 is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="addEditFacilityForm.controls['address1'].hasError('minlength')">
+            *Minimum length should be 3 characters
+          </mat-error>
+          <mat-error *ngIf="addEditFacilityForm.controls['address1'].hasError('maxlength')">
+            *Maximum Character Length Exceeded
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12 col-xs-12">
+        <mat-form-field class="full-width-input-wrap">
+          <input matInput placeholder="Address Line 2" formControlName="address2">
+          <mat-error *ngIf="addEditFacilityForm.controls['address2'].hasError('minlength')">
+            *Minimum length should be 3 characters
+          </mat-error>
+          <mat-error *ngIf="addEditFacilityForm.controls['address2'].hasError('maxlength')">
+            *Maximum Character Length Exceeded
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-xs-6">
+        <mat-form-field class="full-width-input-wrap">
+          <input matInput placeholder="City" formControlName="city">
+          <mat-error *ngIf="addEditFacilityForm.controls['city'].hasError('required')">
+            City is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="addEditFacilityForm.controls['city'].hasError('minlength')">
+            *Minimum length should be 3 characters
+          </mat-error>
+          <mat-error *ngIf="addEditFacilityForm.controls['city'].hasError('maxlength')">
+            *Maximum Character Length Exceeded
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-xs-6">
+        <div class="full-width-input-wrap select-box-wrap">
+          <mat-select placeholder="Select State" formControlName="state">
+            <mat-option *ngFor="let state of states" [value]="state.viewValue">
+              {{ state.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="addEditFacilityForm.controls['state'].hasError('required') && addEditFacilityForm.controls['state'].touched">
+            State is <strong>required</strong>
+          </mat-error>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-6">
+        <mat-form-field class="full-width-input-wrap">
+          <input matInput placeholder="Zip Code" formControlName="zipCode">
+          <mat-error *ngIf="addEditFacilityForm.controls['zipCode'].hasError('required')">
+            Zip code is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="addEditFacilityForm.controls['zipCode'].hasError('maxlength')">
+            *Maximum Character Length Exceeded
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-xs-6">
+        <div class="full-width-input-wrap select-box-wrap">
+          <mat-select placeholder="Select Country" formControlName="country">
+            <mat-option *ngFor="let country of countries" [value]="country.viewValue">
+              {{ country.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="addEditFacilityForm.controls['country'].hasError('required') && addEditFacilityForm.controls['country'].touched">
+                Country is <strong>required</strong>
+              </mat-error>
+        </div>
+      </div>
+      <div class="col-sm-12 col-xs-12">
+        <div class="row">
+          <label class="col-xs-12">Hours of Operation</label>
+          <div class="col-xs-6">
+            <mat-form-field class="full-width-input-wrap">
+              <input matInput placeholder="From" class="time-picker" formControlName="hoursOfOperationFrom" dateTimePicker dateFormat="h:i K" enableTime="true" noCalendar="true">
+              <mat-error *ngIf="addEditFacilityForm.controls['hoursOfOperationFrom'].hasError('required')">
+                From is <strong>required</strong>
+              </mat-error>              
+            </mat-form-field>
+          </div>
+          <div class="col-xs-6">
+            <mat-form-field class="full-width-input-wrap">
+              <input matInput placeholder="To" class="time-picker" formControlName="hoursOfOperationTo" dateTimePicker dateFormat="h:i K" enableTime="true" noCalendar="true">
+              <mat-error *ngIf="addEditFacilityForm.controls['hoursOfOperationTo'].hasError('required')">
+                To is <strong>required</strong>
+              </mat-error>              
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-xs-12">
+        <div class="row">
+          <label class="col-xs-12">Days of Operation</label>
+          <div class="col-xs-6">
+            <div class="full-width-input-wrap select-box-wrap">
+              <mat-select placeholder="From" formControlName="daysOfOperationFrom">
+                <mat-option *ngFor="let weekDay of weekDays" [value]="weekDay">
+                  {{ weekDay }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="addEditFacilityForm.controls['daysOfOperationFrom'].hasError('required') && addEditFacilityForm.controls['daysOfOperationFrom'].touched">
+                From is <strong>required</strong>
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="full-width-input-wrap select-box-wrap">
+              <mat-select placeholder="To" formControlName="daysOfOperationTo">
+                <mat-option *ngFor="let weekDay of weekDays" [value]="weekDay">
+                  {{ weekDay }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="addEditFacilityForm.controls['daysOfOperationTo'].hasError('required') && addEditFacilityForm.controls['daysOfOperationTo'].touched">
+                To is <strong>required</strong>
+              </mat-error>
+            </div>
+          </div>
+        </div>
+      </div>
+       <div class="col-sm-6 col-xs-6">
+        <div class="full-width-input-wrap select-box-wrap">
+          <mat-select placeholder="Select Time Zone" formControlName="timeZone">
+            <mat-option *ngFor="let timeZone of timeZones" [value]="timeZone.viewValue">
+              {{ timeZone.viewValue }}
+            </mat-option>
+          </mat-select>  
+          <mat-error *ngIf="addEditFacilityForm.controls['timeZone'].hasError('required') && addEditFacilityForm.controls['timeZone'].touched">
+                Time Zone is <strong>required</strong>
+              </mat-error>
+        </div>  
+      </div>
+    </div>
+
+    <div class="action-wrap">
+      <div class="text-right">
+        <button type="button" mat-button class="app-btn gray-button" (click)="closePopup()">Cancel</button>
+        <button type="submit" mat-button class="app-btn orange-button save-btn" [disabled]="wait" (click)="saveFacility(addEditFacilityForm)">{{saveBtnTitle}}</button>
+      </div>
+    </div>
+  </form>
+</div>

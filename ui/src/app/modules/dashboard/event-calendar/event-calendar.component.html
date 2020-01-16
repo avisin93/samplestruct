@@ -1,0 +1,84 @@
+<div class="row cm-event-calendar">
+  <div class="col-12 col-md-6">
+    <div class="col-3 col-md-2 years-and-months">
+        <div class="row year">
+            <div class="col-3 col-md-4 no-padding" style="cursor: pointer;" (click)="changeYear(-1)">
+              <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="col-6 col-md-4 no-padding text-align-center">{{_dateAdapter.getYear(activeDate)}}</div>
+            <div class="col-3 col-md-4 no-padding" style="cursor: pointer;" (click)="changeYear(1)">
+              <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+        <div *ngFor="let me of months; let i = index" class="row month-num-of-events"
+          [class.active]="_dateAdapter.getMonth(activeDate) == i"
+          (click)="getCountContractsByMonthChangeMonth(i)">
+          <div class="col-6 col-md-6 month no-padding text-align-center margin-top-center">{{me}}</div>
+          <div class="col-6 col-md-6 no-padding text-align-center margin-top-center">{{monthEvents[me]}}</div>
+        </div>
+    </div>
+    <div class="col-9 col-md-10 no-padding event-calendar">
+        <div class="header">
+          Event Calendar
+        </div>
+        <div class="event-calendar-body">
+            <ng-template [cdkPortalOutlet]="_calendarHeaderPortal"></ng-template>
+            <div class="mat-calendar-content" [ngSwitch]="currentView" cdkMonitorSubtreeFocus tabindex="-1">
+              <cm-month-view
+                  *ngSwitchCase="'month'"
+                  [(activeDate)]="activeDate"
+                  [selected]="selected"
+                  [dateFilter]="dateFilter"
+                  [maxDate]="maxDate"
+                  [minDate]="minDate"
+                  [dateClass]="dateClass"
+                  [colors]="colors"
+                  (selectedChange)="_dateSelected($event)"
+                  (_userSelection)="_userSelected()">
+              </cm-month-view>
+              </div>
+        </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6 events">
+    <div class="col-md-12">
+        <div class="header">
+            Events
+          </div>
+          <div class="event-table">
+            <table cellspacing="0" cellpadding="0">
+              <thead>
+                <tr>
+                  <th>DATE <br> EVENT TYPE</th>
+                  <th>CONTRACT TITLE <br>BUSINESS PARTNER</th>
+                  <th>CATEGORY</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let e of events; let i = index"
+                    (click)="showContract(e._id)">
+                  <td>
+                    <div class="event-status {{colors[(startColor+i)%colors.length]}} {{i%colors.length}}">
+                      <span class="event-status-date">{{e.end_date | date : 'MM/dd/yyyy'}}</span>
+                      <span class="event-status-type">End date</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="title-partner">
+                      <span class="contract-title">{{e.contract_title}}</span>
+                      <span class="business-partner">{{e.business_partner ? e.business_partner.name : ''}}</span>
+                    </div>
+                  </td>
+                  <td class="category">
+                    {{e.category ? e.category.name : ''}}
+                  </td>
+                </tr>
+                <tr class="msg-row" *ngIf="events.length == 0">
+                  <td class="empty-msg-row" colspan="3">There are no contracts for selected date!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+    </div>
+  </div>
+</div>

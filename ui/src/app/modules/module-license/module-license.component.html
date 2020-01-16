@@ -1,0 +1,19 @@
+<div class="facilities-wrap" *ngIf="selectedFacility == ''">
+    <ng-data-tables [columns]="columns" [rows]="records" [totalRows]="totalRows" [hasActionButtons]="hasActionButtons" 
+    (rLink)="gotoLink($event)"
+    (edit)="editFacilityPopup($event)"
+    (delete)="deleteFacility($event)">
+        <div class="align-right" button-toolbar>
+            <div class="inner">
+                <button mat-button class="app-btn orange-button" (click)="addFacilityPopup()">
+                    Add Module License
+                </button>
+            </div>
+        </div>
+    </ng-data-tables>
+</div>
+
+<app-groups [type]="type" [selectedFacility]="selectedFacility" (backToFacilities)="backToFacilities($event)" *ngIf="selectedFacility != ''"></app-groups>
+
+
+

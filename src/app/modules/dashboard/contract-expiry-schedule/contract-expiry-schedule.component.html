@@ -1,0 +1,9 @@
+<div class="divided row">
+  <ng-container class="col-2" style="min-width:100%" *ngFor="let contractExpirySchedule of contractExpiryScheduleCircle; let i = index">
+    <span class="circle circle-{{contractExpirySchedule.index}}" (click)="navigateToContractList(contractExpirySchedule)">
+      <span>{{contractExpirySchedule.value}}</span>
+      <span class="text">{{contractExpirySchedule.name}}</span>
+    </span>
+    <span *ngIf="i != contractExpiryScheduleCircle.length - 1" class="divider divider-{{contractExpirySchedule.index}}"></span>
+  </ng-container>
+</div>

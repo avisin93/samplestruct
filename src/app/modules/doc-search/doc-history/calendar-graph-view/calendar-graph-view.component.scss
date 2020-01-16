@@ -1,0 +1,712 @@
+.table-graph-time-view {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  thead,
+  tbody {
+    display: table;
+    width: 100%;
+  }
+
+  thead {
+    position: relative;
+    z-index: 100;
+  }
+
+  thead tr {
+    background-color: #f2f2f2;
+
+    th {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+  }
+
+  tbody ng-container {
+    width: 100%;
+  }
+
+  thead tr,
+  tbody tr, 
+  tbody ng-container tr{
+    height: 4rem;
+    border: 1px solid #dee2e6;
+
+    td,
+    th {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    td,
+    th {
+      text-align: center;
+    }
+
+    .month-cell {
+      min-width: 7rem;
+      max-width: 8%;
+      width: 8%;
+    }
+
+    .year-cell {
+      min-width: 4rem;
+      max-width: 4%;
+      width: 4%;
+    }
+  }
+
+  tbody {
+    position: relative;
+
+    tr:nth-child(even) {
+      background-color: white;
+    }
+
+    tr:nth-child(odd) {
+      background-color: #f2f2f2;
+    }
+
+    tr:first-child {
+      background-color: #f2f2f2;
+      height: 2rem;
+    }
+
+    tr:last-of-type {
+      background-color: #f2f2f2;
+      height: 2rem;
+    }
+
+    div {
+      position: absolute;
+      display: flex;
+      width: 6rem;
+      height: 2rem;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      z-index: 10;
+
+      &.selectedNode {
+        box-shadow: 0 0 3pt 2pt black;
+      }
+
+      &:not(.tail) {
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      &.tail {
+        box-sizing: content-box;
+      }
+
+      &.draft {
+        background-color: #d3f9d4;
+        border: 1px solid #3bb44b;
+        color: #3bb44b;
+      }
+      &.yts {
+        background-color: #dcdcdc;
+        border: 1px solid #a2a2a2;
+        color: #a2a2a2;
+      }
+
+      &.active {
+        background-color: #bff1e6;
+        border: 1px solid #4cb6aa;
+        color: #4cb6aa;
+      }
+
+      &.terminated {
+        background-color: #dcdcdc;
+        border: 1px solid #a2a2a2;
+        color: #a2a2a2;
+      }
+
+      &.approved {
+        background-color: #f3e8ca;
+        border: 1px solid #f9a825;
+        color: #f9a825;
+      }
+
+      &.expired {
+        background-color: #ecbbbe;
+        border: 1px solid #f5511e;
+        color: #f5511e;
+      }
+
+      &.for.renewal {
+        background-color: #eacaef;
+        border: 1px solid #aa47bc;
+        color: #aa47bc;
+      }
+      &.archived {
+        background-color: #b0d36b;
+        border: 1px solid #4f6228;
+        color: #4f6228;
+      }
+      &.sent.for.approval {
+        background-color: #f1b39b;
+        border: 1px solid #eb8359;
+        color: #eb8359;
+      }
+      &.expired {
+        background-color: #d68689;
+        border: 1px solid #cd2026;
+        color: #cd2026;
+      }
+      &.nda {
+        background-color: #cabeb4;
+        border: 1px solid #c1997a;
+        color: #c1997a;
+      }
+    }
+  }
+}
+
+.tail {
+  color: #cccccc;
+  font-size: 1.2rem;
+
+  &::after {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    font-size: 1.2rem;
+    min-width: 1.2rem;
+    min-height: 1.2rem;
+  }
+
+  &.right-t::after {
+    content: '\f0da';
+    top: -0.6rem;
+    right: 3rem;
+    text-align: right;
+  }
+
+  &.right-b::after {
+    content: '\f0da';
+    transform: translateY(50%);
+    bottom: -0.5px;
+    right: calc(3rem + 1px);
+    text-align: right;
+  }
+
+  &.right-bt::after {
+    content: '\f0da';
+    bottom: 0;
+    transform: translateY(50%);
+    right: 3rem;
+    text-align: right;
+  }
+
+  &.top-l::after {
+    content: '\f0d7';
+    left: -0.65rem;
+    bottom: 0.65rem;
+    text-align: center;
+  }
+
+  &.top-r::after {
+    content: '\f0d7';
+    right: -0.65rem;
+    bottom: 0.65rem;
+    text-align: center;
+  }
+
+  &.left-t::after {
+    content: '\f0d9';
+    top: -0.6rem;
+    left: 3rem;
+  }
+
+  &.left-b::after {
+    content: '\f0d9';
+    bottom: -0.5px;
+    transform: translateY(50%);
+    left: 3rem;
+  }
+
+  &.up-r::after {
+    content: '\f0d8';
+    right: -0.65rem;
+    top: 1rem;
+    text-align: center;
+  }
+
+  &.up-l::after {
+    content: '\f0d8';
+    left: -0.65rem;
+    top: .6rem;
+    text-align: center;
+  }
+}
+
+.table-graph-time-view div.div-for-hide {
+  position: absolute !important;
+  display: block !important;
+  width: 96% !important;
+  height: 2rem !important;
+  left: 4% !important;
+  background-color: #f2f2f2 !important;
+  border-radius: 0 !important;
+
+  &.up-arrow {
+    top: 0;
+  }
+
+  &.down-arrow {
+    bottom: 0;
+  }
+}
+
+@keyframes activeOutOfFocus {
+  0% {
+    background-color: #bff1e6;
+    border-color: #4cb6aa;
+  }
+  100% {
+    background-color: #dff8f3;
+    border-color: #a5dbd4;
+    color: #a5dbd4;
+  }
+}
+
+@keyframes activeInFocus {
+  0% {
+    background-color: #dff8f3;
+    border-color: #a5dbd4;
+    color: #a5dbd4;
+  }
+  100% {
+    background-color: #bff1e6;
+    border-color: #4cb6aa;
+    color: #4cb6aa;
+  }
+}
+
+@keyframes approvedOutOfFocus {
+  0% {
+    background-color: #f3e8ca;
+    border-color: #f9a825;
+  }
+  100% {
+    background-color: #f2edde;
+    border-color: #f5cd8b;
+    color: #f5cd8b;
+  }
+}
+
+@keyframes approvedInFocus {
+  0% {
+    background-color: #f2edde;
+    border-color: #f5cd8b;
+    color: #f5cd8b;
+  }
+  100% {
+    background-color: #f3e8ca;
+    border-color: #f9a825;
+    color: #f9a825;
+  }
+}
+
+@keyframes draftOutOfFocus {
+  0% {
+    background-color: #d3f9d4;
+    border-color: #3bb44b;
+    color: #3bb44b;
+  }
+  100% {
+    background-color: #e2f5e3;
+    border-color: #96d39e;
+    color: #96d39e;
+  }
+}
+
+@keyframes draftInFocus {
+  0% {
+    background-color: #e2f5e3;
+    border-color: #96d39e;
+    color: #96d39e;
+  }
+  100% {
+    background-color: #d3f9d4;
+    border-color: #3bb44b;
+    color: #3bb44b;
+  }
+}
+
+@keyframes forRenewalOutOfFocus {
+  0% {
+    background-color: #eacaef;
+    border-color: #aa47bc;
+    color: #aa47bc;
+  }
+  100% {
+    background-color: #f5e5f7;
+    border-color: #d5a3de;
+    color: #d5a3de;
+  }
+}
+
+@keyframes forRenewalInFocus {
+  0% {
+    background-color: #f5e5f7;
+    border-color: #d5a3de;
+    color: #d5a3de;
+  }
+  100% {
+    background-color: #eacaef;
+    border-color: #aa47bc;
+    color: #aa47bc;
+  }
+}
+
+@keyframes expiredOutOfFocus {
+  0% {
+    background-color: #d68689;
+    border-color: #cd2026;
+    color: #cd2026;
+  }
+  100% {
+    background-color: #be9091;
+    border-color: #bd585b;
+    color: #bd585b;
+  }
+}
+
+@keyframes expiredInFocus {
+  0% {
+    background-color: #be9091;
+    border-color: #bd585b;
+    color: #bd585b;
+  }
+  100% {
+    background-color: #d68689;
+    border-color: #cd2026;
+    color: #cd2026;
+  }
+}
+
+@keyframes terminatedOutOfFocus {
+  0% {
+    background-color: #dcdcdc;
+    border-color: #a2a2a2;
+    color: #a2a2a2;
+  }
+  100% {
+    background-color: #e7e7e7;
+    border-color: #cacaca;
+    color: #cacaca;
+  }
+}
+
+@keyframes terminatedInFocus {
+  0% {
+    background-color: #e7e7e7;
+    border-color: #cacaca;
+    color: #cacaca;
+  }
+  100% {
+    background-color: #dcdcdc;
+    border-color: #a2a2a2;
+    color: #a2a2a2;
+  }
+}
+
+@keyframes archivedOutOfFocus {
+  0% {
+    background-color: #b0d36b;
+    border-color: #4f6228;
+    color: #4f6228;
+  }
+  100% {
+    background-color: #939986;
+    border-color: #636b52;
+    color: #636b52;
+  }
+}
+
+@keyframes archivedInFocus {
+  0% {
+    background-color: #939986;
+    border-color: #636b52;
+    color: #636b52;
+  }
+  100% {
+    background-color: #b0d36b;
+    border-color: #4f6228;
+    color: #4f6228;
+  }
+}
+
+@keyframes sentForApprovalOutOfFocus {
+  0% {
+    background-color: #f1b39b;
+    border-color: #eb8359;
+    color: #eb8359;
+  }
+  100% {
+    background-color: #e7b09a;
+    border-color: #e79474;
+    color: #e79474;
+  }
+}
+
+@keyframes sentForApprovalInFocus {
+  0% {
+    background-color: #cec5bd;
+    border-color: #cabeb4;
+    color: #cabeb4;
+  }
+  100% {
+    background-color: #f5eeee;
+    border-color: #d1cbc6;
+    color: #d1cbc6;
+  }
+}
+
+@keyframes ndaOutOfFocus {
+  0% {
+    background-color: #f5eeee;
+    border-color: #d1cbc6;
+    color: #d1cbc6;
+  }
+  100% {
+    background-color: #cec5bd;
+    border-color: #cabeb4;
+    color: #cabeb4;
+  }
+}
+
+@keyframes ndaInFocus {
+  0% {
+    background-color: #e7b09a;
+    border-color: #e79474;
+    color: #e79474;
+  }
+  100% {
+    background-color: #f1b39b;
+    border-color: #eb8359;
+    color: #eb8359;
+  }
+}
+
+@keyframes borderOutOfFocus {
+  0% {
+    border-color: rgb(204, 204, 204);
+  }
+  100% {
+    border-color: #e6e6e6;
+  }
+}
+
+@keyframes borderInFocus {
+  0% {
+    border-color: #e6e6e6;
+  }
+  100% {
+    border-color: red;
+    color: red;
+  }
+}
+
+@keyframes borderInFocusChild {
+  0% {
+    border-color: #e6e6e6;
+  }
+  100% {
+    border-color: green;
+    color: green;
+  }
+}
+
+.table-graph-time-view tbody .content.inFocus {
+  &.active {
+    animation-name: activeInFocus;
+    background-color: #bff1e6 !important;
+    border-color: #4cb6aa !important;
+    color: #4cb6aa !important;
+  }
+
+  &.approved {
+    animation-name: approvedInFocus;
+    background-color: #f3e8ca !important;
+    border-color: #f9a825 !important;
+    color: #f9a825 !important;
+  }
+
+  &.draft {
+    animation-name: draftInFocus;
+    background-color: #d3f9d4 !important;
+    border-color: #3bb44b !important;
+    color: #3bb44b !important;
+  }
+  &.yts {
+    animation-name: ytsInFocus;
+    background-color: #dcdcdc !important;
+    border-color: #a7beaa !important;
+    color: #1a301d !important;
+  }
+
+  &.for.renewal {
+    animation-name: forRenewalInFocus;
+    background-color: #eacaef !important;
+    border-color: #aa47bc !important;
+    color: #aa47bc !important;
+  }
+
+  &.expired {
+    animation-name: expiredInFocus;
+    background-color: #d68689;
+    border-color: #cd2026 !important;
+    color: #cd2026;
+  }
+
+  &.terminated {
+    animation-name: terminatedInFocus;
+    background-color: #dcdcdc !important;
+    border-color: #a2a2a2 !important;
+    color: #a2a2a2 !important;
+  }
+
+  &.archived {
+    animation-name: archivedInFocus;
+    background-color: #b0d36b;
+    border-color: #4f6228 !important;
+    color: #4f6228;
+  }
+
+  &.sent.for.approval {
+    animation-name: sentForApprovalInFocus;
+    background-color: #f1b39b;
+    border-color: #eb8359 !important;
+    color: #eb8359;
+  }
+
+  &.nda {
+    animation-name: ndaInFocus;
+    background-color: #cabeb4;
+    border-color: #c1997a !important;
+    color: #c1997a;
+  }
+
+  animation-duration: 400ms;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+}
+
+.table-graph-time-view tbody .content.outOfFocus {
+  &.active {
+    animation-name: activeOutOfFocus;
+    background-color: #dff8f3 !important;
+    border-color: #a5dbd4 !important;
+    color: #a5dbd4 !important;
+  }
+
+  &.approved {
+    animation-name: approvedOutOfFocus;
+    background-color: #f2edde !important;
+    border-color: #f5cd8b !important;
+    color: #f5cd8b !important;
+  }
+
+  &.draft {
+    animation-name: draftOutOfFocus;
+    background-color: #e2f5e3 !important;
+    border-color: #96d39e !important;
+    color: #96d39e !important;
+  }
+  &.yts {
+    animation-name: ytsOutOfFocus;
+    background-color: #69776a !important;
+    border-color: #3e4e40 !important;
+    color: #213023 !important;
+  }
+
+  &.for.renewal {
+    animation-name: forRenewalOutOfFocus;
+    background-color: #f5e5f7 !important;
+    border-color: #d5a3de !important;
+    color: #d5a3de !important;
+  }
+
+  &.expired {
+    animation-name: expiredOutOfFocus;
+    background-color: #f6dddf !important;
+    border-color: #faa88f !important;
+    color: #faa88f !important;
+  }
+
+  &.terminated {
+    animation-name: terminatedOutOfFocus;
+    background-color: #e7e7e7 !important;
+    border-color: #cacaca !important;
+    color: #cacaca !important;
+  }
+
+  &.archived {
+    animation-name: archivedOutOfFocus;
+    background-color: #dce6c8;
+    border-color: #dfeec2 !important;
+    color: #dfeec2;
+  }
+
+  &.sent.for.approval {
+    animation-name: sentForApprovalOutOfFocus;
+    background-color: #ebcdc1;
+    border-color: #f0c0ad !important;
+    color: #f0c0ad;
+  }
+
+  &.expired {
+    animation-name: expiredOutOfFocus;
+    background-color: #d6b1b2;
+    border-color: #d69496 !important;
+    color: #d69496;
+  }
+  
+  &.nda {
+    animation-name: ndaOutOfFocus;
+    background-color: #c7c3bf;
+    border-color: #cabeb4 !important;
+    color: #cabeb4;
+  }
+  
+  animation-duration: 400ms;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+}
+
+.tail.outOfFocus {
+  animation-name: borderOutOfFocus;
+  animation-duration: 400ms;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  border-color: #e6e6e6 !important;
+  z-index: 5 !important;
+}
+
+.tail.inFocus:not(.notFocusedPath) {
+  animation-name: borderInFocus;
+  animation-duration: 400ms;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  border-color: red !important;
+  color: red !important;
+}
+
+.inFocusChild {
+  animation-name: borderInFocusChild;
+  animation-duration: 400ms;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0s;
+  border-color: green !important;
+  color: green !important;
+}
+
+.focusText {
+  color: #1a301d !important;
+}

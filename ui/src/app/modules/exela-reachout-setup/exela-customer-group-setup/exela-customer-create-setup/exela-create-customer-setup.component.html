@@ -1,0 +1,30 @@
+<div class="component-wrap add-edit-user-setup">
+        <div class="heading-wrap">
+          <div class="inner">
+            <div class="popup-heading">{{heading}}</div>
+            <div class="popup-close" (click)="closePopup()"><i class="material-icons">close</i></div>
+          </div>
+        </div>
+        <form [formGroup]="createCustomerForm" novalidate>
+          <div class="form-wrap row">
+            <div class="col-sm-6 col-xs-12">
+              <mat-form-field class="full-width-input-wrap">
+                  <input i18n-placeholder matInput placeholder="Customer Segment*" formControlName="customerSegment" maxlength="50">
+                    <mat-error i18n *ngIf="createCustomerForm.controls['customerSegment'].hasError('required') && createCustomerForm.controls['customerSegment'].touched && custValidation">
+                    Customer Segment
+                    <strong>required</strong>
+                </mat-error>
+             </mat-form-field>
+          </div>   
+          </div>
+          
+   <app-exela-customer-setup (emitCustomeSegmentData)="editCustomerSegmentRecord($event)" (deleteCustSegmentData)="deleteCustomeSeg($event)" (segmentMode)="custSegmentMode($event)" [customeSegList]= "getCustomeSegList" [organizationId]=organizationId></app-exela-customer-setup>
+          <div class="action-wrap">
+            <div class="text-right">
+                <button i18n type="button" mat-button class="app-btn" id="cancel" (click)="closePopup()">Cancel</button>
+                  <button i18n *ngIf="!deleteFlag" type="submit" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="saveCustomerGroupForm(createCustomerForm)">Save</button>
+                  <button i18n *ngIf="deleteFlag" type="delete" mat-button class="app-btn mat-primary mat-flat-button" (click)="saveCustomerGroupForm(createCustomerForm)">Delete</button>
+            </div>
+          </div>
+        </form>
+      </div>

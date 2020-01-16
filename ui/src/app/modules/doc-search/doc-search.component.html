@@ -1,0 +1,384 @@
+<div class="col-lg-12">
+  <div class="top-section row-10 mar-20 heading-section-doc-search">
+    <div class="hidden-xs col-xs-12 col-sm-6">
+        <app-heading-section heading="Doc Search">
+            <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+        </app-heading-section>
+    </div>
+    <div class="clearfix"></div>
+  
+
+
+
+    <div class="col-xs-12 mobile-view">
+      <div class="row">
+        <div class="col-xs-12 search-advance">
+          <mat-form-field class="doc-list full-width">
+              <input
+                matInput
+                [formControl]="searchTextGlobal"
+                class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+                placeholder="Search"
+                
+                aria-invalid="false"
+                aria-required="false">
+              <span style="font-size: 1.2rem" matPrefix><i class="fas fa-search"></i>&nbsp;</span>
+          </mat-form-field>
+        </div>
+        <div class="col-xs-12">
+          <div class="adv-search-wrapper">
+            <span class="search-btn" (click)="slideIn = !slideIn">
+              <span>Advanced Search</span><i class="fas fa-chevron-down position-absolute"></i>
+            </span>
+          </div>
+        </div>
+        <div class="col-lg-12" class="slide-in-category-subcategory" [@slideInOut]="slideIn ? 'in' : 'out'">
+          <div class="row">
+            <div class="col-lg-6">
+              <mat-form-field class="col-md-12">
+                <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Categories" [(ngModel)]="selectedCategories" (selectionChange)="filterCategoriesAndCreateSubCategories()">
+                  <mat-option value="-1">Select category</mat-option>
+                  <mat-option *ngFor="let category of arrayCategories" name="arrayCategories" [value]="category.code" ngDefaultControl>
+                    {{category.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+              <mat-form-field class="col-md-12">
+                <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Sub Category" [(ngModel)]="selectedSubCategories" (selectionChange)="filterSubCategories()">
+                  <mat-option value="-1">Select sub category</mat-option>
+                  <mat-option *ngFor="let subCategory of arraySubCategories" name="arraySubCategories" [value]="subCategory.code" ngDefaultControl>
+                    {{subCategory.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="cm-card">
+    <div class="cm-card-body">
+      <div class="col-lg-12 screen-view">
+        <div class="row">
+          <div class="col-lg-3 left-content-doc-search">
+            <mat-form-field>
+              <mat-label><i class="fa fa-cog"></i> Customize </mat-label>
+              <mat-select [disableOptionCentering]="true" [formControl]="customizeMenuSelect" [multiple]="true" #multiSelect>
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="customizeMenuFilter" [placeholderLabel]="'Find column...'"
+                       [noEntriesFoundLabel]="'No matching column found'"></ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor='let col of filteredColumnsMulti | async' [value]="col" (click)='toggleColumns(col)'>{{col.customizeName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-9 right-content-doc-search">
+            <button mat-button class="reset-adv-search mr-4" (click)="resetAdvSearch()">
+                RESET
+            </button>
+            <mat-form-field class="contract-list">
+                <input
+                  matInput
+                  [formControl]="searchTextGlobal"
+                  class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+                  placeholder="Search"
+                  
+                  aria-invalid="false"
+                  aria-required="false">
+                <span style="font-size: 1.2rem" matPrefix><i class="fas fa-search"></i>&nbsp;</span>
+            </mat-form-field>
+            <div class="adv-search-wrapper">
+              <span class="search-btn" (click)="slideIn = !slideIn">
+                <span>Advanced Search</span><i class="fas fa-chevron-down position-absolute"></i>
+              </span>
+            </div>
+            <div class="btn-docs-wrapper">
+              <span class="button-documents">
+                <i [matTooltipClass]="{'align-on-right': true}" matTooltip="Share" class="fas fa-share-square fa-lg" (click)="mySelect.toggle()"></i>
+                <mat-select disableOptionCentering panelClass="select-dropdown-class" #mySelect id="mySelect">
+                  <mat-option (click)="generatePDF()">
+                    <i class="far fa-file-pdf"></i> PDF
+                  </mat-option>
+                  <mat-option (click)="generateExcelFiles()">
+                    <i class="far fa-file-excel"></i> EXCEL
+                  </mat-option>
+                </mat-select>
+              </span>
+              <span class="button-documents">
+                <i matTooltip="Download selected" [matTooltipClass]="{'align-on-right': true}" class="fas fa-download fa-lg" (click)="getUploadedDocumentsZip()"></i>
+              </span>
+              <span class="button-documents"><i matTooltip="Delete selected" [matTooltipClass]="{'align-on-right': true}" class="far fa-trash-alt fa-lg" (click)="openDialogForDeleteConfirmation(undefined)"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12 screen-view" [@slideInOut]="slideIn ? 'in' : 'out'">
+        <div class="row">
+          <div class="col-lg-6">
+            <mat-form-field class="col-md-12" style="margin-left: -30px;">
+              <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Categories" [(ngModel)]="selectedCategories" (selectionChange)="filterCategoriesAndCreateSubCategories()">
+                <mat-option value="-1">Select category</mat-option>
+                <mat-option *ngFor="let category of arrayCategories" name="arrayCategories" [value]="category.code" ngDefaultControl>
+                  {{category.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6">
+            <mat-form-field class="col-md-12" style="margin-left: -30px;">
+              <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Sub Category" [(ngModel)]="selectedSubCategories" (selectionChange)="filterSubCategories()">
+                <mat-option value="-1">Select sub category</mat-option>
+                <mat-option *ngFor="let subCategory of arraySubCategories" name="arraySubCategories" [value]="subCategory.code" ngDefaultControl>
+                  {{subCategory.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12 datatable-div">
+          <ngx-datatable class="material striped"
+          #datatable
+          [rows]="rowsTable"
+          [columns]="columnsTable"
+          [footerHeight]="50"
+          [messages]="myMessages"
+          [headerHeight]="70"
+          [rowHeight]="'100%'"
+          [selectionType]="'checkbox'"
+          [sortable]="true"
+          [loadingIndicator]="isLoading"
+          [count]="pageTable.count"
+          [offset]="pageTable.offset"
+          [limit]="pageTable.limit"
+          [columnMode]="'force'"
+          (page)='pageCallback($event)'
+          [sortType]="'single'"
+          [externalPaging]="true"
+          [externalSorting]="false"
+          (sort)='sortCallback($event)'>
+            <ng-template #sortableHeaderTemplateInput let-sort="sortFn" let-column="column" let-sortDir="sortDir" ngx-datatable-header-template>
+              <div class="screen-view">
+                <span (click)="sort($event, sortDir, sortFn)" class="header-name">
+                  {{column.name}}
+                </span>
+                <div class="filter-continer">
+                  <input class="filter src-filters" placeholder='Filter' (keyup)="filterCallback($event, column.searchName)" />
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #chkBxTmplCell let-row="row">
+              <div class="screen-view">
+                <mat-checkbox [checked]="row.checked" type="checkbox" (change)="onSelectCell($event, row)">
+                </mat-checkbox>
+              </div>
+            </ng-template>
+            <ng-template #chkBxTmpl let-row="row">
+              <div class="screen-view">
+                <mat-checkbox [checked]="headerCheckBox" type="checkbox" (change)="onSelect($event)">
+                </mat-checkbox>
+              </div>
+            </ng-template>
+            <ng-template #actionColumn let-row="row" let-value="value" let-rowIdentity="rowIdentity" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="screen-view">
+                <div class="action-items-i">
+                  <i style="padding-right:10px;" matTooltip="Download" [matTooltipClass]="{'align-on-right': true}" class="fa fa-download" (click)="getUploadedDocument(row.documents.id_document_efa_reference, row.documents.name_document_efa, false, row.documents.file_type)"></i>
+                  <i style="padding-right:10px;" matTooltip="History" [matTooltipClass]="{'align-on-right': true}" class="fa fa-history" (click)="showHistory(row.documents.root_document, row.documents._id)"></i>
+                  <i style="padding-right:10px;" matTooltip="Add Comment" [matTooltipClass]="{'align-on-right': true}" class="far fa-comment" (click)="updateComment(row, 'Add Comment')"></i>
+                  <i matTooltip="Delete" [matTooltipClass]="{'align-on-right': true}" class="far fa-trash-alt" (click)="openDialogForDeleteConfirmation(row)"></i>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #firstColumnTemplate let-row="row" let-value="value" let-rowIdentity="rowIdentity" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <span class="screen-view">{{value}}</span>
+              <div class="mobile-view">
+                <div class="row">
+                  <div class="col-xs-6 mobile-inner-div" *ngFor="let oneColumn of filterOutCheckBox();let i = index">
+                    <div class="col-xs-12" [ngClass]="{'align-right': i % 2 === 1, 'align-left': i % 2 === 0}" *ngIf="oneColumn.name !== ''">
+                      {{oneColumn.name}}
+                    </div> <!-- header of a row-->
+                    <div class="col-xs-12"  [ngClass]="{'align-right': i % 2 === 1, 'align-left': i % 2 === 0}" *ngIf="oneColumn.name === 'START DATE'">
+                      <div>{{row.term.start_date | date:"MM/dd/yyyy"}}</div>
+                    </div>
+                    <div class="col-xs-12"  [ngClass]="{'align-right': i % 2 === 1, 'align-left': i % 2 === 0}" *ngIf="oneColumn.name === 'END DATE'">
+                      <div>{{row.term.end_date | date:"MM/dd/yyyy"}}</div>
+                    </div>
+                    <div class="col-xs-12"  [ngClass]="{'align-right': i % 2 === 1, 'align-left': i % 2 === 0}" *ngIf="oneColumn.name === 'STATUS'">
+                      <div class="action-items-i">
+                        <span class="badge badge-{{row.documents.status && row.documents.status.code ? row.documents.status.code.toLowerCase() : ''}}">
+                          {{row.documents.status ? row.documents.status.name : ''}}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="col-xs-12" [ngClass]="{'align-right': i % 2 === 1, 'align-left': i % 2 === 0}" *ngIf="oneColumn.name === 'ACTION'">
+                      <div class="action-items-i">
+                        <i style="padding-right:10px;" class="fa fa-download" (click)="getUploadedDocument(row.documents.id_document_efa_reference, row.documents.name_document_efa, false, row.documents.file_type)"></i>
+                        <i style="padding-right:10px;" class="fa fa-history" (click)="showHistory(row.documents.root_document, row.documents._id)"></i>
+                        <i style="padding-right:10px;" class="far fa-comment" (click)="updateComment(row, 'Add Comment')"></i>
+                        <i class="far fa-trash-alt" (click)="openDialogForDeleteConfirmation(row)"></i>
+                      </div>
+                    </div>
+                    <div class="col-xs-12" [ngClass]="{'align-right': i % 2 === 1, 'align-left': i % 2 === 0}" *ngIf="oneColumn.name !== '' && oneColumn.name !== 'STATUS' && oneColumn.name !== 'START DATE' && oneColumn.name !== 'END DATE' && oneColumn.name !== 'ACTION'">
+                      {{oneColumn.prop.includes('.') ?
+                        row[oneColumn.prop.substring(0,oneColumn.prop.indexOf('.'))][oneColumn.prop.substring(oneColumn.prop.indexOf('.')+1)]
+                        :row[oneColumn.prop]}}
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+          </ng-template>
+          <ng-template #firstHeaderTemplate let-column="column" ngx-datatable-header-template>
+            <div class="screen-view">
+              <span class="header-name">{{column.name}}</span>
+            </div>
+            <div class="mobile-view">
+              <mat-form-field>
+                <mat-label><i class="fa fa-cog"></i> Customize </mat-label>
+                <mat-select [disableOptionCentering]="true" [formControl]="customizeMenuSelect" [multiple]="true" #multiSelect>
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="customizeMenuFilter" [placeholderLabel]="'Find column...'"
+                          [noEntriesFoundLabel]="'No matching column found'"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor='let col of filteredColumnsMulti | async' [value]="col" (click)='toggleColumnsForMobile(col)'>{{col.customizeName}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </ng-template>
+          <ng-template #textHeaderTemplate let-column="column" ngx-datatable-header-template>
+            <div class="screen-view">
+              <span class="header-name">{{column.name}}</span>
+            </div>
+          </ng-template>
+          <ng-template #textColumnTemplate let-row="row" let-value="value" let-rowIdentity="rowIdentity" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+            <div class="screen-view">
+              <span>{{value}}</span>
+            </div>
+          </ng-template>
+          <ng-template #sortableHeaderTemplateStartDate let-sort="sortFn" let-column="column" let-sortDir="sortDir" ngx-datatable-header-template>
+            <div class="screen-view">
+              <span class="header-name">
+                {{column.name}}
+              </span>
+              <div class="filter-continer">
+                <input class="filter" [matDatepicker]="startDatePicker" (click)="startDatePicker.open()"
+                placeholder='Filter' (dateChange)="filterDate($event, column.searchName)" readonly/>
+              </div>
+              <mat-datepicker #startDatePicker></mat-datepicker>
+            </div>
+          </ng-template>
+
+          <ng-template #sortableHeaderTemplateEndDate let-sort="sortFn" let-column="column" let-sortDir="sortDir" ngx-datatable-header-template>
+            <div class="screen-view">
+              <span class="header-name">{{column.name}}
+              </span>
+              <div class="filter-continer">
+                <input class="filter" [matDatepicker]="endDatePicker" (click)="endDatePicker.open()"
+                placeholder='Filter' (dateChange)="filterDate($event, column.searchName)" readonly/>
+              </div>
+              <mat-datepicker #endDatePicker></mat-datepicker>
+            </div>
+          </ng-template>
+
+            <ng-template #sortableHeaderTemplateSelectStatus let-column="column" ngx-datatable-header-template>
+              <div class="screen-view">
+                <span class="header-name">{{column.name}}</span>
+                <div class="filter-continer">
+                  <select class="filter" placeholder='Filter' [(ngModel)] = "selectedStatusFilter"
+                    (change)="filterCallback($event, column.filterCode)">
+                    <option value="-1" selected>Filter</option>
+                    <option *ngFor="let status of arrayStatus" [value]="status.code">
+                        {{ status.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </ng-template>
+
+            <ng-template #sortableHeaderTemplateSelectDocType let-column="column" ngx-datatable-header-template>
+              <div class="screen-view">
+                <span class="header-name">{{column.name}}</span>
+                <div class="filter-continer">
+                  <select class="filter" placeholder='Filter' [(ngModel)] = "selectedDocTypeFilter"
+                    (change)="filterCallback($event, column.filterCode)">
+                    <option value="" selected>Filter</option>
+                    <option *ngFor="let docType of arrayDocTypes" [value]="docType.code">
+                        {{ docType.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </ng-template>
+
+            <ng-template #statusColumnTemplate let-row="row" let-value="value" let-rowIdentity="rowIdentity" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="screen-view">
+                <div class="action-items-i">
+                  <span class="badge badge-{{row.documents.status && row.documents.status.code ? row.documents.status.code.toLowerCase() : ''}}">
+                    {{row.documents.status ? row.documents.status.name : ''}}
+                  </span>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #fileColumnTemplate let-row="row" let-value="value" let-rowIdentity="rowIdentity" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+              <div class="screen-view">
+                <a href="javascript:void(0);" (click)="getUploadedDocument(row.documents.id_document_efa_reference, row.documents.name_document_efa, true, row.documents.file_type)">
+                  <span>{{row.contract_title}}</span>
+                </a>
+              </div>
+            </ng-template>
+            <ng-template #dateColumnTemplate let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="screen-view">  
+                <div>{{value | date:"MM/dd/yyyy"}}</div>
+              </div>
+            </ng-template>
+            <ngx-datatable-footer>
+              <ng-template
+              ngx-datatable-footer-template
+              let-rowCount="rowCount"
+              let-pageSize="pageTable.limit"
+              let-curPage="curPage"
+              let-offset="pageTable.offset"
+              let-isVisible="isVisible">
+                <div class="page-count screen-view" [hidden]="!((rowCount / pageTable.limit) > 1)  && !(pageTable.limit > 10)">
+                  {{datatable.messages.totalMessage}}{{pageTable.offset * pageTable.limit + 1}} -
+                  {{pageTable.offset * pageTable.limit + pageTable.limit > rowCount ? rowCount : pageTable.offset * pageTable.limit + pageTable.limit }}
+                  of {{rowCount.toLocaleString()}}
+                </div>
+                <div class="screen-view" [hidden]="!((rowCount / pageTable.limit) > 1)  && !(pageTable.limit > 10)">
+                  <input style="width:40px" placeholder='Page' (change)="onInputPageChange($event.target.value)" >
+<!--
+                  <select (change)="onLimitChange($event.target.value)">
+                    <option *ngFor="let option of pageLimitOptions" [value]="option.value" [selected]="option.value == pageTable.limit">
+                        {{ option.value }}
+                    </option>
+                  </select>
+-->
+                </div>
+                <datatable-pager class="screen-view"
+                  [pagerLeftArrowIcon]="'datatable-icon-left'"
+                  [pagerRightArrowIcon]="'datatable-icon-right'"
+                  [pagerPreviousIcon]="'datatable-icon-prev'"
+                  [pagerNextIcon]="'datatable-icon-skip'"
+                  [page]="curPage"
+                  [size]="pageTable.limit"
+                  [count]="rowCount"
+                  [hidden]="!((rowCount / pageTable.limit) > 1) && !(pageTable.limit > 10)"
+                  (change)="datatable.onFooterPage($event)">
+                </datatable-pager>
+                <div class="mobile-view mobile-footer col-xs-12" [hidden]="!((rowCount / pageTable.limit) > 1) && !(pageTable.limit > 10)">
+                  <p class="blue-letter" (click)="showMore()">Show More</p>
+                </div>
+              </ng-template>
+          </ngx-datatable-footer>
+          </ngx-datatable>
+       </div>
+    </div>
+  </div>
+</div>

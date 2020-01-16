@@ -1,0 +1,67 @@
+mat-tab-group[vertical] .mat-tab-labels {
+    display: flex;
+    flex-direction: column!important;
+}
+
+mat-tab-group[vertical] {
+    display: flex;
+    flex-direction: row!important;
+}
+
+#saveAndContinueContractButton {
+    margin-left:1rem;
+}
+
+#cancel {
+    background-color: #5C6B70;
+}
+
+.cm-btn {
+    border-radius: 0.5rem;
+    padding: 1rem 1.5rem;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+.btn-container {
+    padding-top: 2rem;
+}
+
+.page-title {
+    font-size: 2.2rem;
+    position: relative;
+    left: 1.5rem;
+    top: -1rem;
+    color: black;
+}
+
+.row.ng-star-inserted {
+    padding-top: 1rem; 
+}
+
+.tab-label {
+    /deep/ .row {
+        padding-left: 1.5rem;
+        padding-top: 3rem; 
+        padding-right: 1.5rem;
+    }
+}
+
+.cm-card-body {
+    padding: 0;
+}
+
+.heading-section-add-contract {
+    padding-left: 10px;
+    margin: 2rem 0rem;
+}
+
+:host ::ng-deep .fa-calendar{
+  font-size: 15px !important;
+}
+
+:host ::ng-deep mat-error {
+  margin-top: 5px;
+}

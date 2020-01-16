@@ -1,0 +1,13 @@
+<div [ngClass]="oneSubtab ? 'col-md-4' : 'col-md-6'" style="padding-top: 1.5rem;" [formGroup]="formGroup">
+  <mat-form-field class="col-md-12">
+    <mat-select disableOptionCentering panelClass="select-dropdown-class" [placeholder]="field.name" 
+        [formControl]="formGroup.controls[field.database_column_name]"  required="false">
+        <mat-option *ngFor="let opt of arrayData" [value]="opt.code" ngDefaultControl>
+            {{field && !field.default_field ? opt.value : opt.name}}
+        </mat-option>
+    </mat-select>
+    <mat-error *ngIf="formGroup.controls[field.database_column_name].invalid">
+      {{getErrorMessage(formGroup.controls[field.database_column_name])}}
+    </mat-error>
+  </mat-form-field>
+</div>

@@ -1,0 +1,30 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+:host {
+    ::ng-deep ng-data-tables {
+        table {
+            tbody {
+                tr {
+                    td {
+                        @media(min-width: 992px) and (max-width: 999999px) {
+                            &:nth-child(1) {
+                                width: 20%;
+                            }
+                            &:nth-child(2) {
+                                width: 20%;
+                            }
+                        }                    
+                    }
+                }
+            }
+        }
+    }
+}
+
+.actionIcon{
+	margin-top: 11px;
+}
+.margin-top{
+	margin-top: 20px;
+}

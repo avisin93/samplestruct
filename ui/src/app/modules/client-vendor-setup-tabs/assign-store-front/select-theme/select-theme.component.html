@@ -1,0 +1,30 @@
+<div class="select-theme-wrap">
+  <div class="select-theme-error" *ngIf="themeRequired">Please select at least one theme.</div>
+  <div class="theme-selection-carousel-wrap">
+    <div class="theme-selection-carousel owl-carousel" #carousel carousel [options]="{items: 4, dots: false, nav: true, margin: 20}" [responsive]="responsive" [navText]="navText" [refresh]="refresh">  
+      <div *ngFor="let theme of themes" style="width: 210px;">
+        <div class="theme-wrap" [class.selected-theme]="selectedTheme == theme.themeId" (click)="selectTheme(theme)">
+          <h2>{{theme.themedesc}}</h2>
+          <div class="colors-wrap">
+            <p>Colors</p>
+            <div class="colors-boxes">
+              <div class="color-box" *ngFor="let color of theme.colors" [style.background-color]="color"></div>
+            </div>
+          </div>
+          <div class="font-wrap">
+            <p>Font</p>
+            <span>{{theme.font}}</span>
+          </div>
+          <div class="select-link">SELECT</div>        
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="action-wrap" [formGroup]="form">    
+    <div class="text-right">        
+        <input type="hidden" formControlName="storeFrontTheme" />
+        <button type="submit" mat-button class="app-btn orange-button save-btn" (click)="saveContinue(form)">Save and Continue</button>
+    </div>
+  </div>
+</div>
+

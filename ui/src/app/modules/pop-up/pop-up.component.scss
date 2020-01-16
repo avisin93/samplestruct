@@ -1,0 +1,51 @@
+.accept-button {
+  background-color: #D71996;
+  margin-left: 2rem !important;
+}
+
+.cancel-button {
+  background-color: white;
+  color: #1d7ab4;
+  border: none;
+
+  &:hover,
+  &:active {
+    background-color: white;
+    color: #1d7ab4;
+    border: none;
+  }
+}
+
+.action-content{
+  margin-top: 5rem;
+  text-align: right;
+}
+
+.close-button-position {
+  float: right;
+  & > .close-button {
+    line-height: normal;
+    border: none;
+    background: white;
+  }
+}
+
+.heading {
+  font-size: 1.8rem;
+  font-weight: normal;
+  color: #18191B;
+  float: left;
+  margin-top: 1.3 rem;
+}
+
+.text {
+  margin-top: 13px;
+  width: 90%;
+  font-size: 1.3rem;;
+  color: #40505b;
+  float: left;
+}
+
+.text-div {
+  min-height: 7.5rem;
+}

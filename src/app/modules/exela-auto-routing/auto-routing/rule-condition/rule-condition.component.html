@@ -1,0 +1,18 @@
+<form [formGroup]="autoRoutingForm">
+  <div class="section-wrap">
+    <ng-data-tables [columns]="columns" [rows]="records" [hasActionButtons]="hasActionButtons" (edit)="edit($event)" (delete)="delete($event)" [totalRows]=totalRows>
+      <div class="align-right" button-toolbar>
+        <div class="inner">
+          <button i18n mat-button class="app-btn orange-button" (click)="add()">Add</button>
+        </div>
+      </div>
+    </ng-data-tables>
+  </div>
+  <div class="action-wrap">
+    <div class="text-right">
+      <button i18n type="button" mat-button class="app-btn" id="cancel" (click)="gotoRoutingRuleList()" >Cancel</button>
+      <button i18n type="button" mat-button class="app-btn dark-blue-button" (click)="previous()">Previous</button>
+      <button i18n type="submit" mat-button class="app-btn orange-button save-btn" (click)="next()">Next</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,88 @@
+<div class="col-md-12" [formGroup]="formGroup">
+    <div class="top-section row-10 mar-20 heading-section-my-profile">
+        <div class="hidden-xs col-xs-12 col-sm-6">
+            <app-heading-section heading="Profile">
+                <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+            </app-heading-section>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="row">
+        <div class="my-profile-image-card">
+            <div class="col-xs-12 margin-top-10">
+                <div class="image-upload-my-profile-box">
+                    <div class="image-selected-wrap" *ngIf="logoSelected">
+                        <img src="{{formGroup.get('profilePhoto').value}}"/>
+                    </div>
+                    <div class="image-upload-circle" *ngIf="!logoSelected">
+                        <i class="material-icons" style="font-size:155px">perm_identity</i>
+                    </div>
+                    <label class="camera-icon" for="input-file">
+                        <i class="fas fa-camera fa-2x"></i><br/>
+                    </label>
+                    <label class="remove-icon">
+                        <i class="far fa-trash-alt fa-1x" (click)="removeImage()"></i><br/>
+                    </label>
+                    <input id="input-file" type="file" name="file" accept="image/*" (change)="selectProfilePhoto(inputImage)" #inputImage />
+                </div>
+            </div>
+        </div>
+        <div class="my-profile-data-card">
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field class="col-md-12 no-line">
+                        <input readonly matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+                            placeholder="User Name" aria-invalid="false" formControlName="username" aria-required="false" required='false'
+                            name="username" [readonly]="true">
+                        <mat-error *ngIf="formGroup.get('username').invalid">
+                            {{getErrorMessage(formGroup.get('username'), { required: 'User Name is required' })}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field class="col-md-12 no-line">
+                        <input readonly matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+                            placeholder="Email" aria-invalid="false" formControlName="email" aria-required="false" required='false'
+                            name="email" [readonly]="true">
+                        <mat-error *ngIf="formGroup.get('email').invalid">
+                            {{getErrorMessage(formGroup.get('email'), { required: 'Email is required' })}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field class="col-md-12" [ngClass]="{'no-line' : !editProfileInformation}">
+                        <input readonly matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+                            placeholder="First Name" aria-invalid="false" formControlName="name" aria-required="false" required='false'
+                            name="name" [readonly]="!editProfileInformation">
+                        <mat-error *ngIf="formGroup.get('name').invalid">
+                            {{getErrorMessage(formGroup.get('name'), { required: 'First Name is required', pattern: 'Incorrect data, Alphanumeric values with only Special characters _ \' and spaces are allowed' })}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field class="col-md-12" [ngClass]="{'no-line' : !editProfileInformation}">
+                        <input readonly matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+                            placeholder="Last Name" aria-invalid="false" formControlName="lastName" aria-required="false" required='false'
+                            name="lastName" [readonly]="!editProfileInformation">
+                        <mat-error *ngIf="formGroup.get('lastName').invalid">
+                            {{getErrorMessage(formGroup.get('lastName'), { required: 'Last Name is required', pattern: 'Incorrect data, Alphanumeric values with only Special characters _ \' and spaces are allowed' })}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row my-profile-buttons">
+                <div class="col-md-12 content-right btn-container">
+                    <button *ngIf="editProfileInformation" class="cm-btn" id="cancel" (click)="cancelProfile()">Cancel</button>
+                    <button *ngIf="!editProfileInformation" class="cm-btn primary-pink-color" id="editButton" (click)="editProfile()">Edit</button>
+                    <button *ngIf="editProfileInformation" class="cm-btn primary-pink-color" id="updateButton" (click)="updateProfile('updateProfile',formGroup)">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

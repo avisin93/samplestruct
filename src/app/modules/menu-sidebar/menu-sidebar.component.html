@@ -1,0 +1,23 @@
+<div class="cm-menu-sidebar {{sidebarClass}}">
+  <ul class="menu-items">
+    <li *ngFor="let item of items" class="menu-item" routerLinkActive="expanded">
+      <a #elem *ngIf="item.children !== undefined" (click) = "toggleSideMenu(elem)">
+        <i class="menu-icon {{item.icon}}"></i>
+        <span *ngIf="sidebarClass !== 'compacted'" class="menu-title">{{item.title}}</span>
+        <i *ngIf="sidebarClass !== 'compacted'" class="menu-icon menu-icon-right fas fa-chevron-down"></i>
+      </a>
+      <ul #el *ngIf="item.children !== undefined" class="menu-items" routerLinkActive="expanded"
+        [@slideInOut]="(el.classList.contains('expanded')) ? 'in' : 'out'">
+        <li *ngFor="let child of item.children" class="menu-item">
+          <a routerLink="{{child.link}}" routerLinkActive="active-link">
+              <span class="menu-title">{{child.title}}</span>
+          </a>
+        </li>
+      </ul>
+      <a *ngIf="item.children === undefined" routerLink="{{item.link}}" (click)="currentLink = item.link">
+        <i class="menu-icon {{item.icon}}"></i>
+        <span *ngIf="sidebarClass !== 'compacted'" class="menu-title">{{item.title}}</span>
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,105 @@
+<div class="mb-vw">
+  <button class="accordion active">Fixed Period</button>
+  <div class="panel show">
+    <cm-fixed-period [arrayTimePeriods]="arrayTimePeriods" [arrayRenewalTypes]="arrayRenewalTypes"
+      [minStartDate]="minStartDate" [maxStartDate]="maxStartDate" (isDirty)="dirtyForm($event)"></cm-fixed-period>
+    <div class="btn-mob-container">
+      <button color="primary" class="cm-mob-btn" id="cancel" (click)="cancel()">
+        Cancel
+      </button>
+      <button color="primary" class="cm-mob-btn primary-pink-color"
+        (click)="saveAndContinueTermContract('FIXED_PERIOD')">
+        SAVE AND CONTINUE
+      </button>
+    </div>
+  </div>
+
+  <button class="accordion">Fixed Period Without Renewal</button>
+  <div class="panel">
+    <cm-fixed-period-without-renewal [arrayTimePeriods]="arrayTimePeriods" [arrayRenewalTypes]="arrayRenewalTypes"
+      [minStartDate]="minStartDate" [maxStartDate]="maxStartDate" (isDirty)="dirtyForm($event)">
+    </cm-fixed-period-without-renewal>
+    <div class="btn-mob-container">
+      <button color="primary" class="cm-mob-btn" id="cancel" (click)="cancel()">
+        Cancel
+      </button>
+      <button color="primary" class="cm-mob-btn primary-pink-color"
+        (click)="saveAndContinueTermContract('FIXED_PERIOD_WITHOUT_RENEWAL')">
+        SAVE AND CONTINUE
+      </button>
+    </div>
+  </div>
+
+  <button class="accordion">Open Ended Contracts</button>
+  <div class="panel">
+    <cm-open-ended-contracts [arrayTimePeriods]="arrayTimePeriods" [arrayRenewalTypes]="arrayRenewalTypes"
+      [minStartDate]="minStartDate" [maxStartDate]="maxStartDate" (isDirty)="dirtyForm($event)">
+    </cm-open-ended-contracts>
+    <div class="btn-mob-container">
+      <button color="primary" class="cm-mob-btn" id="cancel" (click)="cancel()">
+        Cancel
+      </button>
+      <button color="primary" class="cm-mob-btn primary-pink-color"
+        (click)="saveAndContinueTermContract('OPEN_ENDED_CONTRACTS')">
+        SAVE AND CONTINUE
+      </button>
+    </div>
+  </div>
+</div>
+
+<mat-tab-group flex="1" vertical class="vertical-mat-tab ds-vw" #tabGroup [(selectedIndex)]="selectedIndex">
+  <!-- <mat-tab [disabled]="typeOfContractTerm != 'FIXED_PERIOD' && typeOfContractTerm != ''"  -->
+  <!-- [active]="typeOfContractTerm != 'FIXED_PERIOD' && typeOfContractTerm != ''" -->
+  <mat-tab label="Fixed Period">
+    <ng-template matTabContent>
+      <cm-fixed-period [arrayTimePeriods]="arrayTimePeriods" [arrayRenewalTypes]="arrayRenewalTypes"
+        [minStartDate]="minStartDate" [maxStartDate]="maxStartDate" (isDirty)="dirtyForm($event)"></cm-fixed-period>
+      <div class="btn-container">
+        <button color="primary" class="cm-btn" id="cancel" (click)="cancel()">
+          Cancel
+        </button>
+        <button color="primary" class="cm-btn primary-pink-color" (click)="saveAndContinueTermContract('FIXED_PERIOD')">
+          SAVE AND CONTINUE
+        </button>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <!-- <mat-tab [disabled]="typeOfContractTerm != 'FIXED_PERIOD_WITHOUT_RENEWAL' && typeOfContractTerm != ''" -->
+  <mat-tab #tabGroup label="Fixed Period Without Renewal">
+    <ng-template matTabContent>
+      <cm-fixed-period-without-renewal [arrayTimePeriods]="arrayTimePeriods" [arrayRenewalTypes]="arrayRenewalTypes"
+        [minStartDate]="minStartDate" [maxStartDate]="maxStartDate" (isDirty)="dirtyForm($event)">
+      </cm-fixed-period-without-renewal>
+      <div class="btn-container">
+        <button color="primary" class="cm-btn" id="cancel" (click)="cancel()">
+          Cancel
+        </button>
+        <button color="primary" class="cm-btn primary-pink-color"
+          (click)="saveAndContinueTermContract('FIXED_PERIOD_WITHOUT_RENEWAL')">
+          SAVE AND CONTINUE
+        </button>
+      </div>
+    </ng-template>
+  </mat-tab>
+
+  <!-- <mat-tab [disabled]="typeOfContractTerm != 'OPEN_ENDED_CONTRACTS' && typeOfContractTerm != ''" -->
+  <!-- [active]="
+      typeOfContractTerm != 'OPEN_ENDED_CONTRACTS' && typeOfContractTerm != ''
+    " -->
+  <mat-tab #tabGroup label="Open Ended Contracts">
+    <ng-template matTabContent>
+      <cm-open-ended-contracts [arrayTimePeriods]="arrayTimePeriods" [arrayRenewalTypes]="arrayRenewalTypes"
+        [minStartDate]="minStartDate" [maxStartDate]="maxStartDate" (isDirty)="dirtyForm($event)">
+      </cm-open-ended-contracts>
+      <div class="btn-container">
+        <button color="primary" class="cm-btn" id="cancel" (click)="cancel()">
+          Cancel
+        </button>
+        <button color="primary" class="cm-btn primary-pink-color"
+          (click)="saveAndContinueTermContract('OPEN_ENDED_CONTRACTS')">
+          SAVE AND CONTINUE
+        </button>
+      </div>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

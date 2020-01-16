@@ -1,0 +1,39 @@
+<div mat-dialog-title>
+    <div class="title-position">
+        <h3>Add Contract</h3>
+    </div>
+    <div class="close-button-position">
+        <button class="close-button" mat-dialog-close (click)="cancelUpload()">
+            x
+        </button>
+    </div>
+</div>
+<mat-dialog-content class="content-mat-dialog">
+  <div class="center" class="file-upload-wrapper">
+    <ngx-file-drop dropZoneClassName="file-drop" 
+           dropZoneLabel="Drop files here"
+           multiple="false" 
+          (onFileDrop)="dropped($event)"
+          accept="application/pdf, text/plain, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    >
+        <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+          <div class="drop-point" (click)="openFileSelector()">
+            <div class="upload-document">
+                <i class="fas fa-upload"></i>
+                <p>{{files[0] && files[0].relativePath !== undefined ? files[0].relativePath : 'Upload Document'}}</p>
+            </div>
+          </div>
+        </ng-template>
+    </ngx-file-drop>
+  </div>
+</mat-dialog-content>
+<mat-dialog-content class="checkbox-class">
+    <mat-checkbox #extractCheckbox [checked]="extractCheckboxChecked"
+        (click)="onClickExtractData($event)">
+        <span style="font-size: larger;font-weight: 500;">Extract contract data automatically</span>
+    </mat-checkbox>
+</mat-dialog-content>
+<mat-dialog-actions class="buttons-class">
+    <button class="dialog-button" id="cancel" mat-button mat-dialog-close (click)="cancelUpload()">Cancel</button>
+    <button class="dialog-button primary-pink-color" mat-raised-button #saveButton (click)="saveDocument()">Save</button>
+</mat-dialog-actions>

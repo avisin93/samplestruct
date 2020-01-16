@@ -1,0 +1,115 @@
+<ngx-datatable
+  #datatable
+  class="material novi"
+  [rows]="rowsTable"
+  [columns]="columnsTable"
+  [footerHeight]="50"
+  [messages]="myMessages"
+  [headerHeight]="65"
+  [rowHeight]="'100%'"
+  [count]="pageTable.count"
+  [offset]="pageTable.offset"
+  [limit]="pageTable.limit"
+  [columnMode]="'force'"
+  (page)="pageCallback($event)"
+  (sort)="sortCallback($event)"
+>
+  <!-- [sortable]="true" -->
+  <ng-template
+    #sortableHeaderTemplate
+    let-sort="sortFn"
+    let-column="column"
+    let-sortDir="sortDir"
+    ngx-datatable-header-template
+  >
+    <div class="screen-view">
+      <span (click)="sort($event, sortDir, sortFn)" class="header-name novi">
+        {{ column.name }}
+      </span>
+      <div class="filter-continer novi">
+        <input
+          class="filter novi"
+          placeholder="Filter"
+          (keyup)="updateFilter($event, column.prop)"/>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #dateFormatTemplate let-row="row" ngx-datatable-cell-template>
+    <div class="screen-view">
+      {{row.date_modified | date:'MM/dd/yyyy'}}
+    </div>
+  </ng-template>
+  <ng-template #textColumnTemplate let-row="row" let-value="value" let-rowIdentity="rowIdentity" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+    <div class="screen-view">
+      <span>{{value}}</span>
+    </div>
+  </ng-template>
+  <ng-template #firstColumnTemplate let-row="row" let-value="value" let-rowIdentity="rowIdentity" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+    <span class="screen-view">{{value}}</span>
+    <div class="mobile-view">
+      <div class="row">
+        <div class="col-xs-6 mobile-inner-div">
+          <div class="col-xs-12 align-left">
+            USER
+          </div> <!-- header of a row-->
+          <div class="col-xs-12 align-left">
+            {{row.user}}
+          </div>
+        </div>
+        <div class="col-xs-6 mobile-inner-div">
+          <div class="col-xs-12 align-right">
+            DATE
+          </div> <!-- header of a row-->
+          <div class="col-xs-12 align-right">
+            {{row.date_modified | date:'MM/dd/yyyy'}}
+          </div>
+        </div>
+        <div class="col-xs-12 mobile-inner-div">
+          <div class="col-xs-12 align-left">
+            ACTIVITY
+          </div> <!-- header of a row-->
+          <div class="col-xs-12 align-left break-work">
+            {{row.activity}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ngx-datatable-footer>
+    <ng-template
+      ngx-datatable-footer-template
+      let-rowCount="rowCount"
+      let-pageSize="pageTable.limit"
+      let-curPage="curPage"
+      let-offset="pageTable.offset"
+      let-isVisible="isVisible"
+    >
+      <div class="page-count screen-view" [hidden]="!(rowCount / pageTable.limit > 1)">
+        {{ datatable.messages.totalMessage
+        }}{{ pageTable.offset * pageTable.limit + 1 }} -
+        {{
+          pageTable.offset * pageTable.limit + pageTable.limit > rowCount
+            ? rowCount
+            : pageTable.offset * pageTable.limit + pageTable.limit
+        }}
+        of {{ rowCount.toLocaleString() }}
+      </div>
+      <div class="screen-view" [hidden]="!(rowCount / pageTable.limit > 1)"></div>
+      <datatable-pager class="screen-view"
+        [pagerLeftArrowIcon]="'datatable-icon-left'"
+        [pagerRightArrowIcon]="'datatable-icon-right'"
+        [pagerPreviousIcon]="'datatable-icon-prev'"
+        [pagerNextIcon]="'datatable-icon-skip'"
+        [page]="curPage"
+        [size]="pageTable.limit"
+        [count]="rowCount"
+        [hidden]="!(rowCount / pageTable.limit > 1)"
+        (change)="datatable.onFooterPage($event)"
+      >
+      </datatable-pager>
+      <div class="mobile-view mobile-footer col-xs-12" [hidden]="!((rowCount / pageTable.limit) > 1) && !(pageTable.limit > 10)">
+        <p class="blue-letter" (click)="showMore()">Show More</p>
+      </div>
+    </ng-template>
+  </ngx-datatable-footer>
+</ngx-datatable>

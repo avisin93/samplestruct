@@ -1,0 +1,82 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+.add-escalation-method {
+    padding: 30px 20px 30px;
+
+    .action-wrap {
+        margin-top: 3px;
+    }
+
+    .checkbox-wrap {
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .mat-checkbox {
+            margin-left: 15px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+        } 
+
+        @include checkbox-styled();
+    }        
+
+    .full-width-input-wrap .mat-select {
+        padding-bottom: 1em;
+    }
+
+    textarea {
+        height: 68px;
+        resize: none;
+    }
+
+    .select-logo-error {
+        @include applyFont($fontSize: 13px);        
+        color: #f44336;
+        margin-bottom: 14px;
+    }
+}
+.popup-overflow  {
+    overflow-x: hidden;
+    overflow-y: auto;
+   // overflow: hidden;
+} 
+.btn-padding {
+    padding-top: 26px;
+}
+.font-smaller{
+    font-size: 71% !important;
+    position: absolute !important;
+        top: 48px;
+}
+.example-container {
+    height: 350px;
+    overflow: auto;
+}
+.btn-position{
+    margin-top: 2em;
+    text-align: right;
+}
+
+.margin-bottom-10{
+    margin-bottom:10px;
+}
+.margin-bottom-15{
+     margin-bottom:15px;
+}
+.drop-top{
+    top:3px;
+    font-size: 17px;
+
+}
+
+  .scrollable-content {
+    //padding: 16px;
+     margin: 0;
+   }
+   .font-small{
+    font-size: 71% !important;
+    position: absolute !important;
+        top: 48px;
+   }

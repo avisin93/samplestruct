@@ -1,0 +1,69 @@
+<div *ngIf= "!formGroup.get('is_deleted').value" class="row" [formGroup]="formGroup" style="padding-bottom: 2rem;">
+    <div class="col-lg-3">
+        <mat-form-field class="col-md-12">
+        <mat-label>Label</mat-label>
+        <input matInput formControlName="name" />
+        <mat-error *ngIf="formGroup.get('name').invalid">
+            {{getErrorMessage(formGroup.get('name'), { required: 'Name is required', pattern: 'Name can be only alphabetic' })}}
+        </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="col-lg-3">
+        <mat-form-field class="col-md-12">
+        <mat-label>Value</mat-label>
+        <mat-select disableOptionCentering panelClass="select-dropdown-class" (selectionChange)="selectedDropType($event)" formControlName="type">
+            <mat-option *ngFor="let attribute of attributeTypes" [value]="attribute.name">
+            {{ attribute.name }}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formGroup.get('type').invalid">
+            {{getErrorMessage(formGroup.get('type'), { required: 'Type is required'})}}
+        </mat-error>
+        </mat-form-field>
+    </div>
+    <div
+        *ngIf="!defaultField && (formGroup.get('type').value === 'Dropdown' || formGroup.get('type').value === 'DropdownCreate' || formGroup.get('type').value === 'Radio Group')"
+        class="col-lg-3"
+        formArrayName="options"
+    >
+        <mat-form-field class="col-md-12">
+        <mat-label>Add Options</mat-label>
+        <input matInput placeholder="Add" formControlName="0"/>
+        <span matSuffix>
+            <label *ngIf="!defaultField" (click)="addNewValue()">
+            <i class="fa fa-plus theme-fields"></i>
+            </label>
+        </span>
+        <mat-error>
+            You need to add at least 1 element and only alphabetic value is allowed!
+        </mat-error>
+        </mat-form-field>
+        <div
+        *ngFor="
+            let item of formGroup.get('options').controls | slice: 1;
+            let i = index
+        "
+        >
+        <mat-form-field class="col-md-12">
+            <input matInput [formControlName]="i + 1" />
+            <span matSuffix>
+            <label *ngIf="!defaultField" (click)="deleteValue(i + 1)">
+                <i class="fa fa-trash theme-fields"></i>
+            </label>
+            </span>
+            <mat-error *ngIf="formGroup.get('options').at(i + 1).invalid">
+                {{getErrorMessage(formGroup.get('options').at(i + 1), { required: 'Option is required', pattern: 'Enter alphabetic value'})}}
+            </mat-error>
+        </mat-form-field>
+        </div>
+    </div>
+    <div class="col-lg-3 is-default-field" *ngIf="!(formGroup.get('type').value === 'ParentChildInput' || formGroup.get('type').value === 'InputFile')">
+        <mat-checkbox formControlName="is_visible_form" (change)="onChangeVisibility($event)"> Is Visible
+        </mat-checkbox>
+    </div>   
+    <div class="col-lg-3 theme-fields remove-field" *ngIf="!defaultField">
+        <h5 (click)="removeField()" aria-label="remove">
+        Remove
+        </h5>
+    </div>
+</div>

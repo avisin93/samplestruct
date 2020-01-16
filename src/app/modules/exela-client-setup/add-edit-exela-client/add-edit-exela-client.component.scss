@@ -1,0 +1,55 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.client-setup-tabs-wrap {
+    margin-top: 25px;
+
+    .client-setup-tabs-card {
+        padding: 0px;
+
+        .client-setup-tabs {
+            border-bottom: 1px solid #F5F5F5;
+
+            ul {
+                list-style-type: none;
+                padding: 0px;
+                margin: 0px;
+                white-space: nowrap;
+
+                li {
+                    padding: 14px 30px 12px;
+                    @include applyFont($fontSize: 14px);
+                    letter-spacing: 0.7px;
+                    color: #767676;
+                    cursor: pointer;
+                    display: inline-block;
+
+                    &.hide-tab {
+                        display: none;
+                    }
+
+                    &.current-tab, &:hover {
+                        color: $primary_link;    
+                        font-weight: 600;
+                        border-bottom: 3px solid $primary_link;
+                    }
+                }
+            }
+        }
+
+        .facilities-tab {
+            padding: 30px 20px 30px;
+        }
+    }
+
+.scroll-container {
+  position: relative;
+}
+
+.scrollable-content {
+ padding: 16px;
+  margin: 0;
+}
+
+}
+ 

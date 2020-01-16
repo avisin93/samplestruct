@@ -1,0 +1,39 @@
+.toast-wrap{
+    position: absolute;
+    top: 80px;
+    left: auto;
+    right: 30px;
+    padding: 15px 24px 15px;   
+
+    @include applyFont($fontSize: 14px);
+    color: $white;     
+
+    .icon {
+        display: block;
+        float: left;
+    }    
+
+    .text {
+        display: block;
+        float: left;
+        margin-top: 5px;
+        margin-left: 10px;
+    }
+
+    &.toast-success {
+        background-color: #2e7d32;   
+        border:1px solid #266628;     
+        min-width: 180px;        
+    }
+
+    &.toast-error {
+        background-color: #cc0514;        
+        min-width: 180px;      
+        border:1px solid #ad051a;
+
+        .text {
+            margin-top: 0px;
+        }
+    }
+
+}

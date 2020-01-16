@@ -1,0 +1,140 @@
+.divided {
+    display: flex;
+    align-items: center;
+    padding-bottom: 4rem;
+    margin: 0 !important;
+
+    &:first-of-type{
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    &.text {
+      & > .divider {
+        width:5%;
+      }
+    }
+  }
+
+  .circle {
+    cursor: pointer;
+    position: relative;
+    border-radius: 50%;
+    width: 6.5rem;
+    white-space: nowrap;
+    @media (max-width: 575.98px) { 
+      width: 15%;
+    }    
+    & > .text {
+      position: absolute;
+      top: 7.5rem;
+      text-align: center;
+      font-weight: 400;
+      @media (max-width: 575.98px) { 
+        white-space: normal;
+      }
+    }
+
+    &:before {
+      content:     "";
+      display:     block;
+      padding-top: 100%; /* initial ratio of 1:1*/
+    }
+
+    &.circle-1 {
+      border: 0.5rem solid #DE1697;
+      @media (max-width: 575.98px) { 
+        border: 0.3rem solid #DE1697;
+      }
+    }
+
+    &.circle-2 {
+      border: 0.5rem solid #E65FB3;
+      @media (max-width: 575.98px) { 
+        border: 0.3rem solid #E65FB3;
+      }
+    }
+
+    &.circle-3 {
+      border: 0.5rem solid #EC85C7;
+      @media (max-width: 575.98px) { 
+        border: 0.3rem solid #EC85C7;
+      }
+    }
+
+    &.circle-4 {
+      border: 0.5rem solid #F4AED9;
+      @media (max-width: 575.98px) { 
+        border: 0.3rem solid #F4AED9;
+      }
+    }
+
+    &.circle-5 {
+      border: 0.5rem solid #F9D6EC;
+      @media (max-width: 575.98px) { 
+        border: 0.3rem solid #F9D6EC;
+      }
+      & > .text {
+        white-space: normal;
+      }
+    }
+
+  }
+
+  .divider {
+    flex-grow: 1;
+    padding-bottom:0.2rem;
+    background-size:100% 0.2rem;
+
+    &.divider-1 {
+      background:
+        linear-gradient(to right, #DE1697, #E65FB3)
+        left
+        bottom
+        #fff
+        no-repeat;
+    }
+
+    &.divider-2 {
+      background:
+        linear-gradient(to right, #E65FB3, #EC85C7)
+        left
+        bottom
+        #fff
+        no-repeat;
+    }
+
+    &.divider-3 {
+      background:
+        linear-gradient(to right, #EC85C7, #F4AED9)
+        left
+        bottom
+        #fff
+        no-repeat;
+    }
+
+    &.divider-4 {
+      background:
+        linear-gradient(to right, #F4AED9, #F9D6EC)
+        left
+        bottom
+        #fff
+        no-repeat;
+    }
+  }
+
+  .circle span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    font-weight: nb-theme(font-weight-bold);
+    font-weight: 600;
+  }
+  .circle span:not(.text) {
+    font-size: 1.6rem;
+  }
+
+  .circle .text {
+    font-size: 1.4rem;
+  }

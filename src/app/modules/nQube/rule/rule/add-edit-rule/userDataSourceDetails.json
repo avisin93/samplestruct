@@ -1,0 +1,148 @@
+{
+  "dataSources": [
+    {
+      "value": "POI",
+      "data": {
+        "operators": [
+          {
+            "displaytext": "First Name",
+            "dataType": "string",
+            "key": "firstName",
+            "type": "text"
+          },
+          {
+            "displaytext": "Last Name",
+            "dataType": "string",
+            "key": "lastName",
+            "type": "text"
+          },
+          {
+            "displaytext": "Middle Name",
+            "dataType": "string",
+            "key": "middleName",
+            "type": "text"
+          },
+          {
+            "displaytext": "Age",
+            "dataType": "number",
+            "key": "age",
+            "type": "number"
+          },
+          {
+            "displaytext": "Date of Birth",
+            "dataType": "date",
+            "key": "dob",
+            "type": "date"
+          },
+          {
+            "displaytext": "City",
+            "dataType": "string",
+            "key": "city",
+            "type": "text"
+          },
+          {
+            "displaytext": "State",
+            "dataType": "string",
+            "key": "state",
+            "type": "text"
+          },
+          {
+            "displaytext": "Zip Code",
+            "dataType": "string",
+            "key": "zip",
+            "type": "text"
+          },
+          {
+            "displaytext": "Email",
+            "dataType": "string",
+            "key": "email",
+            "type": "email"
+          },
+          {
+            "displaytext": "Language",
+            "dataType": "string",
+            "key": "language",
+            "type": "text"
+          },
+          {
+            "displaytext": "Alternate Language",
+            "dataType": "string",
+            "key": "alternateLanguage",
+            "type": "text"
+          },
+          {
+            "displaytext": "Gender",
+            "dataType": "string",
+            "key": "gender",
+            "type": "text"
+          },
+          {
+            "displaytext": "POI ID",
+            "dataType": "number",
+            "key": "poiid",
+            "type": "number"
+          },
+          {
+            "displaytext": "Deleted",
+            "dataType": "boolean",
+            "key": "deleteFlag",
+            "type": "checkbox"
+          },
+          {
+            "displaytext": "Active User",
+            "dataType": "boolean",
+            "key": "active",
+            "type": "checkobx"
+          }
+        ]
+      }
+    },
+
+     {
+      "value": "DMR",
+      "data": {
+        "operators": [
+          {
+            "displaytext": "User Name",
+            "dataType": "string",
+            "key": "username",
+            "type": "text"
+          },
+          {
+            "displaytext": "Last Name",
+            "dataType": "string",
+            "key": "lastname",
+            "type": "text"
+          },
+          {
+            "displaytext": "First Name",
+            "dataType": "string",
+            "key": "firstname",
+            "type": "text"
+          }, {
+            "displaytext": "Role",
+            "dataType": "array",
+            "key": "roles",
+            "type": "text"
+          },
+         
+          {
+            "displaytext": "Email",
+            "dataType": "string",
+            "key": "email",
+            "type": "email"
+          },
+                  {
+            "displaytext": "Active User",
+            "dataType": "boolean",
+            "key": "active",
+            "type": "checkobx"
+          }
+        ]
+      }
+    }
+
+
+
+  ]
+}

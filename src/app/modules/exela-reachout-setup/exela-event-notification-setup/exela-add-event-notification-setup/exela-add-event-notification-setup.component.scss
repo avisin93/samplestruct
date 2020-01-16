@@ -1,0 +1,138 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+.add-event-notification {
+    padding: 30px 20px 30px;
+
+    .action-wrap {
+        margin-top: 15px;
+    }
+
+    .checkbox-wrap {
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .mat-checkbox {
+            margin-left: 15px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+        } 
+
+        @include checkbox-styled();
+    }        
+
+    .full-width-input-wrap .mat-select {
+        padding-bottom: 1em;
+    }
+
+    textarea {
+        height: 68px;
+        resize: none;
+    }
+
+    .select-logo-error {
+        @include applyFont($fontSize: 13px);        
+        color: #f44336;
+        margin-bottom: 14px;
+    }
+
+      
+}
+
+.cart-payment-wrap {
+    position: relative;
+    height: 100%;
+
+    .cart-payment-inner {
+        @include card-box-shadow();
+    }
+
+    .radio-cols {
+        .radio-buttons-col {
+            margin-bottom: 10px;
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                display: inline-block;
+                margin-bottom: 0px;
+            }
+        }
+
+        .mat-radio-button {
+            margin-top: 15px;
+
+            &:first-child {
+                margin-top: 0px;
+            }
+
+            label {
+                margin: 0px;
+            }
+
+            .mat-radio-container {
+                background-color: #F2F2F2;
+                border-radius: 100%;
+            }
+
+            .mat-radio-label-content {
+                @include applyFont($fontSize: 14px, $fontWeight: 600);
+                color: #40505B;
+            }
+
+            .mat-ripple-element {
+                background-color: rgba(33, 138, 204, .26);
+            }
+
+            .mat-radio-outer-circle {
+                border: 1px solid #CFD3D4;
+            }
+
+            &.mat-radio-checked {
+                .mat-radio-container {
+                    background-color: $white;
+                }
+                .mat-radio-label-content {
+                    color: #218ACC;
+                }
+                .mat-radio-outer-circle {
+                    border-color: #218ACC;
+                }
+                .mat-radio-inner-circle {
+                    background-color: #218ACC;
+                }
+            }
+
+            
+        }
+        
+    }
+}
+
+.validation-error{
+    padding: 12px 0px 0px 16px;
+}
+.checkbox-wrap {
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    .mat-checkbox {
+        margin-left: 15px;
+
+        &:first-child {
+            margin-left: 0px;
+        }
+    } 
+
+    @include checkbox-styled();
+} 
+.font-smaller{
+    font-size: smaller;
+    top: 66px;
+    font-size:79%;
+
+}
+.font-sms{
+    margin-bottom: 4px;
+    font-size:79%;
+    margin-top: -1em;
+}

@@ -1,0 +1,200 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.middle-section {
+    &.row {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+
+    .cols {
+        margin-bottom: 30px;
+    }   
+
+    .action-links-col {
+        margin-top: 30px;
+        margin-bottom: 15px;
+
+        a {
+            @include applyFont($fontSize: 14px, $fontWeight: 600);
+            text-decoration: none;
+            outline: none;
+            display: inline-block;
+            padding: 0px 10px;
+            color: $secondary-color;
+
+            &:last-child {
+                padding-right: 0px;
+            }
+        }
+    }
+
+    .card-details {
+        min-height: 185px;
+
+        .card-inner {
+            h2 {
+                @include applyFont($fontFamily: 'Work Sans', $fontSize: 15px, $fontWeight: 600);
+                color: #40505B;
+                margin: 0px;
+            }
+
+            .details {
+                margin-top: 15px;
+
+                p {
+                    margin-top: 8px;
+                    margin-bottom: 0px;
+                    &:first-child {
+                        margin-top: 0px;
+                    }
+
+                    label {
+                        @include applyFont($fontSize: 13px, $lineHeight: 20px);
+                        color: #A4A4A4;
+                        float: left;    
+                        margin: 0px;                    
+                    }
+
+                    i {
+                        font-size: 14px;
+                        color: $gray_shade2;
+                        margin-right: 10px;
+                        margin-top: 4px;
+                        float: left;
+                        display: block;
+                    }
+
+                    span {
+                        @include applyFont($fontSize: 13px, $lineHeight: 20px);
+                        color: $gray_shade2;
+                        float: left;
+                        display: block;
+                        width: 80%;
+                    }               
+
+                    &:after {
+                        display: block;
+                        content: '';
+                        clear: both;
+                    }  
+                }
+            }
+        }
+    }
+
+    .order-details-col {
+        .card-details {
+            .card-inner {          
+                .details {            
+                    p {
+                        label {
+                            width: 45%;
+                            text-align: right;
+                            margin-right: 12px;        
+                            @media(min-width: 100px) and (max-width: 767px) {
+                                text-align: left;
+                            }                
+                        }
+                        span {
+                            width: 50%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .shiping-details-col {
+        .card-details {
+            min-height: initial;
+
+            .card-inner {
+                .details {
+                    p {
+                        &:first-child {
+                            @media(min-width: 768px) and (max-width: 9999999px) {
+                                margin-top: 8px;
+                            }                            
+                        }
+                    }                    
+                }
+            }
+        }
+    }
+
+    .payment-method-edit-col {
+        .card-inner-col-inner {
+            @media(min-width: 768px) and (max-width: 1200px) {
+                float: right;
+            }
+        }
+
+        ._rw {
+            margin-top: 15px;
+
+            &:first-child {
+                margin-top: 0px;
+            }
+
+            &:after {
+                content: '';
+                display: block;
+                clear: both;
+            }
+        }
+
+        .icon {
+            margin-right: 10px;
+            float: left;
+            margin-top:3px;
+        }
+
+        .text {
+            @include applyFont($fontSize: 20px, $lineHeight: 30px);
+            color: $gray_shade2;
+        }
+
+        .text, .text-el {
+            float: left;
+        }
+
+        .text-el {
+            line-height: 10px;
+            
+            label {
+                @include applyFont($fontSize: 11px);
+                letter-spacing: 0.5px;
+                color: #A4A4A4;
+                margin: 0px;
+                float: none;
+            }
+            span {
+                @include applyFont($fontSize: 13px);
+                color: $gray_shade2;
+                float: none;
+                margin-top: 0px;
+                display: block;
+            }
+            .edit-link {
+                @include applyFont($fontSize: 13px, $fontWeight: 600);
+                color: #C75000;
+                cursor: pointer;
+                margin-top: 4px;
+            }
+        }
+    }
+
+    .right-border {
+        @media(min-width: 768px) and (max-width: 99999px) {
+            border-right: 2px solid #E1E1E1;
+        }
+        
+    }
+
+    .padding-left-15 {
+        @media(min-width: 768px) and (max-width: 99999px) {
+            padding-left: 15px;
+        }
+    }
+}

@@ -1,0 +1,120 @@
+<div [formGroup]="formGroup">
+    <div *ngFor="let item of formArrayData.controls; let i = index" [ngSwitch]="arrayComponents[i].type">
+            <ng-container *ngSwitchCase="'TextFiled'">
+                    <cm-contracts-meta-tab-subtab-form-text-field
+                      [field]="arrayComponents[i]"
+                      [formGroup]="item"
+                      [oneSubtab]="oneSubtab"
+                    >
+                    </cm-contracts-meta-tab-subtab-form-text-field>
+                </ng-container>
+                <ng-container *ngSwitchCase="'NumericField'">
+                  <cm-contracts-meta-tab-subtab-form-numeric-field
+                    [field]="arrayComponents[i]"
+                    [formGroup]="item"
+                    [oneSubtab]="oneSubtab"
+                  >
+                  </cm-contracts-meta-tab-subtab-form-numeric-field>
+                </ng-container>
+                <ng-container *ngSwitchCase="'Dropdown'">
+                    <cm-contracts-meta-tab-subtab-form-dropdown
+                      [field]="arrayComponents[i]"
+                      [formGroup]="item"
+                      [oneSubtab]="oneSubtab"
+                      [clientConfigurations]="clientConfigurations"
+                    >
+                    </cm-contracts-meta-tab-subtab-form-dropdown>
+                </ng-container>
+                <ng-container *ngSwitchCase="'InputLocation'">
+                    <cm-contracts-meta-tab-subtab-form-input-location
+                      [field]="arrayComponents[i]"
+                      [formGroup]="item"
+                      [oneSubtab]="oneSubtab"
+                    >
+                    </cm-contracts-meta-tab-subtab-form-input-location>
+                </ng-container>
+                <ng-container *ngSwitchCase="'DropdownCreate'">
+                    <cm-contracts-meta-tab-subtab-form-dropdown-create
+                      [field]="arrayComponents[i]"
+                      [formGroup]="item"
+                      [oneSubtab]="oneSubtab"
+                      [clientConfigurations]="clientConfigurations"
+                      [tab]="tab"
+                      [subtab]="subtab"
+                      [addContractMetaModelId]="addContractMetaModelId"
+                    >
+                    </cm-contracts-meta-tab-subtab-form-dropdown-create>
+                </ng-container>
+                <ng-container *ngSwitchCase="'CurrencySelectInput'">
+                    <cm-contracts-meta-tab-subtab-form-currency-select-input
+                      [field]="arrayComponents[i]"
+                      [formGroup]="item"
+                      [oneSubtab]="oneSubtab"
+                    >
+                    </cm-contracts-meta-tab-subtab-form-currency-select-input>
+                </ng-container>
+                <ng-container *ngSwitchCase="'Datepicker'">
+                    <cm-contracts-meta-tab-subtab-form-datepicker
+                      [field]="arrayComponents[i]"
+                      [formGroup]="item"
+                      [oneSubtab]="oneSubtab"
+                    >
+                    </cm-contracts-meta-tab-subtab-form-datepicker>
+                </ng-container>
+                <ng-container *ngSwitchCase="'PeriodSelectInput'">
+                    <cm-contracts-meta-tab-subtab-form-period-select-input
+                      [field]="arrayComponents[i]"
+                      [formGroup]="item"
+                      [oneSubtab]="oneSubtab"
+                      [clientConfigurations]="clientConfigurations"
+                    >
+                    </cm-contracts-meta-tab-subtab-form-period-select-input>
+                </ng-container>
+                <ng-container *ngSwitchCase="'Textarea'">
+                    <cm-contracts-meta-tab-subtab-form-textarea
+                      [field]="arrayComponents[i]"
+                      [formGroup]="item"
+                      [oneSubtab]="oneSubtab"
+                    >
+                    </cm-contracts-meta-tab-subtab-form-textarea>
+                </ng-container>
+                <ng-container *ngSwitchCase="'InputFile'">
+                  <cm-contracts-meta-tab-subtab-form-input-file
+                    [field]="arrayComponents[i]"
+                    [formGroup]="item"
+                    [oneSubtab]="oneSubtab"
+                  >
+                  </cm-contracts-meta-tab-subtab-form-input-file>
+                </ng-container>
+                <ng-container *ngSwitchCase="'ParentChildInput'">
+                  <cm-contracts-meta-tab-subtab-form-parent-child-input
+                    [field]="arrayComponents[i]"
+                    [formGroup]="item"
+                    [oneSubtab]="oneSubtab"
+                    [objectData]="objectData"
+                  >
+                  </cm-contracts-meta-tab-subtab-form-parent-child-input>
+                </ng-container>
+                <ng-container *ngSwitchCase="'ChildInput'">
+                  <cm-contracts-meta-tab-subtab-form-child-input
+                    [field]="arrayComponents[i]"
+                    [formGroup]="item"
+                    [oneSubtab]="oneSubtab"
+                    [objectData]="objectData"
+                  >
+                  </cm-contracts-meta-tab-subtab-form-child-input>
+                </ng-container>
+                <ng-container *ngSwitchCase="'Radio Group'">
+                  <cm-contracts-meta-tab-subtab-form-radio-group
+                    [field]="arrayComponents[i]"
+                    [formGroup]="item"
+                    [oneSubtab]="oneSubtab"
+                  >
+                  </cm-contracts-meta-tab-subtab-form-radio-group>
+                </ng-container>
+    </div>
+</div>
+<div class="col-lg-12 content-right" style="padding-bottom: 3rem; padding-top: 1rem; padding-right: 3rem;">
+    <button class="cm-btn" id="cancel" (click)="cancel()">Cancel</button>
+    <button class="app-btn mat-primary mat-flat-button" (click)="this.subtab.name_subtab_object === 'documents' ? saveDocument() : saveAndContinue()">SAVE AND CONTINUE</button>
+</div>

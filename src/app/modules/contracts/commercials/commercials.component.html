@@ -1,0 +1,108 @@
+<div class="mb-vw">
+  <button class="accordion active">General Terms</button>
+  <div class="panel show">
+    <cm-general-terms [matgroupCommercials]="matgroupCommercials" (isDirty)="dirtyForm($event)"></cm-general-terms>
+    <div class="content-right btn-mob-container">
+      <button color="primary" class="cm-btn" id="cancel" (click)="cancel()">
+        Cancel
+      </button>
+      <button color="primary" class="cm-mob-btn primary-pink-color"
+        (click)="saveAndContinueCommercials('GENERAL_TERMS')">
+        Save and Continue
+      </button>
+    </div>
+  </div>
+
+  <button class="accordion">Transaction Rate - Standard</button>
+  <div class="panel">
+    <cm-transaction-rate-standard [generalInfoLocation]="generalInfoLocation"
+      [matgroupCommercials]="matgroupCommercials" (isDirty)="dirtyForm($event)">
+    </cm-transaction-rate-standard>
+  </div>
+
+  <button class="accordion">Transaction Rate - Volume</button>
+  <div class="panel">
+    <cm-transaction-rate-volume [generalInfoLocation]="generalInfoLocation" [matgroupCommercials]="matgroupCommercials"
+      (isDirty)="dirtyForm($event)">
+    </cm-transaction-rate-volume>
+  </div>
+  <button class="accordion">Time and Material Model</button>
+  <div class="panel">
+    <cm-time-material-model [generalInfoLocation]="generalInfoLocation" [matgroupCommercials]="matgroupCommercials"
+      (isDirty)="dirtyForm($event)">
+    </cm-time-material-model>
+  </div>
+  <button class="accordion">Fixed Fee</button>
+  <div class="panel">
+    <cm-fixed-fee [generalInfoLocation]="generalInfoLocation" [matgroupCommercials]="matgroupCommercials"
+      (isDirty)="dirtyForm($event)">
+    </cm-fixed-fee>
+  </div>
+  <button class="accordion">Minimum Billing</button>
+  <div class="panel">
+    <cm-minimum-billing [generalInfoLocation]="generalInfoLocation" [matgroup]="matgroup" (isDirty)="dirtyForm($event)">
+    </cm-minimum-billing>
+  </div>
+
+</div>
+
+
+
+<mat-tab-group flex="1" vertical class="vertical-mat-tab ds-vw" #matgroupCommercials [(selectedIndex)]="selectedIndex"
+  (selectedTabChange)="onTabChange()">
+
+  <mat-tab label="General Terms">
+    <ng-template matTabContent>
+      <cm-general-terms [matgroupCommercials]="matgroupCommercials" (isDirty)="dirtyForm($event)"></cm-general-terms>
+      <div class="content-right btn-container">
+        <button color="primary" class="cm-btn" id="cancel" (click)="cancel()">
+          Cancel
+        </button>
+        <button color="primary" class="cm-btn primary-pink-color" (click)="saveAndContinueCommercials('GENERAL_TERMS')">
+          Save and Continue
+        </button>
+      </div>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Transaction Rate - Standard" [disabled]="addMode">
+    <ng-template matTabContent>
+      <cm-transaction-rate-standard [generalInfoLocation]="generalInfoLocation"
+        [matgroupCommercials]="matgroupCommercials" (isDirty)="dirtyForm($event)">
+      </cm-transaction-rate-standard>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Transaction Rate - Volume" [disabled]="addMode">
+    <ng-template matTabContent>
+      <cm-transaction-rate-volume [generalInfoLocation]="generalInfoLocation"
+        [matgroupCommercials]="matgroupCommercials" (isDirty)="dirtyForm($event)">
+      </cm-transaction-rate-volume>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Time and Material Model" [disabled]="addMode">
+    <ng-template matTabContent>
+      <cm-time-material-model [generalInfoLocation]="generalInfoLocation" [matgroupCommercials]="matgroupCommercials"
+        (isDirty)="dirtyForm($event)">
+      </cm-time-material-model>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Fixed Fee" [disabled]="addMode">
+    <ng-template matTabContent>
+      <cm-fixed-fee [generalInfoLocation]="generalInfoLocation" [matgroupCommercials]="matgroupCommercials"
+        (isDirty)="dirtyForm($event)">
+      </cm-fixed-fee>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Minimum Billing" [disabled]="addMode">
+    <ng-template matTabContent>
+      <cm-minimum-billing [generalInfoLocation]="generalInfoLocation" [matgroup]="matgroup"
+        (isDirty)="dirtyForm($event)">
+      </cm-minimum-billing>
+    </ng-template>
+  </mat-tab>
+
+</mat-tab-group>

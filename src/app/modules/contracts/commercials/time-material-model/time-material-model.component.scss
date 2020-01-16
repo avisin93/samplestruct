@@ -1,0 +1,72 @@
+
+#add-button-div {
+  text-align: right;
+  margin-bottom: 1rem;
+
+  >#add-button {
+      background-color: #C75000;
+      margin-left:2rem;
+  }
+}
+
+i{
+  cursor: pointer;
+}
+
+.cm-btn {
+  box-shadow: none;
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+
+cm-add-time-material-dialog {
+  width: 100%;
+}
+
+.content-right {
+  width: 100%;
+}
+
+.btn-container {
+  padding-bottom: 3rem;
+  padding-top: 3rem;
+}
+@media only screen and (min-width: 1024px) {
+  .mb-vw{
+      display: none;
+  }
+  .ds-vw {
+      display: flex;
+      justify-content: flex-end;
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .mb-vw{
+      display: block;
+  }
+  .ds-vw {
+      display: none;
+  }
+}
+
+.btn-mob-container {
+  display: flex !important;
+  -webkit-box-pack: end;
+  justify-content: center;
+  padding-bottom: 3rem;
+  padding-top: 3rem;
+}
+.cm-mob-btn {
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  color: white;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 500;
+  white-space: nowrap;
+}

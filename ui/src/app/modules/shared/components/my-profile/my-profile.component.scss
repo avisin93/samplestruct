@@ -1,0 +1,105 @@
+.my-profile-image-card {
+    background: white;
+    border: 0.05rem solid #dfe3eb;
+    margin-bottom: 1.5rem;
+    width: 250px;
+    margin-left: 1.7rem;
+    overflow: hidden;
+    height: 1%;
+    display: table;
+}
+
+.my-profile-data-card {
+    background: white;
+    border: 0.05rem solid #dfe3eb;
+    margin-bottom: 1.5rem;
+    width: 70%;
+    margin-left: 1.7rem;
+}
+
+.my-profile-buttons {
+    .content-right {
+        padding-bottom: 2rem;
+    }
+}
+
+.heading-section-my-profile {
+    padding-left: 10px;
+    margin-bottom: 10px;
+
+    div {
+        padding-left: 0;
+    }
+}
+
+.row {
+    padding-top: 3rem; 
+    padding-right: 1.5rem;
+}
+
+#editButton, #updateButton {
+    margin-left:1rem;
+    width: 10rem;
+}
+
+.image-upload-my-profile-box {
+    padding-top: 4rem;
+    input {
+        display: none;
+    }
+    .image-selected-wrap {
+        height: 200px;
+        border-radius: 50%;
+        border: 20px solid  #F8F9FB;
+        display: block;
+        background-color: #E1E2E4;
+        text-align: center;
+        position: relative;
+        margin-bottom: 45px;
+        input {
+            display: none;
+        }
+        img {
+            object-fit: cover;
+            max-width: 100%;
+            height: 100%;
+            border-radius: 50%
+        }
+    }
+
+    .image-upload-circle {
+        height: 200px;
+        border-radius: 50%;
+        border: 20px solid  #F8F9FB;
+        display: block;
+        background-color: #E1E2E4;
+        text-align: center;
+        margin-bottom: 45px;
+    }
+
+    .camera-icon {
+        color: #FFFFFF;
+        position: absolute;
+        text-align: center;
+        border: 10px solid #d71996;
+        background-color: #d71996;
+        border-radius: 50%;
+        top: 60%;
+        right: 2%;
+    }
+
+    .remove-icon {
+        color: #FFFFFF;
+        position: absolute;
+        text-align: center;
+        border: 5px solid #4979f7;
+        background-color: #4979f7;
+        border-radius: 50%;
+        top: 75%;
+        right: 25%;
+    }
+}
+
+::ng-deep .no-line .mat-form-field-underline {
+    display: none;
+}

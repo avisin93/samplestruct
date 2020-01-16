@@ -1,0 +1,37 @@
+.btn-container-bottom {
+    padding-bottom: 3rem;
+    padding-top: 3rem;
+}
+
+.content-right-cp {
+    width: 100%;
+    padding-right: 2rem;
+    text-align: right;
+}
+
+#saveButton {
+    margin-left:1rem;
+}
+
+#resetButton {
+    color: #1277d9;
+    background-color: white;
+    border: none;
+}
+
+.cm-btn {
+    border-radius: 0.5rem;
+    padding: 1rem 1.5rem;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+.add-new-field {
+    padding-left: 3rem;
+    color: #C75000 !important;
+    font-weight: 500;
+    font-size: 1.4rem;
+    cursor: pointer;
+}

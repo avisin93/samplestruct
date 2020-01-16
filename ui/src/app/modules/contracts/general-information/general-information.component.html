@@ -1,0 +1,168 @@
+<div [formGroup]="formGroup">
+  <div class="row">
+    <div class="col-md-4 fields-with-plus">
+      <div class="col-md-11">
+        <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Category"
+            formControlName="selectedContractCategory" (selectionChange)="selectedCategory()" required="false">
+            <mat-option *ngFor="let cat of arrayCategories" [value]="cat.code" name="arrayCategories" ngDefaultControl>
+              {{cat.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('selectedContractCategory').invalid">
+            {{getErrorMessage(formGroup.get('selectedContractCategory'))}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-1 new-plus">
+        <i class="fas fa-plus-circle fa-lg" (click)="openCreateNewObjectDialog('Category','CATEGORY')"></i>
+      </div>
+    </div>
+    <div class="col-md-4 fields-with-plus">
+      <div class="col-md-11">
+        <mat-form-field class="col-md-12" hideRequiredMarker>
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Sub Category"
+            formControlName="selectedContractSubcategory">
+            <mat-option *ngFor="let subcat of arraySubcategories" [value]="subcat.code" name="arraySubcategories"
+              ngDefaultControl>
+              {{subcat.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('selectedContractSubcategory')">
+            {{getErrorMessage(formGroup.get('selectedContractSubcategory'))}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-1 new-plus">
+        <i class="fas fa-plus-circle fa-lg" (click)="openCreateNewObjectDialog('Sub Category','SUBCATEGORY')"></i>
+      </div>
+    </div>
+    <div class="col-md-4 fields-with-plus">
+      <div class="col-md-11">
+        <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Business Partner"
+            formControlName="selectedBusinessPartner" required="false">
+            <mat-option *ngFor="let cbp of arrayBusinessPartners" [value]="cbp.code" name="arrayBusinessPartners"
+              ngDefaultControl>
+              {{cbp.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('selectedBusinessPartner').invalid">
+            {{getErrorMessage(formGroup.get('selectedBusinessPartner'))}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-1 new-plus">
+        <i class="fas fa-plus-circle fa-lg"
+          (click)="openCreateNewObjectDialog('Business Partner','BUSINESS_PARTNER')"></i>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field class="col-md-12">
+        <input matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+          placeholder="Contract Title" id="mat-input-22" aria-invalid="false" aria-required="false"
+          formControlName="contractTitle" required='false' name="contractTitle">
+        <mat-error *ngIf="formGroup.get('contractTitle').invalid">
+          {{getErrorMessage(formGroup.get('contractTitle'))}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-1 new-plus">
+      <i class="fas fa-plus-circle fa-lg"
+        (click)="openCreateNewObjectDialog('Business Partner','BUSINESS_PARTNER')"></i>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <mat-form-field class="col-md-12">
+        <input matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+          placeholder="Contract Title" aria-invalid="false" aria-required="false" formControlName="contractTitle"
+          required='false' name="contractTitle">
+        <mat-error *ngIf="formGroup.get('contractTitle').invalid">
+          {{getErrorMessage(formGroup.get('contractTitle'))}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field class="col-md-12">
+        <input (keyup)="onManualChangeInputLocation($event)" matInput type="text"
+          class="google-place-input mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+          #location formControlName="location" name="location" google-place placeholder="Location" required='false'>
+        <i class="fas fa-search" matSuffix></i>
+        <mat-error *ngIf="formGroup.get('location').invalid">
+          {{getErrorMessage(formGroup.get('location'))}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field class="col-md-12 mat-form-field-has-prefix">
+        <div (click)="focusSelect()">
+          <input matInput
+            class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored required"
+            placeholder="Contract Value" required='false' aria-invalid="false" aria-required="false"
+            formControlName="contractValue" name="contractValue">
+        </div>
+        <span class="select-prefix" [ngClass]="{'no-display-arrow' : (formGroup.get('currencyType').value &&
+                                            formGroup.get('currencyType').value !== '')}" style="font-size: 1.6rem"
+          matPrefix>
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" #currencyDropDown
+            formControlName="currencyType" (selectionChange)="selectedCurrency()" panelClass="dropdown-currency">
+            <mat-option *ngFor="let cur of arrayCurrencies" [value]="cur.code" required='false' name="currencyType"
+              ngDefaultControl>
+              {{cur.symbol}}
+            </mat-option>
+          </mat-select>
+          &nbsp;
+        </span>
+        <mat-error *ngIf="formGroup.get('currencyType').invalid || formGroup.get('contractValue').invalid">
+          {{getErrorMessage(formGroup.get('currencyType').invalid ? formGroup.get('currencyType') :
+                          formGroup.get('contractValue'))}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 fields-with-plus">
+      <div class="col-md-11">
+        <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Legal Entity"
+            formControlName="selectedLegalEntity" required="false">
+            <mat-option *ngFor="let cle of arrayLegalEntities" [value]="cle.code" name="arrayLegalEntities"
+              ngDefaultControl>
+              {{cle.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('selectedLegalEntity').invalid">
+            {{getErrorMessage(formGroup.get('selectedLegalEntity'))}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-1 new-plus">
+        <i class="fas fa-plus-circle fa-lg" (click)="openCreateNewObjectDialog('Legal Entity','LEGAL_ENTITY')"></i>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="content-right btn-container">
+  <button class="cm-btn" id="cancel" (click)="cancel()">Cancel</button>
+  <button class="cm-btn primary-pink-color" (click)="saveAndContinueGeneralInformationContract()">Save and
+    Continue</button>
+</div> -->
+<div class="btn-container-bottom content-right-cp ds-vw">
+  <button color="primary" class="cm-btn" id="cancel" (click)="cancel()">
+    CANCEL
+  </button>
+  <button color="primary" class="cm-btn primary-pink-color" (click)="saveAndContinueGeneralInformationContract()">
+    SAVE AND CONTINUE
+  </button>
+</div>
+<div class="content-right btn-mob-container">
+  <button color="primary" class="cm-mob-btn  mb-vw" id="cancel" (click)="cancel()">
+    CANCEL
+  </button>
+  <button color="primary" class="cm-mob-btn primary-pink-color  mb-vw"
+    (click)="saveAndContinueGeneralInformationContract()">
+    SAVE AND CONTINUE
+  </button>

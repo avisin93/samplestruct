@@ -1,0 +1,345 @@
+<div class="col-md-12" [formGroup]="formGroup">
+  <div class="col-md-12 spacing-element">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-12">
+          <textarea matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            placeholder="Description" aria-invalid="false" aria-required="false" formControlName="inputFieldDescription"
+            name="inputFieldDescription">
+          </textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 spacing-element">
+    <div class="col-md-12">
+      <div class="col-md-12 datatable-div" formArrayName="timeMaterial">
+        <ngx-datatable #datatable class="material striped border border-light" [rows]="rowsTable.getRawValue()"
+          [columns]="columnsTable" [footerHeight]="50" [messages]="myMessages" [rowHeight]="'100%'"
+          [count]="pageTable.count" [offset]="pageTable.offset" [limit]="pageTable.limit" [columnMode]="'force'">
+          <ng-template #actionColumnTemplate let-row="row" let-value="value" let-rowIndex="rowIndex"
+            ngx-datatable-cell-template>
+            <div class="action-items-i">
+              <i style="margin-right:15px;" class="fas"
+                [ngClass]="rowIndex === lastIndexInTable ? 'fa-plus' : 'fa-pencil-alt'"
+                (click)="rowIndex === lastIndexInTable ? addNewRow() : changeEditable(rowIndex)">
+              </i>
+              <i class="fas fa-trash-alt" *ngIf="rowIndex !== lastIndexInTable" (click)="deleteRow(rowIndex)"></i>
+            </div>
+          </ng-template>
+          <ng-template #textFieldDescriptionColumnTemplate let-rowIndex="rowIndex" let-row="row" let-value="value"
+            ngx-datatable-cell-template>
+            <mat-form-field class="col-md-12 mat-form-cell" [formGroupName]="rowIndex">
+              <input matInput value="{{row.description_table}}" formControlName="description_table"
+                (input)="setRowData('description_table', $event.target.value, row, rowIndex)">
+            </mat-form-field>
+          </ng-template>
+          <ng-template #effectiveDateColumnTemplate let-rowIndex="rowIndex" let-row="row" let-value="value"
+            ngx-datatable-cell-template>
+            <mat-form-field class="col-md-12 mat-form-cell mat-form-field-has-prefix" [formGroupName]="rowIndex">
+              <input matInput readonly
+                class="mat-input-element mat-form-field-autofill-control  cdk-text-field-autofill-monitored"
+                aria-invalid="false" aria-required="false" [value]="row.effective_date" name="effectiveDate"
+                [matDatepicker]="effectiveDatePicker"
+                (dateChange)="setRowData('effective_date', $event.value, row, rowIndex)"
+                (click)="effectiveDatePicker.open()" formControlName="effective_date"
+                [disabled]="getTable(rowIndex).controls['effective_date'].disabled">
+              <mat-datepicker-toggle matPrefix [for]="effectiveDatePicker">
+                <mat-icon matDatepickerToggleIcon class="fa fa-calendar">
+                </mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker #effectiveDatePicker></mat-datepicker>
+            </mat-form-field>
+          </ng-template>
+          <ng-template #textFieldRateColumnTemplate let-rowIndex="rowIndex" let-row="row" let-value="value"
+            ngx-datatable-cell-template>
+            <mat-form-field class="col-md-12 mat-form-cell" [formGroupName]="rowIndex">
+              <input matInput value="{{row.rate}}" (input)="setRowData('rate', $event.target.value, row, rowIndex)"
+                (change)="validationNumber($event.target.value)"
+                class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored required"
+                aria-invalid="false" aria-required="false" name="rate" formControlName="rate" />
+              <span class="select-prefix" [ngClass]="{'no-display-arrow': row.currency}" style="font-size: 1.6rem"
+                matPrefix>
+                {{contractService.billingCurrency ? contractService.billingCurrency.symbol : ''}}
+                &nbsp;
+              </span>
+              <mat-error *ngIf="getTimeMaterial(rowIndex).controls['rate'].invalid">
+                {{getErrorMessage(getTimeMaterial(rowIndex).controls['rate'])}}
+              </mat-error>
+            </mat-form-field>
+          </ng-template>
+          <ng-template #selectUomColumnTemplate let-rowIndex="rowIndex" let-row="row" let-value="value"
+            ngx-datatable-cell-template>
+            <mat-form-field class="col-md-10 mat-form-cell" [formGroupName]="rowIndex">
+              <mat-select [(value)]="row.uom" formControlName="uom" placeholder="UOM" #singleSelect
+                [disabled]="getTable(rowIndex).controls['uom'].disabled">
+                <mat-option>
+                  <ngx-mat-select-search [formControl]="uomFilterCtrl" [placeholderLabel]="'Find UOM'"
+                    [noEntriesFoundLabel]="'No matching UOM found'"></ngx-mat-select-search>
+                </mat-option>
+                <mat-option (click)="setRowData('uom', uom.code, row, rowIndex)"
+                  *ngFor='let uom of filteredUoms | async' [value]="uom.code">{{uom.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <i style="padding-top: 1rem;" class="fas fa-plus-circle fa-lg"
+              (click)="openCreateNewObjectDialog('UOM','UOM', rowIndex)"></i>
+          </ng-template>
+          <ng-template #textFieldQuantityColumnTemplate let-rowIndex="rowIndex" let-row="row" let-value="value"
+            let-rowIndex="rowIndex" ngx-datatable-cell-template>
+            <mat-form-field class="col-md-12 mat-form-cell" [formGroupName]="rowIndex">
+              <input matInput value="{{row.quantity}}" formControlName="quantity"
+                (input)="setRowData('quantity', $event.target.value, row, rowIndex)">
+              <mat-error *ngIf="getTimeMaterial(rowIndex).controls['quantity'].invalid">
+                {{getErrorMessage(getTimeMaterial(rowIndex).controls['quantity'])}}
+              </mat-error>
+            </mat-form-field>
+          </ng-template>
+          <ng-template #textFieldExtendedRateColumnTemplate let-rowIndex="rowIndex" let-row="row" let-value="value"
+            ngx-datatable-cell-template>
+            <mat-form-field class="col-md-12 mat-form-cell" [formGroupName]="rowIndex">
+              <input matInput readonly formControlName="extended_rate"
+                value="{{contractService.billingCurrency ? contractService.billingCurrency.symbol : ''}}  {{row.extended_rate}}">
+            </mat-form-field>
+          </ng-template>
+
+          <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageTable.limit"
+              let-curPage="curPage" let-offset="pageTable.offset" let-isVisible="isVisible">
+              <div class="total-extended-rate">
+                <span>Total: {{contractService.billingCurrency ? contractService.billingCurrency.symbol : ''}}
+                  {{ totalExtendedRate }}</span>
+              </div>
+              <div class="page-count" [hidden]="!((rowCount / pageTable.limit) > 1)">
+                {{datatable.messages.totalMessage}}{{pageTable.offset * pageTable.limit + 1}} -
+                {{pageTable.offset * pageTable.limit + pageTable.limit > rowCount ? rowCount : pageTable.offset * pageTable.limit + pageTable.limit }}
+                of {{rowCount.toLocaleString()}}
+              </div>
+              <div [hidden]="!((rowCount / pageTable.limit) > 1)">
+                <select (change)="onLimitChange($event.target.value)">
+                  <option *ngFor="let option of pageLimitOptions" [value]="option.value"
+                    [selected]="option.value == pageTable.limit">
+                    {{ option.value }}
+                  </option>
+                </select>
+              </div>
+              <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageTable.limit" [count]="rowCount"
+                [hidden]="!((rowCount / pageTable.limit) > 1)" (change)="changePage($event)">
+              </datatable-pager>
+            </ng-template>
+          </ngx-datatable-footer>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 spacing-element">
+    <div class="row">
+      <div class="col-md-4">
+        <mat-form-field class="col-md-12 mat-form-field-has-prefix">
+          <input matInput readonly
+            class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            placeholder="Effective Start Date" aria-invalid="false" aria-required="false"
+            formControlName="effectiveStartDate" [max]="maxDateFrom" name="effectiveStartDate"
+            [matDatepicker]="effectiveStartDatePicker" (dateChange)="dateFromChanged($event)"
+            (click)="effectiveStartDatePicker.open()">
+          <mat-datepicker-toggle matPrefix [for]="effectiveStartDatePicker">
+            <mat-icon matDatepickerToggleIcon class="fa fa-calendar">
+            </mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #effectiveStartDatePicker></mat-datepicker>
+          <mat-error *ngIf="formGroup.get('effectiveStartDate').invalid">
+            {{getErrorMessage(formGroup.get('effectiveStartDate'))}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field class="col-md-12 mat-form-field-has-prefix">
+          <input matInput readonly
+            class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            placeholder="Effective End Date" aria-invalid="false" aria-required="false"
+            formControlName="effectiveEndDate" name="effectiveEndDate" [matDatepicker]="effectiveEndDatePicker"
+            (dateChange)="dateToChanged($event)" [min]="minDateTo" (click)="effectiveEndDatePicker.open()">
+          <mat-datepicker-toggle matPrefix [for]="effectiveEndDatePicker">
+            <mat-icon matDatepickerToggleIcon class="fa fa-calendar">
+            </mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #effectiveEndDatePicker></mat-datepicker>
+          <mat-error *ngIf="formGroup.get('effectiveEndDate').invalid">
+            {{getErrorMessage(formGroup.get('effectiveEndDate'), { 'matDatepickerMin': 'End date should be after start date'})}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field class="col-md-12">
+          <input matInput placeholder="Reference No." formControlName="inputReferenceNo">
+          <mat-error *ngIf="formGroup.get('inputReferenceNo').invalid">
+            {{getErrorMessage(formGroup.get('inputReferenceNo'), { pattern: 'Incorrect data, alphanumeric values are allowed'})}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 spacing-element">
+    <div class="row">
+      <div class="col-md-4">
+        <mat-form-field class="col-md-12">
+          <input matInput placeholder="Related Reference No." formControlName="inputRelatedRefNo">
+          <mat-error *ngIf="formGroup.get('inputRelatedRefNo').invalid">
+            {{getErrorMessage(formGroup.get('inputRelatedRefNo'), { pattern: 'Incorrect data, alphanumeric values are allowed'})}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 fields-with-plus">
+        <div class="col-md-11">
+          <mat-form-field class="col-md-12">
+            <mat-select placeholder="Linked Opportunity" formControlName="selectedLinkedOpportunity">
+              <mat-option>
+                <ngx-mat-select-search [formControl]="linkedOpportunityFilter"
+                  [placeholderLabel]="'Find Linked Opportunity'"
+                  [noEntriesFoundLabel]="'No matching Linked Opportunity found'">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let linkedOpportunity of filteredLinkedOpportunities | async"
+                [value]="linkedOpportunity.code">
+                {{linkedOpportunity.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1 new-plus-small-padding">
+          <i class="fas fa-plus-circle fa-lg"
+            (click)="openCreateNewObjectDialog('Linked Opportunity','LINKED_OPPORTUNITY')"></i>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Related Doc"
+            formControlName="selectedRelatedDoc">
+            <mat-option *ngFor="let relatedDoc of arrayRelatedDoc" [value]="relatedDoc.code">
+              {{relatedDoc.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12 spacing-element">
+    <div class="col-md-12">
+      <div class="col-md-12">
+        <h5><b>REPORTING FIELDS</b></h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 spacing-element">
+    <div class="row">
+      <div class="col-md-4">
+        <mat-form-field class="col-md-12">
+          <input matInput placeholder="Platforms Applicable" formControlName="inputPlatformsApplicable">
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 fields-with-plus">
+        <div class="col-md-11">
+          <mat-form-field class="col-md-12">
+            <mat-select placeholder="Service" formControlName="selectedService">
+              <mat-option>
+                <ngx-mat-select-search [formControl]="serviceFilter" [placeholderLabel]="'Find Service'"
+                  [noEntriesFoundLabel]="'No matching Service found'">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let service of filteredService | async" [value]="service.code">
+                {{service.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1 new-plus-small-padding">
+          <i class="fas fa-plus-circle fa-lg" (click)="openCreateNewObjectDialog('Service','SERVICE')"></i>
+        </div>
+      </div>
+      <div class="col-md-4 fields-with-plus">
+        <div class="col-md-11">
+          <mat-form-field class="col-md-12">
+            <mat-select placeholder="Sub Service" formControlName="selectedSubService">
+              <mat-option>
+                <ngx-mat-select-search [formControl]="subserviceFilter" [placeholderLabel]="'Find Sub Service'"
+                  [noEntriesFoundLabel]="'No matching Sub Service found'">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let subservice of filteredSubService | async" [value]="subservice.code">
+                {{subservice.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1 new-plus-small-padding">
+          <i class="fas fa-plus-circle fa-lg" (click)="openCreateNewObjectDialog('Sub Service','SUB_SERVICE')"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 spacing-element">
+    <div class="row">
+      <div class="col-md-4 fields-with-plus">
+        <div class="col-md-11">
+          <mat-form-field class="col-md-12">
+            <mat-select placeholder="Project" formControlName="selectedProject">
+              <mat-option>
+                <ngx-mat-select-search [formControl]="projectFilter" [placeholderLabel]="'Find Project'"
+                  [noEntriesFoundLabel]="'No matching Project found'">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let project of filteredProject | async" [value]="project.code">
+                {{project.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1 new-plus-small-padding">
+          <i class="fas fa-plus-circle fa-lg" (click)="openCreateNewObjectDialog('Project','PROJECT')"></i>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Sub Project"
+            formControlName="selectedSubProject">
+            <mat-option *ngFor="let subProject of arraySubProject" [value]="subProject.code">
+              {{subProject.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field class="col-md-12">
+          <input (keyup)="onManualChangeInputLocation($event)" matInput type="text"
+            class="google-place-input mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            #location formControlName="location" name="location" google-place placeholder="Location">
+          <i class="fas fa-search" matSuffix></i>
+          <mat-error *ngIf="formGroup.get('location').invalid">
+            {{getErrorMessage(formGroup.get('location'))}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <cm-additional-reporting-fields formGroupName="additionalFormGroup" [numOfFieldsInRow]="3"
+    [(additionalReportingFields)]="additionalReportingFields"
+    [(additionalReportingFieldsArray)]="additionalReportingFieldsArray" [cdr]="cd"></cm-additional-reporting-fields>
+  <div class="content-right btn-container ds-vw">
+    <button color="primary" class="cm-btn" id="cancel" (click)="cancel()">
+      Cancel
+    </button>
+    <button color="primary" class="cm-btn primary-pink-color" (click)="saveTimeAndMaterial()">
+      SAVE AND CONTINUE
+    </button>
+  </div>
+  <div class="content-right btn-mob-container">
+    <button color="primary" class="cm-mob-btn  mb-vw" id="cancel" (click)="cancel()">
+      Cancel
+    </button>
+    <button color="primary" class="cm-mob-btn  mb-vw primary-pink-color" (click)="saveTimeAndMaterial()">
+      SAVE AND CONTINUE
+    </button>
+  </div>
+</div>

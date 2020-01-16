@@ -1,0 +1,48 @@
+<div class="section-wrap">
+  <div class="top-section row-10">
+    <div class="hidden-xs col-xs-12 col-sm-6">
+      <app-heading-section [heading]="heading">
+        <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+      </app-heading-section>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="middle-section auto-routing-tabs-wrap">
+    <mat-card class="auto-routing-tabs-card">
+      <div class="auto-routing-tabs-content">
+        <div class="auto-routing">
+          <div class="auto-routing-wrap">
+            <div class="auto-routing-steps-form">
+              <div class="steps-wrap">
+                <ul id="steps-bar">
+                  <li [class.active]="currentStep >= 1"  [class.active-step]="currentStep == 1" (click)="onStepChange(1)">
+                    <span i18n>Invocation Trigger</span>
+                  </li>
+                  <li [class.active]="currentStep >= 2" [class.active-step]="currentStep == 2" (click)="onStepChange(2)">
+                    <span i18n>Rule Condition</span>
+                  </li>
+                  <li [class.active]="currentStep >= 3" [class.active-step]="currentStep == 3" (click)="onStepChange(3)">
+                    <span i18n>Rule Execution</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="steps-data-wrap">
+                <form [formGroup]="autoRoutingForm" novalidate>
+                  <div class="invocation-trigger-step-wrap tab-content" [class.show-tab]="currentStep == 1">
+                    <app-invocation-trigger [form]="autoRoutingForm" (stepChange)="onStepChange($event)"  [organizationId]="organizationId"></app-invocation-trigger>
+                  </div>
+                  <div class="rule-condition-step-wrap tab-content" [class.show-tab]="currentStep == 2">
+                    <app-rule-condition [form]="autoRoutingForm" [id]="autoRoutingId" (stepChange)="onStepChange($event)" ></app-rule-condition>
+                  </div>
+                  <div class="rule-execution-step-wrap tab-content" [class.show-tab]="currentStep == 3">
+                    <app-rule-execution [form]="autoRoutingForm"  [autoRoutingId]="autoRoutingId" (stepChange)="onStepChange($event)" [organizationId]="organizationId"> </app-rule-execution>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </mat-card>
+  </div>

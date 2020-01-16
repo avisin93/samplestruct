@@ -1,0 +1,21 @@
+<div class="top-section row-10 mar-20 heading-section-add-contract">
+  <div class="hidden-xs col-xs-12 col-sm-6">
+      <app-heading-section heading="{{title}}">
+          <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+      </app-heading-section>
+  </div>        
+  <div class="clearfix"></div>
+</div>
+<div class="col-md-12 tab-label">
+<div class="cm-card">
+  <div class="cm-card-body">
+  <mat-tab-group #matGroupTab [(selectedIndex)]="selectedIndex" (selectedTabChange)="onTabChange()">
+    <mat-tab *ngFor = "let tab of arrayTabs; let index = index" [label]="tab.name">
+      <ng-template matTabContent>
+        <cm-contracts-meta-tab [addContractMetaModelId]="addContractMetaModelId" [tab]="tab" [matGroupTab]="matGroupTab" (isDirty)="isChildDirty($event)"></cm-contracts-meta-tab>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+  </div>
+</div>
+</div>

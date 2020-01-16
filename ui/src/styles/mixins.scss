@@ -1,0 +1,65 @@
+
+@mixin applyFont($fontFamily: 'Work Sans', $fontSize: 15px, $fontWeight: normal, $lineHeight: normal) {
+    font-family: $fontFamily;
+    font-size: $fontSize;
+    font-weight: $fontWeight;
+    line-height: $lineHeight;
+}
+
+@mixin transform($value) {
+    -webkit-transform: $value;
+    -moz-transform: $value;
+    -ms-transform: $value;
+    -o-transform: $value;
+    transform: $value;
+}
+
+@mixin wrap-text {
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+}
+
+@mixin collapsed-nav-menu {
+    .logo-wrap {
+        img.main-logo {
+            display: none;
+        }
+        img.collapsed-logo {
+            display: inline-block;                    
+        }
+    }
+
+    .mat-nav-list {           
+        .mat-list-item {
+            .menu-icon {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+    }
+}
+
+@mixin checkbox-styled {
+    .mat-checkbox-background {
+        background-color: #f1f1f1;
+        border: 1px solid #CFD2D3;
+        border-radius: 0px;
+    }
+    .mat-checkbox-checked.mat-accent {
+        .mat-checkbox-background {
+            background-color: $primary-shade4;
+            border-color: $primary-shade4;
+        }
+    }
+    .mat-checkbox-label {
+        @include applyFont($fontSize: 13px, $fontWeight: 600, $lineHeight: 25px);
+        color: $gray_shade2;
+    }
+}
+
+@mixin card-box-shadow {
+    -webkit-box-shadow: 0 3px 1px -4px rgba(0,0,0,.1), 0 2px 2px 0 rgba(0,0,0,0.1), 0 1px 5px 0 rgba(0,0,0,.1)!important;
+    -moz-box-shadow: 0 3px 1px -4px rgba(0,0,0,.1), 0 2px 2px 0 rgba(0,0,0,0.1), 0 1px 5px 0 rgba(0,0,0,.1)!important;
+    -ms-box-shadow: 0 3px 1px -4px rgba(0,0,0,.1), 0 2px 2px 0 rgba(0,0,0,0.1), 0 1px 5px 0 rgba(0,0,0,.1)!important;
+    box-shadow: 0 3px 1px -4px rgba(0,0,0,.1), 0 2px 2px 0 rgba(0,0,0,0.1), 0 1px 5px 0 rgba(0,0,0,.1)!important;
+}

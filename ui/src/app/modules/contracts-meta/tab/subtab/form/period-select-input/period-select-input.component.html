@@ -1,0 +1,32 @@
+
+<div [ngClass]="oneSubtab ? 'col-md-8' : 'col-md-12'" style="padding-top: 1.5rem;" [formGroup]="formGroup">
+    <div [ngClass]="oneSubtab ? 'col-md-4' : 'col-md-6'">
+      <mat-form-field class="col-md-12">
+          <input
+            matInput
+            class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            placeholder="Contract Term"
+            aria-invalid="false"
+            aria-required="false"
+            [formControl]="formGroup.controls[field.database_column_name]"
+            [placeholder]="field.name"
+            required="false"
+          />
+          <mat-error *ngIf="formGroup.controls[field.database_column_name].invalid">
+              {{getErrorMessage(formGroup.controls[field.database_column_name])}}
+          </mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="clientConfigurations" [ngClass]="oneSubtab ? 'col-md-4' : 'col-md-6'">
+      <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" [formControl]="formGroup.controls[field.database_column_select_name]" >
+            <mat-option *ngFor="let timePeriod of clientConfigurations['time_period']" [value]="timePeriod.code" ngDefaultControl>
+              {{ timePeriod.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.controls[field.database_column_select_name].invalid">
+              {{getErrorMessage(formGroup.controls[field.database_column_select_name])}}
+          </mat-error>
+      </mat-form-field>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.add-edit-client-information {
+    padding: 30px 20px 30px;
+
+    .action-wrap {
+        margin-top: 45px;
+    }
+
+    .checkbox-wrap {
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .mat-checkbox {
+            margin-left: 15px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+        } 
+
+        @include checkbox-styled();
+    }        
+
+    .full-width-input-wrap .mat-select {
+        padding-bottom: 1em;
+    }
+
+    textarea {
+        height: 68px;
+        resize: none;
+    }
+}
+

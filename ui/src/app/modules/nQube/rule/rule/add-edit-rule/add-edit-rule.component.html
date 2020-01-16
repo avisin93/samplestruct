@@ -1,0 +1,180 @@
+<div class="add-edit-theme-wrap">
+  <div class="top-section row-10">
+    <div class="hidden-xs col-xs-12 col-sm-6">
+      <app-heading-section [heading]="heading">
+        <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+      </app-heading-section>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <div class="add-edit-rule">
+    <mat-card>
+      <form [formGroup]="addEditRuleForm" novalidate>
+
+        <div class="form-wrap row mar40">
+
+          <div class="col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="col-sm-3 col-xs-12">
+                <mat-form-field class="full-width-input-wrap">
+                  <input i18n-placeholder matInput placeholder="Rule Name*" formControlName="rule" maxlength="100">
+                  <mat-error i18n *ngIf="addEditRuleForm.controls['rule'].hasError('required')">
+                    Rule Name is
+                    <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-sm-3 col-xs-12">
+                <mat-form-field class="mat-select-full-width width_85">
+                  <mat-select i18n-placeholder placeholder="Rule Group*" formControlName="group">
+                    <mat-option *ngFor="let ruleGroup of activeRuleGroups" [value]="ruleGroup._id">
+                      {{ ruleGroup.groupName }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error i18n *ngIf="addEditRuleForm.controls['group'].hasError('required') && groupNameError">
+                    Rule Group is
+                    <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <div class="col-sm-1 col-xs-1 top_mar_25">
+                  <div class="full-width-input-wrap ">
+                    <a href="javascript:void(0);" aria-label="Add New Rule Group" (click)="createRuleGroupPopup()"
+                      class="fontText" style="cursor:pointer;">
+                      <i i18n-title class="fa fa-plus-circle rule_group_icon" aria-hidden="true" title="Add New Rule Group"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-xs-12">
+                <mat-form-field class="mat-select-full-width">
+                  <mat-select i18n-placeholder placeholder="Data Source*" formControlName="dataSource" (ngModelChange)="onDataSourceSelect($event)">
+                    <mat-option *ngFor="let dataSource of userSource" [value]="dataSource.value">
+                      {{ dataSource.value }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error i18n *ngIf="addEditRuleForm.controls['dataSource'].hasError('required') && dataSourceError">
+                    DataSource is
+                    <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div i18n class="col-sm-3 col-xs-12" style="padding: 0;font-size: 13px; margin-bottom: 13px;">
+          <b>Rule Criteria</b>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="row-10 mar40" formArrayName="ruleCriterias">
+          <div *ngFor="let itemrow of getControls(addEditRuleForm, 'ruleCriterias'); let i=index; let first = first; 
+          let last = last"
+            [formGroupName]="i">
+            <div class="clearfix"></div>
+            <div class="col-sm-2 col-xs-12">
+              <mat-form-field class="mat-select-full-width">
+                <mat-select i18n-placeholder placeholder="Attribute*" formControlName="fieldName" (ngModelChange)="onAttributeSelect($event, i)">
+                  <mat-option *ngFor="let fieldName of fieldNames" [value]="fieldName.key">
+                    {{ fieldName.displaytext }}
+                  </mat-option>
+                </mat-select>
+                <mat-error i18n *ngIf="itemrow.controls['fieldName'].hasError('required') && this.fieldNameError">
+                  Attribute is
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-2 col-xs-12">
+              <mat-form-field class="mat-select-full-width">
+                <mat-select i18n-placeholder id="{{'selector_operator' + i}}" placeholder="Operator*" formControlName="criteriaOperator">
+                  <mat-option *ngFor="let criteriaOperator of criteriaOperators[i]" [value]="criteriaOperator.value">
+                    {{ criteriaOperator.criteriaOperator }}
+                  </mat-option>
+                </mat-select>
+                <mat-error i18n *ngIf="itemrow.controls['criteriaOperator'].hasError('required') && this.criteriaOperatorError">
+                  Operator is
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-2 col-xs-12" *ngIf="selectedAttributeTypes[i] !== 'boolean'">
+              <mat-form-field class="full-width-input-wrap">
+                <input i18n-placeholder id="{{'input_value' + i}}" type={{attributeValueTypes[i]}} matInput placeholder="Value"
+                  formControlName="criteriaValue">
+                <mat-error i18n *ngIf="itemrow.controls['criteriaValue'].hasError('required') && this.criteriaValueError">
+                  Value is
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-2 col-xs-12" *ngIf="selectedAttributeTypes[i] === 'boolean'">
+              <div class="bool-radio-section">
+                <mat-radio-group formControlName="criteriaValue">
+                  <mat-radio-button i18n class="bool-radio-button-margin" value="true">
+                    True
+                  </mat-radio-button>
+                  <mat-radio-button i18n class="bool-radio-button-margin" value="false">
+                    False
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+
+            <div class="col-sm-2 col-xs-12" *ngIf="isAndOrVisible && !last">
+              <mat-form-field class="mat-select-full-width" id="{{'selector_logical_operator' + i}}">
+                <mat-select i18n-placeholder id="{{'selector_logical_operator' + i}}" placeholder="AND/OR*"
+                  formControlName="logicalOperator" (ngModelChange)="logicalOperatorError = $event === ''">
+                  <mat-option *ngFor="let logicalOperator of logicalOperators" [value]="logicalOperator.value">
+                    {{ logicalOperator.logicalOperator }}
+                  </mat-option>
+                </mat-select>
+                <mat-error i18n *ngIf="logicalOperatorError && (i == (allCriteriaRules.length - 2))">
+                  Operator is
+                  <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-2 col-xs-12">
+              <div class="row">
+                <div class="col-sm-2 col-xs-1 top_mar_20" *ngIf="addEditRuleForm.controls.ruleCriterias.controls.length > 1 && !first">
+                  <div class="full-width-input-wrap ">
+                    <a href="javascript:void(0);" aria-label="Delete Row" (click)="deleteRow(i)" class="fontText" style="cursor:pointer;">
+                      <i i18n-title class="fa fa-trash-o" aria-hidden="true" title="Delete Row" [ngStyle]="{'fontSize.px': 15}"></i>
+                    </a>
+                  </div>
+                </div>
+
+                <div class="col-sm-10 col-xs-12 " *ngIf="last && addEditRuleForm.controls.ruleCriterias.controls.length < maxRuleCriterias">
+                  <div class="full-width-input-wrap top_mar_20">
+                    <a tabindex="0" href="javascript:void(0);" aria-label="Add Criteria" class="icon_button" (click)="addNewRow(addEditRuleForm)">
+                      <i i18n-title class="fa fa-plus-circle rule_group_icon" aria-hidden="true" title="Add Criteria"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="action-wrap mar40">
+          <div class="text-right">
+            <button i18n type="button" aria-label="Cancel Rule" mat-button class="app-btn" id="cancel" (click)="cancel()">Cancel</button>
+            <button i18n type="submit" aria-label="View Result Rule" mat-button class="app-btn mat-accent mat-flat-button save-btn"
+            (click)="goToRuleScreen()">View Result</button>
+            <button i18n type="submit" aria-label="Save Rule" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="addOrUpdateRule(addEditRuleForm)">Save</button>
+          </div>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

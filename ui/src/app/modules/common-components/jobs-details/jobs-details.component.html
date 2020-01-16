@@ -1,0 +1,125 @@
+<div class="section-wrap">
+    <div class="top-section">
+        <div class="hidden-xs col-xs-12 col-sm-6 padding-left-0">
+            <app-heading-section heading="Jobs Details">
+                <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+            </app-heading-section>
+        </div>        
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="middle-section row">
+        <div class="col-xs-12 action-links-col text-right">
+            <div class="inner">
+                <a href="javascript:void(0);">PRINT</a>
+                <a href="javascript:void(0);">REORDER</a>
+                <a href="javascript:void(0);">CANCEL JOB</a>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 cols">
+            <div class="inner">
+                <mat-card class="card-details">
+                    <div class="card-inner">
+                        <h2>Print Facilities</h2>
+                        <div class="details">
+                            <p><i class="fa fa-print"></i> <span>NY - Facilities</span></p>
+                            <p><i class="fa fa-building-o"></i> <span>2701 E. Grauwyler Road lrving, TX, USA & 75061</span></p>
+                            <p><i class="fa fa-phone"></i> <span>+1 866-321-5854</span></p>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-8 cols">
+            <div class="inner">
+                <mat-card class="card-details">
+                    <div class="card-inner row">
+                        <h2 class="col-xs-12">Customer</h2>
+                        <div class="col-xs-12 col-sm-6">                            
+                            <div class="card-inner-col-inner right-border">
+                                <div class="details">
+                                    <p><i class="fa fa-user"></i> <span>John Deo</span></p>
+                                    <p><i class="fa fa-building-o"></i> <span>Company 1</span></p>
+                                    <p><i class="fa fa-briefcase"></i> <span>Finance Department</span></p>
+                                    <p><i class="fa fa-envelope"></i> <span>loremipsum@printshop.com</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">                            
+                            <div class="card-inner-col-inner padding-left-15">
+                                <div class="details">
+                                    <p><i class="fa fa-phone"></i> <span>+1 866-321-5854<br/>+1 266-321-5822</span></p>
+                                    <p><i class="fa fa-fax"></i> <span>+1 555-233-2323</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 cols order-details-col">
+            <div class="inner">
+                <mat-card class="card-details">
+                    <div class="card-inner row">
+                        <h2 class="col-xs-12">Order <span class="tag received">Received</span></h2>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">                            
+                            <div class="card-inner-col-inner">
+                                <div class="details">
+                                    <p><label>Order ID</label> <span>0000</span></p>
+                                    <p><label>Job ID</label> <span>0001</span></p>
+                                    <p><label>Type</label> <span>Print, Mail</span></p>
+                                    <p><label>Submission Method</label> <span>Method 1</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">                            
+                            <div class="card-inner-col-inner">
+                                <div class="details">
+                                    <p><label>Submitted Date</label> <span>07/23/2017, 05:30 PM</span></p>
+                                    <p><label>Due Date</label> <span>07/23/2017, 09:30 PM</span></p>
+                                    <p><label>Quantity</label> <span>10</span></p>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 payment-method-edit-col">                            
+                            <div class="card-inner-col-inner">
+                                <div class="details">
+                                    <div class="_rw">
+                                        <div class="icon"><img src="assets\images\payment.png"/></div>
+                                        <div class="text">$100</div>
+                                    </div>
+                                    <div class="_rw">
+                                        <div class="icon">
+                                             <img src="assets\images\wallet.png"/>                                           
+                                        </div>
+                                        <div class="text-el">
+                                            <label>Payment Method</label>
+                                            <span>Cost Center 10000-10208050</span>
+                                            <div class="edit-link" (click)="paymentMethodPopup()">EDIT</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 cols shiping-details-col">
+            <div class="inner">
+                <mat-card class="card-details">
+                    <div class="card-inner">
+                        <h2>Shipping</h2>
+                        <div class="details row">
+                            <p class="col-xs-12 col-sm-4 col-md-3 col-lg-2"><i class="fa fa-user"></i> <span>Ethan William</span></p>
+                            <p class="col-xs-12 col-sm-4 col-md-3 col-lg-4"><i class="fa fa-building-o"></i> <span>2701 E. Grauwyler Road lrving, TX, USA & 75061</span></p>
+                            <p class="col-xs-12 col-sm-4 col-md-3 col-lg-3"><i class="fa fa-globe"></i> <span>France</span></p>
+                            <p class="col-xs-12 col-sm-4 col-md-3 col-lg-3"><i class="fa fa-envelope"></i> <span>Code12345</span></p>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

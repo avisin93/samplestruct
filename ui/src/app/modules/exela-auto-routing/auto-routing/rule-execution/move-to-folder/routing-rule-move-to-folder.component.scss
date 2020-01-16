@@ -1,0 +1,152 @@
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+@import '~angular-tree-component/dist/angular-tree-component.css';
+
+
+.add-edit-queue-setup {
+  .checkbox-wrap {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    .mat-checkbox {
+      margin-left: 15px;
+      &:first-child {
+        margin-left: 0px;
+      }
+    }
+    @include checkbox-styled();
+  }
+  .table-dth {
+    width: 100%;
+    padding: 10px 0px;
+    margin: 15px 0px;
+    overflow: auto;
+    max-height: 175px;
+    height: auto;
+    font-size: 13px;
+    table {
+      width: 100%;
+      thead {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        background-color: #ddd;
+        td {
+          padding: 7px 10px;
+        }
+      }
+      tbody {
+        tr {
+          border-bottom: 1px solid #ccc;
+          td {
+            padding: 5px;
+          }
+          td:first-child {
+            padding-left: 10px;
+          }
+          .mat-radio-ripple {
+            left: -5px;
+            top: -5px;
+            right: -5px;
+            bottom: -5px;
+          }
+          .mat-radio-container {
+            height: 15px;
+            ;
+            width: 15px;
+            .mat-radio-outer-circle,
+            .mat-radio-inner-circle {
+              height: 15px;
+              ;
+              width: 15px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.not-active {
+  display: none;
+}
+
+.mat-dialog-container {
+  overflow: hidden
+}
+
+.moveToFolderAnchor {
+  float: right;
+  position: relative;
+  top: 30px;
+}
+
+.moveToFolderMailTitle {
+  width: 45%;
+  float: left;
+}
+
+.scrollable-content {
+  padding: 0px;
+  margin: 0;
+}
+
+.scroll-container-rule {
+  position: relative !important;
+  overflow: auto;
+  max-height: 150px;
+  max-width: 420px !important;
+}
+
+.scrollBarBlock {
+  display: inline-block;
+}
+
+.widget-content {
+  .toggle-children {
+    background-image: url("../../../../../../assets/images/right-arrow-nav.png")
+  }
+  .recent-printed-jobs-wrap {
+    margin-top: 10px;
+    .history_btn {
+      a {
+        cursor: pointer;
+        color: #C75000;
+        .fa {
+          margin-right: 5px;
+        }
+      }
+    }
+    .verAlign {
+      vertical-align: baseline;
+    }
+    .action_btns {
+      float: right;
+      cursor: pointer;
+      .fa-floppy-o {
+        color: #C75000
+      }
+      .fa-pencil {
+        color: #1B8BCD
+      }
+      .fa-times {
+        color: #1B8BCD
+      }
+    }
+    tree-viewport {
+      width: 100%;
+      font-size: 12px;
+      tree-node-content {
+        span:last-child {
+          display: block;
+        }
+        input {
+          border: 0;
+          border-bottom: 1px solid #ccc;
+          :focus {
+            outline: none !important;
+          }
+        }
+      }
+    }
+  }
+}

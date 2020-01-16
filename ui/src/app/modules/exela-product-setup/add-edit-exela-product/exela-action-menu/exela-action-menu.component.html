@@ -1,0 +1,14 @@
+<div class="action-menu-wrap">
+    <ng-data-tables [columns]="columns" [rows]="records" [totalRows]="totalRows" [hasActionButtons]="hasActionButtons" 
+    (edit)="editAction($event)" 
+    (delete)="deleteAction($event)"
+    [showDeleteButton]="showDeleteButton" >
+        <div class="align-right" button-toolbar>
+            <div class="inner">
+                <button i18n mat-button class="app-btn orange-button" (click)="addAction(action)" *ngIf="allowClientAdd">
+                    Add Action
+                </button>
+            </div>
+        </div>
+    </ng-data-tables>
+</div>

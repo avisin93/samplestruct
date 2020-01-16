@@ -1,0 +1,43 @@
+<div class="component-wrap">
+  <div class="heading-wrap">
+    <div class="inner">
+      <div class="popup-heading">{{heading }}</div>
+      <div class="popup-close" (click)="closePopup()">
+        <i class="material-icons">close</i>
+      </div>
+    </div>
+  </div>
+  <div class="form-wrap" [formGroup]="clientSharedMailboxForm">
+    <div class="row">
+      <div class="col-sm-12 col-xs-12">
+        <div class="col-sm-6 col-xs-12 required-col">
+          <mat-form-field class="full-width-input-wrap">
+            <input i18n-placeholder matInput placeholder="Display Name*" formControlName="mailboxName" maxlength="100">
+            <mat-error i18n *ngIf="clientSharedMailboxForm.controls['mailboxName'].hasError('required')">
+              Mailbox Name is
+              <strong> required</strong>
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-sm-6 col-xs-12 required-col">
+            <mat-form-field class="full-width-input-wrap">
+              <input i18n-placeholder matInput placeholder="Email*" formControlName="email" maxlength="100">
+              <mat-error i18n *ngIf="clientSharedMailboxForm.controls['email'].hasError('required')">
+                Email is <strong> required</strong>
+              </mat-error>
+              <mat-error i18n *ngIf="clientSharedMailboxForm.controls['email'].hasError('pattern')">
+                  Please enter a valid email id.
+                </mat-error>
+            </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="action-wrap">
+    <div class="text-right">
+      <button i18n type="button" mat-button class="app-btn" id="cancel" (click)="closePopup()">Cancel</button>
+      <button i18n type="button" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="saveSharedMailBox(clientSharedMailboxForm)">Save</button>
+    </div>
+  </div>
+</div>

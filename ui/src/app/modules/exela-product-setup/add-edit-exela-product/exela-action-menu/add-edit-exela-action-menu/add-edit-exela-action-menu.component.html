@@ -1,0 +1,56 @@
+<div class="component-wrap add-edit-user-setup ">
+  <div class="heading-wrap">
+    <div class="inner">
+      <div class="popup-heading">{{heading}}</div>
+      <div class="popup-close" (click)="closePopup()"><i class="material-icons">close</i></div>
+    </div>
+  </div>
+  <form [formGroup]="addEditActionForm" novalidate>
+    <div class="form-wrap row">
+        <div class="col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="col-sm-6 col-xs-6">
+              <mat-form-field class="full-width-input-wrap">
+                <input matInput i18n-placeholder placeholder="Name*" formControlName="name" maxlength="50">              
+                <mat-error i18n *ngIf="addEditActionForm.controls['name'].hasError('required')">
+                    Name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>          
+            </div>
+           <div class="col-sm-6 col-xs-6">
+              <mat-form-field class="full-width-input-wrap">
+                <input matInput i18n-placeholder placeholder="Display Name*" formControlName="displayname" maxlength="50">              
+                <mat-error i18n *ngIf="addEditActionForm.controls['displayname'].hasError('required')">
+                    Display Name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>          
+            </div>
+
+            <div class="col-sm-6 col-xs-6">
+              <mat-form-field class="full-width-input-wrap">
+                <input matInput i18n-placeholder placeholder="Queue*" formControlName="queue" maxlength="50">              
+                <mat-error i18n *ngIf="addEditActionForm.controls['queue'].hasError('required')">
+                    Queue is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>          
+            </div>
+           <div class="col-sm-6 col-xs-6">
+              <mat-form-field class="full-width-input-wrap">
+                <input matInput i18n-placeholder placeholder="Status*" formControlName="status" maxlength="50">              
+                <mat-error i18n *ngIf="addEditActionForm.controls['status'].hasError('required')">
+                    Status is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>          
+            </div>
+
+          </div>
+        </div>    
+    </div>
+    <div class="action-wrap">
+      <div class="text-right">
+          <button i18n type="button" mat-button class="app-btn gray-button" (click)="closePopup()">Cancel</button>
+          <button i18n type="submit" mat-button class="app-btn orange-button save-btn" (click)="saveActionForm(addEditActionForm)">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,18 @@
+<div [ngClass]="oneSubtab ? 'col-md-4' : 'col-md-6'" style="padding-top: 1.5rem;" [formGroup]="formGroup">
+  <mat-form-field class="col-md-12" >
+    <input #fileToUpload type="file" accept="application/pdf, text/plain, image/jpg, image/jpeg, image/png, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" (change)="onFileChoose($event)" style="display:none;">
+    <input (click)="fileToUpload.click()" readonly matInput class="mat-input-element mat-form-field-autofill-control 
+    cdk-text-field-autofill-monitored" placeholder="Attachments"
+      aria-invalid="false" aria-required="false"       
+      [formControl]="formGroup.controls[field.database_column_name]"     
+      name="inputFile" required="false">
+      <span matSuffix *ngIf="true">
+          <label [for]="fileToUpload" (click)="fileToUpload.click()">
+              <i class="fa fa-paperclip"></i>
+          </label>
+      </span>
+      <mat-error *ngIf="formGroup.controls[field.database_column_name].invalid">
+        {{getErrorMessage(formGroup.controls[field.database_column_name])}}
+      </mat-error>
+  </mat-form-field>
+</div>

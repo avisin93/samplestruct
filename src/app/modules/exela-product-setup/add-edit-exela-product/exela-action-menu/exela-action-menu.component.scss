@@ -1,0 +1,21 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+    
+.action-menu-wrap{
+    padding: 15px;
+}
+:host {
+    ::ng-deep ng-data-tables {   
+        table {
+            tbody {
+                tr {
+                    td {
+                        @media(min-width: 992px) and (max-width: 999999px) { 
+                            
+                        }                    
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+<div class="section-wrap">
+    <div class="top-section row-10">
+        <div class="hidden-xs col-xs-12 col-sm-6">
+            <app-heading-section heading="Escalation Methods">
+                <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+            </app-heading-section>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <ng-data-tables [columns]="columns" [rows]="records" [totalRows]="totalRows" [hasActionButtons]="hasActionButtons" [showDeactivateButton]="showDeactivateButton"
+        (delete)="deleteEscalationMethodDetail($event)" (edit)="editEscalationMethodPopup($event)" (deActivate)="activateDeactivateEscalationMethod($event)">
+        <div class="align-right" button-toolbar>
+            <div class="inner">
+                <button i18n mat-button class="mat-primary mat-flat-button" (click)="addEscalationMethod()">
+                    Add Escalation Method
+                </button>
+            </div>
+        </div>
+    </ng-data-tables>
+</div>

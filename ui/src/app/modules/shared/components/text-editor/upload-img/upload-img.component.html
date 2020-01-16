@@ -1,0 +1,53 @@
+<div class="component-wrap upload-img-setup">
+  <div class="heading-wrap">
+    <div class="inner">
+      <div class="popup-heading">Insert Image</div>
+      <div class="popup-close" (click)="closePopup()"><i class="material-icons">close</i></div>
+    </div>
+  </div>
+
+  <form [formGroup]="uploadImageForm" novalidate>
+    <div class="form-wrap row">
+      <div class="col-sm-8 col-xs-8">
+        <div class="file-upload-inner image-file-uploader-box">
+          <div class="image-selection-wrap" *ngIf="imageSelected == true">
+            <div class="selected-image">
+              <img src="{{uploadImageForm.controls['image'].value}}" />
+            </div>
+            <div class="selected-image-actions">
+              <div class="i-actions-inner">
+                <label class="i-actions replace" for="input-file">REPLACE</label><br/>
+                <div class="i-actions remove" (click)="removeImage()">REMOVE</div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <label class="uploader" for="input-file" *ngIf="imageSelected == false">
+                  <div class="icon-text-wrap">
+                      <i class="icon-upload3"></i><br/>
+                      <span class="file-upload-text">Upload Files</span>
+                      <!-- <span class="file-upload-hint-text">(Logo Size 230px X 80px)</span>                       -->
+                  </div>
+              </label>
+          <input id="input-file" type="file" name="file"  accept="image/*" (change)="selectImage(input)" #input />
+          <div class="select-image-error" *ngIf="imageValidation == true">Please select Image.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-wrap">
+      <div >
+        <!--<button type="button" md-button class="app-btn gray-button" (click)="closePopup()">Cancel</button>-->
+        <button type="submit" mat-button class="app-btn orange-button save-btn" (click)="uploadImage(uploadImageForm)">Upload</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="row image-grid-view"> 
+  <div class="column">
+    <div *ngFor="let image of images" class="col-sm-3 col-xs-3">
+    <a (click)="insertImage($event)"><img src="{{getImageUrl}}/{{image.file_id}}"></a>
+    </div>
+  </div>
+  <div>
+</div>

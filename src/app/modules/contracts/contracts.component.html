@@ -1,0 +1,62 @@
+<div class="top-section row-10 mar-20 heading-section-add-contract">
+  <div class="hidden-xs col-xs-12 col-sm-6">
+      <app-heading-section heading="{{title}}">
+          <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+      </app-heading-section>
+  </div>        
+  <div class="clearfix"></div>
+</div>
+<div class="col-md-12 tab-label">
+<div class="cm-card">
+  <div class="cm-card-body">
+  <mat-tab-group #matgroup (selectedTabChange)="onTabChange()" [(selectedIndex)]="selectedIndex">
+    <mat-tab label="General Information">
+      <ng-template matTabContent>
+        <cm-general-information 
+          #generalInformation 
+          [matgroup] = "matgroup" 
+          (locationOutput)="setLocation($event)" 
+          (isDirty)="isChildDirty($event)">
+        </cm-general-information>
+      </ng-template>
+    </mat-tab>
+    <mat-tab class="vertical-mat-tab" label="Term" [disabled]="addMode">
+      <ng-template matTabContent>
+        <cm-term #term [matgroup]="matgroup" (isDirty)="isChildDirty($event)"></cm-term>
+      </ng-template>
+    </mat-tab>
+    <mat-tab class="vertical-mat-tab" label="Commercials" [disabled]="addMode">
+      <ng-template matTabContent>
+        <cm-commercials 
+          #commercials 
+          [generalInfoLocation]="generalInfoLocation" 
+          [matgroup] = "matgroup" 
+          (isDirty)="isChildDirty($event)">
+        </cm-commercials>
+      </ng-template>
+    </mat-tab>
+    <mat-tab class="vertical-mat-tab" label="Other Commercial Terms" [disabled]="addMode">
+      <ng-template matTabContent>
+        <cm-other-commercial-terms #otherCommercialTerms [matgroup] = "matgroup" (isDirty)="isChildDirty($event)"></cm-other-commercial-terms>
+      </ng-template>
+    </mat-tab>
+    <mat-tab class="vertical-mat-tab" label="SLA" [disabled]="addMode">
+      <ng-template matTabContent>
+        <cm-sla #sla [matgroup] = "matgroup" (isDirty)="isChildDirty($event)"></cm-sla>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Contact Persons" [disabled]="addMode">
+      <ng-template matTabContent>
+        <cm-contact-person #contractPerson [generalInfoLocation]="generalInfoLocation" [matgroup]="matgroup" (isDirty)="isChildDirty($event)"></cm-contact-person>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Documents" [disabled]="addMode">
+      <ng-template matTabContent>
+        <cm-document #document [matgroup]="matgroup" (isDirty)="isChildDirty($event)"></cm-document>
+      </ng-template>
+    </mat-tab>
+    <!-- Documents end -->
+  </mat-tab-group>
+  </div>
+</div>
+</div>

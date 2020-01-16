@@ -1,0 +1,468 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.ng-data-table-wrap {
+    // margin-top: 15px;
+    // padding-bottom:3%;
+
+    .table-responsive{
+        padding: 1px;
+        margin-bottom: 5px;
+    }
+
+    .top-toolbar-wrap {
+        margin-bottom:15px;
+        .extra-toolbar-left{
+            float: left;
+            // margin-left: 30px;
+            
+            ::ng-deep .full-width-input-wrap .mat-select{
+                width: 165px;     
+                padding-bottom: 0px;
+            }
+
+            ::ng-deep .mat-select-full-width .mat-form-field-wrapper {
+                padding-bottom: 0;
+                padding-top: 0;
+
+                .mat-form-field-infix .mat-form-field-label-wrapper .mat-form-field-label {
+                    transform: translateY(-1.5rem) scale(.75) !important;
+                    font-size: 1.4rem;
+                    font-weight: 400;
+                }
+
+                .mat-form-field-underline {
+                    bottom: 0.25rem;
+                }
+
+                .mat-form-field-infix {
+                    padding: 0.7rem 0px !important;
+                }
+            }
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                margin-left: 10px;
+                float:none;
+                display: block;;
+            }
+        }
+        .extra-toolbar {
+            float: right;
+            margin-left: 30px;
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                margin-left: 10px;
+            }
+        }
+
+        .all-search-box {
+            float: right;
+            position: relative;
+            margin-top: 15px;
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                margin-top: 17px;
+                float: left;
+            }
+
+            label {
+                margin: 0px;
+
+                &:before {
+                    display: inline-block;
+                    font: normal normal normal 11px FontAwesome;
+                    font-size: inherit;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    color: #748791;
+                    content: '\F002';
+                    position: absolute;
+                    left: 0px;
+                }
+            }
+            input {
+                    @include applyFont($fontSize: 12px);
+                    border-top: 0 none;
+                    border-left: 0 none;
+                    border-right: 0 none;
+                    border-bottom: 1px solid #D7D7D7;
+                    color: #748791;
+                    background-color: transparent;
+                    margin: 0px;
+                    padding: 0px 10px 2px 25px;
+                    width: 200px;
+                    outline: 0 none;
+
+                    @media(min-width: 100px) and (max-width: 767px) {
+                        width: 148px;
+                    }
+            }
+
+            ::-webkit-input-placeholder{
+                @include applyFont($fontSize: 14px);
+                color: #748791;
+            }
+        }
+    }
+
+
+
+    table {
+        margin-top: 0px;
+        border: 1px solid #e5e5e5;	
+        margin-bottom: 15px;
+        width: 100%;
+        &.no-footer {
+            border-color: #e5e5e5;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            @include applyFont($fontSize: 13px, $fontWeight: 600);
+            color: #18191A;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 15px 15px;
+            background-image: none!important;
+            outline: 0 none!important;
+
+            span {
+                display: block;
+            }
+
+            &.actions {
+                text-align: center;
+                // width:16%;
+            }
+
+            &.hiddenColumn {
+                display: none;
+            }
+
+            &.previousVersion_column {
+                text-align: right;
+            }
+            &.filesize_column {
+                text-align: right;
+            }
+
+            &.sortable {
+                cursor: pointer;
+
+                span {
+                    .sort-arrows {
+                        display: inline-block;
+                        color: #4A4A4A;
+                        font-size: 12px;
+                        margin-left: 6px;
+
+                        i {
+                            display: block;
+                            height: 0px;
+                        }
+                    }
+                }
+
+                &.sorting_desc {
+                    span {
+                        .sort-arrows {
+                            i {
+                                display: none;
+
+                                &.fa-sort-desc {
+                                    display: block;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.sorting_asc {
+                    span {
+                        .sort-arrows {
+                            i {
+                                display: none;
+
+                                &.fa-sort-asc {
+                                    display: block;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            input.filter-input {
+                border: 0 none;
+                padding: 6px 10px 5px;
+                margin-top: 10px;
+                // width: 56px;
+                width: 100%;
+                outline: none;
+
+                 &.single-col-filter{
+                     width: 30%;
+                 }
+
+                 &.scroll-if-expand{
+                      width: 56px;
+                 }
+            }
+        }      
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        tr:nth-child(odd) {
+            background: #FFFFFF;
+        }  
+
+        tbody {
+            tr {
+                .data-el{
+                     white-space: nowrap;
+                     max-width:180px;
+                     overflow: hidden;
+                     text-overflow: ellipsis; 
+                     display: block;
+                     &:focus{
+                         outline: none;
+                     }
+                }
+
+               
+                cursor: pointer;
+                &:hover {
+                    background: #e3f6fc;
+                }
+            }
+        }
+
+        .no-wrap-text {
+            span {
+                white-space:nowrap; 
+                text-overflow: ellipsis;
+            }            
+        }
+
+        td {
+            @include applyFont($fontSize: 14px);
+            color: #40505B;
+            padding: 10px 20px;                   
+
+            &.link {
+                color: #124e73;
+            }
+
+            &.no-records {
+                text-align: center;
+            }
+            &.hiddenColumn {
+                display: none;
+            }
+            &.previousVersion{
+                text-align:right;
+                width:14%;
+            }
+            &.filesize{
+                text-align:right;
+            }
+            &.fileName{
+                width:17%;
+            }
+            
+        }
+
+        td[data-title="ACTION"] {
+            text-align: center;
+            width: 16%;
+            
+            @media(min-width: 100px) and (max-width: 991px) {
+                text-align: right;
+            }
+        }
+
+        .actions {
+            padding: 10px 10px;
+        }
+
+
+
+        .action_buttons {
+            a {
+                font-size: 16px;
+                color: #858585;
+                display: inline-block;
+                padding: 0px 7px;
+                &:focus{
+                    outline: none;
+                }
+            }
+        }
+        .action_buttons.action_buttons1 {
+            span {
+                font-size: 16px;
+                color: #Fff;
+                display: inline-block;
+                padding: 0px 7px;
+            }
+        }
+        
+
+        .check_icon{
+            font-size: 20px; 
+            color: #81D152
+        }
+        .uncheck_icon{
+            font-size: 20px; 
+            color: #CD2026
+        }
+
+    }
+
+
+    .bottom-bar-wrap {
+        @media(min-width: 100px) and (max-width: 767px) {
+            text-align: center;
+        }
+
+        .table-info {
+            @include applyFont($fontSize: 12px);
+            color: #40505B;
+            float: left;
+            background-color: transparent;
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                float: none;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        .pagination-wrap {
+            float: right;
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                float: none;
+                margin-top: 10px;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+            }
+        }
+
+        .per-page-select-wrap {
+            float: right;
+            margin-right: 10px;
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                display: inline-block;
+                float: none;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 10px;
+            }
+
+            select {
+                border: 1px solid #e5e5e5;
+                width: 50px;
+                padding: 5px 0px;
+                @include applyFont($fontSize: 12px);
+                color: #252525;
+            }
+        }
+    }
+}
+
+input[type="search"]::-ms-clear {
+    display: none;
+}
+
+/*CSS for Toggle switch*/
+ .switchText {
+	font-size: 12.5px;
+	color: #666;
+	text-decoration: none !important;
+	font-weight: normal;
+	line-height: 34px;
+	display: inline-block;;
+}
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 26px;
+	height: 14px;
+	margin-bottom: -3px;
+	margin-right: 10px;
+}
+.switch input {
+	display: none;
+}
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 1px;
+	bottom: 0;
+	-webkit-transition: .4s;
+	transition: .4s;
+	background-color:#f2f2f2;
+	border: 0.5px solid #9FB6C1;
+}
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 13px;
+	width: 13px;
+	left: -0.5px;
+	bottom: 0px;
+	-webkit-transition: .4s;
+	transition: .4s;
+	background-color: white;
+	border: 0.5px solid #9FB6C1;
+}
+input:checked + .slider {
+	background-color: #81D152;
+}
+input:focus + .slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+input:checked + .slider:before {
+	-webkit-transform: translateX(12px);
+	-ms-transform: translateX(12px);
+	transform: translateX(12px);
+}
+/* Rounded sliders  */
+.slider.round {
+	border-radius: 34px;
+}
+.slider.round:before {
+	border-radius: 50%;
+}
+table tr.highlight {
+    background-color: #e6f4fb !important;
+    color: #ffffff;
+}
+.mob-font{
+    font-size: 23px;
+    padding-left: 3px;
+
+}
+.forword-font{
+    padding-left: 5px;
+    font-size: 16px;
+}
+.post-btn{
+color: white;
+}
+
+input:not(:checked) + .slider {
+    background-color: white;
+}
+
+input:checked + .slider {
+    background-color: #1277D9;
+}
+

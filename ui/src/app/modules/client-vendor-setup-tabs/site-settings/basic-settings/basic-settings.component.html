@@ -1,0 +1,193 @@
+<div class="basic-settings-wrap">
+    <form [formGroup]="basicSettingsForm" novalidate>
+        <div class="row-wrap">
+            <div class="left-side">Session Timeout</div>
+            <div class="right-side">
+                <p>Please specify the session timeout for this site</p>
+                <mat-form-field class="full-width-input-wrap half-width-input-wrap">
+                    <input type="number" step="1" matInput placeholder="" formControlName="sessionTimeout">                              
+                    <mat-error *ngIf="basicSettingsForm.controls['sessionTimeout'].hasError('required')">
+                        Session Timeout is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>                
+                <div class="save-changes-btn">SAVE CHANGES</div>
+            </div>
+        </div>
+
+        <div class="row-wrap">
+            <div class="left-side">File Expiration</div>
+            <div class="right-side">
+                <p>Specify how long customer file will remain in the system before they are deleted. Please note that the accumulation of too many files can deplete your system resource (Hard Drive space)</p>
+                <div class="files-expiration-wrap">
+                    <div class="rows heading-row">
+                        <div class="cols col-1">
+                            <div class="heading-label">Section</div>
+                        </div>
+                        <div class="cols col-2">
+                            <div class="heading-label">Delete Files After</div>                    
+                        </div>
+                    </div>
+                    <div class="rows content-row">
+                        <div class="cols col-1">
+                            <div class="col-inner-label">Files</div>
+                        </div>
+                        <div class="cols col-2">
+                            <div class="col-inner">                            
+                                <div class="inner-col-1">
+                                    <mat-form-field class="full-width-input-wrap">
+                                        <input type="number" step="1" matInput placeholder="" formControlName="filesExpirationNumber">                              
+                                    </mat-form-field>
+                                </div>
+                                <div class="inner-col-2 full-width-input-wrap select-box-wrap">
+                                    <mat-select placeholder="" formControlName="filesExpirationType">
+                                        <mat-option *ngFor="let type of dayTypes" [value]="type">
+                                            {{ type }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                                <div class="inner-col-3">
+                                    <span class="fa fa-exclamation-circle" matTooltip="Information"></span>
+                                </div>
+                            </div>                    
+                        </div>                    
+                    </div>
+                    <div class="rows content-row">
+                        <div class="cols col-1">
+                            <div class="col-inner col-inner-label">Job Files</div>
+                        </div>
+                        <div class="cols col-2">
+                            <div class="col-inner">                            
+                                <div class="inner-col-1">
+                                    <mat-form-field class="full-width-input-wrap">
+                                        <input type="number" step="1" matInput placeholder="" formControlName="jobFilesExpirationNumber">                              
+                                    </mat-form-field>
+                                </div>
+                                <div class="inner-col-2 full-width-input-wrap select-box-wrap">
+                                    <mat-select placeholder="" formControlName="jobFilesExpirationType">
+                                        <mat-option *ngFor="let type of dayTypes" [value]="type">
+                                            {{ type }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                                <div class="inner-col-3">
+                                    <span class="fa fa-exclamation-circle" matTooltip="Information"></span>
+                                </div>
+                            </div>                    
+                        </div>
+                    </div>
+                    <div class="rows content-row">
+                        <div class="cols col-1">
+                            <div class="col-inner col-inner-label">Saved Files</div>
+                        </div>
+                        <div class="cols col-2">
+                            <div class="col-inner">                            
+                                <div class="inner-col-1">
+                                    <mat-form-field class="full-width-input-wrap">
+                                        <input type="number" step="1" matInput placeholder="" formControlName="savedExpirationNumber">                              
+                                    </mat-form-field>
+                                </div>
+                                <div class="inner-col-2 full-width-input-wrap select-box-wrap">
+                                    <mat-select placeholder="" formControlName="savedFilesExpirationType">
+                                        <mat-option *ngFor="let type of dayTypes" [value]="type">
+                                            {{ type }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                                <div class="inner-col-3">
+                                    <span class="fa fa-exclamation-circle" matTooltip="Information"></span>
+                                </div>
+                            </div>                    
+                        </div>
+                    </div>
+                    <div class="rows content-row">
+                        <div class="cols col-1">
+                            <div class="col-inner col-inner-label">Credit Card Transactions</div>
+                        </div>
+                        <div class="cols col-2">
+                            <div class="col-inner">                            
+                                <div class="inner-col-1">
+                                    <mat-form-field class="full-width-input-wrap">
+                                        <input type="number" step="1" matInput placeholder="" formControlName="cardExpirationNumber">                              
+                                    </mat-form-field>
+                                </div>
+                                <div class="inner-col-2 full-width-input-wrap select-box-wrap">
+                                    <mat-select placeholder="" formControlName="cardExpirationType">
+                                        <mat-option *ngFor="let type of dayTypes" [value]="type">
+                                            {{ type }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                                <div class="inner-col-3">
+                                    <span class="fa fa-exclamation-circle" matTooltip="Information"></span>
+                                </div>
+                            </div>                    
+                        </div>
+                    </div>
+                </div>
+                <div class="save-changes-btn">SAVE CHANGES</div>
+            </div>
+        </div>
+
+        <div class="row-wrap">
+            <div class="left-side">PDF Job Submission</div>
+            <div class="right-side">            
+                <div class="checkbox-wrap">
+                    <mat-checkbox formControlName="pdfJobSubmission">Preserve original files during file uploads</mat-checkbox>
+                </div>
+                <div class="save-changes-btn">SAVE CHANGES</div>
+            </div>
+        </div>
+
+        <div class="row-wrap">
+            <div class="left-side">Status changes for job & multipart order</div>
+            <div class="right-side">
+                <div class="radio-buttons-wrap status-change-job-wrap">
+                    <mat-radio-group formControlName="statusChangeJob">
+                        <mat-radio-button value="1">Changing status of <b>first job</b> in multipart order to "in production" changes status of the entire</mat-radio-button>
+                        <mat-radio-button value="2">Changing status of <b>last job</b> in multipart order to "in production" changes status of the entire</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="save-changes-btn">SAVE CHANGES</div>
+            </div>
+        </div>
+
+        <div class="row-wrap">
+            <div class="left-side">Mixed (Color & BW) Impressions</div>
+            <div class="right-side">            
+                <div class="checkbox-wrap">
+                    <mat-checkbox formControlName="mixedImpressions">Allow mixed (color & BW) impressions for the same sheets. (This works in conjunction with product-level settings.)</mat-checkbox>
+                </div>
+                <div class="save-changes-btn">SAVE CHANGES</div>
+            </div>
+        </div>
+
+        <div class="row-wrap">
+            <div class="left-side">Maximum number of jobs allowed</div>
+            <div class="right-side">
+                <p>You may set a limit on the number of items each user may place into the cart. Consider doing this if your site typically processes complex products (such as kits with many VDP components) or there are delays with larger orders during order placement.</p>
+                <div class="radio-buttons-wrap">
+                    <mat-radio-group formControlName="maximumNumberOfJobsAllowed">
+                        <mat-radio-button value="1" (click)="onMaximumNumberOfJobsAllowed('1')">Unlimited</mat-radio-button>
+                        <mat-radio-button value="2" (click)="onMaximumNumberOfJobsAllowed('2')">Limit to this many job</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="limited-jobs-input" *ngIf="basicSettingsForm.controls['maximumNumberOfJobsAllowed'].value == '2'">
+                    <mat-form-field class="full-width-input-wrap half-width-input-wrap">
+                        <input matInput placeholder="Limit Job Count" formControlName="limitedJobsCount">                              
+                        <mat-error *ngIf="basicSettingsForm.controls['limitedJobsCount'].hasError('required')">
+                            Count is <strong>required</strong>
+                        </mat-error> 
+                    </mat-form-field>
+                </div>
+                <div class="save-changes-btn">SAVE CHANGES</div>
+            </div>
+        </div>
+
+        <div class="action-wrap">
+        <div class="text-right">
+            <button type="button" mat-button class="app-btn gray-button" (click)="gotoClientVendorSetup()">Cancel</button>
+            <button type="submit" mat-button class="app-btn orange-button save-btn" (click)="saveBasicSettings(basicSettingsForm)">Save</button>
+        </div>
+        </div>
+    </form>
+</div>

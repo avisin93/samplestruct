@@ -1,0 +1,79 @@
+<div class="section-wrap">
+  <div class="top-section row-10 mar-20">
+      <div class="hidden-xs col-md-6">
+          <app-heading-section heading="Dashboard">
+          </app-heading-section>
+      </div>        
+      <div class="clearfix"></div>
+  </div>
+  <div class="col-md-12">
+    <div class="cm-card-no-white-main">
+      <div class="cm-card-no-white-header">
+        Contract Store
+      </div>
+      <div class="cm-card-no-white-body">
+        <div class="row">
+            <div class="col-3 col-md-3" *ngFor="let contractStage of arrayContractsStagesView">
+              <div>
+                <cm-status-card 
+                  [num]="contractStage.number"
+                  [status]="contractStage.status"
+                  [color]="contractStage.color"
+                  [name]="contractStage.name"
+                >
+                </cm-status-card>
+              </div>
+            </div>
+        </div>
+        <div class="cm-card-paginate-main" *ngIf="arrayNumbersOfPageContractsStages.length > 0">
+            <div class="cm-card-paginate-body">
+              <span [ngStyle]="i === selectedPageContractsStages ? {'background-color' : '#717171'} : {}" *ngFor="let i of arrayNumbersOfPageContractsStages;" class="cm-card-contract-store-paginate-dot" (click)="currentPageContractsStages(i)"></span> 
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="cm-card">
+      <div class="cm-card-header">
+        Contract Expiry Schedule
+      </div>
+      <div class="cm-card-body">
+          <cm-status-time-circle></cm-status-time-circle>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="cm-card">
+      <div class="cm-card-event-calendar-body">
+        <cm-event-calendar></cm-event-calendar>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="cm-card">
+      <div class="cm-card-header">
+        My Tasks and Recent Activities
+      </div>
+      <div class="cm-card-body">
+        <mat-tab-group class="mat-tab-group mat-body-padding-middle mat-body-margin-big autoscroll">
+          <mat-tab label="Pending Updates">
+            <cm-pending-updates [dataSource] = "dataSource"
+                                [displayedColumns] = "displayedColumns">
+            </cm-pending-updates>
+          </mat-tab>
+          <mat-tab label="Renewals Due">
+            <cm-renewals-due [dataSource] = "dataSource"
+                            [displayedColumnsRenewalsDue] = "displayedColumnsRenewalsDue">
+            </cm-renewals-due>
+          </mat-tab>
+          <mat-tab label="Recent Activities">
+              <cm-recent-activities [dataSourceRecentAct] = "dataSourceRecentAct"
+                                    [displayedColumnsRecentAct] = "displayedColumnsRecentAct">
+              </cm-recent-activities>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

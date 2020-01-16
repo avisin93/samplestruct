@@ -1,0 +1,24 @@
+.cm-event-calendar-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.3rem;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cm-event-calendar-header button {
+  width: auto;
+}
+
+button:focus {
+  outline: none;
+}
+
+.cm-event-calendar-header-label {
+  flex: 1;
+  height: 1em;
+  font-weight: 600;
+  text-align: center;
+  font-size: 1.3rem;
+}

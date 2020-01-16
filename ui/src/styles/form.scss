@@ -1,0 +1,276 @@
+.full-width-input-wrap {
+    width: 100%;
+    &.mat-form-field {
+        .mat-input-wrapper {
+            margin-bottom: 5px;
+            .mat-input-element {
+                @include applyFont($fontSize: 14px);
+                color: $input-text-color;
+            }
+            .mat-input-placeholder {
+                @include applyFont($fontSize: 14px);
+                color: $placeholder-text-color;
+
+                &.mat-float:not(.mat-empty){
+                    -webkit-transform: translateY(-1.28125em) scale(.85) perspective(100px) translateZ(.001px);
+                    transform: translateY(-1.28125em) scale(.85) perspective(100px) translateZ(.001px);
+                     -ms-transform: translateY(-1.28125em) scale(.85);
+                }
+            }
+            .mat-input-underline {
+                background-color: $silver_shade3;
+            }
+            .mat-input-ripple {
+                background-color: $silver_shade3;
+            }
+            .mat-input-infix {
+                border-bottom: 1px solid $silver;
+                @include applyFont($fontSize: 14px);
+            }
+        }
+        &.mat-input-invalid {
+            .mat-input-wrapper {
+                .mat-input-placeholder {
+                    color: $error;
+
+                    &.mat-accent{
+                        color: #cd2026;
+                    }
+                    &.mat-float{
+                        .mat-placeholder-required{
+                            color: #cd2026;
+                        }
+                    }
+                }
+                .mat-input-ripple {
+                    background: $error;
+                }
+            }
+        }
+        &.mat-focused {
+            .mat-input-placeholder {
+                color: $focus-placeholder-text-color;
+                
+                &.mat-float{
+                    -webkit-transform: translateY(-1.28125em) scale(.85) perspective(100px) translateZ(.001px);
+                    transform: translateY(-1.28125em) scale(.85) perspective(100px) translateZ(.001px);
+                     -ms-transform: translateY(-1.28125em) scale(.85);
+                }
+            }
+            .mat-input-ripple {
+                background-color: $focus-placeholder-text-color;
+            }
+            .mat-select-underline {
+                background-color: $focus-placeholder-text-color;
+            }
+        }
+ 
+    }
+    &.select-box-wrap {
+        position: relative;
+        .mat-input-error {
+            font-size: 75%;
+            position: absolute;
+            top: 48px;
+        }
+    }
+    .mat-select {
+        position: relative;
+        width: 100%;
+        padding-bottom: 1.4em;
+        margin-top: 12px;
+        @include applyFont();
+        .mat-select-placeholder {
+            @include applyFont($fontSize: 14px);
+            color: $placeholder-text-color;
+        }
+        .mat-select-value {
+            @include applyFont($fontSize: 14px);
+            color: $input-text-color !important;
+        }
+        .mat-option.mat-selected.mat-primary,
+        .mat-primary .mat-option.mat-selected {
+            color: $primary_link;
+        }
+     
+        .mat-select-underline {
+            background-color: $silver;
+        }
+        &:focus {
+            .mat-select-placeholder {
+                color: $focus-placeholder-text-color;
+            }
+            .mat-select-underline {
+                height: 2px;
+                background-color: $focus-placeholder-text-color;
+            }
+            &:not(.mat-select-disabled) {
+                &.mat-primary {
+                    .mat-select-underline {
+                        background-color: $focus-placeholder-text-color;
+                    }
+                }
+            }
+        }
+        &:not(:focus) {
+            &.ng-invalid {
+                &.ng-touched {
+                    &:not(.mat-select-disabled) {
+                        .mat-select-underline {
+                            background-color: $error;   
+                        }
+                        .mat-select-arrow{
+                            color: $error; 
+                        }
+                        .mat-select-trigger{
+                            color: $error; 
+                        }
+                        .mat-select-placeholder{
+                            color: $error; 
+                        }
+                    }
+                }
+            }
+        }
+        &.ng-invalid {
+            &.ng-touched {
+                .mat-select-underline {
+                    height: 2px;
+                }
+            }
+        }
+        .mat-select-arrow {
+            border-left: 0 none;
+            border-right: 0 none;
+            border-top: 0 none;
+            margin: 0px;
+            color: $gray_shade1;
+            font-size: 20px;
+            position: absolute;
+            right: 18px;
+            top: 8px;
+            left: auto;
+            &:after {
+                display: inline-block;
+                font: normal normal normal 14px/1 FontAwesome;
+                font-size: inherit;
+                text-rendering: auto;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                content: '\f107';
+            }
+        }
+    }
+}
+
+.form-wrap {
+    label {
+        @include applyFont($fontSize: 13px, $fontWeight: 600);
+        color: $placeholder-text-color;
+        margin: 0px 0px 2px;
+    }
+    span{
+        @include applyFont($fontSize: 13px, $fontWeight: 600);
+    }
+}
+
+.mat-select-panel {
+    margin-top: -5px;
+    .mat-option {
+        @include applyFont($fontSize: 14px, $lineHeight: 40px);
+        height: 40px;
+    }
+}
+
+// checkbox buttons
+.mat-primary .mat-pseudo-checkbox-checked {
+    background: $primary-shade4;
+}
+
+.mat-pseudo-checkbox {
+    border: 1px solid;
+    border-color: $silver_shade1 !important;
+    background: $white_shade3;
+}
+
+.mat-checkbox {
+
+    .mat-checkbox-inner-container{
+        height: 16px;
+        width: 16px;
+
+        .mat-checkbox-frame{
+            border-width: 1px;
+            border-color:#cfd3d4;
+            background-color:#f2f2f2;
+            border-radius: 0px;
+        }
+
+   
+    }
+    &.mat-checkbox-checked{
+        &.mat-accent{
+            .mat-checkbox-background{
+                background-color: transparent;
+                .mat-checkbox-checkmark-path{
+                    stroke: #40505B!important;
+                }
+            }
+        } 
+    }
+    .mat-ripple-element {
+        background-color: rgba(33, 138, 204, .26) !important;
+    }
+}
+
+// .mat-pseudo-checkbox-checked {
+//     &:after {
+//         top: 6px !important;
+//         left: 4px !important;
+//     }
+// }
+
+// radio buttons
+.mat-radio-button {
+    .mat-radio-container {
+        background-color: #F2F2F2;
+        border-radius: 100%;
+    }
+    .mat-radio-label-content {
+        @include applyFont($fontSize: 14px);
+        color: #767676;
+        margin-right: 10px;
+    }
+    .mat-ripple-element {
+        background-color: rgba(33, 138, 204, .26) !important;
+    }
+    .mat-radio-outer-circle {
+        border: 1px solid #cfd3d4;
+    }
+    &.mat-radio-checked {
+        &.mat-accent {
+            .mat-radio-container {
+                background-color: $white;
+            }
+            .mat-radio-label-content {
+                color: #40505B;
+            }
+            .mat-radio-outer-circle {
+                border-color: #40505B;
+            }
+            .mat-radio-inner-circle {
+                background-color: #40505B;
+            }
+        }
+    }
+}
+
+.mat-input-error {
+    color: $error;
+}
+
+ 
+  .mat-primary .mat-option.mat-selected{
+        color:#2DA2CC;
+    }
+ 

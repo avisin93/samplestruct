@@ -1,0 +1,58 @@
+<div class="component-wrap add-edit-facilities-wrap">
+  <div class="heading-wrap">
+    <div class="inner">
+      <div class="popup-heading">{{heading}}</div>
+      <div class="popup-close" (click)="closePopup()"><i class="material-icons">close</i></div>
+    </div>
+  </div>
+
+  <form [formGroup]="addEditFacilityForm" novalidate>
+    <div class="form-wrap row">
+      <div class="col-sm-12 col-xs-12">
+        <div class="full-width-input-wrap select-box-wrap">
+          <mat-select placeholder="Select Module Name" formControlName="managerName1">
+            <mat-option *ngFor="let module of modules" [value]="module.value">
+              {{ module.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="addEditFacilityForm.controls['managerName1'].hasError('required') && addEditFacilityForm.controls['managerName1'].touched">
+            Module Name is <strong>required</strong>
+          </mat-error>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-6">
+        <div class="col-sm-10 col-xs-10 nopadding">
+          <mat-form-field class="full-width-input-wrap">
+            <input matInput placeholder="From Date" formControlName="startDate" dateTimePicker dateFormat="m/d/Y" enableTime="false" noCalendar="false">
+            <!--<md-error *ngIf="addEditDealCodeForm.controls['startDate'].hasError('required')">
+                Start Date is <strong>required</strong>
+              </md-error>
+              <md-error *ngIf="addEditDealCodeForm.controls['startDate'].hasError('invalidDates')">
+                Start Date must be less than End Date
+              </md-error>-->
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xs-6">
+        <div class="col-sm-10 col-xs-10 nopadding">
+          <mat-form-field class="full-width-input-wrap">
+            <input matInput placeholder="To Date" formControlName="endDate" dateTimePicker dateFormat="m/d/Y" enableTime="false" noCalendar="false">
+            <!--<md-error *ngIf="addEditDealCodeForm.controls['startDate'].hasError('required')">
+                Start Date is <strong>required</strong>
+              </md-error>
+              <md-error *ngIf="addEditDealCodeForm.controls['startDate'].hasError('invalidDates')">
+                Start Date must be less than End Date
+              </md-error>-->
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-wrap">
+      <div class="text-right">
+        <button type="button" mat-button class="app-btn gray-button" (click)="closePopup()">Cancel</button>
+        <button type="submit" mat-button class="app-btn orange-button save-btn" [disabled]="wait" (click)="saveFacility(addEditFacilityForm)">{{saveBtnTitle}}</button>
+      </div>
+    </div>
+  </form>
+</div>

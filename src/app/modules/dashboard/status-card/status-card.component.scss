@@ -1,0 +1,27 @@
+.cm-status-card {
+    cursor: pointer;
+    flex-direction: row;
+    align-items: center;
+    height: 7.5rem;
+    & > .cm-card-details {
+        margin:auto;
+        text-align: center;
+
+        & > .cm-card-number {
+          height: 4rem;
+          font-size: 3rem;
+          font-weight: 600;
+          color: white;
+          padding-top: 1rem;
+        }
+
+        & > .cm-card-status {
+          color: white;
+          text-transform: none;
+          font-size: 1.4rem;
+          font-weight: 400;
+          color: white;
+          padding-top: .5rem;
+        }
+    }
+}

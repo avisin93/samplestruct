@@ -1,0 +1,58 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.price-details-wrap {
+    .middle-wrap {
+        table {
+            width: 100%;
+
+            th {
+                @include applyFont($fontSize: 13px, $fontWeight: 600);
+                color: #222;
+                padding: 7px 10px;
+            }
+
+            tbody {
+                tr {
+                    border-bottom: 1px solid #D8D8D8;
+                    border-left: 1px solid #D8D8D8;
+                    border-right: 1px solid #D8D8D8;
+                    
+                    &:first-child {
+                        border-top: 1px solid #D8D8D8;
+                    }
+                }
+
+                tr:nth-child(even) {
+                    background: #FAFAFA;
+                }
+                tr:nth-child(odd) {
+                    background: #FFFFFF;
+                }
+
+                td {
+                    @include applyFont($fontSize: 13px);
+                    color: #222;
+                    padding: 7px 10px;
+                }
+            }
+
+            tfoot {
+                td {
+                    text-align: right;
+                    @include applyFont($fontSize: 16px, $fontWeight: 600);
+                    color: #222;
+                    padding: 20px 0px 0px;
+
+                    span.total-label {
+                        color: #222;
+                        padding-right: 10px;
+                    }
+                    span.total-price {
+                        color: $secondary-color;
+                    }
+                }
+            }
+        }
+    }
+}

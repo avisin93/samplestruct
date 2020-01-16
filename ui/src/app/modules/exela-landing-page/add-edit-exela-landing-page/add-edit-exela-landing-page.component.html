@@ -1,0 +1,44 @@
+<div class="component-wrap add-edit-user-setup">
+  <div class="heading-wrap">
+    <div class="inner">
+      <div class="popup-heading">{{heading}}</div>
+      <div class="popup-close" (click)="closePopup()"><i class="material-icons">close</i></div>
+    </div>
+  </div>
+
+  <form [formGroup]="addEditUserSetupForm" novalidate>
+    <div class="form-wrap row">
+      <div class="col-sm-6 col-xs-6">
+        <mat-form-field class="mat-select-full-width">
+          <mat-select placeholder="Select Client" formControlName="organizationId" (selectionChange)="onClientSelect($event)">
+            <mat-option *ngFor="let client of clients" [value]="client._id">
+              {{ client.organizationname }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="addEditUserSetupForm.controls['organizationId'].hasError('required') && showClientError" >
+            Client is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-xs-6">
+        <mat-form-field class="mat-select-full-width">
+          <mat-select placeholder="Select Project" formControlName="projectId">
+            <mat-option *ngFor="let project of projects" [value]="project._id">
+              {{ project.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="addEditUserSetupForm.controls['projectId'].hasError('required') && showProjectError">
+            Project is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="action-wrap">
+      <div class="text-right margin-top" >
+        <button type="button" mat-button class="app-btn" id="cancel" (click)="closePopup()">Cancel</button>
+        <button type="submit" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="saveUserSetup(addEditUserSetupForm)">{{saveBtnTitle}}</button>
+      </div>
+    </div>
+  </form>
+</div>

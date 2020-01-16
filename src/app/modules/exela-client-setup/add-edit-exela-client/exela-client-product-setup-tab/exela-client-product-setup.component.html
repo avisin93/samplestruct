@@ -1,0 +1,96 @@
+<div class="section-wrap vendor-mapper-wrap">
+    <!--<div class="top-section row-10">
+        <div class="hidden-xs col-xs-12 col-sm-6">
+            <app-heading-section heading="User Permissions">
+                <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+            </app-heading-section>
+        </div>          
+        <div class="clearfix"></div>
+    </div>  -->
+    
+    <div class="vendor-mapper-card-wrap">
+        <form [formGroup]="assignProductForm" novalidate>
+            <mat-card>           
+
+                <div class="row">
+                    <!--<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+                        <div class="full-width-input-wrap select-box-wrap">
+                            <md-select placeholder="Select Role*" formControlName="role">
+                                <md-option *ngFor="let role of roles" [value]="role.value">
+                                    {{ role.text }}
+                                </md-option>
+                            </md-select>
+                            <md-error *ngIf="assignProductForm.controls['role'].hasError('required') && assignProductForm.controls['role'].touched">
+                                Role is <b>required</b>.
+                            </md-error>
+                        </div>
+                    </div>-->
+
+                    <!--<h4 class="col-xs-12 col-sm-12 heading-text">Assign User Permissions</h4>-->
+
+                    <div class="vendor-mapping-box-wrap col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3 list-col">
+                                <div class="inner">
+                                    <div i18n class="col-heading">Current Product List</div>
+                                    <div class="listing">
+                                        <ul>
+                                            <li *ngFor="let item of assignProductForm.controls['currentProductList']['controls']; let i = index" 
+                                            [class.active]="selectedItem == item"
+                                            (click)="onSelectItem(item, i, 'left')">
+                                                <div [formGroup]="item">
+                                                    <input type="hidden" formControlName="id" />
+                                                    {{item.controls.name.value}}
+                                                </div>
+                                            </li>                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-1 col-md-1 buttons-col">
+                                <div class="inner">
+                                    <button type="button" (click)="moveRight()"><i class="fa fa-angle-right" aria-hidden="true"></i></button> 
+                                    <button type="button" (click)="moveAllRight()"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button> 
+                                    <button type="button" (click)="moveLeft()"><i class="fa fa-angle-left" aria-hidden="true"></i></button> 
+                                    <button type="button" (click)="moveAllLeft()"><i class="fa fa-angle-double-left" aria-hidden="true"></i></button> 
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3 list-col">
+                                <div class="inner">
+                                    <div i18n class="col-heading">Assigned Product List</div>
+                                    <div class="listing">
+                                        <ul>
+                                            <li *ngFor="let item of assignProductForm.controls['assignProductList']['controls']; let i = index" 
+                                            [class.active]="selectedItem == item"
+                                            (click)="onSelectItem(item, i, 'right')">
+                                                <div [formGroup]="item">
+                                                    <input type="hidden" formControlName="id" />
+                                                    {{item.controls.name.value}}
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-wrap col-xs-12">
+                        <div class="text-left">
+                            <button i18n type="button" mat-button class="app-btn" id="cancel" (click)="gotoClientSetup()">Cancel</button>
+                            <button i18n type="submit" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="save(assignProductForm)">Assign</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </mat-card>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+

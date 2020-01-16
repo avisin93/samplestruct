@@ -1,0 +1,88 @@
+<div class="component-wrap add-edit-user-setup">
+    <div class="heading-wrap">
+        <div class="inner">
+            <div class="popup-heading">{{heading}}</div>
+            <div class="popup-close" (click)="closePopup()"><i class="material-icons">close</i></div>
+        </div>
+    </div>
+
+    <form [formGroup]="exeFileAddGroup" novalidate>
+        <div class="form-wrap row">
+            <div class="col-xs-12 col-lg-12 col-md-12 col-sm-12">
+                <mat-form-field class="mat-select-full-width">
+                    <mat-select placeholder="Select Model Name*" formControlName="modelName">
+                        <mat-option *ngFor="let model of modelList" [value]="model.value">
+                            {{model.label}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="exeFileAddGroup.controls['modelName'].hasError('required') && isModelNameInvalid">
+                        Please select a <strong>model</strong> name.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-xs-12 col-lg-12 col-md-12 col-sm-12" formArrayName="fileParameters">
+                <div *ngFor="let pair of getAllParams(exeFileAddGroup, 'fileParameters'); let i=index;
+                    let first=first; let last=last;" [formGroupName]="i">
+                    <div class="col-lg-5 col-md-5 col-xs-5 col-sm-5">
+                        <mat-form-field class="full-width-input-wrap">
+                            <input matInput placeholder="Paramater {{i+1}} key" formControlName="keyName">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-xs-5 col-sm-5">
+                        <mat-form-field class="full-width-input-wrap">
+                            <input matInput placeholder="Paramater {{i+1}} value" formControlName="keyValue">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-xs-2 col-sm-2">
+                        <a class="fontText" style="cursor: pointer;" (click)="addNewParameterPair()" >
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-4 col-lg-4 col-md-4">
+                <div class="file-upload-inner image-file-uploader-box">
+                    <label class="uploader" for="input-file" >
+                        <div class="icon-text-wrap">
+                            <div class="col-xs-12 text-center">
+                                <i class="icon-upload3" *ngIf="!fileSelected"></i>
+                                <i class="fa fa-file-excel-o file-selected-icon" *ngIf="fileSelected"></i>
+                            </div>
+                            <div class="col-xs-12 text-center">
+                                <span *ngIf="!fileSelected">Upload Files</span>
+                                <span class="file-selected-name" *ngIf="fileSelected">{{fileName}}</span>
+                            </div>
+                            <!-- <span class="file-upload-hint-text">(file Size 230px X 80px)</span>  -->
+                        </div>
+                    </label>
+                    <input id="input-file" type="file" name="file" (change)="selectfile(input)" #input multiple="multiple" />
+                    <div class="select-file-error" *ngIf="!isFileValid">Please select a file to execute</div>
+                    <!-- <div class="select-logo-error" *ngIf="logoValidation == true">Please select file.</div> -->
+                    <a *ngIf="isFileExecuted" class="download-excel-template" (click)="downloadOutputFile()">{{outputFileName}}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-wrap">
+            <div class="text-right">
+                <button type="button" mat-button class="app-btn" id="cancel" (click)="closePopup()">Cancel</button>
+                <button type="submit" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="processTextFile(exeFileAddGroup)">Execute</button>
+                <!-- <button type="submit" md-button class="app-btn orange-button save-btn" (click)="onlyUpdateRule(addEditModelSetupForm)">{{saveBtnTitle}}</button> -->
+                <!--<button type="submit" md-button class="app-btn orange-button save-btn" (click)="saveSentiments(addEditModelSetupForm)">{{saveBtnTitle}}</button>-->
+            </div>
+        </div>
+
+    </form>
+
+    <div *ngIf="isFileExecuted" class="execution-output">
+        <table>
+            <tbody>
+                <tr *ngFor="let object of outputOfProgram">
+                    <td>{{object.key}}</td>
+                    <td>{{object.value}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

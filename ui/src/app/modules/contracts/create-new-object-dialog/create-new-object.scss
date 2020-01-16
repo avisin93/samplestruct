@@ -1,0 +1,24 @@
+.buttons-class {
+    float: right;
+    padding: 25px 0px !important;
+}
+
+.dialog-button {
+    color: #ffffff;
+    width: 90px;
+}
+
+.title-position {
+  float:left;
+  margin-right:5px;
+  font-family: "Work Sans" !important;
+}
+
+.close-button-position {
+  text-align: right;
+  & > .close-button {
+    line-height: normal;
+    border: none;
+    background: white;
+  }
+}

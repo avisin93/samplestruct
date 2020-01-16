@@ -1,0 +1,85 @@
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+
+.add-edit-user-setup {
+    .checkbox-wrap {
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .mat-checkbox {
+            margin-left: 15px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                margin-left: 0px;
+                display: block;
+            }
+        } 
+
+        @include checkbox-styled();
+    }    
+
+    // .full-width-input-wrap .mat-select {
+    //     padding-bottom: 1.29688em;
+    // }    
+}
+
+a.download-use-file {
+    @include applyFont($fontSize: 14px);
+    text-decoration: none;
+    outline: 0 none;
+    color: $primary_shade3;
+    cursor: pointer;
+    display: block;
+    margin-top: 6px;
+}
+
+
+
+
+
+
+.add-edit-Product-information {
+    padding: 30px 20px 30px;
+
+    .action-wrap {
+        margin-top: 15px;
+    }
+
+    .checkbox-wrap {
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .mat-checkbox {
+            margin-left: 15px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+        } 
+
+        @include checkbox-styled();
+    }        
+
+    // .full-width-input-wrap .mat-select {
+    //     padding-bottom: 1em;
+    // }
+
+    textarea {
+        height: 68px;
+        resize: none;
+    }
+
+    .select-logo-error {
+        @include applyFont($fontSize: 13px);        
+        color: #CD2026;
+        margin-bottom: 14px;
+    }
+}
+.upload-margin{
+    padding-top: 37px;
+}
+

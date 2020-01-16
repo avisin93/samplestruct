@@ -1,0 +1,38 @@
+<div class="component-wrap change-facility-wrap change-facility-popup-wrap">
+    <div class="heading-wrap">
+        <div class="inner">
+            <div class="popup-heading">Change Facility</div>
+            <div class="popup-close" (click)="closePopup()"><i class="material-icons">close</i></div>
+        </div>
+    </div>
+
+    <div class="middle-wrap">
+        <mat-radio-group [(ngModel)]="selectedFacility">
+            <div class="facility-items">
+                <div class="facility-item-row" *ngFor="let facility of facilities">
+                    <mat-radio-button [value]="facility">{{facility.facilityName}}</mat-radio-button>
+                    <div class="facility-details">
+                        <div class="address">
+                            <i class="fa fa-building"></i> <span>{{facility.facilityAddress}}</span>
+                        </div>
+                        <div class="date-time">
+                            <i class="fa fa-calendar"></i> <span>{{facility.facilityDayTime}}</span>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="current-facility-time">
+                            <i class="fa fa-clock-o"></i> <span>Current Print shop time : {{facility.facilityCurrentTime}}</span>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </mat-radio-group>
+    </div>
+
+    <div class="action-wrap">
+        <div class="error-text" *ngIf="!isFacilitySelected">Please select at least one facility.</div>
+        <div class="text-right">
+            <button type="button" mat-button class="app-btn gray-button" (click)="closePopup()">Cancel</button>
+            <button type="button" mat-button class="app-btn orange-button save-btn" (click)="saveSelectedFacility()">Save</button>
+        </div>
+    </div>
+</div>

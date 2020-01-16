@@ -1,0 +1,121 @@
+<div class="add-edit-client-information"> 
+  <form [formGroup]="clientInformationForm" novalidate>
+    <div class="form-wrap row">
+        <!--<div class="col-sm-6 col-xs-12">
+          <div class="file-upload-inner image-file-uploader-box">
+              <div class="image-selection-wrap" *ngIf="logoSelected == true">
+                <div class="selected-image">
+                    <img src="{{clientInformationForm.controls['logo'].value}}" />
+                </div>
+                <div class="selected-image-actions">
+                    <div class="i-actions-inner">
+                      <label class="i-actions replace" for="input-file">REPLACE</label><br/>
+                      <div class="i-actions remove" (click)="removeLogo()">REMOVE</div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <label class="uploader" for="input-file" *ngIf="logoSelected == false">
+                  <div class="icon-text-wrap">
+                      <i class="icon-upload3"></i><br/>
+                      <span class="file-upload-text">Upload Files</span>
+                      <span class="file-upload-hint-text">(Logo Size 230px X 80px)</span>                      
+                  </div>
+              </label>            
+              <input id="input-file" type="file" name="file" accept="image/*" (change)="selectLogo(input)" #input />            
+          </div>
+        </div>-->
+        <div class="col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="col-sm-3 col-xs-6">
+              <mat-form-field class="full-width-input-wrap">
+                <input i18n-placeholder matInput placeholder="Client Code*" formControlName="organizationcode" maxlength="50">              
+                <mat-error i18n *ngIf="clientInformationForm.controls['organizationcode'].hasError('required')">
+                    Client Code is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>          
+            </div>
+            <div class="col-sm-3 col-xs-6">
+              <mat-form-field class="full-width-input-wrap">
+                <input i18n-placeholder matInput placeholder="Client Name*" formControlName="organizationname" maxlength="50">              
+                <mat-error i18n *ngIf="clientInformationForm.controls['organizationname'].hasError('required')">
+                    Client Name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+              <mat-form-field class="full-width-input-wrap" formGroupName="address">
+                <!--<textarea mdInput placeholder="Address*" formControlName="add1"></textarea>-->
+                <input i18n-placeholder matInput placeholder="Address" formControlName="add1" maxlength="100">
+              </mat-form-field>        
+            </div>
+          </div>
+        </div>    
+        <div class="clearfix"></div>            
+        <div class="col-sm-3 col-xs-6"> 
+          <mat-form-field class="full-width-input-wrap" formGroupName="address">
+              <input matInput i18n-placeholder  placeholder="Country" formControlName="country" maxlength="30">              
+              </mat-form-field>                     
+        </div>        
+        <div class="col-sm-3 col-xs-6">      
+        <mat-form-field class="full-width-input-wrap" formGroupName="address">
+              <input matInput i18n-placeholder placeholder="State" formControlName="state" maxlength="30">              
+              </mat-form-field>      
+        </div> 
+        <div class="col-sm-3 col-xs-6">          
+              <mat-form-field class="full-width-input-wrap" formGroupName="address">
+              <input matInput i18n-placeholder placeholder="City" formControlName="city" maxlength="30">              
+              </mat-form-field>           
+        </div>
+        <div class="col-sm-3 col-xs-6">
+          <mat-form-field class="full-width-input-wrap" formGroupName="address">
+            <input matInput i18n-placeholder placeholder="Zip Code" formControlName="zipcode" maxlength="20">
+          </mat-form-field>
+        </div>         
+        <div class="col-sm-3 col-xs-6">
+          <mat-form-field class="full-width-input-wrap" formGroupName="address">
+            <input matInput i18n-placeholder placeholder="Country Code" formControlName="countrycode" maxlength="20">
+          </mat-form-field>
+        </div>      
+        <div class="col-sm-3 col-xs-6">
+          <mat-form-field class="full-width-input-wrap">
+            <input matInput i18n-placeholder placeholder="Phone Number" formControlName="phone" maxlength="20">                          
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 col-xs-6">
+          <mat-form-field class="full-width-input-wrap">
+            <input matInput i18n-placeholder placeholder="Fax" formControlName="fax" maxlength="30">                          
+          </mat-form-field>
+        </div> 
+        <!--<div class="col-sm-3 col-xs-6" *ngIf="mode === 'add'">
+          <md-input-container class="full-width-input-wrap">
+            <input mdInput placeholder="Admin User Name*" formControlName="adminUserName" maxlength="50">              
+            <md-error *ngIf="clientInformationForm.controls['adminUserName'].hasError('required')">
+                Admin User name is <strong>required</strong>
+            </md-error>
+            <md-error *ngIf="clientInformationForm.controls['adminUserName'].hasError('pattern')">
+                Please enter a valid user name.
+            </md-error>
+          </md-input-container>
+        </div>
+        <div class="col-sm-3 col-xs-6" *ngIf="mode === 'add'">
+          <md-input-container class="full-width-input-wrap">
+            <input mdInput placeholder="Admin Email Id*" formControlName="adminUserEmail" maxlength="50">              
+            <md-error *ngIf="clientInformationForm.controls['adminUserEmail'].hasError('required')">
+                Email is <strong>required</strong>
+            </md-error>
+            <md-error *ngIf="clientInformationForm.controls['adminUserEmail'].hasError('pattern')">
+                Please enter a valid email id.
+            </md-error>
+          </md-input-container>
+        </div>  -->
+    </div>
+
+    <div class="action-wrap">
+      <div class="text-right">
+          <button i18n type="button" mat-button class="app-btn" id="cancel" (click)="gotoClientSetup()">Cancel</button>
+          <button i18n type="submit" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="saveClient(clientInformationForm)">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

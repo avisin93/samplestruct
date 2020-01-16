@@ -1,0 +1,15 @@
+@import '../../../../styles/variables.scss';
+@import '../../../../styles/mixins';
+
+.heading {    	
+    color: #18191a;
+    @include applyFont($fontFamily: 'Work Sans', $fontSize: 22px, $fontWeight: 600);
+    text-align: left;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+.breadcrumbs {
+    @include applyFont($fontFamily: 'Work Sans', $fontSize: 12px);
+}
+

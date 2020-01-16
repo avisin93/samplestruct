@@ -1,0 +1,15 @@
+<div [ngClass]="oneSubtab ? 'col-md-4' : 'col-md-6'" style="padding-top: 1.5rem;" [formGroup]="formGroup">
+  <mat-form-field class="col-md-12" hideRequiredMarker>
+    <mat-slide-toggle class="slide-checkbox" [color] = "'primary'" 
+      (click) = "documentHasParent()" #hasParentCheckbox matPrefix></mat-slide-toggle>
+    <mat-select disableOptionCentering panelClass="select-dropdown-class parentPanelClass" placeholder="Parent document" 
+      [formControl]="formGroup.controls[field.database_column_name]" required="false">
+      <mat-option *ngFor="let pd of parentDocuments" [value]="pd.documents._id" name="parentDocuments" ngDefaultControl>
+        {{pd.documents.name_document_efa}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="formGroup.controls[field.database_column_name].invalid">
+      {{getErrorMessage(formGroup.controls[field.database_column_name])}}
+    </mat-error>
+  </mat-form-field>
+</div>

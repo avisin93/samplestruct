@@ -1,0 +1,88 @@
+<div class="row show-table" [hidden]="!showPanels.tablePanel">
+  <div id="add-button-div" class="col-md-12">
+    <button class="cm-btn primary-pink-color" (click)="openPanel(null)">Add</button>
+  </div>
+  <div class="col-md-12 datatable-div">
+    <ngx-datatable #datatable class="material striped border border-light" [rows]="rowsTable" [columns]="columnsTable"
+      [footerHeight]="50" [messages]="myMessages" [headerHeight]="70" [rowHeight]="35" [sortable]="true"
+      [count]="pageTable.count" [offset]="pageTable.offset" [limit]="pageTable.limit" [columnMode]="'force'">
+      <ng-template #sortableHeaderTemplate let-sort="sortFn" let-column="column" let-sortDir="sortDir"
+        ngx-datatable-header-template>
+        <span (click)="sort($event, sortDir, sortFn)" class="header-name">{{column.name}}</span>
+        <div class="filter-continer">
+          <input class="filter" placeholder='Filter' (keyup)="updateFilter($event, column.prop)" />
+        </div>
+      </ng-template>
+      <ng-template #actionColumnTemplate let-row="row" let-value="value" let-rowIndex="rowIndex"
+        ngx-datatable-cell-template>
+        <div class="action-items-i">
+          <i style="margin-right:15px;" [matTooltipClass]="{'fixed-fee-tooltip': true}" matTooltip="Edit"
+            class="fas fa-pencil-alt" (click)="openPanel(row)"></i>
+          <i style="margin-right:15px;" [matTooltipClass]="{'fixed-fee-tooltip': true}" matTooltip="Copy"
+            class="fa fa-files-o" (click)="copyItem(row)"></i>
+          <i matTooltip="Delete" [matTooltipClass]="{'fixed-fee-tooltip': true}" class="fas fa-trash-alt"
+            (click)="openDialogForDeleteConfirmation(row)"></i>
+        </div>
+      </ng-template>
+      <ng-template #rateColumnTemplate let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{row.currency ? row.currency.symbol : ''}} {{row.rate}}
+      </ng-template>
+      <ngx-datatable-footer>
+        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageTable.limit"
+          let-curPage="curPage" let-offset="pageTable.offset" let-isVisible="isVisible">
+          <div class="page-count" [hidden]="!((rowCount / pageTable.limit) > 1)">
+            {{datatable.messages.totalMessage}}{{pageTable.offset * pageTable.limit + 1}} -
+            {{pageTable.offset * pageTable.limit + pageTable.limit > rowCount ? rowCount : pageTable.offset * pageTable.limit + pageTable.limit }}
+            of {{rowCount.toLocaleString()}}
+          </div>
+          <div [hidden]="!((rowCount / pageTable.limit) > 1)">
+            <select (change)="onLimitChange($event.target.value)">
+              <option *ngFor="let option of pageLimitOptions" [value]="option.value"
+                [selected]="option.value == pageTable.limit">
+                {{ option.value }}
+              </option>
+            </select>
+          </div>
+          <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'" [pagerRightArrowIcon]="'datatable-icon-right'"
+            [pagerPreviousIcon]="'datatable-icon-prev'" [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage"
+            [size]="pageTable.limit" [count]="rowCount" [hidden]="!((rowCount / pageTable.limit) > 1)"
+            (change)="changePage($event)">
+          </datatable-pager>
+        </ng-template>
+      </ngx-datatable-footer>
+    </ngx-datatable>
+    <!-- <div class="content-right btn-container" [ngStyle]="{'padding-right.rem': 0}">
+        <button color="primary" class="cm-btn" id="cancel" (click) = "cancel()">
+          Cancel
+        </button>
+        <button color="primary" class="cm-btn primary-pink-color"
+              (click) = "saveAndContinueCommercialsFixedFee()">
+              Save and Continue
+        </button>
+      </div> -->
+
+
+    <div class="content-right btn-container ds-vw" [ngStyle]="{'padding-right.rem': 0}">
+      <button color="primary" class="cm-btn" id="cancel" (click)="cancel()">
+        Cancel
+      </button>
+      <button color="primary" class="cm-btn primary-pink-color" (click)="saveAndContinueCommercialsFixedFee()">
+        SAVE AND CONTINUE
+      </button>
+    </div>
+    <div class="content-right btn-mob-container">
+      <button color="primary" class="cm-mob-btn  mb-vw" id="cancel" (click)="cancel()">
+        Cancel
+      </button>
+      <button color="primary" class="cm-mob-btn primary-pink-color  mb-vw"
+        (click)="saveAndContinueCommercialsFixedFee()">
+        SAVE AND CONTINUE
+      </button>
+    </div>
+  </div>
+</div>
+<div class="row show-add" [hidden]="!showPanels.addPanel">
+  <cm-add-fixed-fee [generalInfoLocation]="generalInfoLocation" [transferData]="transferData" (goBack)="togglePanel()"
+    (isDirty)="isDirtyChild($event)">
+  </cm-add-fixed-fee>
+</div>

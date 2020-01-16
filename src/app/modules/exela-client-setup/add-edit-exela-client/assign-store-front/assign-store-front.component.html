@@ -1,0 +1,30 @@
+<div class="assign-store-front-wrap">
+  <div class="assign-store-front-steps-form">
+    <div class="steps-wrap">
+      <ul id="steps-bar">
+        <li [class.active]="currentStep >= 1" [class.active-step]="currentStep == 1" (click)="onStepChange(1)">
+          <span i18n>Select Theme</span>
+        </li>
+        <li [class.active]="currentStep >= 2" [class.active-step]="currentStep == 2" (click)="onStepChange(2)">
+          <span i18n>Banner Branding</span>
+        </li>
+        <li [class.active]="currentStep >= 3" [class.active-step]="currentStep == 3" (click)="onStepChange(3)">
+          <span i18n>Landing Page Content</span>
+        </li>
+      </ul>
+    </div>
+    <div class="steps-data-wrap">
+      <form [formGroup]="assignStoreFrontForm" novalidate>
+        <div class="select-theme-step-wrap tab-content" [class.show-tab]="currentStep == 1">
+          <app-select-theme [organizationId]="organizationId" [form]="assignStoreFrontForm" [mode]="mode" [selectedTheme]="selectedTheme" (stepChange)="onStepChange($event)"></app-select-theme>
+        </div>
+        <div class="branding-step-wrap tab-content" [class.show-tab]="currentStep == 2">
+          <app-branding [organizationId]="organizationId" [form]="assignStoreFrontForm" [mode]="mode" [logoSelected]="logoSelected" [collapseLogoSelected]="collapseLogoSelected" (stepChange)="onStepChange($event)"></app-branding>
+        </div>
+        <div class="promotional-banner-step-wrap tab-content" [class.show-tab]="currentStep == 3">
+          <app-promotional-banner [organizationId]="organizationId" [form]="assignStoreFrontForm" [mode]="mode" [bannerSelected]="bannerSelected" (stepChange)="onStepChange($event)"></app-promotional-banner>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

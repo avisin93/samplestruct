@@ -1,0 +1,98 @@
+<div class="col-md-12 spacing-element" *ngIf="additionalReportingFieldsArray.length != 0" [formGroup] = "additionalFormGroup">
+    <div class="row" *ngFor="let row of getNumberOfRows()">
+      <div class="col-md-{{ 12 / numOfFieldsInRow}}" *ngFor="let col of getNumberOfFieldsInRow(row)">
+        <mat-form-field class="col-md-12" 
+          *ngIf="additionalReportingFieldsArray[row*numOfFieldsInRow+col] && ['textbox', 'number'].indexOf(additionalReportingFieldsArray[row*numOfFieldsInRow+col].config) > -1">
+          <input matInput
+            placeholder="{{ additionalReportingFieldsArray[row*numOfFieldsInRow+col].label }}" 
+            [formControl]="additionalFormGroup.controls['valueAdditionalReport_' + additionalReportingFieldsArray[row*numOfFieldsInRow+col].prop]"
+          > 
+          <mat-error *ngIf="additionalFormGroup.controls['valueAdditionalReport_' + additionalReportingFieldsArray[row*numOfFieldsInRow+col].prop] && additionalFormGroup.controls['valueAdditionalReport_' + additionalReportingFieldsArray[row*numOfFieldsInRow+col].prop].invalid">
+            {{ getErrorMessage(additionalFormGroup.controls['valueAdditionalReport_' + additionalReportingFieldsArray[row*numOfFieldsInRow+col].prop]) }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-12 mat-form-field-has-prefix" *ngIf="additionalReportingFieldsArray[row*numOfFieldsInRow+col] && additionalReportingFieldsArray[row*numOfFieldsInRow+col].config == 'datepicker'">
+          <input 
+            matInput
+            readonly
+            class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            
+            aria-invalid="false" 
+            aria-required="false"
+            placeholder="{{ additionalReportingFieldsArray[row*numOfFieldsInRow+col].label }}"  
+            [formControl]="additionalFormGroup.controls['valueAdditionalReport_' + additionalReportingFieldsArray[row*numOfFieldsInRow+col].prop]"
+            [matDatepicker]="datePicker" 
+            (click)="datePicker.open()"
+          >
+          <mat-datepicker-toggle  matPrefix [for]="datePicker">
+            <mat-icon matDatepickerToggleIcon class="fa fa-calendar">
+            </mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #datePicker></mat-datepicker>
+          <mat-error *ngIf="additionalFormGroup.controls['valueAdditionalReport_' + additionalReportingFieldsArray[row*numOfFieldsInRow+col].prop] && additionalFormGroup.controls['valueAdditionalReport_' + additionalReportingFieldsArray[row*numOfFieldsInRow+col].prop].invalid">
+            {{ getErrorMessage(additionalFormGroup.controls['valueAdditionalReport_' + additionalReportingFieldsArray[row*numOfFieldsInRow+col].prop]) }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+</div>
+<div class="row spacing-element">
+  <div class="col-md-12">
+    <div class="col-md-12">
+      <h5 class="additional-reporting-fields-color" (click)="showAdditionalReportingFields()"><i class="fas fa-plus-circle"></i> ADDITIONAL REPORTING FIELDS</h5>
+    </div>
+  </div>
+</div>
+<div class="additional-row spacing-element" *ngIf="additionalReportingFields" [formGroup] = "additionalFormGroup">
+  <div class="col-md-12" *ngFor="let field of additionalReportingFieldsArray">
+    <div class="col-md-4">
+      <mat-form-field class="col-md-12">
+        <input matInput placeholder="Label" [formControl]="additionalFormGroup.controls['labelAdditionalReport_'+field.prop]">
+        <mat-error *ngIf="additionalFormGroup.get('labelAdditionalReport_' + field.prop) && additionalFormGroup.get('labelAdditionalReport_' + field.prop).invalid">
+          {{ getErrorMessage(additionalFormGroup.get('labelAdditionalReport_' + field.prop)) }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field class="col-md-12">
+        <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Configuration" [formControl]="additionalFormGroup.controls['configurationAdditionalReport_'+field.prop]">
+          <mat-option *ngFor="let config of configurations" [value]="config.value"> 
+            {{ config.text }} 
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="additionalFormGroup.get('configurationAdditionalReport_' + field.prop) && additionalFormGroup.get('configurationAdditionalReport_' + field.prop).invalid">
+          {{ getErrorMessage(additionalFormGroup.get('configurationAdditionalReport_' + field.prop)) }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4 icon-container-next-to-input">
+      <i class="fas fa-trash-alt fa-lg" (click)="removeAdditionalReportingField(field.prop)"></i>
+      <i class="fas fa-check fa-lg" (click)="updateAdditionalReportingField(field.prop)"></i>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="col-md-4">
+      <mat-form-field class="col-md-12">
+        <input matInput placeholder="Label" formControlName="labelAdditionalReport">
+        <mat-error *ngIf="additionalFormGroup.get('labelAdditionalReport') && additionalFormGroup.get('labelAdditionalReport').invalid">
+          {{ getErrorMessage(additionalFormGroup.get('labelAdditionalReport')) }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field class="col-md-12">
+        <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Configuration" formControlName="configurationAdditionalReport">
+          <mat-option *ngFor="let config of configurations" [value]="config.value"> 
+            {{ config.text }} 
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="additionalFormGroup.get('configurationAdditionalReport') && additionalFormGroup.get('configurationAdditionalReport').invalid">
+          {{ getErrorMessage(additionalFormGroup.get('configurationAdditionalReport')) }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-4 icon-container-next-to-input">
+      <i class="fas fa-check fa-lg" (click)="addAdditionalReportingField()"></i>
+    </div>
+  </div>
+</div>

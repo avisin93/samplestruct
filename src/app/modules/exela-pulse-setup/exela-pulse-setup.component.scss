@@ -1,0 +1,102 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+:host {
+    ::ng-deep ng-data-tables {
+        table {
+            tbody {
+                tr {
+                    td {
+                        @media(min-width: 992px) and (max-width: 999999px) {
+                            &:nth-child(1) {
+                                width: 20%;
+                            }
+                            &:nth-child(2) {
+                                width: 13%;
+                            }
+                             &:nth-child(3) {
+                                width: 20%;
+                            }
+			    &:nth-child(4) {
+                                width: 17%;
+                            }
+			    &:nth-child(5) {
+                                width: 30%;
+                            }
+                        }                    
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*CSS for Toggle switch*/
+ .switchText {
+	font-size: 12.5px;
+	color: #666;
+	text-decoration: none !important;
+	font-weight: normal;
+	line-height: 34px;
+	display: block;
+}
+
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 26px;
+	height: 14px;
+	margin-bottom: -3px;
+	margin-right: 10px;
+}
+.switch input {
+	display: none;
+}
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 1px;
+	bottom: 0;
+	-webkit-transition: .4s;
+	transition: .4s;
+	background-color:#f5f9fa;
+	border: 0.5px solid #9c9c9c;
+}
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 14px;
+	width: 14px;
+	left: -2px;
+	bottom: 0px;
+	-webkit-transition: .4s;
+	transition: .4s;
+	background-color:#f5f9fa;
+	border: 2px solid #9c9c9c;
+}
+input:checked + .slider {
+	background-color: #1277D9;
+}
+input:focus + .slider {
+	box-shadow: 0 0 1px #2196F3;
+}
+input:checked + .slider:before {
+	-webkit-transform: translateX(12px);
+	-ms-transform: translateX(12px);
+	transform: translateX(12px);
+}
+/* Rounded sliders  */
+.slider.round {
+	border-radius: 34px;
+}
+.slider.round:before {
+	border-radius: 50%;
+}
+.mar-20{
+	margin-bottom: 20px;
+}
+.padd0{
+	padding: 0px;
+}

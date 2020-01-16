@@ -1,0 +1,50 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.email-settings-wrap {
+    padding: 30px;
+
+    @media (min-width: 100px) and (max-width: 767px) {
+        padding: 30px 10px;
+    }
+
+    .toolbar-button {
+        display: block;
+    }
+
+    .data-table-section {
+        display: block;
+
+        tbody {
+            tr {
+                td {
+                    @media(min-width: 768px) and (max-width: 999999px) { 
+                        &:nth-child(1) {
+                            span {
+                                display: block;
+                                width: 200px;
+                                overflow: hidden;
+
+                                @media(min-width: 768px) and (max-width: 991px) {
+                                    text-align: right;
+                                }
+                            }
+                        }
+                    }
+                    
+
+                    @media(min-width: 100px) and (max-width: 767px) {
+                        &:nth-child(1) {        
+                            span {
+                                display: block;
+                                width: 120px;
+                                overflow: hidden;
+                                text-align: right;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

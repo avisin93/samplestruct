@@ -1,0 +1,102 @@
+#back {
+  background-color: #c75000;
+  margin-left: 1rem;
+}
+
+h5 {
+  margin-top: 3rem;
+}
+
+.cm-btn {
+  box-shadow: none;
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+:host ::ng-deep .smallerRadioButton {
+  .mat-radio-container {
+    height: 15px;
+    width: 15px;
+  }
+  .mat-radio-outer-circle {
+    height: 15px;
+    width: 15px;
+  }
+  .mat-radio-inner-circle {
+    height: 15px;
+    width: 15px;
+  }
+}
+.content-right {
+  width: 100%;
+}
+
+.btn-container {
+  padding-bottom: 3rem;
+  padding-top: 3rem;
+}
+
+:host ::ng-deep .optional {
+  font-weight: 400 !important;
+  margin-left: 15px !important;
+  font-size: 1.2rem !important;
+}
+
+.radio-group-div {
+  p {
+    font-size: 1.3rem;
+  }
+  #radio-no {
+    margin-left: 15px;
+  }
+}
+
+.spacing-element {
+  margin-top: 15px;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.new-plus {
+  display: flex;
+  align-items: center;
+}
+
+@media only screen and (min-width: 1024px) {
+  .mb-vw{
+      display: none;
+  }
+  .ds-vw {
+      display: flex;
+      justify-content: flex-end;
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .mb-vw{
+      display: block;
+  }
+  .ds-vw {
+      display: none;
+  }
+}
+
+.btn-mob-container {
+  display: flex !important;
+  -webkit-box-pack: end;
+  justify-content: center;
+  padding-bottom: 3rem;
+  padding-top: 3rem;
+}
+.cm-mob-btn {
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  color: white;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 500;
+  white-space: nowrap;
+}

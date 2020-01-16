@@ -1,0 +1,54 @@
+<div class="component-wrap">
+  <div class="heading-wrap">
+    <div class="inner">
+      <div class="popup-heading">{{heading}}</div>
+      <div class="popup-close" (click)="closePopup()">
+        <i class="material-icons">close</i>
+      </div>
+    </div>
+  </div>
+  <div class="form-wrap" [formGroup]="addRuleConditionForm" >
+    <div class="row">
+      <div class="col-sm-12 col-xs-12">
+        <div class="col-sm-4 col-xs-12">
+          <mat-form-field class="mat-select-full-width">
+            <mat-select placeholder="Field*" formControlName="fact">
+              <mat-option *ngFor="let field of fields" [value]="field.value">
+                {{ field.text }}
+              </mat-option>
+            </mat-select>
+             <mat-error i18n *ngIf="addRuleConditionForm.controls['fact'].hasError('required') && addRuleConditionForm.controls['fact'].touched ">
+              Field Name is <strong>required</strong>
+            </mat-error> 
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 col-xs-12">
+          <mat-form-field class="mat-select-full-width">
+            <mat-select i18n-placeholder placeholder="Operator*" formControlName="operator">
+              <mat-option *ngFor="let operation of operations" [value]="operation.value">
+                {{ operation.text }}
+              </mat-option>
+            </mat-select>
+             <mat-error i18n *ngIf=" addRuleConditionForm.controls['operator'].hasError('required') && addRuleConditionForm.controls['operator'].touched">
+              Operator is<strong> required</strong>
+            </mat-error> 
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 col-xs-12">
+          <mat-form-field class="full-width-input-wrap">
+            <input i18n-placeholder matInput placeholder="Value*" formControlName="value" maxlength="50">
+          </mat-form-field>
+           <mat-error i18n *ngIf=" addRuleConditionForm.controls['value'].hasError('required') && addRuleConditionForm.controls['value'].touched">
+            Value is<strong> required</strong>
+          </mat-error>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="action-wrap">
+      <div class="text-right">
+          <button i18n type="button" mat-button class="app-btn" id="cancel" (click)="closePopup()">Cancel</button>
+          <button i18n type="button" mat-button class="app-btn orange-button save-btn" (click)="addRuleCondition(addRuleConditionForm)">Save</button>
+      </div>
+    </div>
+</div>

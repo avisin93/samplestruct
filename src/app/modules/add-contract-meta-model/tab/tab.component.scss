@@ -1,0 +1,77 @@
+mat-tab-group[vertical] .mat-tab-labels {
+    display: flex;
+    flex-direction: column !important;
+}
+
+mat-tab-group[vertical] {
+    display: flex;
+    flex-direction: row !important;
+}
+
+.add-sub-section {
+    color: #1277d9 !important;
+    font-weight: 500;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.save-sub-section {
+    color: #1277d9 !important;
+    font-weight: 500;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.sub-tab-icon {
+    font-weight: 500;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.vertical-mat-tab {
+    height: auto;
+    & > .mat-tab-header {
+        background: #FAFEFF;
+    }
+}
+
+.vertical-mat-tab ::ng-deep .mat-tab-label:last-child {
+    opacity: 1;
+}
+
+.vertical-mat-tab ::ng-deep .mat-tab-label .mat-tab-label-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.vertical-mat-tab ::ng-deep .mat-tab-label.mat-tab-label-active .mat-tab-label-content {
+    width: 99% !important;
+}
+
+.section-heading {
+  padding: 5px 10px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.dropBox {
+  padding: 8px 10px;
+  border: none;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 20px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+

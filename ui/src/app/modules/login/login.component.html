@@ -1,0 +1,156 @@
+<div class="lf-page-main-wrap">
+  <div class="login-page-bg">
+	  <img src="../../../assets/login_page_image.png" class="login-page-bg_pic" alt="Img">
+  </div>
+  <div class="login">
+    <div class="col-sm-12 col-md-12 col-xs-12 col-lg-12 martop10" style="height: 100%;" [@panelInOut]>
+      <div class="back-arrow">
+          <a *ngIf="!showLoginUsername" class="back-btn link" (click)="goBack()">
+            <i id="goBack" class="fas fa-arrow-left fa-2x"></i>
+            <i class="material-icons"></i>
+          </a>
+      </div>
+      <div class="wrapper-lg">
+        <div class="text-center">
+          <img  class="app-logo" src="../../assets/Contract_management_logo(285x63).png" alt="Logo" title="Logo">
+        </div>
+        <div class="login-info">
+          <!-- username -->
+          <div class="new-login-info row" *ngIf="showLoginUsername" [@panelInOut]>
+            <div class="col-md-12 form-group layout-gt-sm-row" layout-gt-sm="row">
+              <mat-form-field class="col-md-12">
+                <input ngModel matInput #passwd class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored" placeholder="User Name or Email ID" aria-invalid="false" aria-required="false" [(ngModel)]="username" required name="username" [ngModelOptions]="{standalone: true}">
+                <mat-error *ngIf="inputControl.hasError('required')">
+                  Username is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-12 padding0">
+              <div class="col-md-12 text-center martop20 padding0">
+                <button mat-raised-button color="primary" class="col-md-12 loginBtn" (click)="next(username)">
+                  Next
+                </button>
+
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="clearfix"></div>
+            </div>
+            <!-- /.col -->
+            <div class="clearfix"></div>
+          </div>
+          <!-- password -->
+          <div class="new-login-info row" *ngIf="showPasswordOTPLoginForgot" [@panelInOut]>
+            <div class="col-md-12 padding0">
+
+              <div class="col-md-12 text-center martop20 padding0">
+                <h1>Welcome</h1>
+                <span id="userIconAndName" class="badge badge-pill badge-light">
+                  <i id="userBadge" class="fa fa-user"></i>
+                  {{username}}
+                </span>
+                <mat-form-field class="col-md-12">
+                  <input matInput placeholder="Password" [type]="showPassword ? 'text' : 'password'"
+                    id="inputPassword" [(ngModel)]="password" required name="loginPassword" autocomplete="off"
+                    ng-minlength="3" ng-maxlength="40" class="mat-input-element" aria-invalid="false" autofocus>
+                  <i class="far fa-eye fa-2x" (mouseup)="hidePassword('password')" (mousedown)="showText('password')" matSuffix></i>
+                  <mat-error *ngIf="inputControl.hasError('required')">
+                  Password is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-12" id="remember-me">
+              <div class="col-md-12 martop20 padding0">
+                <div class="col-md-12">
+                  <mat-checkbox [(ngModel)]="rememberMe">REMEMBER ME!</mat-checkbox>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 padding0">
+              <div class="col-md-12 text-center martop20 padding0">
+                <div class="col-md-12">
+                  <button mat-raised-button color="primary" class="col-md-12 loginBtn" id="loginBtn" (click)="login()">
+                    Login
+                  </button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+            <div class="col-md-12 user-pass">
+              <div class="col-md-12">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 text-left padding0">
+                      <p class="p-under-login" (click)="otpLoginForm()">OTP LOGIN</p>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="new-login-info row" *ngIf="showOtpLoginInfo" [@panelInOut]>
+            <div class="digit-div layout-gt-sm-row ng-hide" layout-gt-sm="row" ng-show="loginBtnFlag" aria-hidden="true">
+              <div class="col-md-12">
+                <h2>Please enter</h2>
+                <div class="row"  [formGroup]="myGroup">
+                  <mat-form-field class="col-md-2">
+                    <input id="digit1" name="digit1" matInput type="text" ng-minlength="1" formControlName="digitFormControlName1" [maxLength]="1"
+                    ng-maxlength="1" class="mat-input-element" aria-invalid="false" (keyup)="keyUp('digit2','digitFormControlName1',$event)" ngDefaultControl>
+                  </mat-form-field>
+                  <mat-form-field class="col-md-2">
+                    <input id="digit2" name="digit2" matInput type="text" ng-minlength="1" formControlName="digitFormControlName2" [maxLength]="1"
+                      ng-maxlength="1" class="mat-input-element" aria-invalid="false" (keyup)="keyUp('digit3','digitFormControlName2',$event)" ngDefaultControl>
+                  </mat-form-field>
+                  <mat-form-field class="col-md-2">
+                    <input  id="digit3" name="digit3" matInput type="text" ng-minlength="1" formControlName="digitFormControlName3" [maxLength]="1"
+                      ng-maxlength="1" class="mat-input-element" aria-invalid="false" (keyup)="keyUp('digit4','digitFormControlName3',$event)" ngDefaultControl>
+                  </mat-form-field>
+                  <mat-form-field class="col-md-2">
+                    <input id="digit4" name="digit4" matInput type="text" ng-minlength="1" formControlName="digitFormControlName4" [maxLength]="1"
+                      ng-maxlength="1" class="mat-input-element" aria-invalid="false" (keyup)="keyUp('digit5','digitFormControlName4',$event)" ngDefaultControl>
+                  </mat-form-field>
+                  <mat-form-field class="col-md-2">
+                    <input id="digit5" name="digit5" matInput type="text" ng-minlength="1" formControlName="digitFormControlName5" [maxLength]="1"
+                      ng-maxlength="1" class="mat-input-element" aria-invalid="false" (keyup)="keyUp('digit6','digitFormControlName5',$event)" ngDefaultControl>
+                  </mat-form-field>
+                  <mat-form-field class="col-md-2">
+                    <input id="digit6" name="digit6" matInput type="text" ng-minlength="1" formControlName="digitFormControlName6" [maxLength]="1"
+                      ng-maxlength="1" class="mat-input-element" aria-invalid="false" (keyup)="keyUp('loginBtn','digitFormControlName6',$event)" ngDefaultControl>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="col-lg-12 align-right">
+                <p class="p-under-login" (click)="otpLoginForm()">RESEND OTP</p>
+              </div>
+              <div class="col-lg-12">
+                <button mat-raised-button color="primary" name="loginBtn" [(ngModel)]="loginBtn" class="col-md-12 loginBtn" (click)="loginWithOtp()" ngDefaultControl>
+                  Submit
+                </button>
+              </div>
+            </div>
+            <div class="col-md-12 padding0">
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="copyright-row">
+        <div class="col-sm-12 col-md-12 col-xs-12 col-lg-12 text-center padding30">
+          <p>
+            <small>Copyright © </small>
+            <small>2019 </small>
+            <small>
+              Exela Contract Management.
+            <br>All Rights Reserved.
+            <br>v0.0.9
+            </small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

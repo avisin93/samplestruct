@@ -1,0 +1,76 @@
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+
+.add-edit-user-setup {
+    .checkbox-wrap {
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .mat-checkbox {
+            margin-left: 15px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                margin-left: 0px;
+                display: block;
+            }
+        } 
+
+        @include checkbox-styled();
+    }    
+
+    // .full-width-input-wrap .mat-select {
+    //     padding-bottom: 1.29688em;
+    // }    
+}
+.select-file-error {
+    @include applyFont($fontSize: 13px);        
+    color: #CD2026;
+    margin-bottom: 14px;
+}
+
+.execution-output {
+    @include applyFont($fontSize: 13px);
+    table {
+        width: 100%;
+        border: 1px solid #D8D8D8;
+        margin-top: 7px;
+    }
+
+    tbody {
+        tr:nth-child(even) {
+            background: #FAFAFA;
+        }
+        tr:nth-child(odd) {
+            background: #FFFFFF;
+        }
+        td {
+            color: #767676;
+            padding: 10px 20px;                 
+            border-bottom: 1px solid #D8D8D8; 
+        }
+    }
+}
+
+.top_mar_20{
+    margin-top: 20px;
+}
+.rule_group_icon{
+    font-size: larger;
+}
+.mar40{
+    margin-bottom: 40px;
+}
+
+a.download-excel-template {
+    @include applyFont($fontSize: 14px);
+    text-decoration: none;
+    outline: 0 none;
+    color: #124E73;
+    margin-top: 6px;
+    display: block;
+    cursor: pointer;
+}

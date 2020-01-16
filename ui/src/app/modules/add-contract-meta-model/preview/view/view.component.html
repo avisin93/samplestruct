@@ -1,0 +1,17 @@
+<div class="col-md-12 tab-label">
+<div class="cm-card">
+  <div class="cm-card-body">
+  <mat-tab-group #matGroupPreviewTab [(selectedIndex)]="selectedIndexPreviewTab">
+    <mat-tab *ngFor = "let tab of arrayTabs; let index = index" [label]="tab.name">
+      <ng-template matTabContent>
+        <cm-preview-add-contract-meta-model-view-tab 
+          [tab]="tab" 
+          [selectedIndexSubtab]="selectedIndexSubtab"
+        >
+        </cm-preview-add-contract-meta-model-view-tab>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+  </div>
+</div>
+</div>

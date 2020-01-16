@@ -1,0 +1,93 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.vendor-mapper-wrap {     
+      .vendor-mapper-card-wrap {
+            // margin-top: 25px;
+
+            .mat-card {
+                  padding: 25px 30px;
+                  box-shadow: none;
+            }
+
+            .heading-text {
+                  color: $primary_shade3;
+                  @include applyFont($fontSize: 17px, $fontWeight:bold);
+                  margin: 10px 0px 0px;
+            }
+
+            .vendor-mapping-box-wrap {
+                  margin-top: 35px;
+
+                  .list-col {
+                        .inner {
+                              border: 1px solid #cccccc;
+                        }
+
+                        .col-heading {
+                              padding: 15px 12px;
+                              @include applyFont($fontSize: 15px);
+                              color: #222222;
+                        }
+
+                        .listing {
+                              height: 350px;
+                              overflow-y: auto;
+
+                              ul {
+                                    list-style-type: none;
+                                    margin: 0px;
+                                    padding: 0px;
+
+                                    li {
+                                          @include applyFont($fontSize: 13px);
+                                          color: #222222;
+                                          cursor: pointer;
+                                          padding: 10px 12px;
+
+                                          &:hover, &.active {
+                                                background-color: #D6EDFF;
+                                          }    
+                                    }
+                              }
+                        }
+
+                  }
+
+                  .buttons-col {
+                        text-align: center;
+
+                        .inner {
+                              margin-top: 100px;                              
+
+                              @media(min-width: 100px) and (max-width: 767px) {
+                                    margin-top: 10px;
+                                    margin-left: 0px;
+                                    margin-bottom: 10px;
+                              }
+                        }
+
+                        button {
+                              border-radius: 100%;
+                              width: 25px;
+                              height: 25px; 
+                              background: $primary_shade3;
+                              color: $white;                              
+                              display: block;                              
+                              border: 0 none;
+                              outline: 0 none;
+                              margin: 14px auto;
+
+                              @media(min-width: 100px) and (max-width: 767px) {                                    
+                                    display: inline-block;
+                                    @include transform(rotate(90deg));
+                              }
+                        }
+                  }
+            }
+
+            .action-wrap {
+                  margin-top: 45px;
+            }
+      }
+}

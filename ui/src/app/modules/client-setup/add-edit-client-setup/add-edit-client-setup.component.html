@@ -1,0 +1,45 @@
+<div class="section-wrap">
+    <div class="top-section row-10">
+        <div class="hidden-xs col-xs-12 col-sm-6">
+            <app-heading-section [heading]="heading">
+                <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+            </app-heading-section>
+        </div>          
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="middle-section client-setup-tabs-wrap">
+        <mat-card class="client-setup-tabs-card">
+          <div class="client-setup-tabs">
+            <ul>
+              <li *ngFor="let tab of tabs; let i = index" [class.current-tab]="currentTab == tab.key" [class.hide-tab]="tab.visible == false" (click)="onSelectTab(tab.key)">
+                {{tab.name}}
+              </li>
+            </ul>
+          </div>
+          <div class="client-setup-tabs-content">
+            <div class="information-tab" *ngIf="currentTab == 'information-tab'">
+              <app-client-information [mode]="mode" [organizationId]="organizationId"></app-client-information>
+            </div>
+            <div class="assign-storefront-tab" *ngIf="currentTab == 'assign-storefront-tab'">
+              <app-assign-store-front [type]="type" [mode]="mode"></app-assign-store-front>
+            </div>
+            <div class="facilities-tab" *ngIf="currentTab == 'facilities-tab'">
+              <app-facilities [type]="type"></app-facilities>
+            </div>
+            <div class="feature-setup-tab" *ngIf="currentTab == 'feature-setup-tab'">
+              <app-feature-setup [type]="type" [mode]="mode"></app-feature-setup>
+            </div>
+            <div class="pricing-tab" *ngIf="currentTab == 'pricing-tab'">
+              <app-pricing [type]="type" [mode]="mode"></app-pricing>
+            </div>
+            <div class="site-settings-tab" *ngIf="currentTab == 'site-settings-tab'">
+              <app-site-settings [type]="type" [mode]="mode"></app-site-settings>
+            </div>
+            <div class="module-license-tab" *ngIf="currentTab == 'module-license-tab'">
+              <app-module-license [type]="type" [organizationId]="organizationId"></app-module-license>
+            </div>
+          </div>
+        </mat-card>
+    </div>
+</div>

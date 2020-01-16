@@ -1,0 +1,69 @@
+
+#saveAndContinueContractButton {
+    margin-left:1rem;
+}
+
+#cancel {
+  background-color: white;
+  color: #1277d9;
+  border: none;
+}
+
+.cm-btn {
+    border-radius: 0.5rem;
+    padding: 1rem 1.5rem;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+.btn-container {
+    padding-top: 2rem;
+}
+
+.page-title {
+    font-size: 2.2rem;
+    position: relative;
+    left: 1.5rem;
+    top: -1rem;
+    color: black;
+}
+
+.row.ng-star-inserted {
+    padding-top: 1rem; 
+}
+
+.tab-label {
+    /deep/ .row {
+        padding-left: 1.5rem;
+        padding-top: 3rem; 
+        padding-right: 1.5rem;
+    }
+}
+
+.cm-card-body {
+    padding: 0;
+}
+
+.heading-section-add-contract {
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+:host ::ng-deep .fa-calendar{
+  font-size: 15px !important;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  margin-left: 10px !important;
+}
+
+:host ::ng-deep mat-error {
+  margin-top: 5px;
+}
+
+.new-plus {
+    display: flex;
+    align-items: center;
+}

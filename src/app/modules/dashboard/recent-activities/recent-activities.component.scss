@@ -1,0 +1,140 @@
+:host ::ng-deep ngx-datatable.material {
+  border: 1rem gray !important;
+  .datatable-header {
+    padding-top: 15px;
+    padding-bottom: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    .datatable-header-cell {
+      background-color: white;
+      padding: 0.9rem 1.2rem;
+      //   border: none !important;
+      height: 100% !important;
+
+      border-bottom: none !important;
+      border-top: none !important;
+
+      &:first-of-type {
+        border-left: none !important;
+      }
+
+      &:last-of-type {
+        border-right: none !important;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .ngx-datatable.material {
+  .datatable-body {
+    .datatable-body-row .datatable-body-cell {
+      padding-bottom: 20px !important;
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.break-work {
+  white-space: initial;
+}
+
+@media screen and (max-width: 900px) {
+  .screen-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: initial;
+    margin-top: 50px;
+  }
+
+  .cm-card > .cm-card-body {
+    padding: 0rem !important;
+  }
+
+  ::ng-deep .datatable-header-cell {
+    background-color: white !important;
+    width: 100% !important;
+  }
+
+  ::ng-deep .datatable-body-cell {
+    width: 100% !important;
+  }
+
+  .row-datatable {
+    padding-top: 0rem !important;
+  }
+
+  ::ng-deep .datatable-body-cell-label {
+    font-size:10px;
+  }
+
+  ::ng-deep .doc-list .mat-form-field-infix {
+    width: 115px !important;
+  }
+
+  .slide-in-category-subcategory {
+    padding: 0px 30px;
+  }
+
+  .mobile-inner-div {
+    padding-bottom: 5px;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+  }
+
+  .mobile-footer {
+    margin-top: 0px !important;
+    text-align: center;
+  }
+
+  .blue-letter {
+    color: #1277D9;
+  }
+
+  .align-right {
+    text-align: right;
+  }
+
+  .align-left {
+    text-align: left;
+  }
+
+  .search-advance {
+    padding: 0px 15px;
+  }
+}
+
+@media screen and (min-width: 900px) {
+
+  .screen-view {
+    display: initial;
+  }
+
+  .mobile-view {
+    display: none;
+  }
+
+  ::ng-deep .datatable-header-cell {
+    min-height: 80px !important;
+  }
+
+  .heading-section-doc-search {
+    padding-left: 10px;
+    margin-bottom: 10px;
+
+    div {
+        padding-left: 0;
+    }
+  }
+}

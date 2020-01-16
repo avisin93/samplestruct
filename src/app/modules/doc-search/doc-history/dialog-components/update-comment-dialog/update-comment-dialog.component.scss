@@ -1,0 +1,40 @@
+.buttons-class {
+    float: right;
+    padding: 25px 0px !important;
+}
+
+.dialog-button {
+    color: #ffffff;
+    width: 90px;
+}
+
+.title-position {
+  float:left;
+  margin-right:5px;
+  font-family: "Work Sans" !important;
+}
+
+.close-button-position {
+  text-align: right;
+  & > .close-button {
+    line-height: normal;
+    border: none;
+    background: white;
+  }
+}
+
+#previewButton {
+  color: #1277d9;
+  background-color: white;
+  border: 0.1rem solid #1277d9;
+  margin-right: 1rem;
+}
+
+
+.cm-btn {
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+}

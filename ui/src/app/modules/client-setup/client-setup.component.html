@@ -1,0 +1,22 @@
+<div class="section-wrap">
+    <div class="top-section row-10">
+        <div class="hidden-xs col-xs-12 col-sm-6">
+            <app-heading-section heading="Client Setup">
+                <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+            </app-heading-section>
+        </div>        
+        <div class="clearfix"></div>
+    </div>
+
+    <ng-data-tables [columns]="columns" [rows]="records" [totalRows]="totalRows" [hasActionButtons]="hasActionButtons" 
+    (edit)="editClient($event)" 
+    (delete)="deleteClient($event)">
+        <div class="align-right" button-toolbar>
+            <div class="inner">
+                <button mat-button class="app-btn orange-button" [routerLink]="['add']">
+                    Add Client
+                </button>
+            </div>
+        </div>
+    </ng-data-tables>
+</div>

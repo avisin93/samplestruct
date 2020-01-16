@@ -1,0 +1,48 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.add-edit-user-setup {
+    .checkbox-wrap {
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .mat-checkbox {
+            margin-left: 15px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+
+            @media(min-width: 100px) and (max-width: 767px) {
+                margin-left: 0px;
+                display: block;
+            }
+        } 
+
+        @include checkbox-styled();
+    }    
+
+    .full-width-input-wrap .mat-select {
+        padding-bottom: 1.29688em;
+    }    
+}
+
+.template-link {
+    @include applyFont($fontSize: 13px);
+    text-decoration: none;
+    outline: 0 none;
+    color: $primary_shade3;
+    margin-top: 6px;
+    display: block;
+}
+
+.select-file-error {
+    @include applyFont($fontSize: 13px);
+    color: #f44336;
+    margin-bottom: 14px;
+}
+
+.template-download {
+    font-size: 15px;
+}
+

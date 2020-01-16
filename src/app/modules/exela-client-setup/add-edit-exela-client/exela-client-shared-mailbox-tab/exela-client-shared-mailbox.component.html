@@ -1,0 +1,12 @@
+<div class="section-wrap">
+  <ng-data-tables [columns]="columns" [rows]="records" [totalRows]="totalRows" [hasActionButtons]="hasActionButtons" (edit)="addOrEditMailbox($event)"
+    (delete)="deleteShareMailbox($event)">
+    <div class="align-right" button-toolbar>
+      <div class="inner">
+        <button i18n mat-button class="app-btn mat-primary mat-flat-button" (click)="addOrEditMailbox(undefined)">
+          Add Shared Mailbox
+        </button>
+      </div>
+    </div>
+  </ng-data-tables>
+</div>

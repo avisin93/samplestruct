@@ -1,0 +1,119 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.section-tabs {
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+    ul {
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+
+        &:after {
+            display: block;
+            content: '';
+            clear: both;
+        }
+
+        li {
+            @include applyFont($fontSize: 15px);
+            color: #767676;
+            float: left;
+            margin-left: 25px;
+            padding-left: 2px;
+            padding-right: 2px;
+            padding-bottom: 10px;
+            cursor: pointer;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+
+            &.active {
+                font-weight: 600;
+                color: #4c4c4c;
+                border-bottom: 3px solid #4c4c4c;
+            }
+        }        
+    }
+}
+
+.manual-add-wrap {
+    .action-wrap {
+        margin-top: 50px;
+    }
+
+    .radio-cols {
+        margin-bottom: 10px;
+    }
+
+    .mat-input-invalid + .blue_sublink {
+        display: block;
+        margin-top: 15px;
+    }
+}
+
+.file-upload-wrap {
+    margin-top: 30px;
+
+    a.download-excel-template {
+        @include applyFont($fontSize: 14px);
+        text-decoration: none;
+        outline: 0 none;
+        color: $primary_shade3;
+        margin-top: 20px;
+        display: block;
+    }
+}
+
+.uploader-wrap input {
+  display: none;
+}
+
+.uploader {
+  -webkit-align-items: center;
+  align-items: center;
+  border: 1px solid #EBEBEB;
+  background-color: #FAFEFF;
+  cursor: pointer;
+  display: block;
+  height: 150px;
+  -webkit-justify-content: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  padding-top:55px;
+  font-weight:normal;
+  font-size: 13px;
+}
+
+.uploader .icon-upload3 {
+  pointer-events: none;
+}
+
+.uploader,
+.uploader .icon-upload3 {
+  -webkit-transition: all 100ms ease-in;
+  -moz-transition: all 100ms ease-in;
+  -ms-transition: all 100ms ease-in;
+  -o-transition: all 100ms ease-in;
+  transition: all 100ms ease-in;
+}
+
+.uploader .icon-upload3 {
+  color: $secondary-color;
+  font-size: 2em;
+}
+
+.file-selected-icon {
+    font-size: 30px;
+    padding-bottom: 6px;
+    color: #2E7D32;
+}
+
+.add-group-input {
+    .mat-form-field {
+         margin-bottom: -12px!important;
+    }
+}

@@ -1,0 +1,223 @@
+.cm-event-calendar {
+    .years-and-months {
+        float: left;
+        height: 100%;
+        background: #005183;
+
+        .year {
+            color: white;
+            font-size: 1.4rem;
+            text-align: center;
+            padding: 1.5rem 0 1.5rem 0rem;
+            height: 4.6rem;
+            span {
+                font-size: 1.6rem;
+                padding: 0 1rem;
+            }
+        }
+        .month-num-of-events {
+            height: 2.8rem;
+            font-size: 1.4rem;
+            color: #a8deff;
+            cursor: pointer;
+            .month {
+                text-transform: capitalize;
+            }
+            &.active {
+                background: white;
+                color: #40505b;
+                font-weight: 600;
+                border-radius: 1rem 0 0 1rem;
+            }
+        }
+    }
+
+    .event-calendar {
+      float: left;
+      height: 100%;
+      width: 100%;      
+      background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(250,254, 255, 1));
+    }
+
+    .events {
+        float: left;
+        font-weight: 600 !important;
+        color: #18191a !important;
+        height: 100%;
+    }
+}
+
+.header {
+  font-size: 1.6rem !important;
+  color: #18191a !important;
+  font-family: 'Work Sans';
+  padding: 1.5rem 0 0.2rem 0;
+  font-weight: 600;        
+  padding-left: 1rem;   
+}
+
+.event-table {
+  padding-top: 1.5rem;
+  
+  table {
+    border: none;
+    border-spacing: 0;
+    table-layout: fixed;
+    border-collapse: collapse;
+
+    tbody {
+      display: block;
+      overflow: auto;
+      width: 100%;
+      height: 29rem;
+      overflow-y: scroll;
+      overflow-x: hidden;
+
+      &::-webkit-scrollbar-track {
+        background: #f2f2f2;
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: #dadada;
+        cursor: pointer;
+        border-radius: 0.25rem;
+      }
+      
+      &::-webkit-scrollbar {
+        width: 0.5rem;
+        height: 0.5rem;
+      }
+    }
+  }
+
+  tbody tr, thead tr {
+    border-bottom: .05rem solid #d7d7d7;
+    display: block;
+    position: relative;
+    width: 95%;
+    td:first-child, th:first-child{
+      width: 12rem; 
+    }
+
+    td:last-child, th:last-child {
+      width: 1%; 
+    }
+  }
+
+  tbody tr {
+    width: calc(95% + .5rem);
+    
+    &:hover {
+      background: rgba(0,0,0,.04);
+      cursor: pointer;
+    }
+  }
+
+  thead tr th {
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding-bottom: 1.5rem;
+    font-family: 'Work Sans' !important;
+  }
+
+  tbody tr td {
+    height: 5.6rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.4rem;
+    font-family: 'Work Sans';
+  }
+}
+.event-status {
+  height: 2.7rem;
+
+  &.orange {
+    border-left: .2rem solid #f39c12;
+  }
+
+  &.black {
+    border-left: .2rem solid #2c3e50;
+  }
+  
+  &.green {
+    border-left: .2rem solid #2ecc71;
+  }
+
+  &.blue {
+    border-left: .2rem solid #3498db;
+  }
+
+  &.purple {
+    border-left: .2rem solid #8e44ad;
+  }
+
+  &.red {
+    border-left: .2rem solid #e74c3c;
+  }
+
+  .event-status-date {
+    font-size: 1.4rem;
+    color: #40505b;
+    font-weight: 600;
+    display: block;
+    padding-left: 1rem; 
+  }
+
+  .event-status-type {
+    font-size: 1.2rem;
+    color: #748791;
+    display: block;
+    padding-left: 1rem;
+    padding-top: .1rem;
+    text-transform: capitalize;
+  }
+}
+
+.title-partner {
+  height: 2.7rem;
+  
+  .contract-title {
+    font-size: 1.4rem;
+    color: #40505b;
+    font-weight: 600;
+    display: block;
+    text-transform: capitalize;
+  }
+
+  .business-partner {
+    font-size: 1.2rem;
+    color: #748791;
+    display: block;
+    padding-top: .1rem;
+    text-transform: capitalize;
+  }
+}
+
+.category {
+  color: #748791;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.example-header {
+  padding: 0;
+}
+
+.empty-msg-row {
+  text-align: center;
+  font-size: 1.4rem;
+  color: #748791;
+}
+
+.no-padding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.margin-top-center {
+  margin-top: 0.5rem !important;;
+}

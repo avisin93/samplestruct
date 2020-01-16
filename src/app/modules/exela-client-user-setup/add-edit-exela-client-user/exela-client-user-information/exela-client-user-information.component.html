@@ -1,0 +1,157 @@
+<div class="add-edit-client-information">
+  <form [formGroup]="addEditUserSetupForm" novalidate>
+    <div [ngClass]="action=='edit'?'form-wrap row':'form-wrap'">
+      <div [class.row]="action=='add'">
+        <div class="col-sm-4 col-xs-12">
+          <mat-form-field class="full-width-input-wrap">
+            <input i18n-placeholder  autofocus matInput placeholder="First Name*" formControlName="firstname" maxlength="30">
+            <mat-error i18n *ngIf="addEditUserSetupForm.controls['firstname'].hasError('required')">
+              First Name is <strong>required</strong>
+            </mat-error>
+            <!--<mat-error *ngIf="addEditUserSetupForm.controls['firstname'].hasError('pattern')">
+             First name should contains only letter
+            </mat-error>-->
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 col-xs-12">
+          <mat-form-field class="full-width-input-wrap">
+            <input i18n-placeholder  matInput placeholder="Last Name*" formControlName="lastname" maxlength="30">
+            <mat-error i18n *ngIf="addEditUserSetupForm.controls['lastname'].hasError('required')">
+              Last Name is <strong>required</strong>
+            </mat-error>
+            <!--<mat-error *ngIf="addEditUserSetupForm.controls['lastname'].hasError('pattern')">
+             Last name should contains only letter
+            </mat-error>-->
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 col-xs-12" >
+          <mat-form-field class="full-width-input-wrap">
+            <input i18n-placeholder matInput placeholder="User Name*" [readonly]="action == 'edit'" formControlName="username" maxlength="50">
+            <mat-error i18n *ngIf="addEditUserSetupForm.controls['username'].hasError('required')">
+              User Name is <strong>required</strong>
+            </mat-error>
+            <mat-error i18n *ngIf="addEditUserSetupForm.controls['username'].hasError('pattern')">
+              Please enter a valid user Name.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div [class.row]="action=='add'">
+        <div class="col-sm-4 col-xs-12" [hidden]="action == 'edit'">
+          <mat-form-field class="full-width-input-wrap">
+            <input i18n-placeholder  matInput type="password" placeholder="Password*" formControlName="password" maxlength="20">
+            <mat-error i18n *ngIf="addEditUserSetupForm.controls['password'].hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 col-xs-12 hide">
+          <div class="full-width-input-wrap">
+            <mat-select i18n-placeholder placeholder="Skill Type" formControlName="skillType">
+              <mat-option *ngFor="let skillType of skillTypes" [value]="skillType.value">
+                {{ skillType.text }}
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="col-sm-4 col-xs-12">
+          <mat-form-field class="full-width-input-wrap">
+            <input  i18n-placeholder  matInput placeholder="Email*" formControlName="email" maxlength="50">
+            <mat-error i18n *ngIf="addEditUserSetupForm.controls['email'].hasError('required')">
+              Email is <strong>required</strong>
+            </mat-error>
+            <mat-error i18n *ngIf="addEditUserSetupForm.controls['email'].hasError('pattern')">
+              Please enter a valid email id.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!--<div class="col-sm-4 col-xs-12">
+          <mat-input-container class="full-width-input-wrap">
+            <input matInput placeholder="Phone Number*" formControlName="phoneNumber">              
+            <mat-error *ngIf="addEditUserSetupForm.controls['phoneNumber'].hasError('required')">
+                Phone Number is <strong>required</strong>
+            </mat-error>
+          </mat-input-container>
+        </div>-->
+        <div class="col-sm-4 col-xs-12 hide">
+          <div class="full-width-input-wrap">
+            <mat-select  i18n-placeholder  placeholder="Client" formControlName="client">
+              <mat-option *ngFor="let client of clients" [value]="client.value">
+                {{ client.text }}
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <!--<div class="col-sm-4 col-xs-12">
+          <mat-input-container class="full-width-input-wrap">
+            <input matInput placeholder="Allow Login Attempts (Times)" formControlName="loginAttempts">                     
+            <mat-error *ngIf="addEditUserSetupForm.controls['loginAttempts'].hasError('pattern')">
+                Please enter valid login attempts number.
+            </mat-error>
+          </mat-input-container>
+        </div>-->
+        <!--<div class="col-sm-4 col-xs-12">
+          <mat-input-container class="full-width-input-wrap">
+            <input matInput placeholder="Password Expired (In Days)" formControlName="passwordExpired">                     
+            <mat-error *ngIf="addEditUserSetupForm.controls['passwordExpired'].hasError('pattern')">
+                Please enter valid password expired days.
+            </mat-error>
+          </mat-input-container>
+        </div>-->
+        <!--<div class="col-xs-12">
+          <div class="inner checkbox-wrap">
+            <mat-checkbox formControlName="mustChangePassword">Must change password next login</mat-checkbox>
+            <mat-checkbox formControlName="resetPassword">Reset Password</mat-checkbox>
+            <mat-checkbox formControlName="isAdmin">Is Admin</mat-checkbox>
+            <mat-checkbox formControlName="allowEmail" class="hide">Allow Email</mat-checkbox>
+          </div>
+        </div>-->
+        <!--<div class="col-sm-4 col-xs-12">
+          <div class="full-width-input-wrap">
+                <mat-select placeholder="Assign Queue" multiple formControlName="assignQueue">
+                    <mat-option *ngFor="let queue of assignQueues" [value]="queue.value">
+                        {{ queue.text }}
+                    </mat-option>
+                </mat-select>
+            </div>
+        </div>-->
+        <div class="col-sm-4 col-xs-12">
+          <mat-form-field class="mat-select-full-width">
+            <mat-select  i18n-placeholder  placeholder="Assign Roles*" multiple formControlName="roles">
+              <mat-option *ngFor="let role of roles" [value]="role.value">
+                {{ role.text }}
+              </mat-option>
+            </mat-select>
+            <mat-error i18n *ngIf="(addEditUserSetupForm.controls['roles'].hasError('required') && showRoleError) || (addEditUserSetupForm.controls['roles'].touched && addEditUserSetupForm.controls['roles'].hasError('required')) ">
+              User role <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div [class.row]="action=='add'">
+        <div class="col-sm-4 col-xs-12" >
+          <mat-form-field class="mat-select-full-width">
+            <mat-select i18n-placeholder  placeholder="Reporting to" formControlName="parentUserId">
+              <mat-option *ngFor="let user of userList" [value]="user._id">
+                {{ user.fullname }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div [ngClass]="{'col-sm-12 col-xs-12': action=='edit' }" [ngClass]="{'col-sm-4 col-xs-12': action=='add' }">
+          <div class="full-width-input-wrap" style="margin-top:20px;" [attr.aria-label]="addEditUserSetupForm.controls.forceChangePassword.value?'Force to change password checked':'Force to change password unchecked'" >
+              <mat-checkbox aria-hidden="true" [checked]="addEditUserSetupForm.controls.forceChangePassword.value" formControlName="forceChangePassword"></mat-checkbox>
+              <span i18n aria-hidden="true" class="checkbox-label">Force to change password</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-wrap">
+      <div class="text-right">
+        <button i18n type="button" aria-label="Cancel Information" mat-button class="app-btn" id="cancel" (click)="gotoUserSetup()"><span aria-hidden="true">Cancel</span></button>
+        <button i18n type="submit" [attr.aria-label]="saveBtnTitle+' information'" mat-button class="app-btn mat-primary mat-flat-button save-btn" (click)="saveUserSetup(addEditUserSetupForm)"><span aria-hidden="true">{{saveBtnTitle}}</span></button>
+      </div>
+    </div>
+  </form>
+</div>

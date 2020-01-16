@@ -1,0 +1,42 @@
+<div class="section-wrap">
+    <div class="top-section row-10 mar-20">
+        <div class="hidden-xs col-xs-12 col-sm-6">
+            <app-heading-section heading="User Setup">
+                <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+            </app-heading-section>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <ng-data-tables [columns]="columns" [rows]="records" [totalRows]="totalRows" [hasActionButtons]="hasActionButtons"
+    (edit)="editUser($event)" (blockUnblock)="blockUnblock($event)"
+    (delete)="deleteUser($event)" [showBlockUnblockButton]="true">
+
+    <div *ngIf="showClientList" button-toolbar-left>
+        <mat-form-field class="mat-select-full-width">
+            <mat-select i18n-placeholder  [(ngModel)]="organizationId" placeholder="Select Client" (selectionChange)="onClientChange($event.value)">
+                <mat-option i18n value="">Select Client</mat-option>
+                <mat-option *ngFor="let client of clients" [value]="client._id">
+                    {{ client.organizationname }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+        <div class="align-right" button-toolbar>
+            <div class="inner">
+                <div class="button-dropdown dropdown">
+                    <button i18n mat-button data-toggle="dropdown" class="app-btn mat-primary mat-flat-button save-btn add-user-button">
+                        Add User <i class="fa fa-sort-desc"></i>
+                    </button>
+                    <button aria-label="Download user details" mat-button class="download-button mat-primary mat-flat-button save-btn" (click)="exportAsExcelFile()" title="Download All Users Details">
+                      <span aria-hidden="true"><i class="fa fa-download"></i></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li i18n><a href="javascript:void(0);" (click)="uploadListPopup()">Upload List</a></li>
+                        <li i18n><a href="javascript:void(0);" (click)="addUser()">Manual Add</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </ng-data-tables>
+</div>

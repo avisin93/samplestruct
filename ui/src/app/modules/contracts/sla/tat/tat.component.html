@@ -1,0 +1,156 @@
+<div class="col-md-12" [formGroup]="formGroup">
+  <div [ngStyle]="showDownload ? {} : {'display': 'none'}" class="row" style="padding-top: 0;">
+    <div class="content-right btn-container select-related no-display-arrow" style="padding-top: 0; padding-bottom: 0;">
+      <mat-select disableOptionCentering panelClass="select-dropdown-class" #downloadSelect id="downloadSelect"
+        panelClass="doc-type-select">
+        <mat-option (click)="generatePDF()">
+          <i class="far fa-file-pdf"></i> PDF
+        </mat-option>
+        <mat-option (click)="generateCSV()">
+          <i class="far fa-file-excel"></i> CSV
+        </mat-option>
+      </mat-select>
+      <span style="font-size: 1.4rem; cursor: pointer;" (click)="downloadSelect.toggle()">
+        Download <i style="padding-left: 1rem;" class="fas fa-share-square"></i>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-12 spacing-element">
+    <div class="row" style="padding-top: 1rem;">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-12">
+          <textarea matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            placeholder="Clause" aria-invalid="false" aria-required="false" formControlName="clause"
+            name="clause"></textarea>
+          <mat-error *ngIf="formGroup.get('clause').invalid">
+            {{ getErrorMessage(formGroup.get('clause')) }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="col-md-12" style="padding-top: 3rem;">
+          <input matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            placeholder="Reference No." formControlName="referenceNo" name="referenceNo" />
+          <mat-error *ngIf="formGroup.get('referenceNo').invalid">
+            {{ getErrorMessage(formGroup.get('referenceNo')) }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 spacing-element">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-12">
+          <input matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            placeholder="Related Reference No." formControlName="relatedReferenceNo" name="referenceNo" />
+          <mat-error *ngIf="formGroup.get('relatedReferenceNo').invalid">
+            {{ getErrorMessage(formGroup.get('relatedReferenceNo')) }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Status"
+            formControlName="status">
+            <mat-option *ngFor="let status of arrayStatuses" [value]="status.code">
+              {{ status.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('status').invalid">
+            {{ getErrorMessage(formGroup.get('status')) }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 spacing-element">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-12 mat-form-field-has-prefix">
+          <div (click)="focusSelect()">
+            <input matInput
+              class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored required"
+              placeholder="Performance Pay" required='false' aria-invalid="false" aria-required="false"
+              formControlName="performancePay" name="performancePay">
+          </div>
+          <span class="select-prefix" [ngClass]="{'no-display-arrow' : (formGroup.get('currency').value &&
+                                                formGroup.get('currency').value !== '')}" style="font-size: 1.6rem"
+            matPrefix>
+            <mat-select disableOptionCentering panelClass="select-dropdown-class" #currencyDropDown
+              formControlName="currency" (selectionChange)="selectedCurrency()" panelClass="dropdown-currency">
+              <mat-option *ngFor="let cur of arrayCurrencies" [value]="cur.code" required='false' name="currency"
+                ngDefaultControl>
+                {{cur.symbol}}
+              </mat-option>
+            </mat-select>
+            &nbsp;
+          </span>
+          <mat-error *ngIf="formGroup.get('currency').invalid || formGroup.get('performancePay').invalid">
+            {{getErrorMessage(formGroup.get('currency').invalid ? formGroup.get('currency') :
+                              formGroup.get('performancePay'))}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="col-md-12">
+          <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Type"
+            formControlName="type">
+            <mat-option *ngFor="let type of arrayTypes" [value]="type.code">
+              {{ type.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('type').invalid">
+            {{ getErrorMessage(formGroup.get('type')) }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 spacing-element">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-12">
+          <input matInput class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+            placeholder="Hours" formControlName="hours" name="hours" />
+          <mat-error *ngIf="formGroup.get('hours').invalid">
+            {{ getErrorMessage(formGroup.get('hours')) }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6" style="padding: 0 3rem;">
+        <label class="radio-group-text" style="font-size: 14px;">Alert Contract owner regarding SLA TAT</label>
+        <mat-radio-group formControlName="alert">
+          <mat-radio-button value="YES">Yes</mat-radio-button>
+          <mat-radio-button value="NO">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <!-- <div class="content-right btn-container">
+      <button color="primary" class="cm-btn" id="cancel" (click) = "cancel()">
+        Cancel
+      </button>
+      <button color="primary" class="cm-btn primary-pink-color" (click) = "save()">
+        SAVE AND CONTINUE
+      </button>
+    </div> -->
+    <div class="content-right btn-container ds-vw">
+      <button color="primary" class="cm-btn" id="cancel" (click)="cancel()">
+        Cancel
+      </button>
+      <button color="primary" class="cm-btn primary-pink-color" (click)="save()">
+        SAVE AND CONTINUE
+      </button>
+    </div>
+    <div class="content-right btn-mob-container">
+      <button color="primary" class="cm-mob-btn  mb-vw" id="cancel" (click)="cancel()">
+        Cancel
+      </button>
+      <button color="primary" class="cm-mob-btn primary-pink-color  mb-vw" (click)="save()">
+        SAVE AND CONTINUE
+      </button>
+    </div>
+  </div>
+</div>

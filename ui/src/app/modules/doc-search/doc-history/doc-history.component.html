@@ -1,0 +1,101 @@
+<div class="col-md-12">
+  <div class="top-section row-10 mar-20 heading-section-doc-history">
+      <div class="hidden-xs col-xs-12 col-sm-6">
+          <app-heading-section heading="Doc History">
+              <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+          </app-heading-section>
+      </div>
+      <div class="clearfix"></div>
+  </div>
+  <div class="cm-card">
+    <div class="cm-card-header">
+      {{businessPartner}}
+    </div>
+    <div class="cm-card-body">
+
+      <div class="row btn-container-doc-history">
+        <div class="content-left btn-container">
+          <div class="row">
+            <label id="date-range-label">Start date range</label>
+          <mat-form-field class="col-md-3 small-padding" style="max-width: 30%">
+            <input
+              ngModel
+              matInput
+              readonly
+              class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+              placeholder="From"
+              
+              aria-invalid="false"
+              aria-required="false"
+              name="startDate"
+              [ngModelOptions]="{standalone: true}"
+              [matDatepicker]="startDatePicker"
+              (click)="startDatePicker.open()"
+              [max] = "maxStartDate"
+              (dateChange)="startDateChange($event)">
+            <span (click)="startDatePicker.open()" style="font-size: 1.4rem; padding-right: .5rem;" matPrefix><i class="fa fa-calendar"></i>&nbsp;</span>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col-md-3 small-padding" style="max-width: 30%">
+            <input
+              ngModel
+              matInput
+              readonly
+              class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+              placeholder="To"
+              
+              aria-invalid="false"
+              aria-required="false"
+              name="endDate"
+              [ngModelOptions]="{standalone: true}"
+              [min] = "minEndDate"
+              [matDatepicker]="endDatePicker"
+              (click)="endDatePicker.open()"
+              (dateChange)="endDateChange($event)">
+            <span (click)="endDatePicker.open()" style="font-size: 1.4rem; padding-right: .5rem;" matPrefix><i class="fa fa-calendar"></i>&nbsp;</span>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+          </mat-form-field>
+          <button id="reset" mat-button (click)="resetTimePeriod()">
+            RESET
+          </button>
+        </div>
+        </div>
+        <div class="content-right btn-container">
+            <mat-form-field class="col-md-6 small-padding" *ngIf="!customFilter">
+              <mat-select disableOptionCentering panelClass="select-dropdown-class" placeholder="Filter" (selectionChange) = "selectedStatus($event.value)" [(ngModel)]="statusFilter">
+                <mat-option *ngFor='let obj of arrayStatus' [value]="obj.code">
+                  {{obj.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-6 small-padding" *ngIf="customFilter">
+              <input
+                matInput
+                [formControl]="searchTextGlobal"
+                class="mat-input-element mat-form-field-autofill-control cdk-text-field-autofill-monitored"
+                placeholder="Custom Filter"
+                
+                aria-invalid="false"
+                aria-required="false">
+              <span style="font-size: 1.2rem" matPrefix><i class="fas fa-search"></i>&nbsp;</span>
+            </mat-form-field>
+            <i class="fas fa-th-large {{currentView == 'secondary' ? 'selected' : ''}}"
+            (click) = "changeView('secondary')"></i>
+            <i class="fas fa-list-ul {{currentView == 'primary' ? 'selected' : ''}}"
+            (click) = "changeView('primary')"></i>
+        </div>
+      </div>
+
+      <cm-graph-view *ngIf="currentView == 'primary'" 
+        [_dataInput] = "data"
+        [_filter] = "filter"
+        (commentCreated)="commentCreated()">
+      </cm-graph-view>
+
+      <cm-calendar-graph-view *ngIf="currentView == 'secondary'" [_dataInput] = "data"
+        [_filter] = "filter" [documentId] = "currentDocumentId">
+      </cm-calendar-graph-view>
+
+    </div>
+  </div>
+</div>

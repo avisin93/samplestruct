@@ -1,0 +1,29 @@
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+
+.operation-wrap {
+
+    .required-col {
+        position: relative;
+        md-error {
+            position: absolute;
+            top: 45px; 
+            @include applyFont($fontSize: 12px);
+        }
+    }
+
+    padding: 30px 20px 30px;
+
+    .action-wrap {
+        margin-top: 45px;
+    }
+    .addButton{
+        color: #187AB4;
+        margin: 27px;
+        font-size: 20px
+    }
+    .deleteButton{
+        font-size: 20px
+    }
+   
+}

@@ -1,0 +1,33 @@
+<div [formGroup]="formGroup">
+    <div mat-dialog-title>
+        <div class="title-position">
+            <h3>{{ titleText }}</h3>
+        </div>
+        <div class="close-button-position">
+            <button class="close-button" mat-dialog-close>
+                x
+            </button>
+        </div>
+    </div>
+    <mat-dialog-content class="checkbox-class">
+        <div class="row">
+            <div class="col-md-12">
+                <mat-form-field class="col-md-12" >
+                <textarea matInput placeholder="Add Comment" formControlName="text"></textarea>
+                <!-- TODO: Ika better error message handling -->
+                </mat-form-field>
+                <mat-error *ngIf="text.invalid && text.touched && !text.hasError('required')">
+                    Comment must not exceed 250 characters
+                </mat-error>
+                <mat-error *ngIf="text.hasError('required') && text.touched">
+                    Comment is required
+                </mat-error>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="buttons-class">
+        <button id="cancel"  style="margin: 0;" mat-button mat-dialog-close>Cancel</button>
+        <button *ngIf="showDeleteButton" class="cm-btn" id="previewButton" (click) = "deleteComment()">Delete</button>
+        <button class="primary-pink-color" mat-raised-button (click)="saveDocumentComment()">Save</button>
+    </mat-dialog-actions>
+    </div>

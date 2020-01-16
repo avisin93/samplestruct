@@ -1,0 +1,42 @@
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+.shared-mailbox {
+  padding: 30px 20px 30px;
+  .action-wrap {
+    margin-top: 45px;
+  }
+  .checkbox-wrap {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    .mat-checkbox {
+      margin-left: 15px;
+      &:first-child {
+        margin-left: 0px;
+      }
+    }
+    @include checkbox-styled();
+  }
+  .full-width-input-wrap .mat-select {
+    padding-bottom: 1em;
+  }
+}
+
+.auto-complete {
+  input {
+    border: 0;
+    border-bottom: 1px solid #c7c3c3;
+    margin: 0;
+    padding: 0.7em;
+    font-weight: normal;
+    width: 180%;
+  }
+  .ui-autocomplete-panel{
+      display: block !important;
+      width: 180% !important;
+      max-height: 200px !important;
+      z-index: 1001 !important;
+      opacity: 1.045 !important;
+      top: 40px !important;
+      left: 0px !important;
+  }
+}

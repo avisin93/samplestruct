@@ -1,0 +1,71 @@
+<table class="table-graph-view" style="height: auto !important;">
+    <thead>
+        <tr>
+          <th class="checkbox">
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+          </th>
+          <th class="year">YEAR</th>
+          <th class="graph-view">GRAPH VIEW</th>
+          <th class="comment">COMMENT</th>
+          <th class="status">STATUS</th>
+          <th class="download"><i [matTooltipClass]="{'align-on-right': true}" matTooltip="Download selected" class="fas fa-download" (click)="getUploadedDocumentsZip()"></i></th>
+        </tr>
+    </thead>
+</table>
+<table class="table-graph-view" style="height: auto !important;">
+  <thead>
+    <tr class="year-row">
+      <th class="year-cell" style="font-size: 1.8rem;">
+        <i class="fas fa-angle-up" (click)="onPreviousSearchPosition()"></i>
+      </th>
+      <th colspan="7"></th>
+    </tr>
+  </thead>  
+</table>
+<table #scrollable class="table-graph-view">
+  <thead></thead>
+    <tbody>
+        <tr *ngFor="let row of data; let i = index">
+        <td class="checkbox">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                (change)="$event ? selection.toggle(row) : null"
+                [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+        </td>
+        <td class="year">{{row.start_date | date: 'yyyy'}}</td>
+        <td class="graph-view ">
+            <div [ngStyle]="calculateStyle(i, row.parent)">
+                <div class="{{hasFilteredParent(row.parent) ? 'tail' : 'no-display'}}" [ngStyle]="calculateStyle(i, row.parent, true)"></div>
+                <div class="content {{row.status | lowercase}} {{row.document_id == documentId ? 'selectedNode' : ''}}">
+                    {{row.type_of_doc ? row.type_of_doc : ''}}
+                </div>
+            </div>
+        </td>
+        <td class="comment position-relative">
+            <div id='parent2' class="parent">
+                <div class="left">
+                  <span [matTooltipClass]="{'arrow_box': true}" matTooltipPosition="below" matTooltip="{{row.comment}}">{{row.comment | comment}}</span>
+                </div>
+                <div class="right"><span class="edit-comment"><i matTooltip="Edit" class="fas fa-pencil-alt" (click)="updateComment(row, 'Edit Comment')"></i></span></div>
+            </div>
+        </td>
+        <td class="status">
+            <span class="badge badge-{{row.status.replace(' ', '') | lowercase}}">{{row.status}}</span>
+        </td>
+        <td class="download"><i [matTooltipClass]="{'align-on-right': true}" matTooltip="Download" class="fas fa-download" (click)="getUploadedDocument(row.id_document_efa_reference, row.name_document_efa, false, row.file_type)"></i></td>
+        </tr>
+    </tbody>
+</table>
+<table class="table-graph-view" style="height: auto !important;">
+  <thead>
+    <tr class="year-row">
+      <td class="year-cell" style="font-size: 1.8rem;">
+        <i class="fas fa-angle-down" (click)="onNextSearchPosition()"></i>
+      </td>
+      <td colspan="7"></td>
+    </tr>
+  </thead>
+</table>
