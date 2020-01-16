@@ -1,0 +1,80 @@
+<div id="manage-bid">
+  <div class="content-heading row">
+    <!-- Breadcrumb right aligned-->
+    <breadcrumb [breadcrumbData]="breadcrumbData" class="col-md-5 col-lg-5 col-xl-5 mb-10 p-0"></breadcrumb>
+    <div class="col-md-7 col-lg-7 col-xl-7 p-0 text-right">
+      <ui-control-permission [fieldName]="'projectMasterConfiguration'"
+        [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions" [uiPermissionObj]="uiAccessPermissionsObj">
+        <button class="btn default-btn btn-primary ml-1 mb-10"
+          (click)="navigateToMasterConfig(BIDDING_ROUTER_LINKS_FULL_PATH.manageBidMasterConfiguration)">{{'biddings.labels.masterConfig'|
+          translate}}</button>
+      </ui-control-permission>
+      <ui-control-permission [fieldName]="'projectApprovalHierarchy'"
+        [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions" [uiPermissionObj]="uiAccessPermissionsObj">
+        <button class="btn default-btn btn-primary ml-1 mb-10"
+          (click)="navigateToMasterConfig(BIDDING_ROUTER_LINKS_FULL_PATH.manageBidApprovalHierarchy)">{{'biddings.labels.approvalHierarchy' | translate}}</button>
+      </ui-control-permission>
+      <button class="btn btl-btn btn-primary mb-m-10" (click)="navigateTo(ROUTER_LINKS_FULL_PATH.bids)" type="button">
+        {{'common.labels.backToList'| translate}}</button>
+    </div>
+  </div>
+  <!-- <div class="content-heading row">
+    <breadcrumb [breadcrumbData]="breadcrumbData" class="col-md-5 col-lg-5 col-xl-5 mb-10 p-0"></breadcrumb>
+    <div class="col-md-7 col-lg-7 col-xl-7 p-0 text-right">
+      <button class="btn default-btn btn-primary ml-1 mb-10" (click)="navigateTo(ROUTER_LINKS_FULL_PATH.manageBidMasterConfiguration)">{{'biddings.labels.masterConfigurationBtn'|
+        translate}}</button>
+        <button class="btn default-btn btn-primary ml-1 mb-10" (click)="navigateTo(ROUTER_LINKS_FULL_PATH.manageBidApprovalHierarchy)">Approval Hierarchy</button>
+      <button class="btn btl-btn btn-primary ml-1 mb-10" [routerLink]="ROUTER_LINKS.bidding" type="button">
+        {{'common.labels.backToList'| translate}}</button>
+    </div>
+  </div> -->
+  <div class="col-md- no-mg project-tabs">
+    <ul class="nav nav-pills nav-justified">
+      <li class="nav-item"
+        [ngClass]="(this.manageBidData.disableTabs.basicInfo || this.manageBidData.spinnerFlag || this.manageBidData.disableProjectInputs) ? 'disabled':''">
+        <a class="nav-link ptr" id="basic-info-tab"
+          (click)="redirectToLink($event, BIDDING_ROUTER_LINKS_FULL_PATH.biddingBasicInfo,TAB_CONST.basicInfo,TAB_NAME_KEYS.basicInfo)">{{'biddings.labels.basicInfo'|
+          translate}}</a>
+      </li>
+
+      <li class="nav-item"
+        [ngClass]="(this.manageBidData.disableTabs.businessTerms || this.manageBidData.spinnerFlag || this.manageBidData.disableProjectInputs) ? 'disabled':''">
+        <a class="nav-link ptr" id="business-terms-tab"
+          (click)="redirectToLink($event, BIDDING_ROUTER_LINKS_FULL_PATH.biddingBuisnessTerms,TAB_CONST.businessTerms,TAB_NAME_KEYS.businessTerms)">{{'biddings.labels.businessTerms'|
+          translate}}</a>
+      </li>
+
+      <li class="nav-item"
+        [ngClass]="(this.manageBidData.disableTabs.productionParameters || this.manageBidData.spinnerFlag || this.manageBidData.disableProjectInputs) ? 'disabled':''">
+        <a class="nav-link ptr" id="production-parameters-tab"
+          (click)="redirectToLink($event, BIDDING_ROUTER_LINKS_FULL_PATH.biddingproductionParameters,TAB_CONST.productionParameters,TAB_NAME_KEYS.productionParameters)">{{'biddings.labels.productionParameters'|
+          translate}}</a>
+      </li>
+      <li class="nav-item"
+        [ngClass]="(this.manageBidData.disableTabs.talent || this.manageBidData.spinnerFlag || this.manageBidData.disableProjectInputs) ? 'disabled':''">
+        <a class="nav-link ptr" id="talent-tab"
+          (click)="redirectToLink($event, BIDDING_ROUTER_LINKS_FULL_PATH.biddingTalent,TAB_CONST.talent,TAB_NAME_KEYS.talent)">{{'biddings.labels.talent'|
+          translate}}</a>
+      </li>
+      <li class="nav-item"
+        [ngClass]="(this.manageBidData.disableTabs.editingAndPost || this.manageBidData.spinnerFlag || this.manageBidData.disableProjectInputs) ? 'disabled':''">
+        <a class="nav-link ptr" id="editing-and-post-tab"
+          (click)="redirectToLink($event, BIDDING_ROUTER_LINKS_FULL_PATH.bidEditingAndPost,TAB_CONST.editingAndPost,TAB_NAME_KEYS.editingAndPost)">{{'biddings.labels.editingAndPost'|
+          translate}}</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link ptr"
+          [ngClass]="(this.manageBidData.spinnerFlag || this.manageBidData.disableProjectInputs) ? 'disabled':''"
+          id="aicp-tab" (click)="redirectToLink($event, BIDDING_ROUTER_LINKS_FULL_PATH.bidAicp,TAB_CONST.aicp)">{{'biddings.labels.aicp'|
+          translate}}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link ptr" [ngClass]="this.manageBidData.spinnerFlag ? 'disabled':''" id="passes-tab"
+          (click)="redirectToLink($event, BIDDING_ROUTER_LINKS_FULL_PATH.bidPasses,TAB_CONST.passes)">{{'biddings.labels.passes'|
+          translate}}</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<router-outlet></router-outlet>

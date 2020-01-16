@@ -1,0 +1,280 @@
+/* You can add global styles to this file, and also import other style files */
+//== Vendor
+@import '~font-awesome/css/font-awesome.css';
+@import '~simple-line-icons/css/simple-line-icons.css'; // @import '~weather-icons/css/weather-icons.css';
+// @import '~weather-icons/css/weather-icons-wind.css';
+// @import '~spinkit/css/spinkit.css';
+@import '~loaders.css/loaders.css';
+@import '~angular2-toaster/toaster.css';
+// @import '~ng2-dnd/bundles/style.css';
+// @import '~ag-grid/dist/styles/ag-grid.css';
+// @import '~ag-grid/dist/styles/theme-fresh.css'; // @import '~ika.jvectormap/jquery-jvectormap-1.2.2.css';
+@import '~jqcloud2/dist/jqcloud.css';
+// @import '~summernote/dist/summernote.css';
+// @import '~fullcalendar/dist/fullcalendar.min.css';
+@import '~codemirror/lib/codemirror.css';
+@import '~sweetalert/dist/sweetalert.css'; //== Bootstrap
+@import "./app/shared/styles/bootstrap.scss"; //== Application
+@import "./app/shared/styles/app.scss";
+@import "./assets/styles/common.style.scss";
+@import "./assets/styles/responsive.style.scss";
+
+.ptr {
+  cursor: pointer;
+}
+
+.mt-5 {
+  margin-top: 5px !important;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.pt-10 {
+  padding-top: 10px;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mr-15 {
+  margin-right: 15px !important;
+}
+
+.mr-20 {
+  margin-right: 20px !important;
+}
+
+.pl-10 {
+  padding-left: 10px;
+}
+
+.ml-15 {
+  margin-left: 15px;
+}
+
+.ml-20 {
+  margin-left: 20px !important;
+}
+
+.ml-30 {
+  margin-left: 30px !important;
+}
+
+.mr-5 {
+  margin-right: 5px !important;
+}
+
+.pt-5 {
+  padding-top: 5px !important;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.pl-25 {
+  padding-left: 25px;
+}
+
+.mg {
+  margin-top: 12px;
+  margin-bottom: 18px;
+}
+
+.w-100 {
+  width: 100%
+}
+
+.c-red {
+  color: red !important;
+}
+
+.c-green {
+  color: green !important;
+}
+
+.f-20 {
+  font-size: 20px;
+}
+
+.f-15 {
+  font-size: 15px;
+}
+
+.f-17 {
+  font-size: 17px;
+}
+
+.f-18 {
+  font-size: 18px;
+}
+
+.mandatory {
+  color: red;
+}
+
+.d-inline-flex {
+  display: inline-flex;
+}
+
+.border-1 {
+  border: 1px solid lightgray;
+}
+
+.bb-error {
+  color: red;
+}
+
+.upload-pictur-btn {
+  width: 150px;
+}
+
+.ptr {
+  cursor: pointer;
+}
+
+//
+// .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell:not(:last-child) {
+// border-right: 1px solid lightgray;
+// }
+// .ngx-datatable.material .datatable-body .datatable-body-row {
+// border-bottom:  1px solid lightgray;
+// }
+// .ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell:not(:last-child) {
+//   border-right: 1px solid lightgray;
+// }
+//
+
+.ngx-datatable.material .datatable-footer {
+  border: 0;
+}
+
+.empty-row,
+.page-count {
+  display: none;
+}
+
+.right-btn {
+  right: 20px;
+  position: absolute;
+}
+
+.sidebar-nav>li.active>.nav-item>em,
+.sidebar-nav>li.active>a>em,
+.sidebar-nav>li.open>.nav-item>em,
+.sidebar-nav>li.open>a>em {
+  color: #D70026 !important;
+}
+
+.no-pd {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.table-responsive {
+  border-top: 2px solid #ccc;
+}
+
+.selectClass {
+  width: 205px !important;
+}
+
+.mandatory {
+  font-size: 11px;
+  font-weight: normal;
+}
+
+.toast-top-right {
+  top: 70px;
+}
+
+.c-pointer {
+  cursor: pointer;
+}
+
+.f-italic {
+  font-style: italic;
+}
+
+/**project nav bar css**/
+.project-tabs .nav-pills .nav-link.active,
+.project-tabs .nav-pills .show>.nav-link {
+  color: #515253 !important;
+  background-color: #fff;
+  // border-radius: 0;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.project-tabs ul li {
+  border: rgb(235, 234, 234) solid 1px;
+}
+
+.project-tabs ul li>a {
+  padding: 12px 25px;
+  text-decoration: none;
+  color: rgb(143, 142, 142);
+}
+
+.project-tabs .nav-pills li>a {
+  background-color: #edf1f2;
+}
+
+.project-tabs .nav li>a:focus,
+.project-tabs .nav>li>a:hover {
+  text-decoration: none;
+  color: #515253 !important;
+  background-color: transparent;
+  border-color: #ddd #ddd #ddd;
+}
+
+/** project nav bar css**/
+
+.d-inline-grid {
+  display: inline-grid;
+}
+
+.document-link {
+  color: #000 !important;
+}
+
+.margin-right-5 {
+  margin-right: 5px;
+}
+
+.hide-content {
+  display: none;
+}
+
+.aside-collapsed .left-sidebar .parent-item em.fa-caret-right,
+.aside-collapsed .left-sidebar .parent-item em.fa-caret-down {
+  display: none;
+}
+
+.lb-nav a.lb-next,
+.lb-nav a.lb-prev {
+  width: 20%;
+}

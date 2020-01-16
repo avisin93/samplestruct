@@ -1,0 +1,36 @@
+@media (min-width:992px) {
+    .project-title{
+      position: relative;
+      top: 7px;
+    }
+}
+th{
+  text-align: center;
+}
+
+.budget-report .rate{
+  color: green;
+}
+.budget-report .tdCenter{
+  text-align: center;
+  font-weight: bold;
+}
+
+.budget-report #red{
+  color:red;
+}
+
+.budget-report .textsize{
+  font-size:16px;
+}
+.budget-report .tab-container{
+  white-space: nowrap;
+text-overflow: ellipsis;     
+}
+.budget-report .positive {
+  color: green;
+ }
+ 
+ .budget-report .negative {
+   color: red;
+ }

@@ -1,0 +1,37 @@
+body, html {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .bgimg {
+   
+    height: 100%;
+    position: relative;
+    color: black;
+    font-family: "Arial", Helvetica, sans-serif;
+    font-size: 25px;
+  }
+  
+  
+  .middle {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+  }
+  
+  hr {
+    margin: auto;
+    width: 40%;
+  }
+  .fa-exclamation-triangle {
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+  .fa-warning:before, .fa-exclamation-triangle:before {
+    font-size: 70px;
+    content: "\f071";
+    color: #ecd241;
+}

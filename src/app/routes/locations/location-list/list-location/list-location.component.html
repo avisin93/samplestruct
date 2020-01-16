@@ -1,0 +1,412 @@
+<div id="location-listing-page" *ngIf="!unauthorizedAccessFlag else unauthorizedAccess">
+  <div class="content-heading row">
+    <breadcrumb [breadcrumbData]="breadcrumbData" (onClick)="resetZipData()"
+      class="col-12 col-sm-6 col-md-6 col-lg-8 col-xl-6 mb-10 p-0">
+    </breadcrumb>
+    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-6 text-right p-0">
+      <u class="mr-2" *ngIf="createZipFlag && listLocation?.atLeastOneImageSelected">
+        <span class="ptr f-15" (click)="openSeletionModal()">{{'location.labels.viewSelectedImages'| translate}}
+        </span>
+      </u>
+      <button class="btn btl-btn btn-primary" (click)="downloadZip()" [disabled]="disableButtonFlag"
+        *ngIf="createZipFlag && listLocation?.atLeastOneImageSelected" type="button">
+        <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>
+        {{'location.labels.downloadZip'| translate}}
+      </button>
+      <button class="btn btl-btn btn-primary" [disabled]="disableButtonFlag" (click)="clearSelectedImages()"
+        *ngIf="createZipFlag && listLocation?.atLeastOneImageSelected" type="button">
+        {{'location.labels.clearSelection'| translate}}
+      </button>
+      <button class="btn btl-btn btn-primary" [disabled]="disableButtonFlag" (click)="resetZipData()"
+        *ngIf="createZipFlag" type="button">
+        {{'location.labels.cancel'| translate}}
+      </button>
+      <ui-control-permission [fieldName]="'createZip'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+        [uiPermissionObj]="uiAccessPermissionsObj">
+        <button class="btn btl-btn btn-primary" data-toggle="modal" data-target="#zipModal" *ngIf="!createZipFlag"
+          [disabled]="locationsList?.length===0" (click)="showZipModal()" type="button">
+          {{'location.labels.createZip'| translate}}
+        </button>
+      </ui-control-permission>
+      <action-permission [actionType]="ACTION_TYPES.ADD" [MODULE_ID]="MODULE_ID" [permissionArr]="permissionObj">
+        <button class="btn btl-btn btn-primary" *ngIf="!createZipFlag" (click)="navigateTo()" type="button">
+          {{'common.labels.add'| translate}}
+        </button>
+      </action-permission>
+    </div>
+  </div>
+  <div class="modal fade" bsModal #zipModal="bs-modal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <strong>
+            <h4>{{'location.labels.zipDetails'| translate}}</h4>
+          </strong>
+          <button type="button" class="close" aria-label="Close" (click)="hideZipDetailsModal()">
+            <i class="fa fa-times ptr f-15" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="zipDetailsForm" novalidate>
+
+            <div class="row">
+              <div class="col-12">
+                <label class="radio-inline ptr" [ngClass]="(index!=0) ? 'ml-3':''"
+                  *ngFor="let zipnameType of ZIP_NAME_TYPES_ARR;let index=index">
+                  <input id="inlineradio{{index}}" type="radio" (change)="checkValidity()" formControlName="zipNameType"
+                    [value]="zipnameType.id" />
+                  {{'location.labels.'+ zipnameType.text | translate}}</label>
+                <div class="col-6 no-pd" *ngIf="zipDetailsForm?.value.zipNameType == ZIP_NAME_TYPE.selectProject;">
+                  <label class="control-label">{{'location.labels.projects'| translate}}
+                    <span class="mandatory">*</span>
+                  </label>
+                  <ngx-select formControlName="projectId" (select)="getProjectObjById($event)" [allowClear]='true'
+                    [items]="projectsList" data-placement="top" placeholder="{{'common.labels.select' | translate}}">
+                  </ngx-select>
+                  <div class="text-danger"
+                    *ngIf="zipDetailsForm?.controls['projectId']?.errors?.checkRequired && (zipDetailsForm?.controls['projectId'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                      translate}}</div>
+                </div>
+
+                <div class="col-6 no-pd " *ngIf="zipDetailsForm?.value.zipNameType == ZIP_NAME_TYPE.other;">
+                  <label class="control-label">{{'location.labels.zipName'| translate}}
+                    <span class="mandatory">*</span>
+                  </label>
+                  <input class="form-control" maxlength="50" formControlName="projectName"
+                    placeholder="{{'location.labels.zipNameEnter'| translate}}">
+                  <div class="text-danger"
+                    *ngIf="zipDetailsForm?.controls['projectName']?.errors?.checkRequired && (zipDetailsForm?.controls['projectName'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                      translate}}</div>
+                </div>
+
+                <div class="col-6 no-pd mr">
+                  <label class="control-label">{{'location.labels.zipDescription'| translate}}
+                    <span class="mandatory">*</span>
+                  </label>
+                  <div>
+                    <textarea class="form-control" maxlength="500" formControlName="zipDiscription"
+                      placeholder="{{'location.labels.description'| translate}}"></textarea>
+                  </div>
+                  <div class="text-danger"
+                    *ngIf="zipDetailsForm?.controls['zipDiscription']?.errors?.checkRequired && (zipDetailsForm?.controls['zipDiscription'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  <br>
+                </div>
+                <div class="mid">
+                  <button class="btn btn-success add-btn mr-5" (click)="proccedToCreatezip()">
+                    {{'location.labels.proceed'| translate}}</button>
+                  <button (click)="hideZipDetailsModal()" class="btn btn-danger add-btn">
+                    {{'common.labels.cancel'| translate}}</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="card card-default">
+    <div class="card-body">
+      <form [formGroup]="locationsFilterForm">
+        <div class="row mb-3">
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <input class="form-control input-width" formControlName="locationName" id="locationName" type="text"
+              placeholder="{{'common.labels.name'| translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.name'| translate}}" />
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+
+
+
+            <ngx-select [multiple]="true" [autoClearSearch]="true" (typed)="searchTags.next($event)"
+              (select)="tagsSelected($event)" data-placement="top" title="{{'common.labels.supplierName' | translate}}"
+              (remove)="tagRemoved($event)" formControlName="locationTags" [items]="tagsList"
+              placeholder="{{'common.labels.tags' | translate}}">
+
+              <ng-template ngx-select-option-not-found>
+                <ng-container *ngIf="isLoadingTagName; else elseBlock">
+                  {{'biddings.labels.loading' | translate}}
+                  <span class="fl-right">
+                    <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                  </span>
+                </ng-container>
+                <ng-template #elseBlock>
+                  {{ 'common.labels.recordNotFound' | translate }}
+                </ng-template>
+              </ng-template>
+            </ngx-select>
+
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <ngx-select [multiple]="true" [autoClearSearch]="true" name="states" formControlName="state" [items]="state"
+              placeholder="{{'common.labels.state' | translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.state' | translate}}">
+            </ngx-select>
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <ngx-select [multiple]="true" [autoClearSearch]="true" formControlName="city" name="cities" [items]="city"
+              placeholder="{{'common.labels.city' | translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.city' | translate}}">
+            </ngx-select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <!-- <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10 project-type">
+            <ngx-select [multiple]="true" [autoClearSearch]="true" formControlName="category" [items]="category"
+              placeholder="{{'common.labels.category'| translate}}" data-toggle="tooltip" data-placement="top" title="{{'common.labels.category'| translate}}"></ngx-select>
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <ngx-select [multiple]="false" name="locationType" formControlName="locationType" [items]="LOCATION_TYPES"
+              placeholder="{{'common.labels.locationType'| translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.locationType'| translate}}">
+            </ngx-select>
+          </div> -->
+          <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <div class="category-name-wrapper mb-10 project-type ptr" (click)="openAddCategoryModel();"
+              contentEditable=false data-text="Enter text here">
+              <span *ngIf="!categorylist?.length || categorylist?.length < 1"
+                style="padding: 0.375rem 1rem; color: #bbbbbb;">{{'common.labels.category'
+                | translate}}</span>
+              <span class="category-name" *ngFor="let category of categorylist; let i=index">
+                <span class="vertical-middle" title="{{category.fullPath}}"
+                  (click)="$event.stopPropagation(); openAddCategoryModel();">
+                  {{category?.name}} </span>
+                <span class="close vertical-middle"
+                  (click)="$event.stopPropagation(); closeCategoryName(category, $event);">&times;</span>
+              </span>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 mb-10">
+            <ngx-select [multiple]="false" name="locationType" formControlName="locationType" [allowClear]='true'
+              [items]="LOCATION_TYPES" placeholder="{{'common.labels.locationType'| translate}}" data-toggle="tooltip"
+              data-placement="top" title="{{'common.labels.locationType'| translate}}">
+            </ngx-select>
+          </div>
+          <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3">
+            <button class="btn btn-primary search-btn mb-10" type="submit" (click)="search()"
+              [disabled]="showLoadingFlg">
+              {{'common.labels.search'| translate}}</button>
+            <button class="btn btn-primary clear-btn mb-10" type="button" (click)="clear()" [disabled]="showLoadingFlg">
+              {{'common.labels.clear'| translate}}</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+    <div class="row no-mg">
+      <app-loader class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-3" [loading]="showLoadingFlg"></app-loader>
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 ng-scope"
+        *ngFor="let location of locationsList;let index = index;">
+        <div class="panel panel-primary">
+          <div class="panel-body ptr">
+            <div (click)="getLocationImagesbyId(location)">
+              <div class="row no-mg">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xs-6 image-background ng-scope">
+                  <ng-container *ngIf="location?.locationImages[0]?.thumbnailImageUrl; else block1">
+                    <img [src]="location?.locationImages[0]?.thumbnailImageUrl" class="img-fluid custom-img" />
+                  </ng-container>
+                  <ng-template #block1>
+                    <img src="assets/img/bg4.jpg" class="img-fluid custom-img" />
+                  </ng-template>
+
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xs-6 image-background ng-scope">
+                  <ng-container *ngIf="location?.locationImages[1]?.thumbnailImageUrl; else block2">
+                    <img [src]="location?.locationImages[1]?.thumbnailImageUrl" class="img-fluid custom-img" />
+                  </ng-container>
+                  <ng-template #block2>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="row no-mg">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xs-6 image-background ng-scope">
+                  <ng-container *ngIf="location?.locationImages[2]?.thumbnailImageUrl; else block3">
+                    <img [src]="location?.locationImages[2]?.thumbnailImageUrl" class="img-fluid custom-img" />
+                  </ng-container>
+                  <ng-template #block3>
+                    <img src="assets/img/bg4.jpg" class="img-fluid custom-img" />
+                  </ng-template>
+                </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xs-6 image-background ng-scope">
+                  <ng-container *ngIf="location?.locationImages[3]?.thumbnailImageUrl; else block4">
+                    <img [src]="location?.locationImages[3]?.thumbnailImageUrl" class="img-fluid custom-img" />
+                  </ng-container>
+                  <ng-template #block4>
+                    <img src="assets/img/bg4.jpg" class="img-fluid custom-img" />
+                  </ng-template>
+                </div>
+              </div>
+              <div class="row no-mg position-relative">
+                <div class="location-search-item">
+                  <p id="location-search-item-name" class="location-details-name text-white ng-binding textElipses"
+                    title="{{location?.locationName}}">
+                    {{location?.locationName}}
+                  </p>
+                </div>
+              </div>
+              <span class="location-search-card text-right">
+                <button class="btn btn-info btn-circle btn-lg ng-binding" type="button">
+                  {{location?.imageCount}}
+                </button>
+              </span>
+            </div>
+          </div>
+          <div class="panel-footer">
+            <action-permission [actionType]="ACTION_TYPES.DELETE" [MODULE_ID]="MODULE_ID"
+              [permissionArr]="permissionObj">
+              <span class="pull-right ml-2p">
+                <button class="btn btn-danger btn-xs" *ngIf="!createZipFlag"
+                  (click)="deleteLocation(location.locationId)">
+                  <em class="fa fa-trash delete-file-icon"></em>
+                </button>
+              </span>
+            </action-permission>
+            <action-permission [actionType]="ACTION_TYPES.EDIT" [MODULE_ID]="MODULE_ID"
+              [permissionArr]="permissionObj">
+              <span class="pull-right">
+                <button class="btn btn-danger btn-xs" *ngIf="!createZipFlag" (click)="editLocation(location.locationId)"
+                  type="button">
+                  <em class="fa fa-pencil"></em>
+                </button>
+              </span>
+            </action-permission>
+
+            <h4 class="m-0 textElipses" title="{{location?.city}}">
+              <span class="ng-binding">{{location?.city ? location?.city : '-'}}</span>
+            </h4>
+            <p class="mt-8 textElipses" title="{{title[index] | uppercase}}">
+              <span *ngFor="let item of location?.categories;let i = index;let lst = last">
+                <ng-container *ngIf="i < 2">
+                  {{item?.i18n?.name ? (item?.i18n?.name | uppercase) : '-'}}
+                  <ng-container *ngIf="location?.categories.length > 1 && !lst">
+                    >
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="i == 2">
+                  <i>...</i>
+                </ng-container>
+              </span>
+            </p>
+
+
+            <ng-container *ngIf="location.lastModifiedDate; else noDate">
+              <p>{{'location.labels.lastModifiedOn'| translate}}: {{location.lastModifiedDate | dateFormat :
+                DATE_FORMATS.CORE_DATE_FORMAT}}</p>
+            </ng-container>
+            <ng-template #noDate>
+              <p>{{'location.labels.lastModifiedOn'| translate}}: -</p>
+            </ng-template>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="row no-mg list-pagination">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" *ngIf="totalItems>itemsPerPage"
+        [ngClass]="{'hide-content': showLoadingFlg}">
+        <pagination *ngIf="config.paging" class="pagination-sm pull-right" [(ngModel)]="page" [totalItems]="totalItems"
+          [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [firstText]="'common.labels.first' | translate"
+          [lastText]="'common.labels.last' | translate" [previousText]="'common.labels.previous' | translate"
+          [nextText]="'common.labels.next' | translate" [boundaryLinks]="true" [rotate]="false"
+          (pageChanged)="pageChanged($event)" (numPages)="numPages = $event">
+        </pagination>
+      </div>
+    </div>
+    <ng-container *ngIf="locationsList?.length == 0 && !showLoadingFlg">
+      <p class="text-danger text-center">{{'common.labels.recordNotFound' | translate}}</p>
+    </ng-container>
+
+    <div class="modal location-listing-model" bsModal #classicModal="bs-modal" tabindex='-1'>
+      <div *ngIf="!isImagePreviewOpen">
+        <div id="image-info">
+          <div><span class="label-font"><strong>{{'common.labels.name'| translate}}:</strong> </span>{{imageinfo?.locationName
+          ?
+          imageinfo?.locationName : '-' }}</div>
+          <div><span class="label-font"><strong>{{'common.labels.locationType'| translate}}:</strong> </span>{{imageinfo?.locationType
+          === 0
+          ? commonLabelObj.labels.public : commonLabelObj.labels.private}}</div>
+          <div><span class="label-font"><strong>{{'location.labels.permit'| translate}}:</strong>
+            </span>{{imageinfo?.permit ? commonLabelObj.labels.yes : commonLabelObj.labels.no}} </div>
+          <div><span class="label-font"><strong>{{'location.labels.price'| translate}}:</strong>
+            </span>{{imageinfo?.currency}} {{imageinfo?.approximatePrice
+          ?
+          imageinfo?.approximatePrice : '-'}}</div>
+          <ng-container *ngIf="imageinfo?.lastModified; else noLastDate">
+            <div><span class="label-font"><strong>{{'location.labels.lastModifiedOn'| translate}}: </strong> </span>{{imageinfo?.lastModified
+            | dateFormat }}</div>
+          </ng-container>
+          <ng-template #noLastDate>
+            <div><span class="label-font"><strong>{{'location.labels.lastModifiedOn'| translate}}:</strong> </span>-
+            </div>
+          </ng-template>
+          <ng-container *ngIf="imageinfo?.description; else noDesc">
+            <div title="{{imageinfo?.description}}"><span class="label-font"><strong>{{'common.labels.description'|
+                translate}}:</strong>
+              </span><span class="img-desc">{{ imageinfo?.description
+            | truncateStr:[150, '...'] }}</span></div>
+          </ng-container>
+          <ng-template #noDesc>
+            <div title="{{imageinfo?.description}}"><span class="label-font"><strong>{{'common.labels.description'|
+                translate}}:</strong>
+              </span>-</div>
+          </ng-template>
+
+        </div>
+        <div class="zip-checkbox" *ngIf="createZipFlag">
+          <div class="checkbox c-checkbox">
+            <label>
+              <input type="checkbox" [(ngModel)]="imageSelectedForZip" id="zip-checkbox"
+                (change)="selectImageForZip($event.target.checked)">
+              <span class="fa fa-check"></span>
+              {{'location.labels.selectThisImageForZip' | translate}}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-dialog modal-dialog-centered modal-lg custom-gallery-modal">
+        <div class="modal-content custom-modal-content ">
+          <div class="modal-body text-center">
+            <ngx-gallery [options]="galleryOptions" [images]="galleryImages" (change)="imageChanged($event)"
+              (previewOpen)="previewOpen();" (previewChange)="setOrientationToImage($event)"
+              (previewClose)="previewClose();">
+            </ngx-gallery>
+          </div>
+        </div>
+      </div>
+      <div class="close-button" [ngClass]="{'hide-content': !enableGallaryCloseButton}">
+        <i class="fa fa-times-circle ptr" (click)="closeClassicModal();" aria-hidden="true"></i>
+      </div>
+    </div>
+
+  </div>
+  <!-- <div class="modal fade" bsModal #viewSelectionModal="bs-modal"> -->
+  <div class="modal fade mt-50" bsModal #viewSelectionModal="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg transform-none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">
+            {{'location.labels.selectedImages' | translate}}
+          </h4>
+          <button type="button" class="close" aria-label="Close" (click)="resetAndCloseViewSelectionModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <zip-images-selection-view #zipImagesSelectionView (hideModal)="closeViewSelectionModal()">
+          </zip-images-selection-view>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<ng-template #unauthorizedAccess>
+  <app-unauthorized-access [errorMessage]="'pages.errorMessages.unauthorizedLocationListingAccess'">
+  </app-unauthorized-access>
+</ng-template>

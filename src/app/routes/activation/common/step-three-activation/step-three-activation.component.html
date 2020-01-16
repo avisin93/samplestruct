@@ -1,0 +1,83 @@
+<h5 class="text-dark">
+  <strong> {{'common.labels.contract'| translate}}</strong>
+</h5>
+<div class="panel panel-primary">
+  <div class="panel-body">
+    <!-- <div class="pl-10"> {{'common.labels.step3Msg'| translate}}</div> -->
+    <!-- <div class="json-block" [innerText]="">
+      <ng-container *ngFor="let imagePath of contractImagesArr">
+        <img class="contract-images" [src]="'assets/img/contract/'+path+'/'+imagePath" />
+      </ng-container>
+    </div>
+    <br/>
+    <form class="form-horizontal" [formGroup]="step3Form" novalidate>
+      <div class="form-group col-md-12">
+        <div class="form-check">
+          <input class="form-check-input" id="defaultCheck1" formControlName="isagreed" type="checkbox" value="" />
+          <label class="form-check-label" for="defaultCheck1">{{'common.labels.contractAgreement' | translate}}</label>
+        </div>
+        <div class="text-danger col-md-12 no-mg" *ngIf="(step3Form.controls['isagreed']?.errors?.pattern || step3Form.controls['isagreed']?.errors?.checkRequired) && (step3Form.controls['isagreed'].touched  || submittedFormFlag)">{{'common.errorMessages.acceptTermsAndConditions'| translate}}</div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'common.labels.name' | translate}}
+      <span class="text-danger">*</span>
+    </label>
+        <div class="col-md-8">
+          <input name="firstName" class="form-control" formControlName="name" placeholder="{{'actors.freelancers.labels.name' | translate}}">
+          <div class="text-danger col-md-12 no-mg" *ngIf="step3Form.controls['name']?.errors?.checkRequired && (step3Form.controls['name'].touched  || submittedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'actors.freelancers.labels.taxId' | translate}}/{{'common.labels.uprc' | translate}}
+      <span class="text-danger">*</span>
+    </label>
+        <div class="col-md-8">
+          <input name="firstName" class="form-control" formControlName="taxId" placeholder="{{'actors.freelancers.labels.taxId' | translate}}/{{'common.labels.uprc' | translate}}">
+          <div class="text-danger col-md-12 no-mg" *ngIf="step3Form.controls['taxId']?.errors?.checkRequired && (step3Form.controls['taxId'].touched  || submittedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'common.labels.liftId' | translate}}
+    </label>
+        <div class="col-md-8">
+          <span>{{liftId}}</span>
+        </div>
+      </div>
+    </form> -->
+    <div class="col-md-12 text-center" *ngIf="showLoadingFlg">
+      <app-loader class="col-md-12" [loading]="showLoadingFlg"></app-loader>
+    </div>
+    <div [ngClass]="{'hide-content': showLoadingFlg}">
+      <ng-container *ngIf="contractFileUrl">
+        <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mt-1">
+          <a class="blue-document-link" target="_blank" href="{{contractFileUrl}}" download="{{contractFileUrl}}">
+            {{'common.labels.download'| translate}}</a>
+        </div>
+        <br />
+        <div class="form-group col-md-12 no-mg">
+          <div class="col-md-12 checkbox c-checkbox">
+            <label>
+              <input id="contractTermsAndConditionsCheck" (change)="termsAndConditionsAccepted($event.target.checked)"
+                type="checkbox" value="" />
+              <span class="fa fa-check"></span>
+              {{'common.labels.contractAgreement' | translate}}
+            </label>
+          </div>
+          <div class="text-danger col-md-12 mb-3" *ngIf="showAcceptanceErrorMsg && submittedFlag">
+            {{'common.errorMessages.acceptTermsAndConditions'| translate}}</div>
+        </div>
+        <div class="col-md-12 mt-3">
+          <button (click)="submit()" [disabled]="this._rolePermission.disableButtonFlag"
+            class="btn btn-success save-btn"><i *ngIf="this._rolePermission.spinnerFlag"
+              class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.submit'| translate}}</button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<!-- <div class="col-md-12 mt-3 no-mg">
+
+  <button class="btn btn-success" [disabled]="disableButtonFlag" (click)="nextStep()"><i *ngIf="spinnerFlag3"
+      class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.continue'| translate}}</button>
+
+</div> -->

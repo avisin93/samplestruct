@@ -1,0 +1,12 @@
+.project-currency-conversion-page .table-bordered th,.project-currency-conversion-page .table-bordered td,
+.project-currency-conversion-page .table th, .project-currency-conversion-page .table td
+{
+border: none;
+}
+.project-currency-conversion-page .table td:nth-child(3),.project-currency-conversion-page .table td:nth-child(4){
+max-width: 50px;
+}
+
+// .project-currency-conversion-page .fa-plus {
+//     color: #6e9eec !important;
+//   }

@@ -1,0 +1,76 @@
+.steponeactivation label.selected-lang {
+  background-color: #3a3f51 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.steponeactivation .switch-field input {
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  width: 1px;
+  border: 0;
+  overflow: hidden;
+}
+
+// import variables scss
+@import "../../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../../assets/styles/mixins.style.scss";
+
+
+#step-one-activation {
+  @include switch-field();
+  @include activation-heading();
+  @include json-block();
+  @include upload-pictur-btn(150px);
+}
+
+@media (min-width:992px) {
+  .date-action-btns {
+    position: relative;
+    top: 35px;
+  }
+}
+
+;
+
+// .steponeactivation .switch-field label {
+//     display: inline-block;
+//     width: 78px;
+//     background-color: #e4e4e4;
+//     color: #3a3f51;
+//     font-size: 14px;
+//     font-weight: 400;
+//     text-align: center;
+//     text-shadow: none;
+//     padding: 6px 10px;
+//     margin-left: -3px;
+//     float: none;
+// }
+// .steponeactivation .switch-field {
+//   margin-right: 25px;
+//   text-align: right;
+//   float: right;
+// }
+
+// .steponeactivation .setPassowrd {
+//     padding-left: 15px;
+// }
+
+#step-one-activation {
+
+  .pswd_info {
+    position: absolute;
+    bottom: -50px;
+    right: -313px;
+    bottom: -115px\9;
+    width: 318px;
+    padding: 15px;
+    background: #fefefe;
+    font-size: .875em;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #ccc;
+    border: 1px solid #ddd;
+  }
+}

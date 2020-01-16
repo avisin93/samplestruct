@@ -1,0 +1,63 @@
+.ng-dropdown-panel-items {
+
+    background-color: white;
+    border: solid 1px #dde6e9;
+}
+.ng-select{
+    border: solid 1px #dde6e9;
+    padding:5px;
+}
+.or{
+    margin-top: 35px;
+}
+
+.secondPanel{
+    margin-top: -15px;
+    padding-bottom: 1px;
+}
+.subtotal{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sublocation{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+// .sublocation-body{
+//     border: 1px solid #ccc;
+//     margin: 5px;
+//     margin-top: 25px !important;
+// }
+.sublocation-body{
+    margin-left: 0px;
+}
+
+.subpo-border{
+  border: 1px solid #ccc;
+  margin: 5px;
+  padding:5px;
+}
+.action-icons{
+  float: right !important;
+  margin-top:22px;
+}
+.addsub{
+  margin-bottom: 10px;
+}
+
+i.fa.fa-pencil.pull-right{
+  cursor: pointer;
+}
+
+i.fa.icon-close.pull-right{
+  cursor: pointer;
+}
+
+.pd-left{
+  padding-left: 18px;
+}
+.max-width{
+  max-width: 100%
+}

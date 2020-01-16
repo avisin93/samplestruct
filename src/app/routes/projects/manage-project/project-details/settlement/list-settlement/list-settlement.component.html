@@ -1,0 +1,331 @@
+<div class="list-settlement">
+  <div class="container-fluid">
+    <div class="row no-mg">
+      <div class="col-md-12 no-mg">
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <div class="">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <form [formGroup]="settlementFilterForm" novalidate>
+                  <div class="row mb-3">
+                    <div class="col-md-12 no-mg search-field-box">
+                      <div class="row col-md-12 no-mg mb-3">
+
+                        <div class=" col-md-4">
+                          <input class="form-control" id="" type="text"
+                            placeholder="{{'payments.labels.po'| translate}}#" formControlName="poNumber"
+                            data-toggle="tooltip" data-placement="top" title="{{'payments.labels.po'| translate}}#"
+                            placeholder="{{'payments.labels.po'| translate}}#" />
+                        </div>
+                        <div class=" col-md-4">
+                          <ngx-select [allowClear]="true" [items]="SETTLEMENT_FOR_TYPE_CONST"
+                            (select)="setBudgetLines($event)" formControlName="type"
+                            placeholder=" {{'projects.labels.type'| translate}}" data-toggle="tooltip"
+                            data-placement="top" title="{{'common.labels.type'| translate}}">
+                          </ngx-select>
+                        </div>
+                        <div class=" col-md-4">
+                          <input class="form-control" type="text"
+                            placeholder="{{'common.labels.supplierName' | translate}}" data-toggle="tooltip"
+                            data-placement="top" title="{{'common.labels.supplierName' | translate}}"
+                            formControlName="supplierName" />
+
+                          <!-- <ngx-select (typed)="searchSupplierName.next($event)" data-placement="top" [allowClear]='true'
+                          title="{{'common.labels.supplierName' | translate}}" formControlName="supplierName"
+                          [items]="supplierDropDown" placeholder="{{'common.labels.supplierName' | translate}}">
+
+                          <ng-template ngx-select-option-not-found>
+                            <ng-container *ngIf="isLoadingSupplierName; else elseBlock">
+                              {{'biddings.labels.loading' | translate}}
+                              <span class="fl-right">
+                                <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                              </span>
+                            </ng-container>
+                            <ng-template #elseBlock>
+                              {{ 'common.labels.recordNotFound' | translate }}
+                            </ng-template>
+                          </ng-template>
+                        </ngx-select> -->
+                        </div>
+                      </div>
+                      <div class="row col-md-12 no-mg">
+                        <div class="col-md-4">
+                          <my-date-range-picker formControlName="dateRange" class="range-picker"
+                            [options]="myDateRangePickerOptions" name="mydaterange"
+                            placeholder="{{'common.labels.daterange'| translate}}" data-toggle="tooltip"
+                            data-placement="top" title="{{'common.labels.daterange'| translate}}">
+                          </my-date-range-picker>
+                        </div>
+                        <div class="col-md-3">
+                          <button mat-button class="btn search-btn btn-primary" [disabled]="showLoadingFlg"
+                            (click)="search()" type="submit">
+                            {{'common.labels.search'| translate}}</button>
+                          <button mat-button class="btn clear-btn btn-primary" type="button" [disabled]="showLoadingFlg"
+                            (click)="clear()"> {{'common.labels.clear'| translate}}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="">
+                  <div class="panel panel-primary">
+                    <div class="col-md-12 no-mg project-tabs">
+                      <ul class="nav nav-pills nav-justified">
+                        <li class="nav-item ptr" *ngFor="let obj of SETTLEMENT_STATUS_CONST;let index=index">
+                          <a class="nav-link nav-link_{{index}}" id="advances-tab"
+                            (click)="showSettlements($event, obj?.id)">{{'projects.labels.' + obj?.text | translate}}</a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="settelement-list-details">
+                      <ng-container *ngIf="(settlementList?.length == 0) && !showLoadingFlg">
+                        <div class="row mt-1">
+                          <div class="col-md-12 text-center">
+                            <p class="text-danger">{{'common.labels.recordNotFound' | translate}}</p>
+                          </div>
+                        </div>
+                      </ng-container>
+                      <div *ngIf="showLoadingFlg">
+                        <app-loader class="col-md-12" [loading]="showLoadingFlg"></app-loader>
+                      </div>
+                      <ng-container *ngFor="let settlement of settlementList">
+                        <div class="items">
+                          <div class="row">
+                            <div class="col-md-10">
+                              <div class="row mb-2">
+                                <div class="col-md-4">
+                                  <span>
+                                    <strong>{{'projects.labels.poWithoutDot'| translate}}#:</strong>
+                                  </span>
+                                  <span class="po-number">
+                                    {{ settlement?.purchaseOrderNumber }}
+                                  </span>
+                                </div>
+                                <div class="col-md-5">
+                                  <span>
+                                    <strong>{{'common.labels.type'| translate}}:</strong>
+                                  </span>
+                                  <span>{{ 'common.labels.' + typeKeyArr[settlement?.settlementFor] | translate }}</span>
+                                </div>
+                                <div class="col-md-3">
+                                  <div class="settlement-status ptr"
+                                    [ngClass]="((settlement?.status==SETTLEMENT_APPROVAL_CONST.pending || settlement?.status==SETTLEMENT_APPROVAL_CONST.draft) ? 'pending':'') || ((settlement.status==SETTLEMENT_APPROVAL_CONST.settled) ? 'settled':'') || ((settlement?.status==SETTLEMENT_APPROVAL_CONST.rejected) ? 'rejected':'')|| ((settlement?.status==SETTLEMENT_APPROVAL_CONST.cancelled) ? 'cancelled':'')"
+                                    (click)="openApprovalModal(settlement)">
+                                    <span class="">
+                                      <i class="fa fa-eye"></i>
+                                      {{ settlement?.status ? ((('projects.labels.' + statusKeyArr[settlement?.status]) | translate) | uppercase) :'projects.labels.draft'|
+                                      translate}}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row mb-3">
+                                <div class="col-md-4">
+                                  <span>
+                                    <strong>{{'projects.labels.createdOn'| translate}}:</strong>
+                                  </span>
+                                  <span>{{ settlement?.createdDate | dateFormat}}</span>
+                                </div>
+                                <div class="col-md-5">
+                                  <span>
+                                    <strong>{{'projects.labels.supplier'| translate}}:</strong>
+                                  </span>
+                                  <span>{{ settlement?.supplierName }} ({{typeKeyArr[settlement?.supplierType]}})</span>
+                                </div>
+                                <div class="col-md-3">
+                                  <span>
+                                    <strong>{{'projects.labels.paidVia'| translate}}:</strong>
+                                  </span>
+                                  <ng-container *ngIf="settlement?.thirdPartyVendorName">
+                                    <span>{{ settlement?.thirdPartyVendorName }}</span>
+                                  </ng-container>
+                                  <ng-container *ngIf="!settlement?.thirdPartyVendorName">
+                                    <span>{{'common.labels.na'| translate}}</span>
+                                  </ng-container>
+                                </div>
+
+                              </div>
+                              <div class="row mb-3">
+                                <div class="col-md-4">
+                                  <span>
+                                    <strong>{{'projects.labels.settlementDate'| translate}}:</strong>
+                                  </span>
+                                  <span>{{ (settlement?.settlementDate | dateFormat) }}</span>
+                                </div>
+
+                                <div class="col-md-5">
+                                  <span>
+                                    <strong>{{'projects.labels.budgetLine'| translate}}:</strong>
+                                  </span>
+                                  <span>{{ settlement?.budgetLines }}</span>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="action-items center col-md-12 display-inline-block">
+                                  <div class="display-inline-flex mb-10">
+                                    <span (click)="viewPO(settlement?.purchaseOrderId)" class="">
+                                      <i class="fa fa-eye view-icon"></i>{{'projects.labels.viewPo'| translate}}
+                                    </span>
+                                  </div>
+                                  <div class="display-inline-flex mb-10" *ngIf="settlement?.adjustmentPOFile">
+                                    <span (click)="viewPO(settlement?.adjustmentPOId)" class="">
+                                      <i
+                                        class="fa fa-eye view-icon"></i>{{'projects.labels.viewAdjustmentPO'| translate}}
+                                    </span>
+                                  </div>
+                                  <!-- <div class="display-inline-flex mb-10" *ngIf="settlement?.adjustmentPOFile">
+                                    <span class="">
+                                      <a style="color: #656565;text-decoration:none;" href="{{settlement?.adjustmentPOFile}}" download="{{settlement?.adjustmentPOFile}}">
+                                        <i class="fa fa-download download-icon"></i>{{'projects.labels.adjustmentPO'| translate}}
+                                      </a>
+                                    </span>
+                                  </div> -->
+
+                                  <div class="display-inline-flex mb-10">
+                                    <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                                      [actionType]="ACTION_TYPES.EDIT">
+                                      <span
+                                        [ngClass]="(settlement?.canEdit && !settlement?.ownSettlement) ? '' : 'ptr-disabled'"
+                                        (click)="editSettlement(settlement)">
+                                        <i
+                                          class="fa fa-edit edit-icon"></i>{{'projects.labels.editSettlement'| translate}}
+                                      </span>
+                                    </action-permission>
+                                  </div>
+                                  <div class="display-inline-flex mb-10">
+                                    <ui-control-permission [fieldName]="'cancelSettlement'"
+                                      [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                      [uiPermissionObj]="uiAccessPermissionsObj">
+                                      <span
+                                        [ngClass]="(settlement?.canCancel && !settlement?.ownSettlement) ? '' : 'ptr-disabled'"
+                                        (click)="deleteSettlement(settlement?.id,settlement?.canCancel,settlement?.status)">
+                                        <i
+                                          class="fa fa-times-circle cancel-icon"></i>{{'projects.labels.cancelSettlement'| translate}}
+                                      </span>
+                                    </ui-control-permission>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="amount-details center">
+                                <div class="details">
+                                  <div class="currency">
+                                    {{ this.currentCurrencyObj?.code ? this.currentCurrencyObj?.code :(settlement?.currencyCode) }}
+                                  </div>
+                                  <div class="amount">
+                                    <strong>{{getConvertedValue(settlement?.defaultCurrencyAmount,settlement?.totalAmount) | twoDecimal | absolute | numberFormat}}</strong>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="approval-details"
+                                *ngIf="settlement?.status != SETTLEMENT_APPROVAL_CONST.draft">
+                                <div *ngIf="settlement?.approverStatus == SETTLEMENT_APPROVAL_CONST.pending">
+                                  <span>
+                                    <strong>{{'projects.labels.nextApprover'| translate}}</strong>
+                                  </span>
+                                </div>
+                                <div *ngIf="settlement?.approverStatus == SETTLEMENT_APPROVAL_CONST.approved">
+                                  <span>
+                                    <strong>{{'projects.labels.finalApprovedBy'| translate}}</strong>
+                                  </span>
+                                </div>
+                                <div *ngIf="settlement?.approverStatus == SETTLEMENT_APPROVAL_CONST.rejected">
+                                  <span>
+                                    <strong>{{'projects.labels.rejectedBy'| translate}}</strong>
+                                  </span>
+                                </div>
+                                <div *ngIf="settlement?.approverStatus == SETTLEMENT_APPROVAL_CONST.cancelled">
+                                  <span>
+                                    <strong>{{'projects.labels.cancelledBy'| translate}}</strong>
+                                  </span>
+                                </div>
+                                <div> {{ settlement?.approverName }}</div>
+                                <div>
+                                  <small>({{ settlement?.approverRole }})</small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="custom-pagination" *ngIf="totalItems>itemsPerPage">
+                    <pagination class="pagination-sm" [(ngModel)]="currentPage" [totalItems]="totalItems"
+                      [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [boundaryLinks]="true" [rotate]="false"
+                      (pageChanged)="pageChanged($event)" (numPages)="numPages = $event">
+                    </pagination>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" bsModal #approvalStatusModal="bs-modal">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <p class="modal-title">
+            <strong>{{'projects.labels.approvalDetails'| translate}}</strong>
+          </p>
+          <button type="button" class="close ptr" data-dismiss="modal"
+            (click)="approvalStatusModal.hide()">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="approval-status-bar">
+            <div class="progress" style="width:450px;">
+              <div class="progress-bar" style="width:450px;background:#bbbbbb;">
+                <div class="progress-value approved" tooltip="{{('common.labels.generated'| translate) | titlecase}}"
+                  placement="right" [ngStyle]="{'left' : 'calc(0% - 15px)'}">
+                  <span>
+                    <i class="fa fa-check"></i>
+                  </span>
+                </div>
+                <div class="approver-name" [ngStyle]="{'left' : 'calc(0% - 5px)'}">
+                  <div>{{('common.labels.generated'| translate) | titlecase}}</div>
+                </div>
+                <ng-container *ngFor="let approval of approvalHierarchyArr; let srNo = index; let first = first">
+                  <div class="progress-value {{statusKeyArr[approval?.status] | lowercase}}"
+                    tooltip="{{('projects.labels.' + statusKeyArr[approval?.status] | translate) | titlecase}}"
+                    placement="right" [ngStyle]="{'left' : 'calc(' + approval?.percent + '% - 15px)'}">
+                    <span *ngIf="approval?.status == SETTLEMENT_APPROVAL_CONST.approved">
+                      <i class="fa fa-check"></i>
+                    </span>
+                    <span *ngIf="approval?.status == SETTLEMENT_APPROVAL_CONST.autoapproved">
+                      <i class="fa fa-check"></i>
+                    </span>
+                    <span *ngIf="approval?.status == SETTLEMENT_APPROVAL_CONST.pending">
+                      <i class="fa fa-question"></i>
+                    </span>
+                    <span *ngIf="approval?.status == SETTLEMENT_APPROVAL_CONST.cancelled">
+                      <i class="fa fa-ban"></i>
+                    </span>
+                    <span *ngIf="approval?.status == SETTLEMENT_APPROVAL_CONST.rejected">
+                      <i class="fa fa-remove"></i>
+                    </span>
+                  </div>
+                  <div class="approver-name" [ngStyle]="{'left' : 'calc(' + approval?.percent + '% - 5px)'}">
+                    <div>{{ approval?.approverName }}</div>
+                    <div *ngIf="approval?.approverRole">
+                      <small>({{ approval?.approverRole }})</small>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

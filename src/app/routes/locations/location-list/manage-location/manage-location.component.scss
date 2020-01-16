@@ -1,0 +1,257 @@
+// import variables scss
+@import "../../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../../assets/styles/mixins.style.scss";
+
+#manage-location-page {
+  .radio-location {
+    margin-right: 3px;
+  }
+
+  .img-uploading-status-panel {
+    border: 1px solid lightgray;
+    border-radius: 0;
+  }
+  .hide {
+    display: none;
+  }
+
+  #map {
+    height: 500px;
+  }
+
+  .tag-input-class {
+    max-width: 250px;
+    margin-left: 2px;
+  }
+
+  .custom-img {
+    max-width: 100%;
+    max-height: 250px;
+    width: auto;
+    height: auto;
+  }
+  .location-grid-image {
+    border: 1px solid rgba(0, 0, 0, .12);
+    max-width: 32%;
+    margin: 3px;
+  }
+
+  .corners2 {
+    border-radius: 4px 5px 4px 5px;
+  }
+
+  .attachRemoveBtn em {
+    margin: 0 auto;
+    color: white !important;
+    background-color: red;
+    padding: 10px;
+    border-radius: 4px;
+  }
+
+  .list-image-style {
+    word-break: break-all;
+  }
+
+  .search-icon {
+    height: 0px;
+    position: absolute;
+    text-align: center;
+    z-index: 300;
+    width: 100%;
+    margin-top: 10%;
+    cursor: pointer;
+  }
+
+  tag-input tag {
+    border-radius: 0 !important;
+  }
+
+  .search-icon a:hover {
+    color: #0a4681;
+    text-decoration: none !important;
+  }
+
+  .primary-phone-radio {
+    float: left;
+    margin-right: 5px;
+  }
+
+  .selectImage {
+    display: inline-block;
+  }
+
+  @include textElipses();
+
+  .pr-10 {
+    padding-right: 10px;
+  }
+
+  .panel-primary .panel-heading {
+    padding: 15px;
+  }
+
+  .center-aligned-div {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+
+  .pl-10 {
+    padding-left: 10px;
+  }
+
+  .mt-25 {
+    margin-top: 25px;
+  }
+
+  .mt-15 {
+    margin-top: 15px;
+  }
+
+  .mt-10 {
+    margin-top: 10px;
+  }
+
+  .pt-30 {
+    padding-top: 30px;
+  }
+
+  .max-h-500 {
+    max-height: 500px;
+  }
+
+  .modal-custom-lg {
+    max-width: 80%;
+  }
+  .btn-delete-selection {
+    margin-left: 15px;
+    margin-bottom: 8px;
+  }
+}
+
+.gallery-modal-dialog {
+  max-width: 100% !important;
+}
+
+.gallery-modal {
+  background-color: #000;
+}
+
+.gallery-modal-content {
+  background-color: transparent;
+}
+
+@media (max-width:575px) {
+  #manage-location-page {
+    .mb-10m {
+      margin-bottom: 10px;
+    }
+
+    .location-grid-image {
+      max-width: 100%;
+    }
+
+    .search-icon {
+      margin-top: 33%;
+    }
+  }
+}
+
+;
+
+
+
+// OLD SCSS
+// .radio-location{
+//     margin-right: 3px;
+// }
+
+// .hide{
+//     display: none;
+// }
+// #map {
+//     height: 500px;
+//   }
+// .tag-input-class{
+//   max-width: 250px;
+//   margin-left: 2px;
+// }
+// .location-grid-image {
+//     margin-top: 15px;
+//     border: 1px solid rgba(0,0,0,.12);
+//     // margin-right: 25px;
+//     padding-left: 0!important;
+//     padding-right: 0!important;
+//     max-width: 30% !important;
+//     margin-left: 20px;
+// }
+// .corners2 {
+//     border-radius: 4px 5px 4px 5px;
+// }
+// .fa-trash{
+//   cursor:pointer;
+// }
+// .attachRemoveBtn em {
+//   margin: 0 auto;
+//   color: white !important;
+//   background-color: red;
+//   padding: 10px;
+//   border-radius: 4px;
+// }
+
+// .textElipses {
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+// }
+
+// .attachment-section{
+//   width:100%;
+// }
+// .list-image-style{
+//   text-align: center;
+//   word-break: break-all;
+// }
+// .add-remove-person-button{
+//   color: rgb(133, 170, 240);
+// }
+// .search-icon{
+//   height: 0px;
+//   color: white;
+//   position: absolute;
+//   text-align: center;
+//   z-index: 300;
+//   width: 100%;
+//   margin-left: 15px;
+//   margin-top: 40px;
+//   cursor:pointer;
+// }
+// tag-input tag {
+//   border-radius:0 !important;
+// }
+// .search-icon a:hover {
+//   color: #0a4681;
+//   text-decoration: none!important;
+// }
+
+
+// .modal-content{
+//  background-color: transparent !important;
+//  border: none;
+// }
+// #manage-location-page .phone-no {
+//   margin-bottom: 5px;
+// }
+// #manage-location-page .primary-phone-radio {
+//   float: left;
+//   margin-right: 5px;
+// }
+// #manage-location-page .primary-phone-msg {
+//   float: left;
+//   width: calc(100% - 20px);
+// }
+
+// #manage-location-page .selectImage {
+//   display: inline-block;
+// }

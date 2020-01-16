@@ -1,0 +1,368 @@
+<div class="container-fluid project-page">
+  <form class="form-horizontal" [formGroup]="projectDetailsForm" novalidate>
+    <div class="col-md-12 no-mg">
+      <div class="row no-mg">
+
+        <div class="col-md-12 no-mg">
+          <div class="panel panel-primary">
+            <div class="panel-body">
+              <div class="row ml-2 mr-2">
+                <div class="col-md-3 text-center">
+                  <div class="row no-mg">
+                    <div class="col-md-12">
+                      <div class="project-image-container">
+                        <!-- <div class="spinner-div">
+                            <i class="fa fa-spinner fa-spin margin-right-5 spinner" *ngIf="projectDetailsForm.value.loader1"></i>
+
+                        </div> -->
+                        <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                        [actionType]="ACTION_TYPES.EDIT">
+                        <div class="upload-logo project-image-hover">
+                          <div class="fileDiv">
+                            <label for="file2" class="file-upload">
+                              <button class="btn btn-success">
+                                {{'common.labels.uploadImage'| translate}}</button>
+                              <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}"
+                                (change)="fileChangeListener($event,'logo','logo1')" />
+                            </label>
+                          </div>
+                        </div>
+                        </action-permission>
+                        <img class="project-logo" *ngIf="!projectDetailsForm?.value?.logo1Url"
+                          src="assets/img/placeholder.png">
+                        <img class="project-logo" *ngIf="projectDetailsForm?.value?.logo1Url"
+                          src="{{projectDetailsForm?.value?.logo1Url}}" alt="">
+
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="row" *ngIf="logo1Control">
+                    <div class="col-md-12 text-center">
+                      <div class="d-inline-flex mt-10">
+                        <input name="foreignProducer" class="form-control" formControlName="logo1Name"
+                          placeholder="{{'common.labels.enterName' |translate}}">
+                        <i class="fa fa-pencil c-pointer ml-10 mt-10 pencil-icon"
+                          (click)="logo1Control=!logo1Control"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="!logo1Control">
+                    <div class="col-md-12 text-center mt-10">
+                      <label data-toggle="tooltip" data-placement="top"
+                        title="{{(projectType && projectType== PROJECT_TYPES.entertainment) ? ('projects.labels.studio' | translate):('projects.labels.brand' | translate)}}">{{projectDetailsForm?.value?.logo1Name ? projectDetailsForm?.value?.logo1Name: ('common.labels.enterName'
+                        |translate)}}&nbsp;</label>
+                      <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                        [actionType]="ACTION_TYPES.EDIT">
+                        <i class="fa fa-pencil c-pointer pencil-icon" (click)="logo1Control=!logo1Control"></i>
+                      </action-permission>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 text-center">
+                  <div class="row  no-mg">
+                    <div class="col-md-12">
+                      <div class="project-image-container">
+                        <!-- <i class="fa fa-spinner fa-spin margin-right-5"></i> -->
+                        <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                          [actionType]="ACTION_TYPES.EDIT">
+                        <div class="upload-logo project-image-hover">
+                          <div class="fileDiv">
+                            <label for="file2" class="file-upload">
+                              <button class="btn btn-success">{{'common.labels.uploadImage'| translate}}</button>
+                              <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}"
+                                (change)="fileChangeListener($event,'logo','logo2')" />
+                            </label>
+                          </div>
+                        </div>
+                        </action-permission>
+                        <img class="project-logo" *ngIf="!projectDetailsForm?.value?.logo2Url "
+                          src="assets/img/placeholder.png">
+                        <img class="project-logo" *ngIf="projectDetailsForm?.value?.logo2Url"
+                          src="{{projectDetailsForm?.value?.logo2Url}}" alt="">
+
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="row" *ngIf="logo2Control">
+                    <div class="col-md-12 text-center">
+                      <div class="d-inline-flex mt-10">
+                        <input name="foreignProducer" class="form-control" formControlName="logo2Name"
+                          placeholder="{{'common.labels.enterName' |translate}}">
+                        <i class="fa fa-pencil c-pointer ml-10 mt-10 pencil-icon"
+                          (click)="logo2Control=!logo2Control"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="!logo2Control">
+                    <div class="col-md-12 text-center mt-10">
+                      <label data-toggle="tooltip" data-placement="top"
+                        title="{{(projectType && projectType== PROJECT_TYPES.entertainment) ? ('projects.labels.productionCompany' | translate):('projects.labels.agency' | translate)}}">{{projectDetailsForm?.value?.logo2Name ? projectDetailsForm?.value?.logo2Name: ('common.labels.enterName'
+                        |translate)}}&nbsp;</label>
+                      <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                        [actionType]="ACTION_TYPES.EDIT">
+                        <i class="fa fa-pencil c-pointer pencil-icon" (click)="logo2Control=!logo2Control"></i>
+                      </action-permission>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 text-center">
+                  <div class="row  no-mg">
+                    <div class="col-md-12">
+                      <div class="project-image-container">
+                        <!-- <i class="fa fa-spinner fa-spin margin-right-5" *ngIf="projectDetailsForm.value.loader3"></i> -->
+                        <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                          [actionType]="ACTION_TYPES.EDIT">
+                          <div class="upload-logo project-image-hover">
+                            <div class="fileDiv">
+                              <label for="file2" class="file-upload">
+                                <button class="btn btn-success">{{'common.labels.uploadImage'| translate}}</button>
+                                <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}"
+                                  (change)="fileChangeListener($event,'logo','logo3')" />
+                              </label>
+                            </div>
+                          </div>
+                        </action-permission>
+                        <img class="project-logo" *ngIf="!projectDetailsForm?.value?.logo3Url "
+                          src="assets/img/placeholder.png">
+                        <img class="project-logo" *ngIf="projectDetailsForm?.value?.logo3Url"
+                          src="{{projectDetailsForm?.value?.logo3Url}}" alt="">
+
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="row" *ngIf="logo3Control">
+                    <div class="col-md-12 text-center">
+                      <div class="d-inline-flex mt-10">
+                        <input name="foreignProducer" class="form-control" formControlName="logo3Name"
+                          placeholder="{{'common.labels.enterName' |translate}}">
+                        <i class="fa fa-pencil c-pointer ml-10 mt-10 pencil-icon"
+                          (click)="logo3Control=!logo3Control"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="!logo3Control">
+                    <div class="col-md-12 text-center mt-10">
+                      <label data-toggle="tooltip" data-placement="top"
+                        title="{{'projects.labels.internationalProduction' | translate}}">{{projectDetailsForm?.value?.logo3Name ? projectDetailsForm?.value?.logo3Name: ('common.labels.enterName'
+                        |translate)}}&nbsp;</label>
+                      <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                        [actionType]="ACTION_TYPES.EDIT">
+                        <i class="fa fa-pencil c-pointer pencil-icon" (click)="logo3Control=!logo3Control"></i>
+                      </action-permission>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 text-center">
+                  <img
+                    src="{{projectDetails?.productionCompany?.image ? projectDetails?.productionCompany?.image:'assets/img/LiftLogoBlack.png'}} "
+                    alt="">
+                  <div class="mt-10"> <label>{{'pages.labels.theLift' | translate}} </label>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="row ml-2">
+                <div class="col-md-6 col-sm-6 col-xs-6">
+
+                  <div class="row">
+                    <div class="col-md-5 col-sm-5 col-xs-5 col-sm-5 col-xs-5">
+                      <label>{{'projects.labels.jobNo'| translate}}</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                      <label>{{projectDetails?.jobNo}}</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 col-sm-5 col-xs-5">
+                      <label>{{'projects.labels.director'| translate}}</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                      <div *ngIf="showDirectorControl" class="d-inline-flex mb-1">
+                        <input name="director" class="form-control" formControlName="director">
+                        <i class="fa fa-pencil c-pointer ml-10 mt-10 pencil-icon"
+                          (click)="showDirectorControl=!showDirectorControl"></i>
+                      </div>
+                      <div *ngIf="!showDirectorControl">
+                        <label>{{projectDetailsForm?.value?.director}}&nbsp;</label>
+                        <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                          [actionType]="ACTION_TYPES.EDIT">
+                          <i class="fa fa-pencil c-pointer pencil-icon"
+                            (click)="showDirectorControl=!showDirectorControl"></i>
+                        </action-permission>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 col-sm-5 col-xs-5">
+                      <label>{{'projects.labels.foreignProducer'| translate}}</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                      <div *ngIf="showProducerControl" class="d-inline-flex mb-1">
+                        <input name="foreignProducer" class="form-control" formControlName="foreignProducer">
+                        <i class="fa fa-pencil c-pointer  ml-10 mt-10 pencil-icon"
+                          (click)="showProducerControl=!showProducerControl"></i>
+                      </div>
+                      <div *ngIf="!showProducerControl">
+                        <label>{{projectDetailsForm?.value?.foreignProducer}}&nbsp;</label>
+                        <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                          [actionType]="ACTION_TYPES.EDIT">
+                          <i class="fa fa-pencil c-pointer pencil-icon"
+                            (click)="showProducerControl=!showProducerControl"></i>
+                        </action-permission>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 col-sm-5 col-xs-5">
+                      <label>{{'projects.labels.section'| translate}}</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                      <label>{{projectDetails?.section}}</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 col-sm-5 col-xs-5">
+                      <label>{{'projects.labels.division'| translate}}</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                      <label>{{ projectTypesKeyArr[projectDetails?.division] }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                      <p>
+                        <strong> {{'projects.labels.otherDocument'| translate}}</strong>
+                      </p>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 pull-right" *ngIf="!showManageDocumentPanel">
+                      <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                        [actionType]="ACTION_TYPES.EDIT">
+                        <button class="btn btn-default default-btn mng-doc"
+                          (click)="showManageDocumentPanel=!showManageDocumentPanel">
+                          <i class="fa fa-cog"></i> {{'projects.labels.manageDocument'| translate}}
+                        </button>
+                      </action-permission>
+                    </div>
+                  </div>
+                  <div *ngIf="!showManageDocumentPanel">
+                    <div class="row" *ngFor="let projectDocument of projectDetailsForm.value.projectDocuments">
+                      <div class="col-md-4 col-sm-4 col-xs-4 ">
+                        <label>{{projectDocument?.name}}</label>
+                      </div>
+                      <div class="col-md-2 col-sm-2 col-xs-2">
+                        <a href="{{projectDocument?.url}}" target="_blank" [download]="projectDocument?.url"
+                          *ngIf="projectDocument?.url">
+                          <i class="fa fa-download download-icon"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="showManageDocumentPanel" class="mt-15">
+                    <div class="row mr-5">
+                      <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="panel panel-primary outer-panel">
+                          <div class="panel-body">
+                            <div class="row no-mg">
+                              <div class="col-md-12 text-right">
+                                <button (click)="addDocument()"
+                                  class="btn btn-danger ml-1 add-btn">{{'common.labels.add'| translate}}</button>
+                              </div>
+                            </div>
+                            <br />
+                            <div class="row no-mg">
+                              <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="panel panel-primary inner-panel">
+                                  <div class="panel-body">
+                                    <div class="col-md-12" formArrayName="projectDocuments">
+                                      <div class="row no-mg"
+                                        *ngFor="let projectDocument of projectDetailsForm.controls.projectDocuments['controls']; let index=index;let lst=last;">
+                                        <div class="col-md-12 no-mg" [formGroupName]="index">
+                                          <div class="row no-mg">
+                                            <div class="col-md-6 col-sm-6 col-xs-6 no-mg">
+                                              <input class="form-control" formControlName="name"
+                                                (keyup)="documentNameChanged(projectDocument)"
+                                                placeholder="{{'common.labels.enterDocumentName' | translate}}"
+                                                data-toggle="tooltip" data-placement="top"
+                                                title="{{'common.labels.enterDocumentName' | translate}}">
+                                            </div>
+                                            <div class="col-md-2 col-sm-4 col-xs-4">
+                                              <i class="fa fa-spinner fa-spin margin-right-5 btn btn-default hide-border no-mg"
+                                                *ngIf="projectDocument.value.showLoader"></i>
+                                              <!-- <img class="btn btn-default hide-border no-mg" *ngIf="projectDocument.value.showLoader" src="../../../../assets/img/ajax-loader.gif" /> -->
+                                              <div
+                                                *ngIf="projectDocument.value.fileName && !projectDocument.value.showLoader"
+                                                class="textElipses c-pointer  mt-10"
+                                                title="{{projectDocument.value.fileName}}" data-toggle="tooltip"
+                                                data-placement="top">{{projectDocument.value.fileName}}</div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-4 col-xs-4 no-mg">
+                                              <label for="file2" class="file-upload">
+                                                <button
+                                                  class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                                                <input id="file2" type="file"
+                                                  title="{{'common.labels.noFileChosen' | translate}}"
+                                                  (change)="fileChangeEvent($event,'document',index)" />
+                                              </label>
+                                            </div>
+                                            <div class="col-md-1 col-sm-2 col-xs-2 mt-5 no-mg">
+                                              <a class="ml-2 click-cursor" (click)="removeDocument(index)">
+                                                <i class="fa fa-minus"></i>
+                                              </a>
+                                            </div>
+                                          </div>
+                                          <div class="row no-mg">
+                                            <div class="text-danger col-md-12 no-mg mb-3"
+                                              *ngIf="projectDocument.controls['name']?.errors?.checkRequired && (projectDocument.controls['name'].touched  || submmitedOtherDocFlag)">
+                                              {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+                                            <div class="text-danger col-md-12 no-mg mb-3"
+                                              *ngIf="projectDocument.controls['fileId']?.errors?.checkRequired && (projectDocument.controls['fileId'].touched  || submmitedOtherDocFlag)">
+                                              {{'actors.freelancers.errorMessages.documentRequired'| translate}}</div>
+
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                              <button (click)="updateDocumentsData()"
+                                [disabled]="disableButtonFlag || isDocSaveClicked || disableButton"
+                                class="btn btn-success save-btn">
+                                <i class="fa fa-spinner fa-spin margin-right-5"
+                                  *ngIf="spinnerFlag"></i>{{'common.labels.save'| translate}}</button>
+                              <button (click)="discardAndToggleDocumentsData()" [disabled]="disableButtonFlag"
+                                class="btn btn-danger ml-1 cancel-btn">{{'common.labels.cancel'| translate}}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-md-12 mt-3 no-mg">
+            <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID" [actionType]="ACTION_TYPES.EDIT">
+              <button (click)="updateProjectsData()" [disabled]="isClicked || disableButton"
+                class="btn btn-success save-btn"><i *ngIf="spinnerFlag"
+                  class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'| translate}}</button>
+            </action-permission>
+            <button (click)="navigateTo()"
+              class="btn btn-danger ml-1 cancel-btn">{{'common.labels.cancel'| translate}}</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,80 @@
+<div id="payment-listing" class="budget-report">
+  <div class="container-fluid">
+    <div class="row no-mg">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+        <div class="card card-default">
+          <div class="card-body">
+            <div class="textsize">
+              <div class="row">
+
+                <div class="col-12 col-sm-8">
+                  <div class="row m-0">
+                    <ng-container *ngIf="budgetAmountDetailsFlag">
+                      <p><strong>{{'budgetView.labels.estimate'| translate}}: </strong>${{newData?.estimate  | twoDecimal | numberFormat}}</p>&nbsp;&nbsp; |
+                        &nbsp;&nbsp;
+
+
+                        <p><strong>{{'budgetView.labels.working'| translate}}: </strong>${{newData?.working | twoDecimal | numberFormat}}
+                          <span *ngIf="newData && (newData?.estimate-newData?.working)!=0" [ngClass]="newData?.estimate-newData?.working > 0?'positive':'negative'" >({{newData?.estimate-newData?.working | twoDecimal | absolute | numberFormat}}) </span>
+                        </p>&nbsp;&nbsp; | &nbsp;&nbsp;
+
+                        <p><strong>{{'budgetView.labels.actual'| translate}}: </strong>${{newData?.actual | twoDecimal | numberFormat}}
+                          <span *ngIf="newData && (newData?.estimate-newData?.actual)!=0" [ngClass]="newData?.estimate-newData?.actual > 0?'positive':'negative'" class="rate">({{newData?.estimate-newData?.actual | twoDecimal | absolute | numberFormat}})</span>
+                        </p>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="project-tabs tab-container" id="manage-project-tabs">
+                <ul class="nav nav-pills nav-justified">
+      
+                      <li class="nav-item ptr">
+                        <a class="nav-link active" (click)='setBudgetType(BUDGET_TYPE.topsheet, $event)'>{{'budgetView.labels.topSheet'| translate}}
+                        </a>
+                      </li>
+                
+                      <li class="nav-item ptr">
+                        <a class="nav-link" (click)='setBudgetType(BUDGET_TYPE.page1A, $event)'>{{'budgetView.labels.page1A'| translate}}</a>
+                      </li>
+
+                      <li class="nav-item ptr">
+                        <a class="nav-link" (click)='setBudgetType(BUDGET_TYPE.page1B, $event)'>{{'budgetView.labels.page1B'| translate}}</a>
+                      </li>
+
+
+                      <li class="nav-item ptr">
+                          <a class="nav-link" (click)='setBudgetType(BUDGET_TYPE.page2, $event)'>{{'budgetView.labels.page2'| translate}}
+                          </a>
+                        </li>
+                  
+                        <li class="nav-item ptr">
+                          <a class="nav-link" (click)='setBudgetType(BUDGET_TYPE.page3, $event)'>{{'budgetView.labels.page3'| translate}}</a>
+                        </li>
+  
+                        <li class="nav-item ptr">
+                          <a class="nav-link" (click)='setBudgetType(BUDGET_TYPE.page4, $event)'>{{'budgetView.labels.page4'| translate}}</a>
+                        </li>
+
+
+                      <li class="nav-item ptr">
+                          <a class="nav-link" (click)='setBudgetType(BUDGET_TYPE.page5, $event)'>{{'budgetView.labels.page5'| translate}}
+                          </a>
+                        </li>
+                  
+                        <li class="nav-item ptr">
+                          <a class="nav-link" (click)='setBudgetType(BUDGET_TYPE.page6, $event)'>{{'budgetView.labels.page6'| translate}}</a>
+                        </li>
+              
+                  </ul> <br>
+                  <app-budget-table (sendData)="dataReceived($event)" #budgetTable [tabType]="tabType"></app-budget-table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

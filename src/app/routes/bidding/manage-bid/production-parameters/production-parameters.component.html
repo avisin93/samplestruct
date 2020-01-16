@@ -1,0 +1,1575 @@
+<ng-container *ngIf="this.manageBidData.showLoaderFlag">
+  <app-loader class="col-md-12" [loading]="this.manageBidData.showLoaderFlag"></app-loader>
+</ng-container>
+<div id="production-parameter-info" *ngIf="!this.manageBidData.showLoaderFlag">
+  <div class="container-fluid">
+    <form class="form-horizontal" [formGroup]="productionParametersForm" (change)="updateFormStatus()" novalidate>
+      <div class="panel panel-primary">
+        <div class="panel-body panel-outer-body">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <ui-control-permission [fieldName]="'general'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="general">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.general'| translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+                        <div class="row">
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.locationShootDays'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'locationShootDays')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="locationShootDays"
+                                  placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'locationShootDays')?.errors?.checkRequired && getFormGroupControls('general', 'locationShootDays')?.errors?.checkDecimal && (getFormGroupControls('general', 'locationShootDays')?.touched) && getFormGroupControls('general', 'locationShootDays')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.stageShootDays'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'stageShootDays')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="stageShootDays"
+                                  placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'stageShootDays')?.errors?.checkRequired && getFormGroupControls('general', 'stageShootDays')?.errors?.checkDecimal && (getFormGroupControls('general', 'stageShootDays')?.touched) && getFormGroupControls('general', 'stageShootDays')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.overtime'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'overtime')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="overtime"
+                                  placeholder="{{'biddings.labels.numberOfHours'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'overtime')?.errors?.checkRequired && getFormGroupControls('general', 'overtime')?.errors?.checkDecimal && (getFormGroupControls('general', 'overtime')?.touched) && getFormGroupControls('general', 'overtime')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.prepDays'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'locationPrepDays')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="locationPrepDays"
+                                  placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'locationPrepDays')?.errors?.checkRequired && getFormGroupControls('general', 'locationPrepDays')?.errors?.checkDecimal && (getFormGroupControls('general', 'locationPrepDays')?.touched) && getFormGroupControls('general', 'locationPrepDays')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.stagePrepDays'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'stagePrepDays')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="stagePrepDays"
+                                  placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'stagePrepDays')?.errors?.checkRequired && getFormGroupControls('general', 'stagePrepDays')?.errors?.checkDecimal && (getFormGroupControls('general', 'stagePrepDays')?.touched) && getFormGroupControls('general', 'stagePrepDays')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.travelDays'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'travelDays')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="travelDays"
+                                  placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'travelDays')?.errors?.checkRequired && getFormGroupControls('general', 'travelDays')?.errors?.checkDecimal && (getFormGroupControls('general', 'travelDays')?.touched) && getFormGroupControls('general', 'travelDays')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.stagePreLight'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'stagePrelight')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="stagePrelight"
+                                  placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'stagePrelight')?.errors?.checkRequired && getFormGroupControls('general', 'stagePrelight')?.errors?.checkDecimal && (getFormGroupControls('general', 'stagePrelight')?.touched) && getFormGroupControls('general', 'stagePrelight')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.locationPreLight'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'locationPrelight')"
+                                  formControlName="locationPrelight" placeholder="{{'biddings.labels.locationPreLight'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.travel'| translate}} - {{'biddings.labels.mileage'| translate}}</label>
+                              <div class="row">
+                                <div class="col-12 col-sm-7 mb-m-10">
+                                  <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'travelMileage')"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="travelMileage"
+                                    placeholder="{{'biddings.labels.mileage'| translate}}">
+                                  <div class="text-danger" *ngIf="!getFormGroupControls('general', 'travelMileage')?.errors?.checkRequired && getFormGroupControls('general', 'travelMileage')?.errors?.checkDecimal && (getFormGroupControls('general', 'travelMileage')?.touched) && getFormGroupControls('general', 'travelMileage')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                                <div class="col-12 col-sm-5">
+                                  <div class="wardrobe-dropdown">
+                                    <!-- <ngx-select [items]="LOCALIZED_MILEAGE_CONST" name="mileageUnit" [defaultValue]="mileageUnit"
+                                      formControlName="travelMileageUnit" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                    <select class="form-control" name="currency" formControlName="travelMileageUnit">
+                                      <option value="" [disabled]="true">{{'biddings.labels.select' |
+                                        translate}}</option>
+                                      <ng-container *ngFor="let item of LOCALIZED_MILEAGE_CONST">
+                                        <option [value]="item.id">{{item?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+                        </div>
+                        <div class="row">
+
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.scoutingDays'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'scoutingDays')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="scoutingDays"
+                                  placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'scoutingDays')?.errors?.checkRequired && getFormGroupControls('general', 'scoutingDays')?.errors?.checkDecimal && (getFormGroupControls('general', 'scoutingDays')?.touched) && getFormGroupControls('general', 'scoutingDays')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.directorScoutDays'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'directorScoutDays')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="directorScoutDays"
+                                  placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'directorScoutDays')?.errors?.checkRequired && getFormGroupControls('general', 'directorScoutDays')?.errors?.checkDecimal && (getFormGroupControls('general', 'directorScoutDays')?.touched) && getFormGroupControls('general', 'directorScoutDays')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.technicalScoutDays'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'technicalScoutDays')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="technicalScoutDays"
+                                  placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('general', 'technicalScoutDays')?.errors?.checkRequired && getFormGroupControls('general', 'technicalScoutDays')?.errors?.checkDecimal && (getFormGroupControls('general', 'technicalScoutDays')?.touched) && getFormGroupControls('general', 'technicalScoutDays')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.foreignCrewMembers'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'foreignCrewMembers')"
+                                  oninput="this.value = this.value.replace(/[^0-9]/g,'');" formControlName="foreignCrewMembers"
+                                  placeholder="{{'biddings.labels.numberOfPeople'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.foreignAgency'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'foreignAgency')"
+                                  oninput="this.value = this.value.replace(/[^0-9]/g,'');" formControlName="foreignAgency"
+                                  placeholder="{{'biddings.labels.numberOfPeople'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.foreignClient'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['general'],'foreignClient')"
+                                  oninput="this.value = this.value.replace(/[^0-9]/g,'');" formControlName="foreignClient"
+                                  placeholder="{{'biddings.labels.numberOfPeople'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'locations'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="locations">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.locations'| translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+                        <div class="row">
+                          <div class="col-12">
+                            <h4 class="text-dark">
+                              <strong>{{'biddings.labels.interior'| translate}}</strong>
+                            </h4>
+                            <div class="panel panel-primary panel-inner-wrapper">
+                              <div class="panel-body panel-inner-body">
+                                <ng-container formArrayName="interior" *ngFor="let item of getFormGroupControls('locations', 'interior')?.controls; let index=index;let lst=last">
+                                  <ng-container [formGroupName]="index">
+                                    <div class="row">
+                                      <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                        <div class="form-group">
+                                          <label>
+                                            {{'biddings.labels.name' | translate}}
+                                          </label>
+                                          <div>
+                                            <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                              formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                            <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                                        <div class="form-group">
+                                          <label>{{'biddings.labels.days'| translate}}</label>
+                                          <div>
+                                            <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'days')"
+                                              oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="days"
+                                              placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                            <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['days']?.errors?.checkRequired && (item.controls['days']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                              translate}}</div>
+                                            <div class="text-danger" *ngIf="!item.controls['days']?.errors?.checkRequired && item.controls['days']?.errors?.checkDecimal && item.controls['days']?.touched && item.controls['days']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                                        <div class="form-group">
+                                          <label>
+                                            {{'biddings.labels.costPerDay'| translate}}
+                                          </label>
+                                          <div class="row">
+                                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                              <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'costPerDay')"
+                                                oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                formControlName="costPerDay" placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                              <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                translate}}</div>
+
+                                            </div>
+                                            <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                              <select class="form-control" name="currency" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                                formControlName="currencyId">
+                                                <ng-container *ngFor="let currency of currencies">
+                                                  <option [value]="currency.id">{{currency?.text}}</option>
+                                                </ng-container>
+                                              </select>
+
+                                              <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                                formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                              <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                translate}}</div>
+                                            </div>
+                                            <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                              <a class="click-cursor mr-2">
+                                                <i class="fa fa-minus" *ngIf="productionParametersForm.controls.locations.controls.interior.controls.length > 1 "
+                                                  (click)="removeFormGroup(productionParametersForm.controls.locations.controls.interior, index);"></i>
+                                              </a>
+                                              <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.locations.controls.interior.controls.length > 0">
+                                                <i (click)="addFormGroup(productionParametersForm.controls.locations.controls.interior, FORM_GROUP_CONST.commonWithDays,true,item)"
+                                                  class="fa fa-plus"></i>
+                                              </a>
+                                            </div>
+                                            <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <h4 class="text-dark">
+                              <strong>{{'biddings.labels.exterior'| translate}}</strong>
+                            </h4>
+                            <div class="panel panel-primary panel-inner-wrapper">
+                              <div class="panel-body panel-inner-body">
+                                <ng-container formArrayName="exterior" *ngFor="let item of getFormGroupControls('locations', 'exterior')?.controls; let index=index;let lst=last">
+                                  <ng-container [formGroupName]="index">
+                                    <div class="row">
+                                      <div class="col-12 col-sm-12">
+                                        <div class="row">
+                                          <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                            <div class="form-group">
+                                              <label>
+                                                {{'biddings.labels.name' | translate}}
+                                              </label>
+                                              <div>
+                                                <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                                  formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                                <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                  translate}}</div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                                            <div class="form-group">
+                                              <label>{{'biddings.labels.days'| translate}}</label>
+                                              <div>
+                                                <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'days') "
+                                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                  formControlName="days" placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                                <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['days']?.errors?.checkRequired && (item.controls['days']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                  translate}}</div>
+                                                <div class="text-danger" *ngIf="!item.controls['days']?.errors?.checkRequired && item.controls['days']?.errors?.checkDecimal && item.controls['days']?.touched && item.controls['days']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                                  translate}}</div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                                            <div class="form-group">
+                                              <label>
+                                                {{'biddings.labels.costPerDay'| translate}}
+                                              </label>
+                                              <div class="row">
+
+                                                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'costPerDay') "
+                                                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                    formControlName="costPerDay" placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                    translate}}</div>
+
+                                                </div>
+                                                <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                                  <select class="form-control" name="currency" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                                    formControlName="currencyId">
+                                                    <ng-container *ngFor="let currency of currencies">
+                                                      <option [value]="currency.id">{{currency?.text}}</option>
+                                                    </ng-container>
+                                                  </select>
+                                                  <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                                    formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                    translate}}</div>
+                                                </div>
+                                                <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                                  <a class="click-cursor mr-2">
+                                                    <i class="fa fa-minus" *ngIf="productionParametersForm.controls.locations.controls.exterior.controls.length > 1 "
+                                                      (click)="removeFormGroup(productionParametersForm.controls.locations.controls.exterior, index);"></i>
+                                                  </a>
+                                                  <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.locations.controls.exterior.controls.length > 0">
+                                                    <i (click)="addFormGroup(productionParametersForm.controls.locations.controls.exterior, FORM_GROUP_CONST.commonWithDays,true,item)"
+                                                      class="fa fa-plus"></i>
+                                                  </a>
+                                                </div>
+                                                <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                                  translate}}</div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <h4 class="text-dark">
+                              <strong>{{'biddings.labels.special'| translate}}</strong>
+                            </h4>
+                            <div class="panel panel-primary panel-inner-wrapper">
+                              <div class="panel-body panel-inner-body">
+                                <ng-container formArrayName="special" *ngFor="let item of getFormGroupControls('locations', 'special')?.controls; let index=index;let lst=last">
+                                  <ng-container [formGroupName]="index">
+                                    <div class="row">
+                                      <div class="col-12 col-sm-12">
+                                        <div class="row">
+                                          <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                            <div class="form-group">
+                                              <label>
+                                                {{'biddings.labels.name' | translate}}
+                                              </label>
+                                              <div>
+                                                <input class="form-control" formControlName="name" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                                  placeholder="{{'biddings.labels.name'| translate}}">
+                                                <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                  translate}}</div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                                            <div class="form-group">
+                                              <label>{{'biddings.labels.days'| translate}}</label>
+                                              <div>
+                                                <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'days')"
+                                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                  formControlName="days" placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                                <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['days']?.errors?.checkRequired && (item.controls['days']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                  translate}}</div>
+                                                <div class="text-danger" *ngIf="!item.controls['days']?.errors?.checkRequired && item.controls['days']?.errors?.checkDecimal && item.controls['days']?.touched && item.controls['days']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                                  translate}}</div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                                            <div class="form-group">
+                                              <label>
+                                                {{'biddings.labels.costPerDay'| translate}}
+                                              </label>
+                                              <div class="row">
+
+                                                <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'costPerDay') "
+                                                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                    formControlName="costPerDay" placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                    translate}}</div>
+
+                                                </div>
+                                                <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                                  <select class="form-control" name="currency" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                                    formControlName="currencyId">
+                                                    <ng-container *ngFor="let currency of currencies">
+                                                      <option [value]="currency.id">{{currency?.text}}</option>
+                                                    </ng-container>
+                                                  </select>
+                                                  <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                                    formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                    translate}}</div>
+                                                </div>
+                                                <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                                  <a class="click-cursor mr-2">
+                                                    <i class="fa fa-minus" *ngIf="productionParametersForm.controls.locations.controls.special.controls.length > 1 "
+                                                      (click)="removeFormGroup(productionParametersForm.controls.locations.controls.special, index);"></i>
+                                                  </a>
+                                                  <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.locations.controls.special.controls.length > 0">
+                                                    <i (click)="addFormGroup(productionParametersForm.controls.locations.controls.special, FORM_GROUP_CONST.commonWithDays,true,item)"
+                                                      class="fa fa-plus"></i>
+                                                  </a>
+                                                </div>
+                                                <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                                  translate}}</div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <h4 class="text-dark">
+                              <strong>{{'biddings.labels.cityPermits' | translate}}</strong>
+                            </h4>
+                            <div class="panel panel-primary panel-inner-wrapper">
+                              <div class="panel-body panel-inner-body">
+                                <ng-container formArrayName="cityPermits" *ngFor="let item of getFormGroupControls('locations', 'cityPermits')?.controls; let index=index;let lst=last">
+                                  <ng-container [formGroupName]="index">
+                                    <div class="row">
+                                      <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                          <label>
+                                            {{'biddings.labels.permitType' | translate}}
+                                          </label>
+                                          <select class="form-control" name="currency" (change)="cityPermitsControlsChanged(FORM_GROUP_CONST.cityPermits,item)"
+                                            formControlName="permitType">
+                                            <option value="" [disabled]="true">{{'biddings.labels.select' |
+                                              translate}}</option>
+                                            <ng-container *ngFor="let item of LOCALIZED_PERMIT_TYPES_CONST">
+                                              <option [value]="item.id">{{item?.text}}</option>
+                                            </ng-container>
+                                          </select>
+                                          <!-- <ngx-select [items]="LOCALIZED_PERMIT_TYPES_CONST" (change)="cityPermitsControlsChanged(FORM_GROUP_CONST.cityPermits,item)"
+                                            formControlName="permitType" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                          <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['permitType']?.errors?.checkRequired && (item.controls['permitType']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                            translate}}</div>
+                                        </div>
+                                      </div>
+                                      <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                          <label>
+                                            {{'biddings.labels.name' | translate}}
+                                          </label>
+                                          <div>
+                                            <input class="form-control" (change)="cityPermitsControlsChanged(FORM_GROUP_CONST.cityPermits,item)"
+                                              formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                            <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                          <label>
+                                            {{'biddings.labels.category' | translate}}
+                                          </label>
+                                          <div>
+                                            <input class="form-control" (change)="cityPermitsControlsChanged(FORM_GROUP_CONST.cityPermits,item)"
+                                              formControlName="category" placeholder="Category">
+                                            <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['category']?.errors?.checkRequired && (item.controls['category']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-12 col-sm-6 col-md-2 col-lg-2">
+                                        <div class="form-group">
+                                          <label>{{'biddings.labels.days'| translate}}</label>
+                                          <div>
+                                            <input class="form-control" (change)="cityPermitsControlsChanged(FORM_GROUP_CONST.cityPermits,item);checkIntegerValue(item,'days')"
+                                              oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="days"
+                                              placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                            <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['days']?.errors?.checkRequired && (item.controls['days']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                              translate}}</div>
+                                            <div class="text-danger" *ngIf="!item.controls['days']?.errors?.checkRequired && item.controls['days']?.errors?.checkDecimal && item.controls['days']?.touched && item.controls['days']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="col-2 col-sm-1 col-md-1 col-lg-1 item-center d-flex p-0">
+                                        <a class="click-cursor mr-2">
+                                          <i class="fa fa-minus" *ngIf="productionParametersForm.controls.locations.controls.cityPermits.controls.length > 1 "
+                                            (click)="removeFormGroup(productionParametersForm.controls.locations.controls.cityPermits, index);"></i>
+                                        </a>
+                                        <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.locations.controls.cityPermits.controls.length > 0">
+                                          <i (click)="addFormGroup(productionParametersForm.controls.locations.controls.cityPermits, FORM_GROUP_CONST.cityPermits,true,item)"
+                                            class="fa fa-plus"></i>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'wardrobe'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="wardrobe">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.wardrobe' | translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+                        <div class="row">
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.principalCost'| translate}}</label>
+                              <div class="row">
+                                <div class="col-12 col-sm-7 pr-0">
+                                  <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['wardrobe'],'principalCost')"
+                                    formControlName="principalCost" placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                  <div class="text-danger" *ngIf="!getFormGroupControls('wardrobe', 'principalCost')?.errors?.checkRequired && getFormGroupControls('wardrobe', 'principalCost')?.errors?.checkDecimal && (getFormGroupControls('wardrobe', 'principalCost')?.touched) && getFormGroupControls('wardrobe', 'principalCost')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                                <div class="col-12 col-sm-5">
+                                  <div class="wardrobe-dropdown">
+                                    <!-- <ngx-select [items]="currencies" formControlName="pcCurrencyId" name="currency" [defaultValue]="defaultCurrency" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                    <select class="form-control" name="currency" formControlName="pcCurrencyId">
+                                      <ng-container *ngFor="let currency of currencies">
+                                        <option [value]="currency.id">{{currency?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.featuredExtraCost'| translate}}</label>
+                              <div class="row">
+                                <div class="col-12 col-sm-7 pr-0">
+                                  <input class="form-control" formControlName="featuredExtraCost" (change)="checkIntegerValue(productionParametersForm.controls['wardrobe'],'featuredExtraCost')"
+                                    placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                  <div class="text-danger" *ngIf="!getFormGroupControls('wardrobe', 'featuredExtraCost')?.errors?.checkRequired && getFormGroupControls('wardrobe', 'featuredExtraCost')?.errors?.checkDecimal && (getFormGroupControls('wardrobe', 'featuredExtraCost')?.touched) && getFormGroupControls('wardrobe', 'featuredExtraCost')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                                <div class="col-12 col-sm-5">
+                                  <div class="wardrobe-dropdown">
+                                    <!-- <ngx-select [items]="currencies" name="currency" formControlName="fecCurrencyId" [defaultValue]="defaultCurrency" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                    <select class="form-control" name="currency" formControlName="fecCurrencyId">
+                                      <ng-container *ngFor="let currency of currencies">
+                                        <option [value]="currency.id">{{currency?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.extrasCost'| translate}}</label>
+                              <div class="row">
+                                <div class="col-12 col-sm-7 pr-0">
+                                  <input class="form-control" formControlName="extrasCost" (change)="checkIntegerValue(productionParametersForm.controls['wardrobe'],'extrasCost')"
+                                    placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                  <div class="text-danger" *ngIf="!getFormGroupControls('wardrobe', 'extrasCost')?.errors?.checkRequired && getFormGroupControls('wardrobe', 'extrasCost')?.errors?.checkDecimal && (getFormGroupControls('wardrobe', 'extrasCost')?.touched) && getFormGroupControls('wardrobe', 'extrasCost')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                                <div class="col-12 col-sm-5">
+                                  <div class="wardrobe-dropdown">
+                                    <select class="form-control" name="currency" formControlName="ecCurrencyId">
+                                      <ng-container *ngFor="let currency of currencies">
+                                        <option [value]="currency.id">{{currency?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                    <!-- <ngx-select [items]="currencies" formControlName="ecCurrencyId" name="currency" [defaultValue]="defaultCurrency" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'pictureVehicles'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+
+              <div class="row m-0">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                  <h5 class="text-dark">
+                    <strong>{{'biddings.labels.pictureVehicles'| translate}}</strong>
+                  </h5>
+                  <div class="panel panel-primary panel-inner-wrapper">
+                    <div class="panel-body panel-inner-body">
+                      <ng-container formArrayName="pictureVehicles" *ngFor="let item of productionParametersForm['controls'].pictureVehicles['controls']; let index=index;let lst=last">
+                        <ng-container [formGroupName]="index">
+                          <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.name' | translate}}
+                                </label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                    formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                              <div class="form-group">
+                                <label>{{'biddings.labels.days'| translate}}</label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'days')"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="days"
+                                    placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['days']?.errors?.checkRequired && (item.controls['days']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                  <div class="text-danger" *ngIf="!item.controls['days']?.errors?.checkRequired && item.controls['days']?.errors?.checkDecimal && item.controls['days']?.touched && item.controls['days']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.costPerDay'| translate}}
+                                </label>
+                                <div class="row">
+
+                                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                    <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'costPerDay') "
+                                      oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="costPerDay"
+                                      placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+
+                                  </div>
+                                  <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                    <select class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                      name="currency" formControlName="currencyId">
+                                      <ng-container *ngFor="let currency of currencies">
+                                        <option [value]="currency.id">{{currency?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                    <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                      formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+                                  </div>
+                                  <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                    <a class="click-cursor mr-2">
+                                      <i class="fa fa-minus" *ngIf="productionParametersForm.controls.pictureVehicles.controls.length > 1 "
+                                        (click)="removeFormGroup(productionParametersForm.controls.pictureVehicles, index);"></i>
+                                    </a>
+                                    <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.pictureVehicles.controls.length > 0">
+                                      <i (click)="addFormGroup(productionParametersForm.controls.pictureVehicles, FORM_GROUP_CONST.commonWithDays,true,item)"
+                                        class="fa fa-plus"></i>
+                                    </a>
+                                  </div>
+                                  <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'carCareAndTransport'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+
+              <div class="row m-0">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                  <h5 class="text-dark">
+                    <strong>{{'biddings.labels.carCareAndTransport'| translate}}</strong>
+                  </h5>
+                  <div class="panel panel-primary panel-inner-wrapper">
+                    <div class="panel-body panel-inner-body">
+                      <ng-container formArrayName="carCareAndTransport" *ngFor="let item of productionParametersForm['controls'].carCareAndTransport['controls']; let index=index;let lst=last">
+                        <ng-container [formGroupName]="index">
+                          <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.name' | translate}}
+                                </label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                    formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                              <div class="form-group">
+                                <label>{{'biddings.labels.days'| translate}}</label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'days')"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="days"
+                                    placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['days']?.errors?.checkRequired && (item.controls['days']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                  <div class="text-danger" *ngIf="!item.controls['days']?.errors?.checkRequired && item.controls['days']?.errors?.checkDecimal && item.controls['days']?.touched && item.controls['days']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.costPerDay'| translate}}
+                                </label>
+                                <div class="row">
+
+                                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                    <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'costPerDay') "
+                                      oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="costPerDay"
+                                      placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+
+                                  </div>
+                                  <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                    <select class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                      name="currency" formControlName="currencyId">
+                                      <ng-container *ngFor="let currency of currencies">
+                                        <option [value]="currency.id">{{currency?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                    <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                      formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+                                  </div>
+                                  <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                    <a class="click-cursor mr-2">
+                                      <i class="fa fa-minus" *ngIf="productionParametersForm.controls.carCareAndTransport.controls.length > 1 "
+                                        (click)="removeFormGroup(productionParametersForm.controls.carCareAndTransport, index);"></i>
+                                    </a>
+                                    <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.carCareAndTransport.controls.length > 0">
+                                      <i (click)="addFormGroup(productionParametersForm.controls.carCareAndTransport, FORM_GROUP_CONST.commonWithDays,true,item)"
+                                        class="fa fa-plus"></i>
+                                    </a>
+                                  </div>
+                                  <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'specialEffects'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+
+              <div class="row m-0">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                  <h5 class="text-dark">
+                    <strong>{{'biddings.labels.specialEffects'| translate}}</strong>
+                  </h5>
+                  <div class="panel panel-primary panel-inner-wrapper">
+                    <div class="panel-body panel-inner-body">
+                      <ng-container formArrayName="specialEffects" *ngFor="let item of productionParametersForm['controls'].specialEffects['controls']; let index=index;let lst=last">
+                        <ng-container [formGroupName]="index">
+                          <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.name' | translate}}
+                                </label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithoutDaysControlsChanged(FORM_GROUP_CONST.commonWithoutDays,item)"
+                                    formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.costPerUnit'| translate}}
+                                </label>
+                                <div class="row">
+
+                                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                    <input class="form-control" (change)="panelWithoutDaysControlsChanged(FORM_GROUP_CONST.commonWithoutDays,item);checkIntegerValue(item,'costPerDay') "
+                                      oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="costPerDay"
+                                      placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.unit'| translate}}">
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+
+                                  </div>
+                                  <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                    <select class="form-control" name="currency" (change)="panelWithoutDaysControlsChanged(FORM_GROUP_CONST.commonWithoutDays,item)"
+                                      formControlName="currencyId">
+                                      <ng-container *ngFor="let currency of currencies">
+                                        <option [value]="currency.id">{{currency?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                    <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                      formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+                                  </div>
+                                  <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                    <a class="click-cursor mr-2">
+                                      <i class="fa fa-minus" *ngIf="productionParametersForm.controls.specialEffects.controls.length > 1 "
+                                        (click)="removeFormGroup(productionParametersForm.controls.specialEffects, index);"></i>
+                                    </a>
+                                    <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.specialEffects.controls.length > 0">
+                                      <i (click)="addFormGroup(productionParametersForm.controls.specialEffects, FORM_GROUP_CONST.commonWithoutDays,true,item)"
+                                        class="fa fa-plus"></i>
+                                    </a>
+                                  </div>
+                                  <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'animals'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+
+              <div class="row m-0">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                  <h5 class="text-dark">
+                    <strong>{{'biddings.labels.animals'| translate}}</strong>
+                  </h5>
+                  <div class="panel panel-primary panel-inner-wrapper">
+                    <div class="panel-body panel-inner-body">
+                      <ng-container formArrayName="animals" *ngFor="let item of productionParametersForm['controls'].animals['controls']; let index=index;let lst=last">
+                        <ng-container [formGroupName]="index">
+                          <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.name' | translate}}
+                                </label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                    formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.days' | translate}}
+                                </label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'days')"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="days"
+                                    placeholder="{{'biddings.labels.numberOfDays' | translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['days']?.errors?.checkRequired && (item.controls['days']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                  <div class="text-danger" *ngIf="!item.controls['days']?.errors?.checkRequired && item.controls['days']?.errors?.checkDecimal && item.controls['days']?.touched && item.controls['days']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.costPerDay'| translate}}
+                                </label>
+                                <div class="row">
+
+                                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                    <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'costPerDay') "
+                                      oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="costPerDay"
+                                      placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+
+                                  </div>
+                                  <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                    <select class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                      name="currency" formControlName="currencyId">
+                                      <ng-container *ngFor="let currency of currencies">
+                                        <option [value]="currency.id">{{currency?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                    <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                      formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+                                  </div>
+                                  <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                    <a class="click-cursor mr-2">
+                                      <i class="fa fa-minus" *ngIf="productionParametersForm.controls.animals.controls.length > 1 "
+                                        (click)="removeFormGroup(productionParametersForm.controls.animals, index);"></i>
+                                    </a>
+                                    <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.animals.controls.length > 0">
+                                      <i (click)="addFormGroup(productionParametersForm.controls.animals, FORM_GROUP_CONST.commonWithDays,true,item)"
+                                        class="fa fa-plus"></i>
+                                    </a>
+                                  </div>
+                                  <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'other1'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+
+              <div class="row m-0">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                  <h5 class="text-dark">
+                    <strong>{{'biddings.labels.other1'| translate}}</strong>
+                  </h5>
+                  <div class="panel panel-primary panel-inner-wrapper">
+                    <div class="panel-body panel-inner-body">
+                      <ng-container formArrayName="other1" *ngFor="let item of productionParametersForm['controls'].other1['controls']; let index=index;let lst=last">
+                        <ng-container [formGroupName]="index">
+                          <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.name' | translate}}
+                                </label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                    formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                              <div class="form-group">
+                                <label>{{'biddings.labels.days'| translate}}</label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'days')"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="days"
+                                    placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['days']?.errors?.checkRequired && (item.controls['days']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                  <div class="text-danger" *ngIf="!item.controls['days']?.errors?.checkRequired && item.controls['days']?.errors?.checkDecimal && item.controls['days']?.touched && item.controls['days']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.costPerDay'| translate}}
+                                </label>
+                                <div class="row">
+
+                                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                    <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'costPerDay') "
+                                      oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="costPerDay"
+                                      placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+                                  </div>
+                                  <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                    <select class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                      name="currency" formControlName="currencyId">
+                                      <ng-container *ngFor="let currency of currencies">
+                                        <option [value]="currency.id">{{currency?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                    <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                      formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+                                  </div>
+                                  <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                    <a class="click-cursor mr-2">
+                                      <i class="fa fa-minus" *ngIf="productionParametersForm.controls.other1.controls.length > 1 "
+                                        (click)="removeFormGroup(productionParametersForm.controls.other1, index);"></i>
+                                    </a>
+                                    <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.other1.controls.length > 0">
+                                      <i (click)="addFormGroup(productionParametersForm.controls.other1, FORM_GROUP_CONST.commonWithDays,true,item)"
+                                        class="fa fa-plus"></i>
+                                    </a>
+                                  </div>
+                                  <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'other2'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+
+              <div class="row m-0">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                  <h5 class="text-dark">
+                    <strong>{{'biddings.labels.other2'| translate}}</strong>
+                  </h5>
+                  <div class="panel panel-primary panel-inner-wrapper">
+                    <div class="panel-body panel-inner-body">
+                      <ng-container formArrayName="other2" *ngFor="let item of productionParametersForm['controls'].other2['controls']; let index=index;let lst=last">
+                        <ng-container [formGroupName]="index">
+                          <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.name' | translate}}
+                                </label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                    formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                              <div class="form-group">
+                                <label>{{'biddings.labels.days'| translate}}</label>
+                                <div>
+                                  <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'days')"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="days"
+                                    placeholder="{{'biddings.labels.numberOfDays'| translate}}">
+                                  <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['days']?.errors?.checkRequired && (item.controls['days']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                  <div class="text-danger" *ngIf="!item.controls['days']?.errors?.checkRequired && item.controls['days']?.errors?.checkDecimal && item.controls['days']?.touched && item.controls['days']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                              <div class="form-group">
+                                <label>
+                                  {{'biddings.labels.costPerDay'| translate}}
+                                </label>
+                                <div class="row">
+
+                                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                    <input class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item);checkIntegerValue(item,'costPerDay') "
+                                      oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="costPerDay"
+                                      placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+                                  </div>
+                                  <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                    <select class="form-control" (change)="panelWithDaysControlsChanged(FORM_GROUP_CONST.commonWithDays,item)"
+                                      name="currency" formControlName="currencyId">
+                                      <ng-container *ngFor="let currency of currencies">
+                                        <option [value]="currency.id">{{currency?.text}}</option>
+                                      </ng-container>
+                                    </select>
+                                    <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                      formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                    <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                      translate}}</div>
+                                  </div>
+                                  <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                    <a class="click-cursor mr-2">
+                                      <i class="fa fa-minus" *ngIf=" productionParametersForm.controls.other2.controls.length > 1 "
+                                        (click)="removeFormGroup( productionParametersForm.controls.other2, index);"></i>
+                                    </a>
+                                    <a class="click-cursor" *ngIf="lst &&  productionParametersForm.controls.other2.controls.length > 0">
+                                      <i (click)="addFormGroup( productionParametersForm.controls.other2, FORM_GROUP_CONST.commonWithDays,true,item)"
+                                        class="fa fa-plus"></i>
+                                    </a>
+                                  </div>
+                                  <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'artDepartment'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="artDepartment">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.artDepartment'| translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+                        <div class="row">
+                          <div class="col-12">
+                            <h4 class="text-dark">
+                              <strong>{{'biddings.labels.setConstruction'| translate}}/{{'biddings.labels.dressing'|
+                                translate}}</strong>
+                            </h4>
+                            <div class="panel panel-primary panel-inner-wrapper">
+                              <div class="panel-body panel-inner-body">
+                                <ng-container formArrayName="setConstruction" *ngFor="let item of getFormGroupControls('artDepartment', 'setConstruction')?.controls; let index=index;let lst=last">
+                                  <ng-container [formGroupName]="index">
+                                    <div class="row">
+                                      <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                        <div class="form-group">
+                                          <label>
+                                            {{'biddings.labels.name' | translate}}
+                                          </label>
+                                          <div>
+                                            <input class="form-control" (change)="panelWithoutDaysControlsChanged(FORM_GROUP_CONST.commonWithoutDays,item)"
+                                              formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                                            <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                                        <div class="form-group">
+                                          <label>
+                                            {{'biddings.labels.costPerDay'| translate}}
+                                          </label>
+                                          <div class="row">
+
+                                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                              <input class="form-control" (change)="panelWithoutDaysControlsChanged(FORM_GROUP_CONST.commonWithoutDays,item);checkIntegerValue(item,'costPerDay') "
+                                                oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                formControlName="costPerDay" placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                              <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                translate}}</div>
+
+                                            </div>
+                                            <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                              <select class="form-control" name="currency" (change)="panelWithoutDaysControlsChanged(FORM_GROUP_CONST.commonWithoutDays,item)"
+                                                formControlName="currencyId">
+                                                <ng-container *ngFor="let currency of currencies">
+                                                  <option [value]="currency.id">{{currency?.text}}</option>
+                                                </ng-container>
+                                              </select>
+                                              <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                                formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                              <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired && (item.controls['currencyId']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                translate}}</div>
+                                            </div>
+                                            <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                              <a class="click-cursor mr-2">
+                                                <i class="fa fa-minus" *ngIf="productionParametersForm.controls.artDepartment.controls.setConstruction.controls.length > 1 "
+                                                  (click)="removeFormGroup(productionParametersForm.controls.artDepartment.controls.setConstruction, index);"></i>
+                                              </a>
+                                              <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.artDepartment.controls.setConstruction.controls.length > 0">
+                                                <i (click)="addFormGroup(productionParametersForm.controls.artDepartment.controls.setConstruction, FORM_GROUP_CONST.commonWithoutDays,true,item)"
+                                                  class="fa fa-plus"></i>
+                                              </a>
+                                            </div>
+                                            <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="panel panel-primary panel-inner-wrapper">
+                              <div class="panel-body panel-inner-body">
+                                <div class="row">
+                                  <div class="col-12 col-sm-9 col-md-9 col-lg-4">
+                                    <div class="form-group">
+                                      <label>
+                                        <strong>{{'biddings.labels.streetSignage'| translate}}</strong>
+                                      </label>
+                                      <ng-container formArrayName="streetSingingOthers" *ngFor="let item of getFormGroupControls('artDepartment', 'streetSingingOthers')?.controls; let index=index;let lst=last">
+                                        <ng-container [formGroupName]="index">
+                                          <div class="row">
+
+                                            <div class="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 pr-0">
+                                              <input class="form-control" formControlName="costPerDay" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                placeholder="{{'biddings.labels.cost' | translate}}/{{'biddings.labels.day' | translate}}">
+
+                                            </div>
+                                            <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                              <select class="form-control" name="currency" formControlName="currencyId">
+                                                <ng-container *ngFor="let currency of currencies">
+                                                  <option [value]="currency.id">{{currency?.text}}</option>
+                                                </ng-container>
+                                              </select>
+                                              <!-- <ngx-select [items]="currencies" formControlName="currencyId" name="currency"
+                                                [defaultValue]="defaultCurrency" placeholder="Select"></ngx-select> -->
+                                            </div>
+                                            <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                              translate}}</div>
+                                          </div>
+                                        </ng-container>
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                  <div class="col-12 col-sm-9 col-md-9 col-lg-4">
+                                    <div class="form-group">
+                                      <label>
+                                        <strong>{{'biddings.labels.greens'| translate}}</strong>
+                                      </label>
+                                      <ng-container formArrayName="greens" *ngFor="let item of getFormGroupControls('artDepartment', 'greens')?.controls; let index=index;let lst=last">
+                                        <ng-container [formGroupName]="index">
+                                          <div class="row">
+                                            <div class="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 pr-0">
+                                              <input class="form-control" formControlName="costPerDay" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                placeholder="{{'biddings.labels.cost' | translate}}/{{'biddings.labels.day' | translate}}">
+
+                                            </div>
+                                            <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                              <select class="form-control" name="currency" formControlName="currencyId">
+                                                <ng-container *ngFor="let currency of currencies">
+                                                  <option [value]="currency.id">{{currency?.text}}</option>
+                                                </ng-container>
+                                              </select>
+                                              <!-- <ngx-select [items]="currencies" formControlName="currencyId" name="currency" [defaultValue]="defaultCurrency" placeholder="Select"></ngx-select> -->
+                                            </div>
+                                            <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                              translate}}</div>
+                                          </div>
+                                        </ng-container>
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                  <div class="col-12 col-sm-9 col-md-9 col-lg-4">
+                                    <div class="form-group">
+                                      <label>
+                                        <strong>{{'biddings.labels.specialTranspo'| translate}}</strong>
+                                      </label>
+                                      <ng-container formArrayName="specialManufactures" *ngFor="let item of getFormGroupControls('artDepartment', 'specialManufactures')?.controls; let index=index;let lst=last">
+                                        <ng-container [formGroupName]="index">
+                                          <div class="row">
+                                            <div class="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 pr-0">
+                                              <input class="form-control" formControlName="costPerDay" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                placeholder="{{'biddings.labels.cost' | translate}}/{{'biddings.labels.day' | translate}}">
+
+                                            </div>
+                                            <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                              <select class="form-control" name="currency" formControlName="currencyId">
+                                                <ng-container *ngFor="let currency of currencies">
+                                                  <option [value]="currency.id">{{currency?.text}}</option>
+                                                </ng-container>
+                                              </select>
+                                              <!-- <ngx-select [items]="currencies" formControlName="currencyId" name="currency" [defaultValue]="defaultCurrency" placeholder="Select"></ngx-select> -->
+                                            </div>
+                                            <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                              translate}}</div>
+                                          </div>
+                                        </ng-container>
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        <div class="row">
+                          <div class="col-12">
+                            <h4 class="text-dark">
+                              <strong>Others</strong>
+                            </h4>
+                            <div class="panel panel-primary panel-inner-wrapper">
+                              <div class="panel-body panel-inner-body">
+                                <ng-container formArrayName="others" *ngFor="let item of getFormGroupControls('artDepartment', 'others')?.controls; let index=index;let lst=last">
+                                  <ng-container [formGroupName]="index">
+                                    <div class="row">
+                                      <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                        <div class="form-group">
+                                          <label>
+                                            {{'biddings.labels.name' | translate}}
+                                          </label>
+                                          <div>
+                                            <input class="form-control" formControlName="name" (change)="panelWithoutDaysControlsChanged(FORM_GROUP_CONST.commonWithoutDays,item)"
+                                              placeholder="{{'biddings.labels.name'| translate}}">
+                                            <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['name']?.errors?.checkRequired && (item.controls['name']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-12 col-sm-9 col-md-9 col-lg-7">
+                                        <div class="form-group">
+                                          <label>
+                                            {{'biddings.labels.costPerDay'| translate}}
+                                          </label>
+                                          <div class="row">
+
+                                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pr-0">
+                                              <input class="form-control" (change)="panelWithoutDaysControlsChanged(FORM_GROUP_CONST.commonWithoutDays,item);checkIntegerValue(item,'costPerDay') "
+                                                oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                                formControlName="costPerDay" placeholder="{{'biddings.labels.cost'| translate}}/{{'biddings.labels.day'| translate}}">
+                                              <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['costPerDay']?.errors?.checkRequired && (item.controls['costPerDay']?.touched || item?.value?.invalidFlag || this.manageBidData.invalidFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                translate}}</div>
+
+                                            </div>
+                                            <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-3">
+                                              <select class="form-control" name="currency" (change)="panelWithoutDaysControlsChanged(FORM_GROUP_CONST.commonWithoutDays,item)"
+                                                formControlName="currencyId">
+                                                <ng-container *ngFor="let currency of currencies">
+                                                  <option [value]="currency.id">{{currency?.text}}</option>
+                                                </ng-container>
+                                              </select>
+                                              <!-- <ngx-select [items]="currencies" name="currency" [defaultValue]="defaultCurrency"
+                                                formControlName="currencyId" placeholder="{{'biddings.labels.select'| translate}}"></ngx-select> -->
+                                              <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['currencyId']?.errors?.checkRequired">{{'actors.freelancers.errorMessages.fieldRequired'|
+                                                translate}}</div>
+                                            </div>
+                                            <div class="col-3 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-10 pl-0">
+                                              <a class="click-cursor mr-2">
+                                                <i class="fa fa-minus" *ngIf="productionParametersForm.controls.artDepartment.controls.others.controls.length > 1 "
+                                                  (click)="removeFormGroup(productionParametersForm.controls.artDepartment.controls.others, index);"></i>
+                                              </a>
+                                              <a class="click-cursor" *ngIf="lst && productionParametersForm.controls.artDepartment.controls.others.controls.length > 0 && productionParametersForm.controls.artDepartment.controls.others.controls.length < 2">
+                                                <i (click)="addFormGroup(productionParametersForm.controls.artDepartment.controls.others, FORM_GROUP_CONST.commonWithoutDays,true,item)"
+                                                  class="fa fa-plus"></i>
+                                              </a>
+                                            </div>
+                                            <div class="text-danger ml-3" *ngIf="!item.controls['costPerDay']?.errors?.checkRequired && item.controls['costPerDay']?.errors?.checkDecimal && item.controls['costPerDay']?.touched && item.controls['costPerDay']?.dirty">{{'pages.errorMessages.validDecimal'|
+                                              translate}}</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'equipment'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="equipment">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.equipment'| translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+
+                        <div class="row">
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.cameras'| translate}}</label>
+                              <div>
+                                <input class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g,'');"
+                                  formControlName="cameras" (change)="checkIntegerValue(productionParametersForm.controls['equipment'],'cameras')"
+                                  placeholder="Number of Cameras">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.cameraCar'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['equipment'],'cameraCar')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="cameraCar"
+                                  placeholder="{{'biddings.labels.noOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('equipment', 'cameraCar')?.errors?.checkRequired && getFormGroupControls('equipment', 'cameraCar')?.errors?.checkDecimal && (getFormGroupControls('equipment', 'cameraCar')?.touched) && getFormGroupControls('equipment', 'cameraCar')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.steadyCam'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['equipment'],'steadyCam')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="steadyCam"
+                                  placeholder="{{'biddings.labels.noOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('equipment', 'steadyCam')?.errors?.checkRequired && getFormGroupControls('equipment', 'steadyCam')?.errors?.checkDecimal && (getFormGroupControls('equipment', 'steadyCam')?.touched) && getFormGroupControls('equipment', 'steadyCam')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="row">
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.lightiningNightShootEquipment'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['equipment'],'lightiningNightShootEquipment')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="lightiningNightShootEquipment"
+                                  placeholder="{{'biddings.labels.noOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('equipment', 'lightiningNightShootEquipment')?.errors?.checkRequired && getFormGroupControls('equipment', 'lightiningNightShootEquipment')?.errors?.checkDecimal && (getFormGroupControls('equipment', 'lightiningNightShootEquipment')?.touched) && getFormGroupControls('equipment', 'lightiningNightShootEquipment')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.crane'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['equipment'],'crane')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="crane"
+                                  placeholder="{{'biddings.labels.noOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('equipment', 'crane')?.errors?.checkRequired && getFormGroupControls('equipment', 'crane')?.errors?.checkDecimal && (getFormGroupControls('equipment', 'crane')?.touched) && getFormGroupControls('equipment', 'crane')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.directSound'| translate}}</label>
+                              <div>
+                                <input class="form-control" (change)="checkIntegerValue(productionParametersForm.controls['equipment'],'directSound')"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="directSound"
+                                  placeholder="{{'biddings.labels.noOfDays'| translate}}">
+                                <div class="text-danger" *ngIf="!getFormGroupControls('equipment', 'directSound')?.errors?.checkRequired && getFormGroupControls('equipment', 'directSound')?.errors?.checkDecimal && (getFormGroupControls('equipment', 'directSound')?.touched) && getFormGroupControls('equipment', 'directSound')?.dirty">{{'pages.errorMessages.validDecimal'|
+                                  translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission>
+          </div>
+          <action-permission [actionType]="ACTION_TYPES.ADD" [MODULE_ID]="MODULE_ID"
+          [permissionArr]="permissionObject">
+          <div class="row p-0 m-0">
+            <div class="col-12 pull-right">
+              <button class="btn save-btn btn-success pull-right" [disabled]="this.manageBidData.disableButtonFlag"
+                (click)="openAICPReflectionIntimationPopup()"><i *ngIf="this.manageBidData.spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'biddings.buttons.next'|
+                translate}}</button>
+            </div>
+          </div>
+</action-permission>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

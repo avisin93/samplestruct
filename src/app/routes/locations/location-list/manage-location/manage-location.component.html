@@ -1,0 +1,1237 @@
+<div id="manage-location-page">
+  <!-- <div class="content-heading">
+    <breadcrumb [breadcrumbData]="breadcrumbData"></breadcrumb>
+  </div> -->
+  <div class="content-heading row">
+    <!-- Breadcrumb right aligned-->
+    <breadcrumb [breadcrumbData]="breadcrumbData" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-10 p-0">
+    </breadcrumb>
+  </div>
+  <ng-container *ngIf="!renderPage">
+    <app-loader class="col-md-12" [loading]="!renderPage"></app-loader>
+  </ng-container>
+  <form [formGroup]="manageLocationForm" [hidden]="!renderPage">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+      <h4 class="text-dark">
+        <strong>{{'location.labels.locationDetails'| translate}}</strong>
+        <em class="pull-right mandatory">*{{'common.labels.mandatory'| translate}}</em>
+      </h4>
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="form-group">
+            <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'location.labels.locationName' |
+              translate}}
+              <span class="mandatory">*</span>
+            </label>
+            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <input name="firstName" class="form-control" formControlName="locationName"
+                onkeyup="this.value = this.value.toUpperCase();"
+                placeholder="{{'location.labels.locationName' | translate}}">
+              <div class="bb-error"
+                *ngIf="manageLocationForm.controls['locationName']?.errors?.checkRequired && (manageLocationForm.controls['locationName'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                translate}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'location.labels.locationType' |
+              translate}}
+              <span class="mandatory">*</span>
+            </label>
+            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <label class="radio-inline">
+                <input type="radio" id="inlineradio0" formControlName="locationType" name="locationType" [value]="0"
+                  class="radio-location" (change)="selectPermitType()">{{'location.labels.public' | translate}}</label>
+              <label class="ml-3">
+                <input type="radio" id="inlineradio1" formControlName="locationType" name="locationType" [value]="1"
+                  class="radio-location " (change)="selectPermitType()"> {{'location.labels.private' | translate}}
+              </label>
+            </div>
+            <div class="bb-error ml-3"
+              *ngIf="manageLocationForm.controls['locationType']?.errors?.checkRequired && (manageLocationForm.controls['locationType'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+              translate}}</div>
+          </div>
+          <div class="form-group">
+            <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'location.labels.permit' |
+              translate}}
+              <span class="mandatory">*</span>
+            </label>
+            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <label class="radio-inline ">
+                <input type="radio" id="inlineradio0" formControlName="permit" name="permit" [value]="true"
+                  class="radio-location">{{'common.labels.yes'
+                | translate}}
+              </label>
+              <label class="ml-3">
+                <input type="radio" id="inlineradio1" formControlName="permit" name="permit" [value]="false"
+                  class="radio-location">
+                {{'common.labels.no' | translate}} </label>
+            </div>
+            <div class="bb-error ml-3"
+              *ngIf="manageLocationForm.controls['permit']?.errors?.checkRequired && (manageLocationForm.controls['permit'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+              translate}}</div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg">
+              <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'location.labels.category' |
+                translate}}
+                <span class="mandatory">*</span>
+              </label>
+            </div>
+            <div class="row no-mg">
+              <div class="col-12 col-sm-8 col-md-6 col-lg-6 col-xl-6 control-label">
+                <input class="form-control ptr" [readonly]="true" type="text" [value]="selectedCategoryHierarchyStr"
+                  (click)="OpenAddCategoryModel();"  formControlName="category" placeholder="{{'common.labels.selectCategory' | translate}}"
+                  data-toggle="tooltip" data-placement="top" title="{{'common.labels.selectCategory' | translate}}" />
+                <div class="bb-error"
+                  *ngIf="manageLocationForm.controls['category']?.errors?.checkRequired && (manageLocationForm.controls['category'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg">
+              <div class="col-12 col-sm-8 col-md-3 col-lg-3 col-xl-3 control-label">
+                <label class=" control-label">{{'location.labels.approxDays' | translate}}
+                  <span class="mandatory">*</span>
+                </label>
+                <input name="firstName" class="form-control" maxlength="10" formControlName="approxPrice"
+                  (keyup)="setApproxPriceToZero()" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                  placeholder="{{'location.labels.approxDays' | translate}}">
+                <div class="bb-error"
+                  *ngIf="manageLocationForm.controls['approxPrice']?.errors?.checkRequired && (manageLocationForm.controls['approxPrice'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                  translate}}</div>
+                <div class="text-danger"
+                  *ngIf="!manageLocationForm.controls['approxPrice']?.errors?.checkRequired && manageLocationForm.controls['approxPrice']?.errors?.checkDecimal && (manageLocationForm.controls['approxPrice'].touched) && manageLocationForm.controls['approxPrice'].dirty">{{'pages.errorMessages.validDecimal'|
+                  translate}}</div>
+              </div>
+              <div class="col-12 col-sm-8 col-md-3 col-lg-3 col-xl-3">
+                <label class="control-label">{{'common.labels.currency' | translate}}
+                  <span class="mandatory">*</span>
+                </label>
+
+                <ngx-select id="currencyDropdown" [allowClear]="true" [items]="currencies" formControlName="currencyId"
+                  placeholder="{{'common.labels.select' | translate}}">
+                </ngx-select>
+                <div class="bb-error"
+                  *ngIf="manageLocationForm.controls['currencyId']?.errors?.checkRequired && (manageLocationForm.controls['currencyId'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'location.labels.locationURL' |
+              translate}}
+            </label>
+            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <input name="firstName" class="form-control" formControlName="locationURL"
+                placeholder="{{'location.labels.locationURL' | translate}}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'location.labels.locationDescription'
+              |
+              translate}}
+            </label>
+            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <textarea name="locationDescription" maxlength="500" formControlName="description" rows="4"
+                class="form-control" placeholder="{{'location.labels.locationDescription' | translate}}"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+      <h4 class="text-dark">
+        <strong>{{'location.labels.locationImages'| translate}}</strong>
+      </h4>
+
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <label class="radio-inline">
+                <input type="radio" id="" name="imagesPanel" formControlName="imagesPanel" [value]="0"
+                  (change)="selectLocationImagePanel()" (click)="uploadFromComputer();"
+                  class="radio-location">{{'location.labels.computer' | translate}}</label>
+              <label class="ml-3">
+                <input type="radio" id="" name="imagesPanel" formControlName="imagesPanel" [value]="1"
+                  (change)="selectLocationImagePanel()" (click)="googleMaps();" class="radio-location">
+                {{'location.labels.googlemaps' | translate}} </label>
+            </div>
+            <div class="bb-error"
+              *ngIf="manageLocationForm.controls['imagesPanel']?.errors?.checkRequired && (manageLocationForm.controls['imagesPanel'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+              translate}}</div>
+          </div>
+          <div formGroupName="computerForm">
+            <div class="row no-mg" id="computer" class="hide">
+              <div class="form-group">
+                <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'location.labels.locationAdd'
+                  | translate}}
+                  <span class="mandatory">*</span>
+                </label>
+                <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                  <textarea name="locationadd" class="form-control" formControlName="locationAdd"
+                    placeholder="{{'location.labels.locationAdd' | translate}}"></textarea>
+                  <div class="bb-error"
+                    *ngIf="getFormGroupControls('computerForm', 'locationAdd')?.errors?.checkRequired && (getFormGroupControls('computerForm', 'locationAdd')?.touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                    translate}}</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'common.labels.city' |
+                  translate}}
+                  <span class="mandatory">*</span>
+                </label>
+                <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                  <input name="locationadd" class="form-control" formControlName="city"
+                    placeholder="{{'common.labels.city' | translate}}">
+                  <div class="bb-error"
+                    *ngIf="getFormGroupControls('computerForm', 'city')?.errors?.checkRequired && (getFormGroupControls('computerForm', 'city').touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                    translate}}</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'location.labels.state' |
+                  translate}}
+                  <span class="mandatory">*</span>
+                </label>
+                <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                  <input name="locationadd" class="form-control" formControlName="state"
+                    placeholder="{{'location.labels.state' | translate}}">
+                  <div class="bb-error"
+                    *ngIf="getFormGroupControls('computerForm', 'state')?.errors?.checkRequired && (getFormGroupControls('computerForm', 'state')?.touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                    translate}}</div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="col-12 no-mg text-right">
+                  <em
+                    class="small f-italic mr-15 mt-10 text-right">({{('location.labels.maximumFileSize'|translate) + " " +IMAGE_SIZE.limit_50MB}})</em>
+                  <em
+                    class="small f-italic mr-15 mt-10 text-right">({{'location.labels.maximumFileResolution'|translate}}
+                    {{IMAGE_DIMENSION.width + ' px * ' }} {{IMAGE_DIMENSION.height + ' px'}} )</em>
+                </div>
+                <div class="panel panel-primary">
+                  <div class="panel-heading document-panel">
+                    <div class="text-dark row">
+                      <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3"
+                        [ngClass]="(this.manageLocationForm.value.locationUpload.length == 0 && this.manageLocationForm.value.imagesPanel == 0) ? 'ng-invalid':''">
+                        <strong>
+                          {{'location.labels.loctionAttachments'| translate}}
+                          <span class="bb-error mandatory"> *</span>
+                        </strong>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xs-9 text-right">
+                        <label for="file2" class="file-upload">
+                          <em class="small f-italic mr-15 mt-10 text-right">{{'common.labels.profilePicTypes' |
+                            translate}}</em>
+
+                          <button type="button" class="btn btn-default browse-btn"> <i
+                              class="fa fa-spinner fa-spin margin-right-5" *ngIf="showLoader"></i>
+                            {{'common.labels.browse'| translate}}</button>
+                          <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                            (change)="addLocationImagesEvent($event)" />
+                        </label>
+                      </div>
+                      <!-- <em clas  s="pull-right d-inline-flex" style="margin-bottom:5%;">
+                        <div class="small f-italic mr-15 mt-10">{{'common.labels.documentTypes' | translate}}</div>
+                    <label for="file2" class="file-upload" >
+                    <button class="btn btn-default">{{'common.labels.browse'| translate}}</button>
+                    <input id="file2" type="file" title ="{{'common.labels.noFileChosen' | translate}}" multiple  ng2FileSelect [uploader]="uploaderConstancia" (change)="fileChangeEvent($event,DOCUMENT_TYPES.constancia)" />
+                  </label>
+                 </em> -->
+                    </div>
+
+                  </div>
+                </div>
+                <div class="bb-error selectImage"
+                  *ngIf="manageLocationForm.controls['imagesAttached']?.errors?.checkRequired && submitManageLocationForm">{{'pages.errorMessages.selectImages'|
+                  translate}}</div>
+              </div>
+
+            </div>
+          </div>
+          <div class="row" id="googlemaps" class="hide">
+            <div>
+              <input id="pac-input" class="form-control controls mt-2 col-md-8" type="text" placeholder="Search Box">
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div id="map"></div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2">
+              <div class="text-center col-md-12">
+                <button type="button" class="btn btn-success " (click)="getStreetViewImage()">{{'common.labels.grabImage'|
+                  translate}}</button>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="streetViewArrayHeader">
+              <div class="form-group">
+                <!-- <label class="col-md-2 control-label">{{'location.labels.locationAdd' | translate}}
+                  <span class="mandatory">*</span>
+                </label>
+                  <div class="col-md-8">
+                    <textarea name="locationadd" class="form-control" formControlName="locationAdd" placeholder="{{'location.labels.locationAdd' | translate}}"></textarea>
+                    <div class="bb-error" *ngIf="getFormGroupControls('computerForm', 'locationAdd')?.errors?.checkRequired && (getFormGroupControls('computerForm', 'locationAdd')?.touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'| translate}}</div>
+                  </div> -->
+              </div>
+              <label class="col-md-2 control-label">{{'common.labels.city' | translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-md-8">
+                <input name="locationadd" class="form-control" formControlName="streetViewCity"
+                  placeholder="{{'common.labels.city' | translate}}">
+                <div class="bb-error"
+                  *ngIf="manageLocationForm.controls['streetViewCity']?.errors?.checkRequired && (manageLocationForm.controls['streetViewCity'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="streetViewArrayHeader">
+              <label class="col-md-2 control-label">{{'location.labels.state' | translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-md-8">
+                <input name="locationadd" class="form-control" formControlName="streetViewState"
+                  placeholder="{{'location.labels.state' | translate}}">
+                <div class="bb-error"
+                  *ngIf="manageLocationForm.controls['streetViewState']?.errors?.checkRequired && (manageLocationForm.controls['streetViewState'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="form-group location-grid-view">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="row">
+                  <div class="col-6 col-md-6 col-lg-6" *ngIf="computerUploadArrayHeader">
+                    <strong class="selectImage">{{'common.labels.computerImages'| translate}}</strong>
+                  </div>
+                  <div class="col-6 col-md-6 col-lg-6 text-right" *ngIf="computerUploadArrayHeader">
+                    <div class="row">
+                      <div class="col-12 col-md-12 col-lg-12">
+                        <div class="btn-group btn-group-justified mb">
+                          <label class="btn btn-secondary" (click)="selectAllComputerImages(true)"
+                            [class.active]="setComputerSelectAllFlag">{{'common.labels.selectAll'| translate}}</label>
+                          <label class="btn btn-secondary" (click)="selectAllComputerImages(false)"
+                            [class.active]="isSetComputerSelectNone">{{'common.labels.selectNone'| translate}}</label>
+                        </div>
+                        <div class="btn-group btn-delete-selection btn-group-justified mb">
+                          <button class="btn btn-sm btn-danger" [disabled]="!removeComputerSelectedArr.length"
+                            (click)="removeFromComputerArray();" type="button">
+                            <em class="fa fa-trash delete-file-icon ptr">
+                              <span>{{'common.labels.deleteSelection'| translate}}
+                              </span>
+                            </em>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                <div class="img-uploading-status-panel p-10 mb-2" *ngIf="showImageStatusBlock">
+                  <div class="mb-3">
+                    <strong><u>{{'location.labels.imageUploadingInProgress' | translate}}</u></strong>
+                  </div>
+                  <div *ngFor="let image of errorImageStatusArr">
+                    <div class="row">
+                      <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-2">
+                        <span>{{image.name}}</span>
+                      </div>
+                      <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-6">
+                        <div [ngSwitch]="image?.errorType">
+                          <div *ngSwitchCase="IMAGE_ERROR_TYPES.invalidFile">
+                            <strong class="text-right text-danger">
+                              {{'location.errorMessages.invalidFileType' | translate}}
+                            </strong>
+                          </div>
+                          <div *ngSwitchCase="IMAGE_ERROR_TYPES.exceedSize">
+                            <strong class="text-right text-danger">
+                              {{('location.errorMessages.imageCanNotBeUploaded' | translate) + " " +IMAGE_SIZE.limit_50MB + " " + ('location.labels.fileSizeLimit' | translate)}}
+                            </strong>
+                          </div>
+                          <div *ngSwitchCase="IMAGE_ERROR_TYPES.invalidResolution">
+                            <strong class="text-right text-danger">
+                              {{'location.errorMessages.imageCanNotBeUploaded' | translate}} {{IMAGE_DIMENSION.width}} *
+                              {{IMAGE_DIMENSION.height}} {{'location.labels.fileResolutionLimit' | translate}}
+                            </strong>
+                          </div>
+                          <div *ngSwitchCase="IMAGE_ERROR_TYPES.serverError">
+                            <strong class="text-right text-danger">
+                              {{'common.errorMessages.error' | translate }}</strong>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngFor="let image of imageStatusArr$">
+                    <div *ngFor="let item of image">
+                      <div class="row" *ngIf="item && (item.percentage || (item.percentage===0))">
+                        <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 mb-2">
+                          <span>{{item.name}}</span>
+                        </div>
+                        <div class="col-2 col-sm-2 col-md-6 col-lg-6 col-xl-6 mb-6">
+                          <strong class="text-right"> {{item.percentage}} %</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row no-mg" *ngIf="computerUploadArrayHeader">
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" *ngIf="computerGalleryImages.length > 0">
+                    <div class="row">
+                      <!-- <div class="checkbox c-checkbox pl-2">
+                    <label>
+                      <input type="checkbox" formControlName="selectAll">
+                      <span class="fa fa-check"></span>
+                    </label>
+                  </div> -->
+                    </div>
+                  </div>
+                  <div formArrayName="locationUpload" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <div class="row no-mg">
+                      <div class="location-grid-image corners2 col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 mb-15"
+                        *ngFor="let item of manageLocationForm.controls.locationUpload['controls']; let i=index;">
+                        <div class="text-center" [formGroupName]="i">
+                          <div class="row">
+                            <div class="search-icon">
+                              <a (click)="openComputerUploadImages(i)" data-toggle="tooltip" data-placement="bottom"
+                                title="{{ item?.value?.age }}">
+                                <em class="icon-magnifier"></em>
+                              </a>
+                            </div>
+                            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                              <div class="checkbox c-checkbox mt-1">
+                                <label>
+                                  <input type="checkbox" formControlName="selection"
+                                    (change)="removeComputerSelectedImages(i, $event);">
+                                  <span class="fa fa-check"></span>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                              <a class="example-image-link" data-lightbox="example-set" data-title="">
+                                <img (click)="openComputerUploadImages(i)" [src]="item.value.thumbnailImageUrl"
+                                  class="img-fluid ptr custom-img" />
+                              </a>
+                              <div class="list-image-name text-center list-image-style">
+                                <span *ngIf="!item.value.fileName"> loading... </span>
+                                <span *ngIf="item.value.fileName">{{item.value.fileName}}</span>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                              <div class="row">
+
+                                <a (click)="downloadFile(item?.value)">
+                                  <button class="btn btn-sm btn-green ml-1 mr-1" type="button">
+                                    <em class="fa fa-download"></em>
+                                  </button>
+                                </a>
+                                <button class="btn btn-sm btn-danger ml-1" (click)="removeLocationImageEvent(i);"
+                                  type="button">
+                                  <em class="fa fa-trash delete-file-icon ptr"></em>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <tag-input class="tag-input-class" placeholder="{{'location.labels.tag' | translate}}"
+                            *ngIf="tagEditOptionFlag && item?.value?.id != ''" formControlName="tags" [editable]='true'>
+                          </tag-input>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group location-grid-view mt-25">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row">
+                      <div class="col-6 col-md-6 col-lg-6" *ngIf="streetViewArrayHeader">
+                        <strong class="selectImage">{{'common.labels.streetView'| translate}}</strong>
+                      </div>
+                      <div class="col-6 col-md-6 col-lg-6 text-right" *ngIf="streetViewArrayHeader">
+                        <div class="row">
+                          <div class="col-12 col-md-12 col-lg-12">
+                            <div class="btn-group btn-group-justified mb">
+                              <label class="btn btn-secondary" (click)="selectAllStreetImages(true)"
+                                [class.active]="setStreetImageSelectAllFlag">{{'common.labels.selectAll'| translate}}</label>
+                              <label class="btn btn-secondary" (click)="selectAllStreetImages(false)"
+                                [class.active]="isSetStreetSelectNone">{{'common.labels.selectNone'| translate}}</label>
+                            </div>
+                            <button class="btn btn-sm btn-delete-selection btn-danger" (click)="removeFromArray();"
+                              [disabled]="!removeSelectedArr.length" type="button">
+                              <em class="fa fa-trash delete-file-icon ptr">
+                                <span>{{'common.labels.deleteSelection'| translate}}
+                                </span>
+                              </em>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row no-mg" *ngIf="streetViewArrayHeader">
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" *ngIf="streetViewGalleryImages.length > 0">
+                    <div class="row">
+                      <!-- <div class="checkbox c-checkbox pl-2">
+                    <label>
+                      <input type="checkbox" formControlName="selectAllStreetImages"
+                        (click)="selectAllStreetImages($event);">
+                      <span class="fa fa-check"></span>
+                    </label>
+                  </div> -->
+                      <!-- <button class="btn btn-sm btn-danger" (click)="removeFromArray();" type="button">
+                    <em class="fa fa-trash delete-file-icon ptr"> <span class="ml-2">Delete Selection
+                      </span></em>
+                  </button> -->
+                    </div>
+                  </div>
+                  <div formArrayName="streetViewImages" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row no-mg">
+                      <div class="location-grid-image corners2 col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 mb-15"
+                        *ngFor="let item of manageLocationForm.controls.streetViewImages['controls']; let i=index;">
+                        <div class="text-center" [formGroupName]="i">
+                          <div class="row">
+                            <div class="search-icon">
+                              <a (click)="openStreetViewImages(i)" data-toggle="tooltip" data-placement="bottom"
+                                title="{{ item?.value?.age }}">
+                                <em class="icon-magnifier"></em>
+                              </a>
+                            </div>
+                            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                              <div class="checkbox c-checkbox ml-1 mt-1">
+                                <label>
+                                  <input type="checkbox" formControlName="selection"
+                                    (change)="removeSelectedImages(i, $event);">
+                                  <span class="fa fa-check"></span>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                              <a class="example-image-link" data-lightbox="example-set" data-title="">
+                                <img (click)="openStreetViewImages(i)" [src]="item.value.thumbnailImageUrl"
+                                  class="img-fluid ptr custom-img" />
+                              </a>
+                              <div class="list-image-name text-center list-image-style">
+                                <span *ngIf="!item.value.fileName"> loading... </span>
+                                <span *ngIf="item.value.fileName">{{item.value.fileName}}</span>
+                              </div>
+                              <tag-input class="tag-input-class" placeholder="{{'location.labels.tag' | translate}}"
+                                *ngIf="tagEditOptionFlag && item?.value?.id != ''" formControlName="tags"
+                                [editable]='true'>
+                              </tag-input>
+                            </div>
+                            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                              <div class="row">
+                                <a (click)="downloadFile(item?.value, true)">
+                                  <button class="btn btn-sm btn-green ml-1 mr-1" type="button">
+                                    <em class="fa fa-download"></em>
+                                  </button>
+                                </a>
+                                <button class="btn btn-sm btn-danger ml-1"
+                                  (click)="removeStreetViewImageEvent(i);" type="button">
+                                  <em class="fa fa-trash delete-file-icon ptr"></em>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+      <h4 class="text-dark">
+        <strong>{{'location.labels.contactPersonDetails'| translate}}</strong>
+      </h4>
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="form-group">
+            <div formArrayName="contactPersons" class="">
+              <div
+                *ngFor="let contactperson of manageLocationForm.controls.contactPersons['controls']; let i=index;let lst=last;">
+                <div [formGroupName]="i">
+                  <div class="row no-mg mt-10">
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                      <label class="col-md-12 col-sm-12 col-xs-12 no-mg control-label textElipses">{{'location.labels.name'
+                        | translate}}
+                        <span class="mandatory">*</span>
+                      </label>
+                      <input name="firstName" class="form-control" formControlName="name"
+                        placeholder="{{'common.labels.name' | translate}}">
+                      <div class="bb-error"
+                        *ngIf="getFormArrayControls('contactPersons', 'name', i)?.errors?.checkRequired && (getFormArrayControls('contactPersons', 'name', i)?.touched || submitManageLocationForm || validContactPersonDetails)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}</div>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                      <label class="col-md-12 col-sm-12 col-xs-12 no-mg control-label textElipses">{{'location.labels.email'
+                        | translate}}
+                        <span class="mandatory">*</span>
+                      </label>
+                      <div class="col-md-12 col-xs-12 col-sm-12 no-mg">
+                        <input name="email" class="form-control" formControlName="email"
+                          placeholder="{{'common.labels.email' | translate}}">
+                        <div class="bb-error"
+                          *ngIf="(getFormArrayControls('contactPersons', 'email', i)?.errors?.checkEmail && (getFormArrayControls('contactPersons', 'email', i)?.touched || submitManageLocationForm) && getFormArrayControls('contactPersons', 'email', i)?.dirty)">{{'pages.errorMessages.invalidEmail'|
+                          translate}}</div>
+                        <div class="bb-error"
+                          *ngIf="(getFormArrayControls('contactPersons', 'email', i)?.errors?.checkRequired && (getFormArrayControls('contactPersons', 'email', i)?.touched || submitManageLocationForm || validContactPersonDetails))">{{'pages.errorMessages.fieldRequired'|
+                          translate}}</div>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                      <div class="phone-no mb-10">
+                        <label class="col-md-12 col-sm-12 col-xs-12 no-mg control-label textElipses">{{'location.labels.phoneNo'
+                          | translate}}
+                        </label>
+                        <input (blur)="selectPrimary(i,1)" name="phone" class="form-control"
+                          formControlName="phoneNumber" oninput="this.value = this.value.replace(/[^0-9()+-\s]/g, '');"
+                          placeholder="{{'common.labels.phoneMob' | translate}}" data-toggle="tooltip"
+                          data-placement="top" title="{{'common.labels.phoneMob' | translate}}">
+                      </div>
+                      <div class="primary-phone-radio">
+                        <input (change)="selectPrimary(i,1)" type="radio" value="1" formControlName="primary"
+                          checked="checked" />
+                      </div>
+                      <div class="primary-phone-msg">
+                        <span>{{'common.labels.primary'| translate}}</span>
+                      </div>
+                      <div class="bb-error"
+                        *ngIf="(getFormArrayControls('contactPersons', 'phoneNumber', i)?.errors?.checkRequired && getFormArrayControls('contactPersons', 'phoneNumberWork', i)?.errors?.checkRequired) && (submitManageLocationForm || validContactPersonDetails)">{{'common.labels.atleastOnePhone'|
+                        translate}}</div>
+                    </div>
+                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                      <div class="phone-no mb-10">
+                        <label class="col-md-12 col-sm-12 col-xs-12 no-mg control-label textElipses">{{'location.labels.phoneNoWork'
+                          | translate}}
+                        </label>
+                        <input (blur)="selectPrimary(i,2)" name="phoneNumberWork" class="form-control"
+                          formControlName="phoneNumberWork"
+                          oninput="this.value = this.value.replace(/[^0-9()+-\s]/g, '');"
+                          placeholder="{{'common.labels.phoneWork' | translate}}" data-toggle="tooltip"
+                          data-placement="top" title="{{'common.labels.phoneWork' | translate}}">
+                      </div>
+                      <div class="primary-phone-radio">
+                        <input (change)="selectPrimary(i,2)" type="radio" value="2" formControlName="primary"
+                          checked="checked" />
+                      </div>
+                      <div class="primary-phone-msg">
+                        <span>{{'common.labels.primary'| translate}}</span>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 pt-30">
+                      <a class="ml-2 click-cursor" (click)="removeContactPerson(i)"
+                        *ngIf=" manageLocationForm.controls.contactPersons['controls'].length > 1">
+                        <i class="fa fa-minus add-remove-person-button"></i>
+                      </a>
+                      <a (click)="addContactPersons(true,i)" class="click-cursor ml-2"
+                        *ngIf="lst &&  manageLocationForm.controls.contactPersons['controls'].length > 0">
+                        <i class="fa fa-plus add-remove-person-button"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row no-mg mt-10">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 checkbox c-checkbox">
+              <label>
+                <input type="checkbox" formControlName="disableContactInformation"
+                  (change)="contactInformationChecked()" />
+                <span class="fa fa-check"></span>{{'location.labels.noContactInfo'| translate}}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg" id="financialDetails">
+      <h4 class="text-dark">
+        <strong>{{'location.labels.financialDetails'| translate}}</strong>
+      </h4>
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="row no-mg">
+              <div class="col-md-6">
+                <label class="control-label">{{'location.labels.accountNo' |
+              translate}}
+                </label>
+                <div>
+                  <input name="accountNo" class="form-control" formControlName="accountNumber"
+                    oninput="this.value = this.value.replace(/[^0-9()+-\s]/g, '');"
+                    placeholder="{{'location.labels.accountNo' | translate}}">
+                  <div class="bb-error"
+                    *ngIf="manageLocationForm.controls['accountNumber']?.errors?.checkRequired && (manageLocationForm.controls['accountNumber'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                translate}}</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="control-label">{{'location.labels.bankName' |
+              translate}}
+                </label>
+                <div>
+                  <input name="bankName" class="form-control" formControlName="bankName"
+                    placeholder="{{'location.labels.bankName' | translate}}">
+                  <div class="bb-error"
+                    *ngIf="manageLocationForm.controls['bankName']?.errors?.checkRequired && (manageLocationForm.controls['bankName'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg">
+              <div class="col-md-6">
+                <label class="control-label">{{'location.labels.branch' |
+              translate}}
+                </label>
+                <div>
+                  <input name="branchName" class="form-control" formControlName="branchName"
+                    placeholder="{{'location.labels.branch' | translate}}">
+                  <div class="bb-error"
+                    *ngIf="manageLocationForm.controls['branchName']?.errors?.checkRequired && (manageLocationForm.controls['branchName'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                translate}}</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="ontrol-label">{{'location.labels.clabe' |
+              translate}}
+                </label>
+                <div>
+                  <input name="clabe" class="form-control" minlength="18" maxlength="18" OnlyNumber="true"
+                    formControlName="clabe" placeholder="{{'location.labels.clabe' | translate}}">
+                  <div class="text-danger no-mg"
+                    *ngIf="manageLocationForm.controls['clabe']?.errors && (manageLocationForm.controls['clabe'].touched || submitManageLocationForm)">{{'common.errorMessages.clabeMessage'|
+                translate}}</div>
+                  <div class="bb-error"
+                    *ngIf="manageLocationForm.controls['clabe']?.errors?.checkRequired && (manageLocationForm.controls['clabe'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                translate}}</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <div class="row no-mg">
+              <div class="col-md-6">
+                <label class="control-label">{{'location.labels.address' |
+              translate}}
+                </label>
+                <div>
+                  <textarea name="address" class="form-control" formControlName="bankAddress"
+                    placeholder="{{'location.labels.address' | translate}}"></textarea>
+                  <div class="bb-error"
+                    *ngIf="manageLocationForm.controls['bankAddress']?.errors?.checkRequired && (manageLocationForm.controls['bankAddress'].touched || submitManageLocationForm)">{{'pages.errorMessages.fieldRequired'|
+                translate}}</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="control-label">{{'location.labels.extraHours' | translate}}
+                </label>
+                <div>
+                  <input type="text" maxlength="10" (keyup)="checkInvalidInput('extraHours')" class="form-control" formControlName="extraHours"
+                    oninput="this.value = this.value.replace(/[^0-9.:]/g, '');"
+                    placeholder="{{'location.labels.extraHours' | translate}}" />
+                  <div class="text-danger"
+                    *ngIf="manageLocationForm.controls['extraHours']?.errors?.checkDecimal && (manageLocationForm.controls['extraHours'].touched) && manageLocationForm.controls['extraHours'].dirty">{{'pages.errorMessages.validDecimal'|
+                      translate}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <div class="row no-mg">
+              <div class="col-md-6">
+                <label class=" control-label">{{'location.labels.settingCost' | translate}}
+                </label>
+                <div>
+                  <input class="form-control"  (keyup)="checkInvalidInput('locationSettingCost')" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '');"
+                    placeholder="Extra Hours" formControlName="locationSettingCost"
+                    placeholder="{{'location.labels.settingCost' | translate}}" />
+                  <div class="text-danger"
+                    *ngIf="manageLocationForm.controls['locationSettingCost']?.errors?.checkDecimal && (manageLocationForm.controls['locationSettingCost'].touched) && manageLocationForm.controls['locationSettingCost'].dirty">{{'pages.errorMessages.validDecimal'|
+                      translate}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+      <h4 class="text-dark">
+        <strong>{{'location.labels.documents'| translate}}</strong>
+      </h4>
+      <div class=" panel-body panel panel-primary">
+        <div class="form-group">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="panel panel-primary">
+              <div class="panel-heading document-panel">
+                <!-- <h5 class="text-dark">
+                    <strong class="col-md-2 col-xs-2 col-sm-2"> {{'location.labels.bankattachments'| translate}}
+                    </strong>
+                    <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                      <div class="small f-italic mr-15 mt-10" style="text-align: right;">{{'common.labels.documentTypes' | translate}}</div>
+                      <label for="file2" class="file-upload">
+                        <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="bankattachments"
+                          (change)="addBankFiles($event,false)" />
+                      </label>
+                    </em>
+                  </h5> -->
+
+                <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                  <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                    <h5 class="text-dark">
+                      <strong>
+                        {{'location.labels.bankattachments'| translate}}
+                      </strong>
+                    </h5>
+                  </div>
+                  <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 no-mg text-right">
+                    <label for="file2" class="file-upload m-0">
+                      <em class="text-right text-dark pr-10">
+                        <span class="small f-italic">
+                          {{'common.labels.documentTypes' | translate}}
+                        </span>
+                      </em>
+                      <button class="btn btn-default browse-btn"
+                        type="button">{{'common.labels.browse'| translate}}</button>
+                      <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                        ng2FileSelect [uploader]="attachements.bank" (change)="addFiles($event,fileTypes.bank)" />
+                    </label>
+                  </div>
+                </div>
+
+              </div>
+              <div class="panel-body">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="row attachment-section">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 dropZone">
+                      <div ng2FileDrop [uploader]="attachements.bank" class="my-drop-zone dropzone">
+                        <!-- <div class="text-danger col-md-12 no-mg mb-10 ng-invalid" *ngIf="editUserForm.controls['ttDocument']?.errors?.checkRequired &&  (editUserForm.controls['ttDocument'].touched  ||submmitedFormFlag)">{{'actors.freelancers.errorMessages.documentRequired'| translate}}</div> -->
+                        <div class="attachUpload" *ngIf="attachements.bank.queue.length > 0">
+                          <div class="listItem mb-2" *ngFor="let item of attachements.bank.queue;let i=index;">
+                            <div class="row" *ngIf="item?.file !== undefined">
+                              <!-- <div class="col-md-2" *ngIf="item?.url == ''">
+                                      <i class="fa fa-spinner fa-spin margin-right-5" ></i>
+                                  </div> -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 textElipses">
+                                <a class="fileName document-link" data-toggle="tooltip" data-placement="top"
+                                  title="{{ item?.file?.name }}" target="_blank" *ngIf="item?.url" href="{{item.url}}"
+                                  download="{{item.url}}">
+                                  {{ item?.file?.name }}
+                                </a>
+                                <i *ngIf="item?.url == ''" class="fa fa-spinner fa-spin margin-right-5"></i>
+                              </div>
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                <a *ngIf="item?.url" class="attachRemoveBtn btn-default">
+                                  <em class="fa fa-trash delete-file-icon text-danger ptr"
+                                    (click)="removeBankFiles(i,item);"></em>
+                                </a>
+                              </div>
+                            </div>
+                            <!-- <div class="bb-error" *ngIf="manageLocationForm.controls['locationAttachments']?.errors?.checkRequired && (submitManageLocationForm)">{{'pages.errorMessages.docRequired'| translate}}</div> -->
+                          </div>
+                          <!-- <div class="bb-error" *ngIf="manageLocationForm.controls['locationAttachments']?.errors?.checkRequired && (submitManageLocationForm)">{{'pages.errorMessages.docRequired'| translate}}</div> -->
+                        </div>
+                        <!-- <div class="bb-error" *ngIf="manageLocationForm.controls['locationAttachments']?.errors?.checkRequired && (submitManageLocationForm)">{{'pages.errorMessages.docRequired'| translate}}</div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="panel panel-primary">
+              <div class="panel-heading document-panel">
+                <!-- <h5 class="text-dark">
+                  <strong class="col-md-2 col-xs-2 col-sm-2"> {{'location.labels.otherAttachments'| translate}}
+                  </strong>
+                  <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                    <div class="small f-italic mr-15 mt-10" style="text-align: right;">{{'common.labels.documentTypes' | translate}}</div>
+                    <label for="file2" class="file-upload">
+                      <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                      <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="locationAttachments"
+                        (change)="addFiles($event,true)" />
+                    </label>
+                  </em>
+                </h5> -->
+
+                <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                  <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                    <h5 class="text-dark">
+                      <strong>
+                        {{'location.labels.otherAttachments'| translate}}
+                      </strong>
+                    </h5>
+                  </div>
+                  <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 no-mg text-right">
+                    <label for="file2" class="file-upload m-0">
+                      <em class="text-right text-dark pr-10">
+                        <span class="small f-italic">
+                          {{'common.labels.documentTypes' | translate}}
+                        </span>
+                      </em>
+                      <button class="btn btn-default browse-btn"
+                        type="button">{{'common.labels.browse'| translate}}</button>
+                      <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                        ng2FileSelect [uploader]="attachements.location"
+                        (change)="addFiles($event,fileTypes.location)" />
+                    </label>
+                  </div>
+                </div>
+
+              </div>
+              <div class="panel-body">
+                <div class="col-md-12">
+                  <div class="row attachment-section">
+                    <div class="col-md-12 dropZone">
+                      <div ng2FileDrop [uploader]="attachements.location" class="my-drop-zone dropzone">
+                        <!-- <div class="text-danger col-md-12 no-mg mb-10 ng-invalid" *ngIf="editUserForm.controls['ttDocument']?.errors?.checkRequired &&  (editUserForm.controls['ttDocument'].touched  ||submmitedFormFlag)">{{'actors.freelancers.errorMessages.documentRequired'| translate}}</div> -->
+                        <div class="attachUpload" *ngIf="attachements.location.queue.length > 0">
+                          <div class="listItem mb-2" *ngFor="let item of attachements.location.queue;let i=index;">
+                            <div class="row" *ngIf="item?.file !== undefined">
+                              <!-- <div class="col-md-2" *ngIf="item?.url == ''">
+                                      <i class="fa fa-spinner fa-spin margin-right-5" ></i>
+                                  </div> -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                <div class="row">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 textElipses">
+                                    <i *ngIf="item?.url == ''" class="fa fa-spinner fa-spin margin-right-5"></i>
+                                    <a class="fileName document-link" data-toggle="tooltip" data-placement="top"
+                                      title="{{ item?.file?.name }}" target="_blank" *ngIf="item?.url"
+                                      href="{{item.url}}" download="{{item.url}}">
+                                      {{ item?.file?.name }}
+                                    </a>
+                                  </div>
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 fileName document-link"
+                                    *ngIf="item?.url">
+                                    <input id="docName{{i}}" (keyup)="setDocumentName(i)" class="form-control"
+                                      placeholder="{{'common.labels.enterDocumentName' | translate}}">
+                                  </div>
+
+                                </div>
+                              </div>
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                <a *ngIf="item?.url" class="attachRemoveBtn btn-default">
+                                  <em class="fa fa-trash delete-file-icon text-danger ptr"
+                                    (click)="removeFiles(i,item);"></em>
+                                </a>
+                              </div>
+                            </div>
+                            <!-- <div class="bb-error" *ngIf="manageLocationForm.controls['locationAttachments']?.errors?.checkRequired && (submitManageLocationForm)">{{'pages.errorMessages.docRequired'| translate}}</div> -->
+                          </div>
+                          <!-- <div class="bb-error" *ngIf="manageLocationForm.controls['locationAttachments']?.errors?.checkRequired && (submitManageLocationForm)">{{'pages.errorMessages.docRequired'| translate}}</div> -->
+                        </div>
+                        <!-- <div class="bb-error" *ngIf="manageLocationForm.controls['locationAttachments']?.errors?.checkRequired && (submitManageLocationForm)">{{'pages.errorMessages.docRequired'| translate}}</div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- </div>
+    </div> -->
+
+
+
+
+        <div class="form-group">
+          <div class="row no-mg">
+            <div class="col-md-6">
+              <label class="control-label">{{'location.labels.deed' | translate}}
+              </label>
+              <div>
+                <input class="form-control" formControlName="deed" maxlength="150"
+                  placeholder="{{'location.labels.deed' | translate}}" />
+                <div class="text-danger no-mg" *ngIf="manageLocationForm.controls['deed']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+
+              <!-- <div class="form-group"> -->
+              <label class=" control-label">{{'location.labels.id' | translate}}
+              </label>
+              <div>
+                <input class="form-control" maxlength="150" formControlName="identity"
+                  placeholder="{{'location.labels.id' | translate}}"
+                  oninput="this.value = this.value.replace(/[^0-9A-Za-z\s]/g,'');" />
+                <div class="text-danger no-mg" *ngIf="manageLocationForm.controls['identity']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <div class="row no-mg">
+            <div class="col-md-6">
+              <label class="control-label">{{'location.labels.proofAdd' | translate}}
+              </label>
+              <div>
+                <input class="form-control" maxlength="150"
+                  oninput="this.value = this.value.replace(/[^0-9A-Za-z\s]/g,'');" formControlName="proofAddress"
+                  placeholder="{{'location.labels.proofAdd' | translate}}" />
+                <div class="text-danger no-mg" *ngIf="manageLocationForm.controls['proofAddress']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+              translate}}</div>
+              </div>
+            </div>
+            <!-- <div class="form-group"> -->
+            <div class="col-md-6">
+              <label class="control-label">{{'location.labels.receiptNo' | translate}}
+              </label>
+              <div>
+                <input class="form-control" maxlength="150" formControlName="receiptNo"
+                  placeholder="{{'location.labels.receiptNo' | translate}}" />
+                <div class="text-danger no-mg" *ngIf="manageLocationForm.controls['receiptNo']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+              translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg mt-2">
+      <h4 class="text-dark">
+        <strong>{{'location.labels.observation' | translate}}</strong>
+      </h4>
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="form-group">
+              <div class="row no-mg">
+                <div class="col-md-6">
+                  <label class="control-label">{{'location.labels.timeForProcedure' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="10" (keyup)="checkInvalidInput('timeForProcedure')" oninput="this.value = this.value.replace(/[^0-9.:]/g, '');"
+                      formControlName="timeForProcedure"
+                      placeholder="{{'location.labels.timeForProcedure' | translate}}" />
+                    <div class="text-danger"
+                      *ngIf="manageLocationForm.controls['timeForProcedure']?.errors?.checkDecimal && (manageLocationForm.controls['timeForProcedure'].touched) && manageLocationForm.controls['timeForProcedure'].dirty">{{'pages.errorMessages.validDecimal'|
+                      translate}}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="control-label">{{'location.labels.spaceDescription' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="150" formControlName="spacesDescription"
+                      placeholder="{{'location.labels.spaceDescription' | translate}}" />
+                    <div class="text-danger no-mg"
+                      *ngIf="manageLocationForm.controls['spacesDescription']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row no-mg">
+                <div class="col-md-6">
+                  <label class="control-label">{{'location.labels.facilities' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="150" formControlName="facilities"
+                      placeholder="{{'location.labels.facilities' | translate}}" />
+                    <div class="text-danger no-mg" *ngIf="manageLocationForm.controls['facilities']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="control-label">{{'location.labels.restrictions' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="150" formControlName="restrictions"
+                      placeholder="{{'location.labels.restrictions' | translate}}" />
+                    <div class="text-danger no-mg"
+                      *ngIf="manageLocationForm.controls['restrictions']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row no-mg">
+                <div class="col-md-6">
+                  <label class="control-label">{{'location.labels.availability' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="150" formControlName="availability"
+                      placeholder="{{'location.labels.availability' | translate}}" />
+                    <div class="text-danger no-mg"
+                      *ngIf="manageLocationForm.controls['availability']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="control-label">{{'location.labels.parking' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="150" formControlName="parking"
+                      placeholder="{{'location.labels.parking' | translate}}" />
+                    <div class="text-danger no-mg" *ngIf="manageLocationForm.controls['parking']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row no-mg">
+                <div class="col-md-6">
+
+                  <label class="control-label">{{'location.labels.neighboorFacilities' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="150" formControlName="neighborhoodFacilities"
+                      placeholder="{{'location.labels.neighboorFacilities' | translate}}" />
+                    <div class="text-danger no-mg"
+                      *ngIf="manageLocationForm.controls['neighborhoodFacilities']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg mt-2">
+      <h4 class="text-dark">
+        <strong>{{'location.labels.domesticLocation' | translate}}</strong>
+      </h4>
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="form-group">
+              <div class="row no-mg">
+                <div class="col-md-6">
+
+                  <label class="control-label">{{'location.labels.distanceBase' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="150" formControlName="distanceFromMainBase"
+                      placeholder="{{'location.labels.distanceBase' | translate}}" />
+                    <div class="text-danger no-mg"
+                      *ngIf="manageLocationForm.controls['distanceFromMainBase']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="control-label">{{'location.labels.hospital' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" formControlName="hospital" maxlength="150"
+                      placeholder="{{'location.labels.hospital' | translate}}" />
+                    <div class="text-danger no-mg" *ngIf="manageLocationForm.controls['hospital']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row no-mg">
+                <div class="col-md-6">
+                  <label class="control-label">{{'location.labels.lodging' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="150" formControlName="lodging"
+                      placeholder="{{'location.labels.lodging' | translate}}" />
+                    <div class="text-danger no-mg" *ngIf="manageLocationForm.controls['lodging']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="control-label">{{'location.labels.Shops' | translate}}
+                  </label>
+                  <div>
+                    <input class="form-control" maxlength="150" formControlName="shops"
+                      placeholder="{{'location.labels.Shops' | translate}}" />
+                    <div class="text-danger no-mg" *ngIf="manageLocationForm.controls['shops']?.errors?.maxlength">{{'common.errorMessages.maxLength'|
+                translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 no-mg">
+      <button class="btn btn-success save-btn" [disabled]="!enableSaveButtonFlag || isClicked" (click)="addLocation()"
+        type="submit">
+        <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>
+        {{'common.labels.save'| translate}}</button>
+      <button class="btn btn-danger ml-1 cancel-btn" (click)="navigateTo()"
+        type="button">{{'common.labels.cancel'| translate}}</button>
+    </div>
+  </form>
+  <div class="modal fade" bsModal #classicModal="bs-modal">
+    <div class="modal-dialog modal-custom-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <label class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 control-label">{{'common.labels.selectCategory'|
+            translate}}
+          </label>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+            <i class="fa fa-times pull-right ptr" (click)="closeAddCategoryModel();" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="modal-body">
+          <category-location-hierarchy [showActions]="false" [showFooter]="true"
+            [selectedCategories]="selectedCategories" [includeLocations]="false"
+            (onSelectCategory)="categorySelected($event)" (onCancelAction)="closeAddCategoryModel()">
+          </category-location-hierarchy>
+          <!-- <form [formGroup]="addNewCategoryForm">
+                <div class="col-md-12">
+                  <input name="cat" type="text" class="form-control col-md-8 cat-input-field" formControlName="newCategory" placeholder="{{'location.labels.category'| translate}}"
+                  />
+                  <div class="bb-error" *ngIf="addNewCategoryForm.controls['newCategory']?.errors?.checkRequired && (addNewCategoryForm.controls['newCategory'].touched || submitCategoryFlag)">{{'pages.errorMessages.fieldRequired'| translate}}</div>
+                </div>
+                <div style="margin-top: 15px;" class="col-md-12">
+                  <button class="btn btn-danger add-btn" (click)="addCategory()">
+                    {{'common.labels.add'| translate}}</button>
+                </div>
+              </form> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal gallery-modal" bsModal #galleryModal="bs-modal" tabindex='-1'>
+  <div class="modal-dialog modal-dialog-centered modal-lg gallery-modal-dialog">
+    <div class="modal-content gallery-modal-content">
+      <div class="modal-body text-center">
+        <ngx-gallery #gallery [options]="galleryOptions" [images]="galleryImages"
+          (previewChange)="setOrientationToImage($event)" (previewClose)="previewClose();">
+        </ngx-gallery>
+      </div>
+    </div>
+  </div>
+</div>

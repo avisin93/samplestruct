@@ -1,0 +1,550 @@
+<ng-container *ngIf="!renderPage">
+  <app-loader class="col-md-12" [loading]="!renderPage"></app-loader>
+</ng-container>
+
+<ng-container *ngIf="renderPage">
+  <div class="add-po-freelancer">
+
+    <div class="panel panel-primary">
+
+      <div class="panel-body">
+
+
+        <div class="form-group" *ngIf="!freelancerPOId">
+          <h5 class="text-dark mt-1 ml-3">
+            <strong>{{'projects.labels.addFreelancerPurchaseOrder'| translate}}</strong>
+            <button class="btn btn-primary pull-right mr-3" (click)="navigateTo()" type="button"> {{'common.labels.backToList'|
+              translate}}</button>
+          </h5>
+        </div>
+
+        <div class="form-group" *ngIf="freelancerPOId">
+          <h5 class="text-dark mt-1 ml-3">
+            <strong>{{'projects.labels.editFreelancerPurchaseOrder'| translate}}</strong>
+            <button class="btn btn-primary pull-right mr-3" (click)="navigateTo()" type="button"> {{'common.labels.backToList'|
+              translate}}</button>
+          </h5>
+        </div>
+        <form class="form-horizontal" [formGroup]="freelancerPOForm" novalidate>
+          <div class="form-group">
+            <div class="row no-mg">
+              <div class="col-md-12">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.services'| translate}}</u>
+                  </strong>
+                </label>
+              </div>
+            </div>
+            <!-- </div>
+
+          <div class="form-group"> -->
+            <div class="row no-mg">
+              <div class="col-md-4">
+                <label>{{'projects.labels.budgetLine'| translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <ngx-select  [allowClear] = "true"  (remove)="removedBudgetLine()"   [items]="budgetLineList" placeholder="{{'common.labels.select'| translate}}"
+                  (select)="getFreelancersList($event); resetFreelancerDetail();" formControlName="budgetLine">
+                  <ng-template ngx-select-option-not-found>{{'pages.errorMessages.budgetLine'| translate}}</ng-template>
+                </ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="freelancerPOForm.controls['budgetLine']?.errors?.checkRequired && (freelancerPOForm.controls['budgetLine'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+              <div class="col-md-4">
+
+                <div class="col-lg-12 no-mg">
+                  <label>{{'projects.labels.description'| translate}} <span class="text-danger">*</span></label>
+                </div>
+                <div class="col-lg-12 no-mg">
+                  <textarea name="serviceDescription" class="form-control"
+                    formControlName="serviceDescription"></textarea>
+                  <div class="text-danger col-md-12 no-mg"
+                    *ngIf="freelancerPOForm.controls['serviceDescription']?.errors?.checkRequired && (freelancerPOForm.controls['serviceDescription'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                    translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row no-mg">
+              <div class="col-md-12">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.supplier'| translate}}</u>
+                  </strong>
+                </label>
+              </div>
+            </div>
+            <!-- </div>
+          <div class="form-group"> -->
+            <div class="row no-mg">
+              <div class="col-md-4">
+                <label>{{'common.labels.freelancer'| translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <ngx-select formControlName="freelancerId"  [allowClear] = "true"  [items]="freelancersList"
+                  placeholder="{{'common.labels.select'| translate}}" (select)="freelancerSelected($event,true)">
+                  <ng-template ngx-select-option-not-found>{{'projects.labels.noFreelancerFound'| translate}}
+                  </ng-template>
+                </ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="freelancerPOForm.controls['freelancerId']?.errors?.checkRequired && (freelancerPOForm.controls['freelancerId'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                  translate}}</div>
+                <!-- <div class="text-danger col-md-12 no-mg" *ngIf="incompleteProfileDetailsFlag">{{'actors.errorMessages.incompleteProfile'|
+                      translate}}</div> -->
+              </div>
+              <div class="col-md-4">
+                <label>{{'common.labels.mode'| translate}}</label>
+                <span class="text-danger">*</span>
+                <ngx-select [items]="mode"  [allowClear] = "true"  formControlName="modeOfOperation"
+                  placeholder="{{'common.labels.select' | translate}}">
+                </ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="freelancerPOForm.controls['modeOfOperation']?.errors?.checkRequired && (freelancerPOForm.controls['modeOfOperation'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                  translate}}</div>
+
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg mt-3">
+              <div *ngIf="thirdPartyVendorName" class="col-md-12">
+                <p>{{'projects.labels.thirdPartyPaidYes'| translate}}</p>
+                <p>{{'projects.labels.paidVia'| translate}}: {{thirdPartyVendorName}}</p>
+              </div>
+              <div *ngIf="!thirdPartyVendorName" class="col-md-12">
+                <p>{{'projects.labels.thirdPartyPaidNo'| translate}}</p>
+                <p>{{'projects.labels.paidVia'| translate}}: {{'common.labels.na' | translate}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg">
+              <div class="col-md-6">
+                <div class="col-lg-12 no-mg">
+                  <label>
+                    <strong>
+                      <u>{{'projects.labels.poNotes'| translate}}</u>
+                    </strong>
+                  </label>
+                </div>
+                <div class="col-lg-12 no-mg">
+                  <textarea name="notes" class="form-control" formControlName="notes"></textarea>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg mt-3">
+              <div class="col-md-4">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.paymentDate'| translate}}</u>
+                  </strong>
+                  <span class="text-danger">*</span>
+                </label>
+                <my-date-picker class="bbdate" formControlName="paymentDate" [options]="dobDatePickerOptions"
+                  placeholder="{{'common.labels.datePickerPlaceholder' | translate}}"></my-date-picker>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="freelancerPOForm.controls['paymentDate']?.errors?.checkRequired && (freelancerPOForm.controls['paymentDate'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                    translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg mt-3">
+              <div class="col-md-12">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.poAmt'| translate}}</u>
+                  </strong>
+                </label>
+              </div>
+            </div>
+            <!-- </div>
+    <div class="form-group"> -->
+            <div class="row no-mg">
+              <div class="col-md-2">
+                <label>{{'common.labels.amount'| translate}} <span class="text-danger">*</span></label>
+                <input (keyup)="checkAmount();updatePayableAmount();"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" (keyup)="updateSubtotal()"
+                  formControlName="totalAmountRequested" class="form-control">
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="freelancerPOForm.controls['totalAmountRequested']?.errors?.checkRequired && (freelancerPOForm.controls['totalAmountRequested'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                  translate}}</div>
+                <div class="text-danger"
+                  *ngIf="!freelancerPOForm.controls['totalAmountRequested']?.errors?.checkRequired && freelancerPOForm.controls['totalAmountRequested']?.errors?.checkDecimal && (freelancerPOForm.controls['totalAmountRequested'].touched) && freelancerPOForm.controls['totalAmountRequested'].dirty">{{'pages.errorMessages.validDecimal'|
+                  translate}}</div>
+                <!-- <input class="form-control" (change)="updateSubtotal()" [(ngModel)]="amount" type="text"> -->
+              </div>
+              <div class="col-md-2">
+                <label>{{'projects.labels.currency'| translate}} <span class="text-danger">*</span></label>
+                <ngx-select [items]="currency"  [allowClear] = "true"  formControlName="currencyId"
+                  placeholder="{{'common.labels.select' | translate}}" (select)="onCurrencyChange($event)">
+                </ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="freelancerPOForm.controls['currencyId']?.errors?.checkRequired && (freelancerPOForm.controls['currencyId'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                  translate}}</div>
+                <!-- <ngx-select [items]="currencyArr" placeholder="Currency" [(ngModel)]="currency"></ngx-select> -->
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg mt-3">
+              <div class="col-md-12">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.cfdiType'| translate}}</u>
+                  </strong>
+                </label>
+              </div>
+              <div class="col-md-4">
+                <span>
+                  <label class="ptr">
+                    <input type="radio" class="ptr" [value]="0" selected="true" formControlName="typeSelection"
+                      (click)="changeType(0)">
+                    <!-- <input type="radio" [value]="0" [(ngModel)]="typeSelection" selected="true" (click)="changeType(0)"> -->
+                    {{'projects.labels.factura'| translate}}</label>
+                </span>
+                <span class="ml-5">
+                  <label class="ptr">
+                    <input type="radio" class="ptr" [value]="1" formControlName="typeSelection" (click)="changeType(1)">
+                    <!-- <input type="radio" [value]="1" [(ngModel)]="typeSelection" (click)="changeType(1)"> -->
+                    {{'projects.labels.honorarious'| translate}}</label>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg">
+              <div class="col-md-2">
+                <label>{{'projects.labels.vat'| translate}}(%)</label>
+                <input type="text" (blur)="setValueZero('vat')" (keyup)="updateSubtotal();updatePayableAmount();"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="vat" class="form-control">
+                <!-- <input type="text" (input)="updateSubtotal();" (change)="updateSubtotal()" formControlName="vat" class="form-control"> -->
+                <!-- <input type="text" (change)="updateSubtotal()" [(ngModel)]="vat" class="form-control"> -->
+              </div>
+              <div class="col-md-3">
+                <label>{{'common.labels.subTotal'| translate}}</label>
+                <div class="mt-5">
+                  <span class="mr-2">{{ subTotal ? (subTotal | twoDecimal):0}}</span>
+                  <span>{{defaultCurrency.name}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="text-danger"
+                *ngIf="freelancerPOForm.controls['vat']?.errors?.checkUptoFourDecimal && (freelancerPOForm.controls['vat'].touched || isClicked) && freelancerPOForm.controls['vat'].dirty">{{'pages.errorMessages.validFourDecimal'|
+                translate}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg mt-3"
+              *ngIf="freelancerPOForm.controls['typeSelection'].value == CFDI_CONST.honorarious">
+              <div class="col-md-2">
+                <label>{{'projects.labels.isrWithholding'| translate}}(%)</label>
+                <input type="text" (blur)="setValueZero('isrWithholding')" (keyup)="updateISRWitholding();updatePayableAmount();"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" class="form-control"
+                  formControlName="isrWithholding">
+                <!-- <input type="text" [(ngModel)]="isrWithholding" class="form-control"> -->
+              </div>
+              <div class="col-md-3">
+                <label>{{'projects.labels.isrWithholdingAmount'| translate}}</label>
+                <div class="mt-5">
+                  <span class="mr-2">{{isrWitholdingAmt | twoDecimal :0.00}}</span>
+                  <!-- <span class="mr-2">{{(amount && isrWithholding) ? ((((amount * isrWithholding)/100)) | twoDecimal) :0.00}}</span> -->
+                  <span>{{defaultCurrency.name}}</span>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="text-danger"
+                *ngIf="!freelancerPOForm.controls['isrWithholding']?.errors?.checkRequired && freelancerPOForm.controls['isrWithholding']?.errors?.checkUptoFourDecimal && (freelancerPOForm.controls['isrWithholding'].touched) && freelancerPOForm.controls['isrWithholding'].dirty">{{'pages.errorMessages.validFourDecimal'|
+                translate}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg mt-3"
+              *ngIf="freelancerPOForm.controls['typeSelection'].value == CFDI_CONST.honorarious">
+              <div class="col-md-2">
+                <label>{{'projects.labels.vatWithholding'| translate}}(%)</label>
+                <input type="text" (blur)="setValueZero('vatWithholding')" (keyup)="updateVatWitholding();updatePayableAmount();"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g,'');" class="form-control"
+                  formControlName="vatWithholding">
+                <!-- <input type="text" [(ngModel)]="vatWithholding" class="form-control"> -->
+              </div>
+              <div class="col-md-3">
+                <label>{{'projects.labels.vatWithholdingAmount'| translate}}</label>
+                <div class="mt-5">
+                  <span class="mr-2">{{vatWitholdingAmt | twoDecimal :0.00}}</span>
+                  <span>{{defaultCurrency.name}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="text-danger"
+                *ngIf="!freelancerPOForm.controls['vatWithholding']?.errors?.checkRequired && freelancerPOForm.controls['vatWithholding']?.errors?.checkUptoFourDecimal && (freelancerPOForm.controls['vatWithholding'].touched) && freelancerPOForm.controls['vatWithholding'].dirty">{{'pages.errorMessages.validFourDecimal'|
+                translate}}</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg mt-3">
+              <div class="col-md-3">
+                <label><b>{{'projects.labels.total'|
+                    translate}}</b></label>
+                <div class="mt-5">
+                  <span class="mr-2">{{payableAmount | twoDecimal :0.00}}</span>
+                  <span>{{defaultCurrency.name}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row no-mg mt-3">
+              <div class="col-md-12">
+                <button (click)="addFreelancerPO()" [disabled]="isClicked" class="btn btn-success" value="Save PO" type="Submit"><i
+                    *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'|
+                  translate}} PO</button>
+                <button (click)="navigateTo()" class="btn btn-danger ml-1" value="Cancel" type="button">{{'common.labels.cancel'|
+                  translate}}</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</ng-container>
+
+
+<!--
+<div class="panel panel-primary">
+
+  <div class="panel-body">
+
+
+    <div class="form-group" *ngIf="!freelancerPOId">
+      <h5 class="text-dark mt-1 ml-3">
+        <strong>{{'projects.labels.addFreelancerPurchaseOrder'| translate}}</strong>
+        <button class="btn btn-primary pull-right mr-3 btl-btn" (click)="navigateTo()">  {{'common.labels.backToList'| translate}}</button>
+      </h5>
+    </div>
+
+    <div class="form-group" *ngIf="freelancerPOId">
+      <h5 class="text-dark mt-1 ml-3">
+        <strong>{{'projects.labels.editFreelancerPurchaseOrder'| translate}}</strong>
+        <button class="btn btn-primary pull-right mr-3 btlist-btn" (click)="navigateTo()">  {{'common.labels.backToList'| translate}}</button>
+      </h5>
+    </div>
+    <form class="form-horizontal" [formGroup]="freelancerPOForm" novalidate>
+
+      <div class="form-group">
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <label>{{'projects.labels.budgetLine'| translate}}
+              <span style="color:red;">*</span>
+            </label>
+          </div>
+        </div>
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <ngx-select [items]="budgetLineList" placeholder="{{'common.labels.select'| translate}}" (select) = "getFreelancersList($event)" formControlName = "budgetLine">
+              <ng-template ngx-select-option-not-found>{{'pages.errorMessages.budgetLine'| translate}}</ng-template>
+            </ngx-select>
+            <div class="text-danger col-md-12 no-mg" *ngIf="freelancerPOForm.controls['budgetLine']?.errors?.checkRequired && (freelancerPOForm.controls['budgetLine'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <label>{{'common.labels.freelancer'| translate}}
+            <span style="color:red;">*</span>
+          </label>
+          </div>
+          <div class="col-md-6 col-sm-8" *ngIf="thirdPartyVendorName">
+            <label>{{'projects.labels.thirdPartyVendorName'| translate}}
+        </label>
+          </div>
+        </div>
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <ngx-select formControlName="freelancerId" [items]="freelancersList" placeholder="{{'common.labels.select'| translate}}" (select)="freelancerSelected($event,true)">
+              <ng-template ngx-select-option-not-found>{{'projects.labels.noFreelancerFound'| translate}}</ng-template>
+            </ngx-select>
+            <div class="text-danger col-md-12 no-mg" *ngIf="freelancerPOForm.controls['freelancerId']?.errors?.checkRequired && (freelancerPOForm.controls['freelancerId'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+          </div>
+          <div class="col-md-6 col-sm-8" *ngIf="thirdPartyVendorName">
+            {{thirdPartyVendorName}}
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-6  no-mg">
+          <div class="row no-mg">
+            <div class="col-md-6 col-sm-12">
+              <label>{{'projects.labels.totalAmountRequested'| translate}}
+              <span style="color:red;">*</span>
+            </label>
+              <input oninput="this.value = this.value.replace(/[^0-9.]/g,'');" (change)="updateSubtotal()" formControlName="totalAmountRequested" class="form-control">
+              <div class="text-danger col-md-12 no-mg" *ngIf="freelancerPOForm.controls['totalAmountRequested']?.errors?.checkRequired && (freelancerPOForm.controls['totalAmountRequested'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+              <div class="text-danger" *ngIf="!freelancerPOForm.controls['totalAmountRequested']?.errors?.checkRequired && freelancerPOForm.controls['totalAmountRequested']?.errors?.checkDecimal && (freelancerPOForm.controls['totalAmountRequested'].touched) && freelancerPOForm.controls['totalAmountRequested'].dirty">{{'pages.errorMessages.validDecimal'| translate}}</div>
+            </div>
+            <div class="col-md-6  col-sm-12">
+              <label>{{'common.labels.currency'| translate}}
+              <span style="color:red;">*</span>
+            </label>
+            <ngx-select [items]="currency" formControlName="currencyId" placeholder="{{'common.labels.select' | translate}}">
+              </ngx-select>
+              <div class="text-danger col-md-12 no-mg" *ngIf="freelancerPOForm.controls['currencyId']?.errors?.checkRequired && (freelancerPOForm.controls['currencyId'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <label>{{'projects.labels.vat'| translate}} (%)
+      </label>
+          </div>
+        </div>
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <input type="text" (change)="updateSubtotal()" oninput="this.value = this.value.replace(/[^0-9.]/g,'');" class="form-control" formControlName="vat">
+            <div class="text-danger" *ngIf="!freelancerPOForm.controls['vat']?.errors?.checkRequired && freelancerPOForm.controls['vat']?.errors?.checkDecimal && (freelancerPOForm.controls['vat'].touched) && freelancerPOForm.controls['vat'].dirty">{{'pages.errorMessages.validDecimal'| translate}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-12 col-xs-12 col-sm-8">{{'projects.labels.subTotal'| translate}}
+      </label>
+        <div class="row col-xs-12 col-sm-8">
+          <div class="col-md-9">
+            <span>{{ subTotal ? (subTotal | twoDecimal):0.00}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg">
+          <label class="col-md-6 col-xs-12 col-sm-8">{{'projects.labels.isrWithholding'| translate}} (%)
+        </label>
+          <label class="col-md-2 col-xs-12 col-sm-8">{{'common.labels.amount' | translate}}
+      </label>
+        </div>
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <input type="text" (change) = "checkField()" oninput="this.value = this.value.replace(/[^0-9.]/g,'');" class="form-control" formControlName="isrWithholding">
+            <div class="text-danger" *ngIf="!freelancerPOForm.controls['isrWithholding']?.errors?.checkRequired && freelancerPOForm.controls['isrWithholding']?.errors?.checkDecimal && (freelancerPOForm.controls['isrWithholding'].touched) && freelancerPOForm.controls['isrWithholding'].dirty">{{'pages.errorMessages.validDecimal'| translate}}</div>
+          </div>
+          <div class="col-md-6 col-sm-8">
+            <span>{{(freelancerPOForm?.value?.totalAmountRequested && freelancerPOForm?.value?.isrWithholding) ? (((freelancerPOForm?.value?.totalAmountRequested * freelancerPOForm?.value?.isrWithholding)/100) | twoDecimal) :0.00}}</span>
+
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg">
+          <label class="col-md-6 col-xs-12 col-sm-8">{{'projects.labels.vatWithholding'| translate}} (%)
+        </label>
+          <label class="col-md-2 col-xs-12 col-sm-8">{{'common.labels.amount' | translate}}
+      </label>
+        </div>
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <input type="text" (change) = "checkField()" oninput="this.value = this.value.replace(/[^0-9.]/g,'');" class="form-control" formControlName="vatWithholding">
+            <div class="text-danger" *ngIf="!freelancerPOForm.controls['vatWithholding']?.errors?.checkRequired && freelancerPOForm.controls['vatWithholding']?.errors?.checkDecimal && (freelancerPOForm.controls['vatWithholding'].touched) && freelancerPOForm.controls['vatWithholding'].dirty">{{'pages.errorMessages.validDecimal'| translate}}</div>
+          </div>
+          <div class="col-md-6 col-sm-8">
+            <span>{{(freelancerPOForm?.value?.totalAmountRequested && freelancerPOForm?.value?.vatWithholding) ? (((freelancerPOForm?.value?.totalAmountRequested * freelancerPOForm?.value?.vatWithholding)/100) | twoDecimal) :0.00}}</span>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <label>{{'common.labels.mode'| translate}}
+           <span style="color:red;">*</span>
+         </label>
+          </div>
+        </div>
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+              <ngx-select [items]="mode" formControlName="modeOfOperation" placeholder="{{'common.labels.select' | translate}}">
+                </ngx-select>
+            <div class="text-danger col-md-12 no-mg" *ngIf="freelancerPOForm.controls['modeOfOperation']?.errors?.checkRequired && (freelancerPOForm.controls['modeOfOperation'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <label>{{'projects.labels.requestedBy'| translate}}
+             </label>
+          </div>
+        </div>
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <ngx-select [items]="requestedByList" placeholder="{{'common.labels.select'| translate}}" formControlName = "requestedBy">
+              <ng-template ngx-select-option-not-found>{{'common.errorMessages.noResultFound'| translate}}</ng-template>
+            </ngx-select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <label>{{'projects.labels.serviceDescription'| translate}}
+           <span style="color:red;">*</span>
+         </label>
+          </div>
+        </div>
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <textarea type="text" class="form-control" formControlName="serviceDescription"></textarea>
+            <div class="text-danger col-md-12 no-mg" *ngIf="freelancerPOForm.controls['serviceDescription']?.errors?.checkRequired && (freelancerPOForm.controls['serviceDescription'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <label>{{'projects.labels.notes'| translate}}
+         </label>
+          </div>
+        </div>
+        <div class="row no-mg">
+          <div class="col-md-6 col-sm-8">
+            <textarea type="text" class="form-control" formControlName="notes"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'projects.labels.paymentDate'| translate}}
+        </label>
+        <div class="col-md-6">
+          <my-date-picker class="bbdate" formControlName="paymentDate" [options]="dobDatePickerOptions" placeholder="{{'common.labels.datePickerPlaceholder' | translate}}"></my-date-picker>
+        </div>
+      </div>
+
+      <div class="col-md-12 mt-3">
+
+        <button (click)="addFreelancerPO()" [disabled]="isClicked" class="btn btn-success save-btn"><i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5" ></i>{{'common.labels.save'| translate}}</button>
+        <button (click)="navigateTo()" class="btn btn-danger ml-1 cancel-btn">{{'common.labels.cancel'| translate}}</button>
+
+      </div>
+    </form>
+  </div>
+
+
+</div> -->

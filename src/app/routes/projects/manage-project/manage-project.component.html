@@ -1,0 +1,79 @@
+<div class="manage-project-page">
+  <div class="content-heading row">
+    <!-- Breadcrumb right aligned-->
+    <breadcrumb [breadcrumbData]="breadcrumbData" class="col-12 col-sm-6 col-md-6 col-lg-8 col-xl-8 mb-10 p-0">
+    </breadcrumb>
+    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 p-0 text-right">
+      <button class="btn btl-btn btn-primary" (click)="navigateTo()" type="button">
+        {{'common.labels.backToList'| translate}}</button>
+    </div>
+  </div>
+  <div class="container-fluid mb-10">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+      <div class="row">
+        <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+          <div>
+            <span class="text-dark">
+              <strong class="project-title"> {{'projects.labels.projectName'| translate}} - {{project?.projectName ?
+                project?.projectName:projectDetails?.projectName}}</strong>
+            </span>
+          </div>
+          <div>
+            <span class="text-dark" *ngIf="budgetName">
+              <strong class="project-title">{{'common.labels.budgetType' | translate}} -
+                {{budgetName}}</strong>
+            </span>
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="row  pull-right" *ngIf="addBudgetFlag">
+                <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_IDS.budget" [actionType]="ACTION_TYPES.ADD">
+                    <button class="btn btl-btn btn-primary" type="button" [disabled]='disableAddBudgetFlag'
+                (click)="showBudgetModal()">
+                {{'common.labels.addBudget' | translate}}</button>
+                  </action-permission>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg project-tabs mt-2" id="manage-project-tabs">
+  <ul class="nav nav-pills nav-justified">
+
+    <ui-control-permission [fieldName]="'projecTab'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeTabs"
+      [uiPermissionObj]="uiAccessPermissionsObj">
+
+      <li class="nav-item" *ngIf="project?.projectTypeId!==PROJECT_TYPES.corporate">
+        <a class="nav-link" [routerLink]="ROUTER_LINKS?.details" routerLinkActive="active">{{'projects.labels.project'|
+          translate}}
+        </a>
+      </li>
+    </ui-control-permission>
+    <ui-control-permission [fieldName]="'projecPalTab'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeTabs"
+      [uiPermissionObj]="uiAccessPermissionsObj">
+
+      <li class="nav-item"
+        *ngIf="project?.projectTypeId ? (project?.projectTypeId!==PROJECT_TYPES.corporate) : (projectDetails?.projectType?.id!==PROJECT_TYPES.corporate)">
+        <a class="nav-link" [routerLink]="ROUTER_LINKS.assignment" routerLinkActive="active">{{'projects.labels.projectAssignmentLetter'|
+          translate}}</a>
+      </li>
+    </ui-control-permission>
+    <ui-control-permission [fieldName]="'budgetSheetsTab'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeTabs"
+      [uiPermissionObj]="uiAccessPermissionsObj">
+
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="ROUTER_LINKS?.budgetSheets" routerLinkActive="active">{{"projects.labels.budget"
+          | translate}}</a>
+      </li>
+    </ui-control-permission>
+
+  </ul>
+</div>
+<context-provider provide="projectTypeId loadingFlag">
+  <router-outlet></router-outlet>
+</context-provider>

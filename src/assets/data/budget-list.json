@@ -1,0 +1,226 @@
+{
+  "budgets": [{
+    "id": "1",
+    "budgetDetails": {
+      "name": "Start Up",
+      "jobNo": "S19.16.03",
+      "director": "Nico Kasakoff",
+      "foreignProducer": "Leda Nasio",
+      "section": "COMMERCIAL",
+      "typeId":1,
+      "division": "INTERNATIONAL",
+      "estimatedPrice": 20000,
+      "poPrice": 10000,
+      "disbursedPrice": 5000,
+      "brand": {
+        "name": "lCorona",
+        "image": ""
+      },
+      "agency": {
+        "name": "The Community",
+        "image": ""
+      },
+      "internationalProduction": {
+        "name": "Nike",
+        "image": ""
+      },
+      "productionCompany": {
+        "name": "The Lift",
+        "image": ""
+      },
+      "otherDocuments": [{
+          "name": "Script",
+          "buttonType": "upload"
+        },
+        {
+          "name": "Treatment",
+          "buttonType": "upload"
+        },
+        {
+          "name": "Calendar",
+          "buttonType": "upload"
+        },
+        {
+          "name": "AICP",
+          "buttonType": "download"
+        }
+      ]
+    },
+    "purchaseOrders": [{
+      "id": "",
+      "assignee": "Alma Estela Aragon Cequera(Vendor)",
+      "ceoApproved": true,
+      "cfoApproved": true,
+      "accoutantApproved": true,
+      "type":"Vendor",
+      "subLocationFlag": false
+    },{
+      "id": "",
+      "assignee": "Alma Estela Aragon Cequera(Location)",
+      "ceoApproved": true,
+      "cfoApproved": true,
+      "accoutantApproved": true,
+      "type":"Location",
+      "subLocationFlag": true
+
+    }],
+    "configuration" : [
+    {
+      "categoryId" : 1,
+      "categoryName" : "PRE-PRO & WRAP CREW",
+      "budgetLine" : "A",
+      "subCategory" : [
+      {
+        "categoryId" : 2,
+        "categoryName" : "Foreign crew & agency chaperone",
+        "budgetLine" : "40"
+      },
+      {
+        "categoryId" : 3,
+        "categoryName" : "Foreign Crew Driver",
+        "budgetLine" : "41"
+      },
+      {
+        "categoryId" : 9,
+        "categoryName" : "Transportation Coordinator",
+        "budgetLine" : "42"
+      }]
+    },
+    {
+      "categoryId" : 13,
+      "categoryName" : "SHOOTING CREW",
+      "budgetLine" : "B"
+    }]
+  },
+  {
+    "id": "2",
+    "budgetDetails": {
+      "name": "Full Budget",
+      "jobNo": "S182.17.06",
+      "director": "Eric Lynne",
+      "foreignProducer": "Marc Bèdia",
+      "section": "ENTERTAINMENT",
+      "typeId":2,
+      "division": "INTERNATIONAL",
+      "estimatedPrice": 20000,
+      "poPrice": 10000,
+      "disbursedPrice": 5000,
+      "brand": {
+        "name": "Kraft Foods / Ore-Ida",
+        "image": ""
+      },
+      "agency": {
+        "name": "Droga5",
+        "image": ""
+      },
+      "internationalProduction": {
+        "name": "Partizan",
+        "image": ""
+      },
+      "productionCompany": {
+        "name": "The Lift",
+        "image": ""
+      },
+      "otherDocuments": [{
+          "name": "Script",
+          "buttonType": "upload"
+        },
+        {
+          "name": "Treatment",
+          "buttonType": "upload"
+        },
+        {
+          "name": "Calendar",
+          "buttonType": "upload"
+        },
+        {
+          "name": "AICP",
+          "buttonType": "download"
+        }
+      ]
+    },
+    "purchaseOrders": [{
+      "id": "",
+      "assignee": "David Bahena(freelancer)",
+      "ceoApproved": true,
+      "cfoApproved": true,
+      "accoutantApproved": true
+
+    }],
+    "configuration" : [
+    {
+      "categoryId" : 1,
+      "categoryName" : "ABOVE THE LINE",
+      "budgetLine" : "8",
+      "subCategory" : [
+      {
+        "categoryId" : 2,
+        "categoryName" : "Development Costs",
+        "budgetLine" : "10-00",
+        "subSubCategory" : [
+        {
+          "categoryId" : 3,
+          "categoryName" : "Prelim Breakdown",
+          "budgetLine" : "10-01"
+        },
+        {
+          "categoryId" : 4,
+          "categoryName" : "Office Expenses",
+          "budgetLine" : "10-02"
+        },
+        {
+          "categoryId" : 5,
+          "categoryName" : "Survey/Scouting",
+          "budgetLine" : "10-03"
+        },
+        {
+          "categoryId" : 6,
+          "categoryName" : "Travel Expenses",
+          "budgetLine" : "10-04"
+        },
+        {
+          "categoryId" : 7,
+          "categoryName" : "Legal",
+          "budgetLine" : "10-05"
+        }
+      ]
+      },
+      {
+        "categoryId" : 8,
+        "categoryName" : "Story & Rights",
+        "budgetLine" : "11-00"
+      },
+      {
+        "categoryId" : 9,
+        "categoryName" : "Producer Unit",
+        "budgetLine" : "12-00"
+      },
+      {
+        "categoryId" : 10,
+        "categoryName" : "Director & Staff",
+        "budgetLine" : "13-00"
+      },
+      {
+        "categoryId" : 11,
+        "categoryName" : "Cast",
+        "budgetLine" : "14-00"
+      },
+      {
+        "categoryId" : 12,
+        "categoryName" : "Travel & Living",
+        "budgetLine" : "15-00"
+      }]
+    },
+    {
+      "categoryId" : 13,
+      "categoryName" : "PRODUCTION EXPENSES",
+      "budgetLine" : "17"
+    },
+    {
+      "categoryId" : 14,
+      "categoryName" : "POST-PRODUCTION EXPENSES",
+      "budgetLine" : "40"
+    }]
+  }
+]
+}

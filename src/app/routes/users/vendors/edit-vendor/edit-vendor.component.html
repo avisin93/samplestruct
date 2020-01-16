@@ -1,0 +1,1500 @@
+<div id="edit-vendor-page">
+  <div class="content-heading">
+    <!-- Breadcrumb right aligned-->
+    <breadcrumb class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 no-mg" [breadcrumbData]="breadcrumbData"></breadcrumb>
+  </div>
+
+
+  <app-loader class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" [loading]="showLoadingFlg"></app-loader>
+
+  <div class="container-fluid" *ngIf="!showLoadingFlg">
+    <form class="form-horizontal" *ngIf="manageVendorForm" [formGroup]="manageVendorForm" novalidate>
+      <div class="modal fade mt-50" bsModal #rejectionReasonModal="bs-modal" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true" [config]="{backdrop: false}">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">{{'common.labels.reason' | translate}}</h4>
+              <button type="button" class="close" aria-label="Close" (click)="rejectionReasonModal.hide()"  type="button">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <div>
+                <input name="lastName" class="form-control" formControlName="rejectionReason" placeholder="{{'common.labels.reason' | translate}}">
+                <div class="text-danger col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg" *ngIf="!manageVendorForm?.value?.rejectionReason && (manageVendorForm.controls['rejectionReason'].touched  || submmitedRejectionFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                  translate}}</div>
+
+              </div>
+            </div>
+            <div class="modal-footer text-left">
+              <button type="button" class="btn btn-success" [disabled]="disableButton" (click)="rejectContract()">
+                  <i *ngIf="rejectSpinner" class="fa fa-spinner fa-spin margin-right-5"></i>
+                {{'common.labels.ok' | translate}}</button>
+               
+              <button type="button" class="btn btn-danger ml-1" (click)="rejectionReasonModal.hide()">{{'common.labels.cancel'
+                | translate}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+        <div class="row no-mg">
+          <div class="modal fade mt-50" bsModal #classicModal="bs-modal" tabindex="-1" (onShow) = "checkModalOpen(true)" (onHide) = "checkModalOpen(false)" role="dialog" aria-labelledby="mySmallModalLabel"
+            aria-hidden="true" [config]="{backdrop: false}" (onHidden)="onHidden()">
+            <div class="modal-dialog modal-md">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">{{'common.labels.imageCropper' | translate}}</h4>
+                  <button type="button" class="close" aria-label="Close" (click)="classicModal.hide()"  type="button">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img-cropper #cropper [image]="croppedData" [settings]="cropperSettings"></img-cropper>
+                </div>
+                <div class="modal-footer text-left">
+                  <button type="button" class="btn btn-success" (click)="cropped()">{{'common.labels.save' |
+                    translate}}</button>
+                  <button type="button" class="btn btn-danger ml-1" (click)="classicModal.hide()">{{'common.labels.cancel'
+                    | translate}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-vw">
+            <h5 class="text-dark">
+              <strong>{{'actors.vendors.labels.photograph'| translate}}</strong>
+            </h5>
+            <div class="panel panel-primary">
+              <div class="panel-body">
+                <fieldset>
+                  <div align="center" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 imageStyle">
+                    <div class="imgcrop-preview help-block" data-text="Profile Image">
+                      <img class="img-thumbnail img-circle" *ngIf="profileImageUrl" width="150" src="{{profileImageUrl}}"
+                        alt="Avatar" />
+                      <img class="img-thumbnail img-circle" *ngIf="!profileImageUrl" width="150" src="assets/img/user-5.png"
+                        alt="Avatar" />
+                    </div>
+                  </div>
+                </fieldset>
+                <ui-control-permission [fieldName]="'uploadbutton'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                  [uiPermissionObj]="uiAccessPermissionsObj">
+                  <div align="center" class="selectPicture">
+                    <label for="file2" class="file-upload">
+                      <button class="btn btn-success upload-pictur-btn save-btn" type="button">{{'actors.freelancers.labels.selectPicture'|
+                        translate}}</button>
+                      <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" accept="image/jpeg,image/jpg,image/bmp,image/png"
+                        (change)="fileChangeListener($event)" />
+                      <div class="small">{{'common.labels.profilePicTypes' | translate}}</div>
+                    </label>
+
+                  </div>
+                </ui-control-permission>
+              </div>
+            </div>
+
+            <!-- <ui-control-permission [fieldName]="'uploadbutton'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields" [uiPermissionObj]="uiAccessPermissionsObj">
+              <h5 class="text-dark">
+  
+                <strong>{{'actors.vendors.labels.security'| translate}}</strong>
+              </h5>
+  
+                <div class="panel panel-primary profile-image-user mt-3">
+                  <div class="panel-body">
+                    <div align="center">
+                      <span (click)="doChangePassword()">
+                        <strong>{{'actors.vendors.labels.changePassword'| translate}}</strong>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+  
+              </div>
+              </ui-control-permission> -->
+
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 no-mg">
+            <h5 class="text-dark">
+              <strong>{{'actors.vendors.labels.personalDetails'| translate}}</strong>
+              <em class="pull-right mr-20 mandatory">*{{'common.labels.mandatory'| translate}}</em>
+            </h5>
+            <div class="panel panel-primary vendorPanel">
+              <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">{{'actors.vendors.labels.electronic'|
+                    translate}}
+                  </label>
+                  <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                    <label>{{manageVendorForm.value?.electronicIdNumber}}</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 control-label">{{'actors.vendors.labels.comName'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 control-label">
+                    <input class="form-control" type="text" required formControlName="companyName" placeholder="{{'actors.vendors.labels.comName'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['companyName']?.errors?.checkRequired && (manageVendorForm.controls['companyName'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 control-label">{{'actors.vendors.labels.legalName'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 control-label">
+                    <input class="form-control" type="text" required formControlName="legalName" placeholder="{{'actors.vendors.labels.legalName'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['legalName']?.errors?.checkRequired && (manageVendorForm.controls['legalName'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 control-label">{{'actors.vendors.labels.address'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 control-label">
+                    <textarea class="form-control" type="text" required formControlName="address" placeholder="{{'actors.vendors.labels.address'| translate}}"></textarea>
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['address']?.errors?.checkRequired && (manageVendorForm.controls['address'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <label class="control-label col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.email'
+                      | translate}}
+                      <span class="bb-error"> *</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <span>{{manageVendorForm.value?.emailId}}</span>
+                    </div>
+                  </div>
+                  <!-- <div class="col-md-5"> -->
+                  <div class="form-group col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'actors.freelancers.labels.phone'
+                      | translate}}
+                      <span class="bb-error"> *</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" name="phone" formControlName="phone" oninput="this.value = this.value.replace(/[^0-9()+-\s]/g, '');"
+                        placeholder="{{'actors.freelancers.labels.phone' | translate}}">
+                      <div class="text-danger col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg" *ngIf="manageVendorForm.controls['phone']?.errors?.checkRequired && (manageVendorForm.controls['phone'].touched  || submitVendorForm)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                        translate}}</div>
+                    </div>
+                  </div>
+                  <!-- </div> -->
+                </div>
+                <ui-control-permission [fieldName]="'classification'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                  [uiPermissionObj]="uiAccessPermissionsObj">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 control-label">{{'actors.vendors.labels.classification'|
+                      translate}}
+                      <span class="bb-error"> *</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                      <ngx-select [items]="CLASSIFICATION" [allowClear] = "true" formControlName="classification" placeholder="{{'common.labels.select' | translate}}">
+                      </ngx-select>
+                      <!-- <select class="form-control" name="classification" formControlName="classification">
+                          <option value="">Select</option>
+                          <option *ngFor="let level of CLASSIFICATION" [value]="level.value">{{level.label}}</option>
+                        </select> -->
+                      <div class="bb-error" *ngIf="manageVendorForm.controls['classification']?.errors?.checkRequired && (manageVendorForm.controls['classification'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}</div>
+                    </div>
+                  </div>
+                </ui-control-permission>
+                <ui-control-permission [fieldName]="'vendorType'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                  [uiPermissionObj]="uiAccessPermissionsObj">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">{{'actors.vendors.labels.vendorType'|
+                      translate}}
+                      <span class="text-danger"> *</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                      <ngx-select [items]="VENDOR_TYPE" [allowClear] = "true" formControlName="vendorType" placeholder="{{'common.labels.select' | translate}}">
+                      </ngx-select>
+                      <!-- <select class="form-control" name="roleId" formControlName="vendorType">
+                            <option value="">{{'common.labels.select' | translate}}</option>
+                            <option *ngFor="let role of VENDOR_TYPE" [value]="role.roleId">{{role?.name}}</option>
+                          </select> -->
+                      <div class="text-danger" *ngIf="manageVendorForm.controls['vendorType']?.errors?.checkRequired && (manageVendorForm.controls['vendorType'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}</div>
+                    </div>
+                  </div>
+                </ui-control-permission>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 ds-vw">
+            <h5 class="text-dark">
+              <strong>{{'actors.vendors.labels.photograph'| translate}}</strong>
+            </h5>
+            <div class="panel panel-primary">
+              <div class="panel-body">
+                <fieldset>
+                  <div align="center" class="form-group col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 imageStyle">
+                    <div class="imgcrop-preview help-block" data-text="Profile Image">
+                      <img class="img-thumbnail img-circle" *ngIf="profileImageUrl" width="150" src="{{profileImageUrl}}"
+                        alt="Avatar" />
+                      <img class="img-thumbnail img-circle" *ngIf="!profileImageUrl" width="150" src="assets/img/user-5.png"
+                        alt="Avatar" />
+                    </div>
+                  </div>
+                </fieldset>
+                <ui-control-permission [fieldName]="'uploadbutton'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                  [uiPermissionObj]="uiAccessPermissionsObj">
+                  <div align="center" class="selectPicture">
+                    <label for="file2" class="file-upload">
+                      <button class="btn btn-success upload-pictur-btn save-btn" type="button">{{'actors.freelancers.labels.selectPicture'|
+                        translate}}</button>
+                      <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" accept="image/jpeg,image/jpg,image/bmp,image/png"
+                        (change)="fileChangeListener($event)" />
+                      <div class="small">{{'common.labels.profilePicTypes' | translate}}</div>
+                    </label>
+
+                  </div>
+                </ui-control-permission>
+              </div>
+            </div>
+            <!-- <ui-control-permission [fieldName]="'uploadbutton'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields" [uiPermissionObj]="uiAccessPermissionsObj">
+              <h5 class="text-dark">
+                <strong>{{'actors.vendors.labels.security'| translate}}</strong>
+              </h5>
+  
+                <div class="panel panel-primary profile-image-user mt-3">
+                  <div class="panel-body">
+                    <div align="center">
+                      <span (click)="doChangePassword()">
+                        <strong>{{'actors.vendors.labels.changePassword'| translate}}</strong>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </ui-control-permission> -->
+
+          </div>
+
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+          <h5 class="text-dark">
+            <strong>{{'actors.vendors.labels.rep'| translate}}</strong>
+          </h5>
+          <div class="panel panel-primary">
+            <div class="panel-body">
+              <div class="form-group row">
+                <div formArrayName="representatives" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div *ngFor="let representative of manageVendorForm.controls.representatives['controls']; let i=index;let lst=last;">
+                    <div [formGroupName]="i">
+                      <div class="row no-mg">
+
+                        <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                          <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg control-label">{{'actors.vendors.labels.repName'|
+                            translate}}
+
+                          </label>
+                          <input class="form-control" name="repName" formControlName="repName" placeholder="{{'actors.vendors.labels.repName'| translate}}">
+
+                          <!-- <div class="bb-error col-md-12" *ngIf="representative.controls['repName']?.errors?.checkRequired && (representative.controls['repName'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'| translate}}</div> -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                          <label class="col-md-12 col-sm-12 col-xs-12 no-mg control-label">{{'actors.vendors.labels.email'|
+                            translate}}
+
+                          </label>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                            <input class="form-control" name="repEmail" oninput="this.value = this.value.replace(/[^@a-zA-Z0-9._-]/g, '');"
+                              formControlName="repEmail" placeholder="{{'actors.vendors.labels.email'| translate}}">
+                            <div class="bb-error" *ngIf="representative.controls['repEmail']?.errors?.checkEmail && (representative.controls['repEmail'].touched || submitVendorForm) && representative.controls['repEmail'].dirty">{{'pages.errorMessages.invalidEmail'|
+                              translate}}</div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                          <label class="col-md-12 col-sm-12 col-xs-12 no-mg control-label">{{'actors.vendors.labels.phone'|
+                            translate}}
+
+                          </label>
+                          <div class="form-group">
+                            <div class="col-md-12 col-xs-12 col-sm-12 no-mg">
+                              <input class="form-control" name="repPhone" oninput="this.value = this.value.replace(/[^0-9()+-\s]/g, '');"
+                                formControlName="repPhone" placeholder="{{'actors.vendors.labels.phone'| translate}}">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 mt-4">
+                          <a class="ml-2 click-cursor" (click)="removeRepresentatives(i)" *ngIf="manageVendorForm.controls.representatives['controls'].length > 1">
+                            <i class="fa fa-minus"></i>
+                          </a>
+
+                          <a (click)="addRepresentatives(true,i)" class="click-cursor ml-2" *ngIf="lst && manageVendorForm.controls.representatives['controls'].length > 0">
+                            <i class="fa fa-plus"></i>
+                          </a>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+          <h5 class="text-dark">
+            <strong>{{'actors.vendors.labels.financial'| translate}}</strong>
+
+          </h5>
+          <div class="panel panel-primary">
+            <div class="panel-body">
+              <div class="row no-mg">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 control-label">{{'common.labels.currency'
+                      | translate}}
+                      <span class="bb-error"> *</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                      <ngx-select [items]="currency" formControlName="currency" [allowClear] = "true" placeholder="{{'common.labels.select' | translate}}">
+                      </ngx-select>
+                      <!-- <select class="form-control" name="operation" formControlName="currency">
+                        <option value="">Select</option>
+  
+                        <ng-container *ngFor="let currency of currencies">
+                          <option [value]="currency.id">{{currency.i18n.name}}</option>
+                        </ng-container>
+                        </select> -->
+                      <div class="bb-error" *ngIf="manageVendorForm.controls['currency']?.errors?.checkRequired && (manageVendorForm.controls['currency'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 control-label">
+                  <strong>{{'actors.freelancers.labels.paymentType' | translate}}</strong>
+                  <span class="mandatory">*</span>
+                </label>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                  <label class="radio-inline ptr" [ngClass]="(index!=0) ? 'ml-3':''" *ngFor="let paidType of PAYMENT_TYPES;let index=index">
+                    <input class="ptr" id="inlineradio{{index}}" (change)="removeValidators()" type="radio"
+                      formControlName="paymentType" [value]="paidType?.value" checked="checked" />
+                    {{'actors.freelancers.labels.'+ paidType.label | translate}}</label>
+                  <div class="bb-error" *ngIf="manageVendorForm.controls['paymentType']?.errors?.checkRequired && (manageVendorForm.controls['paymentType'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                    translate}}</div>
+                </div>
+              </div>
+              <div class="row no-mg mb-3" *ngIf="manageVendorForm.controls['paymentType'].value==1">
+                <div class="form-group col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 no-mg">
+                  <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'actors.vendors.labels.acname'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <input class="form-control" required formControlName="acname" placeholder="{{'actors.vendors.labels.acname'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['acname']?.errors?.checkRequired && (manageVendorForm.controls['acname'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 no-mg">
+                  <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'actors.vendors.labels.accNumber'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <input class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '');" autocomplete="off"
+                      required formControlName="accNumber" placeholder="{{'actors.vendors.labels.accNo'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['accNumber']?.errors?.checkRequired && (manageVendorForm.controls['accNumber'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row no-mg mb-3" *ngIf="manageVendorForm.controls['paymentType'].value==1">
+                <div class="form-group col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 no-mg">
+                  <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'actors.vendors.labels.bankName'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <input class="form-control" required formControlName="bankName" placeholder="{{'actors.vendors.labels.bankName'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['bankName']?.errors?.checkRequired && (manageVendorForm.controls['bankName'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.branch'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" required formControlName="branchName" placeholder="{{'actors.vendors.labels.branch'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['branchName']?.errors?.checkRequired && (manageVendorForm.controls['branchName'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row no-mg mb-3" *ngIf="manageVendorForm.controls['paymentType'].value==1">
+                <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.clabe'|
+                    translate}}
+
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" formControlName="clabe" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                      minlength="18" maxlength="18" placeholder="{{'actors.vendors.labels.clabe'| translate}}">
+                    <div class="text-danger no-mg" *ngIf="manageVendorForm.controls['clabe']?.errors && ( manageVendorForm.controls['clabe'].touched || submitVendorForm)">{{'common.errorMessages.clabeMessage'|
+                      translate}}</div>
+                    <!-- <div class="bb-error" *ngIf="manageVendorForm.controls['clabe']?.errors?.checkRequired && (manageVendorForm.controls['clabe'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'| translate}}</div> -->
+                  </div>
+                </div>
+                <!-- <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.rfcCode'| translate}}
+  
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" formControlName="rfcCode" placeholder="{{'actors.vendors.labels.rfcCode'| translate}}"> -->
+                <!-- <div class="bb-error" *ngIf="manageVendorForm.controls['rfcCode']?.errors?.checkRequired && (manageVendorForm.controls['rfcCode'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'| translate}}</div> -->
+                <!-- </div>
+                  </div> -->
+                <!-- </div>
+                  <div class="row no-mg mb-3" *ngIf="manageVendorForm.controls['paymentType'].value==1"> -->
+                <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.sortCode'|
+                    translate}}
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" formControlName="sortCode" placeholder="{{'actors.vendors.labels.sortCode'| translate}}">
+
+                  </div>
+                </div>
+              </div>
+              <div class="row no-mg mb-3" *ngIf="manageVendorForm.controls['paymentType'].value==2">
+                <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.acname'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" required formControlName="internationalACname" placeholder="{{'actors.vendors.labels.acname'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['internationalACname']?.errors?.checkRequired && (manageVendorForm.controls['internationalACname'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.accNumber'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required
+                      formControlName="internationalACnumber" placeholder="{{'actors.vendors.labels.accNo'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['internationalACnumber']?.errors?.checkRequired && (manageVendorForm.controls['internationalACnumber'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row no-mg mb-3" *ngIf="manageVendorForm.controls['paymentType'].value==2">
+                <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.bankName'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" required formControlName="internationalbankName" placeholder="{{'actors.vendors.labels.bankName'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['internationalbankName']?.errors?.checkRequired && (manageVendorForm.controls['internationalbankName'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.branch'|
+                    translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" required formControlName="internationalbranchName" placeholder="{{'actors.vendors.labels.branch'| translate}}">
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['internationalbranchName']?.errors?.checkRequired && (manageVendorForm.controls['internationalbranchName'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row no-mg mb-3" *ngIf="manageVendorForm.controls['paymentType'].value==2">
+                <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.ABAcode'|
+                    translate}}
+
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" formControlName="ABAcode" placeholder="{{'actors.vendors.labels.ABAcode'| translate}}">
+
+                  </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.swiftCode'|
+                    translate}}
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" formControlName="swiftCode" placeholder="{{'actors.vendors.labels.swiftCode'| translate}}">
+
+                  </div>
+                </div>
+              </div>
+              <div class="row no-mg mb-3">
+                <div class="form-group col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-4 col-xs-12 col-sm-9 control-label">{{'actors.vendors.labels.mode'| translate}}
+                    <span class="bb-error"> *</span>
+                  </label>
+                  <div class="col-md-12 col-xs-12 col-sm-9">
+                    <ngx-select [items]="operationDropdown" formControlName="mode" [allowClear] = "true" placeholder="{{'common.labels.select' | translate}}">
+                    </ngx-select>
+                    <!-- <select class="form-control" name="roleId" formControlName="mode">
+                      <option value="">{{'common.labels.selectMode' | translate}}</option>
+                      <ng-container *ngFor="let mode of operation">
+                        <option [value]="mode.id">{{mode.i18n.name}}</option>
+                      </ng-container>
+                    </select> -->
+                    <div class="bb-error" *ngIf="manageVendorForm.controls['mode']?.errors?.checkRequired && (manageVendorForm.controls['mode'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+                  </div>
+                </div>
+              </div>
+              <ui-control-permission [fieldName]="'thirdParty'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                [uiPermissionObj]="uiAccessPermissionsObj">
+                <div class="row no-mg mb-3">
+                  <div class="form-group col-xs-12 col-md-6 no-mg">
+                    <label class="col-md-12 col-sm-12 col-xs-12 control-label">
+                      <span> </span>
+                    </label>
+                    <div class="col-md-12 col-sm-12 col-xs-12 checkbox c-checkbox">
+                      <!-- <input type="checkbox" class="check-box c-checkbox" formControlName="thirdParty">
+                      <span class="ml-2">{{'actors.vendors.labels.thirdParty'| translate}}</span> -->
+                      <label>
+                        <input type="checkbox" formControlName="thirdParty" />
+                        <span class="fa fa-check"></span>{{'actors.vendors.labels.thirdParty'| translate}}</label>
+
+                    </div>
+                  </div>
+                </div>
+              </ui-control-permission>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+        <h5 class="text-dark">
+          <strong>{{'actors.vendors.labels.taxDetails'| translate}}</strong>
+
+        </h5>
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <div class="row no-mg mb-3">
+              <div class="form-group col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 no-mg">
+
+                <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'common.labels.taxIdRFC'
+                  | translate}}
+                  <span class="bb-error"> *</span>
+                </label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <input class="form-control" required formControlName="taxId" placeholder="{{'common.labels.taxIdRFC' | translate}}">
+                  <div class="bb-error col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg" *ngIf="manageVendorForm.controls['taxId']?.errors?.checkRequired && (manageVendorForm.controls['taxId'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                    translate}}</div>
+                </div>
+              </div>
+              <!-- <div class="form-group  col-xs-12 col-md-6 no-mg">
+                  <label class="col-md-12 col-sm-12 col-xs-12 control-label">{{'actors.vendors.labels.companyId'| translate}}
+                    <span class = "bb-error"> *</span>
+                  </label>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                    <input class="form-control" required formControlName="companyId" placeholder="{{'actors.vendors.labels.companyId'| translate}}">
+                    <div class="bb-error col-md-12" *ngIf="manageVendorForm.controls['companyId']?.errors?.checkRequired && (manageVendorForm.controls['companyId'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'| translate}}</div>
+                  </div>
+                  </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+        <h5 class="text-dark">
+          <strong>{{'actors.vendors.labels.document'| translate}}</strong>
+        </h5>
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <div class="form-group">
+              <div class="row no-mg">
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 no-mg">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <strong>{{'actors.vendors.labels.contract'| translate}}</strong>
+                  </div>
+
+                </div>
+                <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 no-mg">
+                  <div class="row no-mg" *ngIf="contractURL">
+                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mt-1">
+                      <a class="fileName textElipses file blue-document-link ptr" target="_blank" download="{{contractURL}}"
+                        href="{{contractURL}}">
+                        {{'common.labels.download'| translate}}
+                      </a>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 mt-1" *ngIf="(manageVendorForm.value.contractStatus==CONTRACT_STATUS_CONST.activeContracts) || (manageVendorForm.value.contractStatus==CONTRACT_STATUS_CONST.rejectedContracts)">
+                      <ui-control-permission [fieldName]="'approvalStatus'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                        [uiPermissionObj]="uiAccessPermissionsObj">
+                        <strong *ngIf="(manageVendorForm.value.contractStatus==CONTRACT_STATUS_CONST.activeContracts)">{{'common.labels.status'|
+                          translate}} : {{'common.labels.approved'| translate}}</strong>
+                        <div class="d-inline-grid" *ngIf="(manageVendorForm.value.contractStatus==CONTRACT_STATUS_CONST.rejectedContracts)">
+                          <strong>{{'common.labels.status'| translate}} : {{'common.labels.rejected'| translate}}</strong>
+                          <strong class="ml-10">{{'common.labels.reason'| translate}} :
+                            {{manageVendorForm.value.contractRejectionReason
+                            ?manageVendorForm.value.contractRejectionReason:'-'}}</strong>
+                        </div>
+                      </ui-control-permission>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <ui-control-permission [fieldName]="'approveButton'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                        [uiPermissionObj]="uiAccessPermissionsObj">
+                        <div *ngIf="manageVendorForm.value.contractStatus==CONTRACT_STATUS_CONST.pendingContracts">
+                          <button class="btn btn-success save-btn" [disabled]="disableButton" (click)="approveContract()" type="button"><i *ngIf="approveSpinner" class="fa fa-spinner fa-spin margin-right-5"></i>
+                            {{'common.labels.approve'| translate}}</button>
+                          <button class="btn btn-danger ml-1 cancel-btn" [disabled]="disableButton" (click)="openRejectionReasoModal()" type="button">{{'common.labels.reject'|
+                            translate}}</button>
+                        </div>
+                      </ui-control-permission>
+                    </div>
+                  </div>
+                  <ui-control-permission [fieldName]="'contractApprovalPending'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                    [uiPermissionObj]="uiAccessPermissionsObj">
+                    <div class="row no-mg" *ngIf="manageVendorForm.value.contractStatus==CONTRACT_STATUS_CONST.pendingContracts">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-1">
+                        <strong>{{'common.labels.contractApprovalPending'| translate}}</strong>
+                      </div>
+                    </div>
+                    <div class="row no-mg" *ngIf="manageVendorForm.value.contractStatus==CONTRACT_STATUS_CONST.rejectedContracts">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-1">
+                        <strong> {{'common.labels.rejectionReason'| translate}} -
+                          {{manageVendorForm.value.contractRejectionReason}}</strong>
+                      </div>
+                    </div>
+                  </ui-control-permission>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="identity-documents" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+        <h5 class="text-dark">
+          <strong>{{'actors.vendors.labels.identity'| translate}}</strong>
+        </h5>
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div class="panel panel-primary">
+                <div class="panel-heading document-panel">
+                  <!-- <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.constancia'| translate}}
+                          <span class="bb-error"> *</span>
+                        </strong>
+                        <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                          <div class="small f-italic mr-15 mt-5">{{'common.labels.constanciaDocumentType' | translate}}</div>
+                          <label for="file2" class="file-upload">
+                            <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                            <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderConstancia"
+                              (change)="fileChangeEvent($event,1)" />
+                          </label>
+                        </em>
+                      </h5> -->
+
+                  <!-- <div class="col-12 col-sm-10 col-md-10 col-lg-10 col-xl-10 no-mg">
+                        <h5 class="text-dark">
+                          <strong>{{'actors.vendors.labels.constancia'| translate}}
+                            <span class="text-danger">*</span>
+                          </strong>
+                        </h5>
+                      </div>
+                      
+                      <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                        <em class="">
+                          <div class="small f-italic">
+                            {{'common.labels.constanciaDocumentType' | translate}}
+                          </div>
+                        </em>
+                      </div>
+                      <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
+                        <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                            <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderConstancia"
+                              (change)="fileChangeEvent($event,1)" />
+                      </div> -->
+
+                  <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                      <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.constancia'| translate}}
+                          <!-- <span class="bb-error mandatory">*</span> -->
+                        </strong>
+                      </h5>
+                    </div>
+                    <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 no-mg text-right">
+                      <label for="file2" class="file-upload m-0">
+                        <em class="text-right text-dark pr-10">
+                          <span class="small f-italic">
+                            {{'common.labels.constanciaDocumentType' | translate}}
+                          </span>
+                        </em>
+                        <button class="btn btn-default browse-btn" type="button">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                          ng2FileSelect [uploader]="uploaderConstancia" (change)="fileChangeEvent($event,1)" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="panel-body">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 dropZone">
+                        <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+                          [uploader]="uploaderConstancia" class="my-drop-zone dropzone">
+                          <!-- <p class="attachMsg" *ngIf="uploaderConstancia.queue.length == 0">Constancia Document</p> -->
+                          <div class="attachUpload" *ngIf="uploaderConstancia.queue.length > 0">
+                            <div class="listItem mb-2" *ngFor="let item of uploaderConstancia.queue;let i=index;">
+                              <div class="row" *ngIf="item?.file !== undefined">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 textElipses">
+                                  <a class="fileName document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}"
+                                    target="_blank" *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                    {{ item?.file?.name }}
+                                  </a>
+                                  <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border" src="../../../../assets/img/ajax-loader.gif" /> -->
+                                  <i *ngIf="item?.url == ''" class="fa fa-spinner fa-spin margin-right-5"></i>
+                                </div>
+                                <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border pull-right" src="../../../../assets/img/ajax-loader.gif"
+                                  /> -->
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                  <a *ngIf="item?.url" class="attachRemoveBtn btn-default">
+                                    <em class="fa fa-trash delete-file-icon ptr" (click)="removeUploadFileArrItem(i,1,item);"></em>
+                                  </a>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="text-danger ng-invalid" *ngIf="manageVendorForm.controls['docConstancia']?.errors?.checkRequired && (manageVendorForm.controls['docConstancia'].touched || submitVendorForm)">{{'pages.errorMessages.docRequired'|
+                            translate}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-primary">
+                <div class="panel-heading document-panel">
+                  <!-- <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.32D'| translate}}
+                          <span class="text-danger"> *</span>
+                        </strong>
+                        <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                          <div class="small f-italic mr-15 mt-5">{{'common.labels.constanciaDocumentType' | translate}}</div>
+                          <label for="file2" class="file-upload">
+                            <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                            <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploader32D"
+                              (change)="fileChangeEvent($event,2)" />
+                          </label>
+                        </em>
+                      </h5> -->
+                  <!-- <div class="col-12 col-sm-10 col-md-10 col-lg-10 col-xl-10 no-mg">
+                        <h5 class="text-dark">
+                          <strong>{{'actors.vendors.labels.32D'| translate}}
+                            <span class="text-danger">*</span>
+                          </strong>
+                        </h5>
+                      </div>
+                      <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                        <em class="">
+                          <div class="small f-italic">
+                            {{'common.labels.constanciaDocumentType' | translate}}
+                          </div>
+                        </em>
+                      </div>
+                      <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
+                        <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploader32D"
+                          (change)="fileChangeEvent($event,2)" />
+                      </div> -->
+                  <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                      <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.32D'| translate}}
+                          <!-- <span class="bb-error mandatory">*</span> -->
+                        </strong>
+                      </h5>
+                    </div>
+                    <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 no-mg text-right">
+                      <label for="file2" class="file-upload m-0">
+                        <em class="text-right text-dark pr-10">
+                          <span class="small f-italic">
+                            {{'common.labels.constanciaDocumentType' | translate}}
+                          </span>
+                        </em>
+                        <button class="btn btn-default browse-btn" type="button">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                          ng2FileSelect [uploader]="uploader32D" (change)="fileChangeEvent($event,2)" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 dropZone">
+                        <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+                          [uploader]="uploader32D" class="my-drop-zone dropzone">
+                          <!-- <p class="attachMsg" *ngIf="uploader32D.queue.length == 0">{{'actors.vendors.labels.32D'| translate}}</p> -->
+                          <div class="attachUpload" *ngIf="uploader32D.queue.length > 0">
+                            <div class="listItem mb-2" *ngFor="let item of uploader32D.queue;let i=index;">
+                              <div class="row" *ngIf="item?.file !== undefined">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 textElipses">
+                                  <a class="fileName document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}"
+                                    target="_blank" *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                    {{ item?.file?.name }}
+                                  </a>
+                                  <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border" src="../../../../assets/img/ajax-loader.gif" /> -->
+                                  <i *ngIf="item?.url == ''" class="fa fa-spinner fa-spin margin-right-5"></i>
+                                </div>
+                                <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border pull-right" src="../../../../assets/img/ajax-loader.gif"
+                                  /> -->
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                  <a *ngIf="item?.url" class="attachRemoveBtn btn-default">
+                                    <em class="fa fa-trash delete-file-icon ptr" (click)="removeUploadFileArrItem(i,2,item);"></em>
+                                  </a>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="text-danger ng-invalid" *ngIf="manageVendorForm.controls['doc32D']?.errors?.checkRequired && (manageVendorForm.controls['doc32D'].touched || submitVendorForm)">{{'pages.errorMessages.docRequired'|
+                            translate}}</div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-primary">
+                <div class="panel-heading document-panel">
+                  <!-- <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.legal'| translate}}
+                          <span class="text-danger"> *</span>
+                        </strong>
+                        <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                          <div class="small f-italic mr-15 mt-5">{{'common.labels.documentTypes' | translate}}</div>
+                          <label for="file2" class="file-upload">
+                            <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                            <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderidRepresentative"
+                              (change)="fileChangeEvent($event,3)" />
+                          </label>
+                        </em>
+                      </h5> -->
+                  <!-- <div class="col-12 col-sm-10 col-md-10 col-lg-10 col-xl-10 no-mg">
+                        <h5 class="text-dark">
+                          <strong>{{'actors.vendors.labels.legal'| translate}}
+                            <span class="text-danger">*</span>
+                          </strong>
+                        </h5>
+                      </div>
+                      <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                        <em class="">
+                          <div class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </div>
+                        </em>
+                      </div>
+                      <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
+                        <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderidRepresentative"
+                          (change)="fileChangeEvent($event,3)" />
+                      </div> -->
+                  <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                      <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.legal'| translate}}
+                          <!-- <span class="bb-error mandatory">*</span> -->
+                        </strong>
+                      </h5>
+                    </div>
+                    <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 no-mg text-right">
+                      <label for="file2" class="file-upload m-0">
+                        <em class="text-right text-dark pr-10">
+                          <span class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </span>
+                        </em>
+                        <button class="btn btn-default browse-btn" type="button">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                          ng2FileSelect [uploader]="uploaderidRepresentative" (change)="fileChangeEvent($event,3)" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 dropZone">
+                        <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+                          [uploader]="uploaderidRepresentative" class="my-drop-zone dropzone">
+                          <!-- <p class="attachMsg" *ngIf="uploaderidRepresentative.queue.length == 0">{{'actors.vendors.labels.legal'| translate}}</p> -->
+                          <div class="attachUpload" *ngIf="uploaderidRepresentative.queue.length > 0">
+                            <div class="listItem mb-2" *ngFor="let item of uploaderidRepresentative.queue;let i=index;">
+                              <div class="row" *ngIf="item?.file !== undefined">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 textElipses">
+                                  <a class="fileName document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}"
+                                    target="_blank" *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                    {{ item?.file?.name }}
+                                  </a>
+                                  <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border" src="../../../../assets/img/ajax-loader.gif" /> -->
+                                  <i *ngIf="item?.url == ''" class="fa fa-spinner fa-spin margin-right-5"></i>
+                                </div>
+                                <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border pull-right" src="../../../../assets/img/ajax-loader.gif"
+                                  /> -->
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                  <a *ngIf="item?.url" class="attachRemoveBtn btn-default">
+                                    <em class="fa fa-trash delete-file-icon ptr" (click)="removeUploadFileArrItem(i,3,item);"></em>
+                                  </a>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="text-danger ng-invalid" *ngIf="manageVendorForm.controls['docRepId']?.errors?.checkRequired && (manageVendorForm.controls['docRepId'].touched || submitVendorForm)">{{'pages.errorMessages.docRequired'|
+                            translate}}</div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-primary">
+                <div class="panel-heading document-panel">
+                  <!-- <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.bylaw'| translate}}
+                          <span class="text-danger"> *</span>
+                        </strong>
+                        <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                          <div class="small f-italic mr-15 mt-5">{{'common.labels.documentTypes' | translate}}</div>
+                          <label for="file2" class="file-upload">
+                            <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                            <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderByLaw"
+                              (change)="fileChangeEvent($event,4)" />
+                          </label>
+                        </em>
+                      </h5> -->
+                  <!-- <div class="col-12 col-sm-10 col-md-10 col-lg-10 col-xl-10 no-mg">
+                        <h5 class="text-dark">
+                          <strong>{{'actors.vendors.labels.bylaw'| translate}}
+                            <span class="text-danger">*</span>
+                          </strong>
+                        </h5>
+                      </div>
+                      <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                        <em class="">
+                          <div class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </div>
+                        </em>
+                      </div>
+                      <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
+                        <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderByLaw"
+                          (change)="fileChangeEvent($event,4)" />
+                      </div> -->
+                  <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                      <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.bylaw'| translate}}
+                          <!-- <span class="bb-error mandatory">*</span> -->
+                        </strong>
+                      </h5>
+                    </div>
+                    <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 no-mg text-right">
+                      <label for="file2" class="file-upload m-0">
+                        <em class="text-right text-dark pr-10">
+                          <span class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </span>
+                        </em>
+                        <button class="btn btn-default browse-btn" type="button">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                          ng2FileSelect [uploader]="uploaderByLaw" (change)="fileChangeEvent($event,4)" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 dropZone">
+                        <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+                          [uploader]="uploaderByLaw" class="my-drop-zone dropzone">
+                          <!-- <p class="attachMsg" *ngIf="uploaderByLaw.queue.length == 0">{{'actors.vendors.labels.bylaw'| translate}}</p> -->
+                          <div class="attachUpload" *ngIf="uploaderByLaw.queue.length > 0">
+                            <div class="listItem mb-2" *ngFor="let item of uploaderByLaw.queue;let i=index;">
+                              <div class="row" *ngIf="item?.file !== undefined">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 textElipses">
+                                  <a class="fileName document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}"
+                                    target="_blank" *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                    {{ item?.file?.name }}
+                                  </a>
+                                  <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border" src="../../../../assets/img/ajax-loader.gif" /> -->
+                                  <i *ngIf="item?.url == ''" class="fa fa-spinner fa-spin margin-right-5"></i>
+                                </div>
+                                <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border pull-right" src="../../../../assets/img/ajax-loader.gif"
+                                  /> -->
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                  <a *ngIf="item?.url" class="attachRemoveBtn btn-default">
+                                    <em class="fa fa-trash delete-file-icon ptr" (click)="removeUploadFileArrItem(i,4,item);"></em>
+                                  </a>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="text-danger ng-invalid" *ngIf="manageVendorForm.controls['docByLaw']?.errors?.checkRequired && (manageVendorForm.controls['docByLaw'].touched || submitVendorForm)">{{'pages.errorMessages.docRequired'|
+                            translate}}</div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-primary">
+                <div class="panel-heading document-panel">
+                  <!-- <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.addressConfirmation'| translate}}
+                          <span class="text-danger"> *</span>
+                        </strong>
+                        <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                          <div class="small f-italic mr-15 mt-5">{{'common.labels.documentTypes' | translate}}</div>
+                          <label for="file2" class="file-upload">
+                            <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                            <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderAC"
+                              (change)="fileChangeEvent($event,5)" />
+                          </label>
+                        </em>
+                      </h5> -->
+                  <!-- <div class="col-12 col-sm-10 col-md-10 col-lg-10 col-xl-10 no-mg">
+                        <h5 class="text-dark">
+                          <strong>{{'actors.vendors.labels.addressConfirmation'| translate}}
+                            <span class="text-danger">*</span>
+                          </strong>
+                        </h5>
+                      </div>
+                      <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                        <em class="">
+                          <div class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </div>
+                        </em>
+                      </div>
+                      <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
+                        <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderAC"
+                          (change)="fileChangeEvent($event,5)" />
+                      </div> -->
+                  <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                      <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.addressConfirmation'| translate}}
+                          <!-- <span class="bb-error mandatory">*</span> -->
+                        </strong>
+                      </h5>
+                    </div>
+                    <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 no-mg text-right">
+                      <label for="file2" class="file-upload m-0">
+                        <em class="text-right text-dark pr-10">
+                          <span class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </span>
+                        </em>
+                        <button class="btn btn-default browse-btn" type="button">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                          ng2FileSelect [uploader]="uploaderAC" (change)="fileChangeEvent($event,5)" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 dropZone">
+                        <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+                          [uploader]="uploaderAC" class="my-drop-zone dropzone">
+                          <!-- <p class="attachMsg" *ngIf="uploaderAC.queue.length == 0">{{'actors.vendors.labels.addressConfirmation'| translate}}</p> -->
+                          <div class="attachUpload" *ngIf="uploaderAC.queue.length > 0">
+                            <div class="listItem mb-2" *ngFor="let item of uploaderAC.queue;let i=index;">
+                              <div class="row" *ngIf="item?.file !== undefined">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 textElipses">
+                                  <a class=" document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}"
+                                    target="_blank" *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                    {{ item?.file?.name }}
+                                  </a>
+                                  <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border" src="../../../../assets/img/ajax-loader.gif" /> -->
+                                  <i *ngIf="item?.url == ''" class="fa fa-spinner fa-spin margin-right-5"></i>
+                                </div>
+                                <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border pull-right" src="../../../../assets/img/ajax-loader.gif"
+                                  /> -->
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                  <a *ngIf="item?.url" class="attachRemoveBtn btn-default">
+                                    <em class="fa fa-trash delete-file-icon ptr" (click)="removeUploadFileArrItem(i,5,item);"></em>
+                                  </a>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="text-danger ng-invalid" *ngIf="manageVendorForm.controls['docAC']?.errors?.checkRequired && (manageVendorForm.controls['docAC'].touched || submitVendorForm)">{{'pages.errorMessages.docRequired'|
+                            translate}}</div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-primary">
+                <div class="panel-heading document-panel">
+                  <!-- <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.imss'| translate}}
+                          <span class="text-danger"> *</span>
+                        </strong>
+                        <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                          <div class="small f-italic mr-15 mt-5">{{'common.labels.documentTypes' | translate}}</div>
+                          <label for="file2" class="file-upload">
+                            <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                            <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderIMSS"
+                              (change)="fileChangeEvent($event,6)" />
+                          </label>
+                        </em>
+                      </h5> -->
+                  <!-- <div class="col-12 col-sm-10 col-md-10 col-lg-10 col-xl-10 no-mg">
+                        <h5 class="text-dark">
+                          <strong>{{'actors.vendors.labels.imss'| translate}}
+                            <span class="text-danger">*</span>
+                          </strong>
+                        </h5>
+                      </div>
+                      <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                        <em class="">
+                          <div class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </div>
+                        </em>
+                      </div>
+                      <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
+                        <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderIMSS"
+                          (change)="fileChangeEvent($event,6)" />
+                      </div> -->
+                  <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                      <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.imss'| translate}}
+                          <!-- <span class="bb-error mandatory">*</span> -->
+                        </strong>
+                      </h5>
+                    </div>
+                    <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 no-mg text-right">
+                      <label for="file2" class="file-upload m-0">
+                        <em class="text-right text-dark pr-10">
+                          <span class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </span>
+                        </em>
+                        <button class="btn btn-default browse-btn" type="button">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                          ng2FileSelect [uploader]="uploaderIMSS" (change)="fileChangeEvent($event,6)" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 dropZone">
+                        <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+                          [uploader]="uploaderIMSS" class="my-drop-zone dropzone">
+                          <!-- <p class="attachMsg" *ngIf="uploaderIMSS.queue.length == 0">{{'actors.vendors.labels.imss'| translate}}</p> -->
+                          <div class="attachUpload" *ngIf="uploaderIMSS.queue.length > 0">
+                            <div class="listItem mb-2" *ngFor="let item of uploaderIMSS.queue;let i=index;">
+                              <div class="row" *ngIf="item?.file !== undefined">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 textElipses">
+                                  <a class="fileName document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}"
+                                    target="_blank" *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                    {{ item?.file?.name }}
+                                  </a>
+                                  <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border" src="../../../../assets/img/ajax-loader.gif" /> -->
+                                  <i *ngIf="item?.url == ''" class="fa fa-spinner fa-spin margin-right-5"></i>
+                                </div>
+                                <!-- <img *ngIf="item?.url == ''" class="btn btn-default hide-border pull-right" src="../../../../assets/img/ajax-loader.gif"
+                                  /> -->
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                  <a *ngIf="item?.url" class="attachRemoveBtn btn-default">
+                                    <em class="fa fa-trash delete-file-icon ptr" (click)="removeUploadFileArrItem(i,6,item);"></em>
+                                  </a>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="text-danger ng-invalid" *ngIf="manageVendorForm.controls['docIMSS']?.errors?.checkRequired && (manageVendorForm.controls['docIMSS'].touched || submitVendorForm)">{{'pages.errorMessages.docRequired'|
+                            translate}}</div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-primary">
+                <div class="panel-heading document-panel">
+                  <!-- <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.others'| translate}}
+                        </strong>
+                        <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                          <div class="small f-italic mr-15 mt-5">{{'common.labels.documentTypes' | translate}}</div>
+                          <label for="file2" class="file-upload">
+                            <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                            <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderOthers"
+                              (change)="fileChangeEvent($event,7)" />
+                          </label>
+                        </em>
+                      </h5> -->
+                  <!-- <div class="col-12 col-sm-10 col-md-10 col-lg-10 col-xl-10 no-mg">
+                        <h5 class="text-dark">
+                          <strong>{{'actors.vendors.labels.others'| translate}}
+                            <span class="text-danger">*</span>
+                          </strong>
+                        </h5>
+                      </div>
+                      <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                        <em class="">
+                          <div class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </div>
+                        </em>
+                      </div>
+                      <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-right">
+                        <button class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderOthers"
+                          (change)="fileChangeEvent($event,7)" />
+                      </div> -->
+                  <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 no-mg">
+                      <h5 class="text-dark">
+                        <strong>{{'actors.vendors.labels.others'| translate}}
+                        </strong>
+                      </h5>
+                    </div>
+                    <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 no-mg text-right">
+                      <label for="file2" class="file-upload m-0">
+                        <em class="text-right text-dark pr-10">
+                          <span class="small f-italic">
+                            {{'common.labels.documentTypes' | translate}}
+                          </span>
+                        </em>
+                        <button class="btn btn-default browse-btn" type="button">{{'common.labels.browse'| translate}}</button>
+                        <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple
+                          ng2FileSelect [uploader]="uploaderOthers" (change)="fileChangeEvent($event,7)" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 dropZone">
+                        <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+                          [uploader]="uploaderOthers" class="my-drop-zone dropzone">
+
+                          <div class="attachUpload" *ngIf="uploaderOthers.queue.length > 0">
+                            <div class="listItem mb-2" *ngFor="let item of uploaderOthers.queue;let i=index;">
+                              <div class="row" *ngIf="item?.file !== undefined">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                  <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" *ngIf="item?.url == ''">
+                                      <!-- <img class="btn btn-default hide-border" src="../../../../assets/img/ajax-loader.gif" /> -->
+                                      <i class="fa fa-spinner fa-spin margin-right-5"></i>
+
+                                    </div>
+
+                                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 textElipses">
+                                      <a class="fileName document-link" data-toggle="tooltip" data-placement="top"
+                                        title="{{ item?.file?.name }}" target="_blank" *ngIf="item?.url" href="{{item.url}}"
+                                        download="{{item.url}}">
+                                        {{ item?.file?.name }}
+                                      </a>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 fileName document-link"
+                                      *ngIf="item?.url">
+                                      <input id="docName{{i}}" (keyup)="setDocumentName(i)" class="form-control"
+                                        placeholder="{{'common.labels.enterDocumentName' | translate}}">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" *ngIf="item?.url">
+                                  <a class="attachRemoveBtn btn-default">
+                                    <em class="fa fa-trash delete-file-icon ptr" (click)="removeUploadFileArrItem(i,7,item);"></em>
+                                  </a>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        <!-- <div class="text-danger ng-invalid">{{'pages.errorMessages.docRequired'| translate}}</div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- <div class="row no-mg  border-1">
+                        <div class="d-inline-flex">
+                          <div class="col-md-8 col-sm-4 col-xs-4 pt-5">
+                            <span>  Password  </span>
+                            <span>  Video_scrren_2.png </span>
+                          </div>
+                          <div class="col-md-2 col-sm-4 col-xs-4 d-inline-flex">
+                            <a (click)="upload()" class="btn">
+                              <i class="fa fa-eye" aria-hidden="true"></i></a>
+                            <a (click)="upload()" class="btn">
+                            <i class="fa fa-times" aria-hidden="true"></i></a>
+                          </div>
+                        </div>
+                      </div> -->
+          </div>
+        </div>
+      </div>
+      <ui-control-permission [fieldName]="'projectCategory'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+        [uiPermissionObj]="uiAccessPermissionsObj">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+          <h4 class="text-dark">
+            <strong>{{'actors.vendors.labels.project'| translate}}</strong>
+
+          </h4>
+          <div class="card card-transparent">
+            <tabset class="bg-white p-0" justified="true">
+              <tab *ngFor="let tab of tabs;let tabIndex=index" (select)="showHideFloatingButtons(50)">
+                <ng-template tabHeading>
+                  {{tab.name | translate}}
+                </ng-template>
+                <div class="min-ht">
+                  <table id="category-table" class="table table-bordered" *ngIf=" tab?.categories.length > 0">
+                    <thead>
+                      <tr>
+                        <th>{{'projects.labels.budgetLine'| translate}}</th>
+                        <th>{{'common.labels.category'| translate}}</th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-center">
+                      <ng-container class="ptr" *ngFor="let category of tab?.categories;let i = index;">
+                        <tr [attr.cat]="category.id">
+                          <td>{{category?.budgetLine}}</td>
+                          <td class="category-name ptr id_{{category.id}}" (click)="selectCategories(category.id,tabIndex,'category_cell_',(category?.accounts ? false:true), '','category')"
+                            [ngClass]="'category_cell_'+category.id">
+                            <ng-container *ngIf="category?.accounts">
+                              <span class="expander">
+                                <i class="category-plus fa fa-plus-circle" [ngClass]="'category_'+category.id" (click)="subMenuShow(category.id, 'show',$event)"></i>
+                              </span>
+                              <span class="expander">
+                                <i class="category-minus fa fa-minus-circle" [ngClass]="'category_'+category.id"
+                                  (click)="subMenuShow(category.id, 'hide',$event)"></i>
+                              </span>
+                            </ng-container>
+                            <span> {{category?.i18n?.mappingName}}</span>
+                            <i class="fa fa-check pull-right"></i>
+                          </td>
+
+                        </tr>
+                        <ng-container class="ptr" *ngIf="category?.accounts">
+                          <ng-container *ngFor="let subCategory of category?.accounts;let subIndex = index;">
+                            <tr class="sub-category sub-category_{{category.id}}" [ngClass]="subCategory?.accounts?.length > 0 ? 'parent-node':'' "
+                              [attr.cat]="category.id" [attr.account]="subCategory.id">
+                              <td>{{subCategory?.budgetLine}}</td>
+                              <td class="subcategory-name ptr id_{{subCategory.id}} pl-60" [ngClass]="'sub_category_cell_'+subCategory.id"
+                                (click)="selectCategories(subCategory.id,tabIndex,'sub_category_cell_',(subCategory?.accounts ? false:true),category.id, 'account')">
+                                <ng-container *ngIf="subCategory?.accounts">
+                                  <span class="expander">
+                                    <i class="category-plus fa fa-plus-circle category-plus_{{category.id}}" [ngClass]="'category_'+subCategory.id"
+                                      (click)="subSubMenuShow(subCategory.id, 'show',$event)"></i>
+                                  </span>
+                                  <span class="expander">
+                                    <i class="category-minus fa fa-minus-circle category-minus_{{category.id}}"
+                                      [ngClass]="'category_'+subCategory.id" (click)="subSubMenuShow(subCategory.id, 'hide',$event)"></i>
+                                  </span>
+                                </ng-container>
+                                <span> {{subCategory?.i18n?.mappingName}}</span>
+                                <i class="fa fa-check pull-right"></i>
+                              </td>
+                            </tr>
+
+                            <ng-container class="ptr" *ngFor="let subSubCategory of subCategory?.accounts;let subSubIndex = index;">
+                              <tr class="sub-sub-category sub-sub-category_{{subCategory.id}} sub-sub-category_{{category.id}}"
+                                [attr.cat]="category.id" [attr.account]="subCategory.id" [attr.sub_account]="subSubCategory.id">
+                                <td>{{subSubCategory?.budgetLine}}</td>
+                                <td class="sub-sub-category-name ptr id_{{subSubCategory.id}} pl-80" (click)="selectCategories(subSubCategory.id,tabIndex,'sub_sub_category_cell_',true, '', 'subAccount')"
+                                  [ngClass]="'sub_sub_category_cell_'+subSubCategory.id">
+                                  <span> {{subSubCategory?.i18n?.mappingName}}</span>
+                                  <i class="fa fa-check pull-right"></i>
+                                </td>
+                              </tr>
+                            </ng-container>
+
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+
+
+                    </tbody>
+                  </table>
+                </div>
+              </tab>
+            </tabset>
+          </div>
+
+        </div>
+      </ui-control-permission>
+      <ui-control-permission [fieldName]="'projectCategory'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+        [uiPermissionObj]="uiAccessPermissionsObj">
+        <div class="floating-btn" *ngIf="showFloatingBtn">
+
+          <button (click)="updateVendor()" [disabled]="disableButton || isClicked" class="btn btn-success save-btn"  type="submit">
+            <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i> {{'common.labels.save'|
+            translate}}</button>
+          <button class="btn btn-danger ml-1 cancel-btn" (click)="navigateTo()"  type="button">{{'common.labels.cancel'| translate}}</button>
+
+        </div>
+      </ui-control-permission>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 no-mg" id="fixed-btn">
+
+        <button (click)="updateVendor()" [disabled]="disableButton || isClicked" class="btn btn-success save-btn"  type="submit">
+          <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i> {{'common.labels.save'| translate}}</button>
+        <button class="btn btn-danger ml-1 cancel-btn" (click)="navigateTo()"  type="button">{{'common.labels.cancel'| translate}}</button>
+
+      </div>
+    </form>
+  </div>
+</div>

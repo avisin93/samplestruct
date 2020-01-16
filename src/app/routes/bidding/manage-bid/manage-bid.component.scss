@@ -1,0 +1,16 @@
+#manage-bid .nav-justified .nav-item {
+  flex-basis: auto;
+}
+
+.disabled {
+  pointer-events: none; //This makes it not clickable
+  opacity: 0.6; //This grays it out to look disabled
+}
+
+@media (max-width: 768px) {
+  #manage-bid {
+    .mb-m-10 {
+      margin-bottom: 10px;
+    }
+  }
+}

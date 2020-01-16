@@ -1,0 +1,1287 @@
+<div id="manage-payment-page">
+  <ng-container *ngIf="!renderPage">
+    <app-loader class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" [loading]="!renderPage"></app-loader>
+  </ng-container>
+  <div *ngIf="renderPage">
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <form [formGroup]="managePaymentForm" novalidate>
+          <div class="form-group">
+            <!-- <div class="row"> -->
+            <!-- <div class="col-md-10"> -->
+            <h4 class="text-dark mt-1 ml-3">
+              <strong>{{'projects.labels.schedulePayment' | translate}}
+              </strong>
+
+            </h4>
+            <!-- </div> -->
+
+
+            <!-- </div> -->
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+              <div class="form-group">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <label>
+                    {{'projects.labels.purchaseOrder' | translate}}#
+                  </label>
+                  <strong>
+                    <strong>{{paymentInvoiceData?.purchaseOrder?.purchaseOrderNumber}}</strong>
+                  </strong>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+              <div class="form-group">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <label>
+                    <a data-toggle="tooltip" data-placement="top"
+                      title="{{paymentInvoiceData?.purchaseOrder?.purchaseOrderFile?.fileName}}" class="td-none"
+                      href="{{paymentInvoiceData?.purchaseOrder?.purchaseOrderFile?.fileUrl}}">
+                      <i class="fa fa-download mr-1"></i>
+                      {{'projects.labels.downloadPurchaseOrder'| translate}}
+                    </a>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+              <div class="form-group">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <label>
+                    {{'projects.labels.supplierName' | translate}} :
+                  </label>
+                  <strong class="ml-2">{{paymentInvoiceData?paymentInvoiceData.supplierName:'-'}}
+                    <span *ngIf="paymentInvoiceData.thirdPartyVendor">({{'projects.labels.thirdParty'| translate}} - {{paymentInvoiceData ? paymentInvoiceData.thirdPartyVendor
+                      : '-'}})</span>
+                  </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+              <div class="form-group">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <label>{{'projects.labels.paymentOrderNo' | translate}} : </label>
+                  <label>
+                    <strong> {{paymentInvoiceData?paymentInvoiceData.invoiceNumber:'-'}}</strong>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+              <div class="form-group">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <label>
+                    <a data-toggle="tooltip" data-placement="top" title="{{paymentInvoiceData?.invoiceFile?.fileName}}"
+                      class="td-none" href="{{paymentInvoiceData?.invoiceFile?.fileUrl}}">
+                      <i class="fa fa-download mr-1"></i>
+                      {{'projects.labels.downloadPaymentOrder' | translate}}
+                    </a>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+              <div class="form-group">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <label>{{'projects.labels.paymentOrderAmount' | translate}} : </label>
+                  <label>
+                    <strong class="ml-2">{{fixedInvoiceAmount?fixedInvoiceAmount:'-'}}
+                      {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</strong>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+              <div class="form-group">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <label>{{'projects.labels.paymentDate' | translate}} : </label>
+                  <strong
+                    *ngIf="paymentInvoiceData?.paymentDate">{{paymentInvoiceData?.paymentDate | dateFormat}}</strong>
+                  <strong *ngIf="!paymentInvoiceData?.paymentDate">-</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <h4 class="text-dark mt-1 col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <strong>{{'projects.labels.payeeAccountInformation' | translate}}</strong>
+            </h4>
+            <ng-container formGroupName="freelancerPayeeInfo"
+              *ngIf="paymentInvoiceData?.payeeAccountInfoFor ==  PURCHASE_ORDER_TYPE.freelancer">
+              <div class="row">
+
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.accNumber'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                        formControlName="accountNumber"
+                        placeholder="{{'actors.freelancers.labels.accNumber'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['freelancerPayeeInfo'].controls['accountNumber']?.errors?.checkRequired && (managePaymentForm.controls['freelancerPayeeInfo'].controls['accountNumber'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <label
+                    class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.bankname'| translate}}
+                    <span class="bb-error">*</span>
+                  </label>
+
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <input class="form-control" formControlName="bankName"
+                      placeholder="{{'actors.freelancers.labels.bankname'| translate}}" />
+                    <div class="bb-error"
+                      *ngIf="managePaymentForm.controls['freelancerPayeeInfo'].controls['bankName']?.errors?.checkRequired && (managePaymentForm.controls['freelancerPayeeInfo'].controls['bankName'].touched || submitPaymentForm)">
+                      {{'pages.errorMessages.fieldRequired'| translate}}
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.clabe'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                        minlength="18" maxlength="18" formControlName="clabe"
+                        placeholder="{{'actors.freelancers.labels.clabe'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['freelancerPayeeInfo'].controls['clabe']?.errors?.checkRequired && (managePaymentForm.controls['freelancerPayeeInfo'].controls['clabe'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                      <div class="bb-error"
+                        *ngIf="!managePaymentForm.controls['freelancerPayeeInfo'].controls['clabe']?.errors?.checkRequired && managePaymentForm.controls['freelancerPayeeInfo'].controls['clabe']?.errors && (managePaymentForm.controls['freelancerPayeeInfo'].controls['clabe'].touched || submitPaymentForm)">
+                        {{'projects.labels.lengthMsg' | translate}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.branch'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="branch"
+                        placeholder="{{'actors.freelancers.labels.branch'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['freelancerPayeeInfo'].controls['branch']?.errors?.checkRequired && (managePaymentForm.controls['freelancerPayeeInfo'].controls['branch'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'common.labels.taxIdRFC' | translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="rfcCode"
+                        placeholder="{{'common.labels.taxIdRFC' | translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['freelancerPayeeInfo'].controls['rfcCode']?.errors?.checkRequired && (managePaymentForm.controls['freelancerPayeeInfo'].controls['rfcCode'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.address'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="address"
+                        placeholder="{{'actors.freelancers.labels.address'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['freelancerPayeeInfo'].controls['address']?.errors?.checkRequired && (managePaymentForm.controls['freelancerPayeeInfo'].controls['address'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container formGroupName="talentPayeeInfo"
+              *ngIf="(paymentInvoiceData?.payeeAccountInfoFor === PAYEE_ACCOUNT_INFO.individual) || (paymentInvoiceData?.payeeAccountInfoFor === PAYEE_ACCOUNT_INFO.agency)">
+              <div class="row">
+
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'projects.labels.accountName'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="accName"
+                        placeholder="{{'projects.labels.accountName'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['talentPayeeInfo'].controls['accName']?.errors?.checkRequired && (managePaymentForm.controls['talentPayeeInfo'].controls['accName'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.accNumber'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                        formControlName="accountNumber"
+                        placeholder="{{'actors.freelancers.labels.accNumber'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['talentPayeeInfo'].controls['accountNumber']?.errors?.checkRequired && (managePaymentForm.controls['talentPayeeInfo'].controls['accountNumber'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.bankname'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="bankName"
+                        placeholder="{{'actors.freelancers.labels.bankname'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['talentPayeeInfo'].controls['bankName']?.errors?.checkRequired && (managePaymentForm.controls['talentPayeeInfo'].controls['bankName'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.branch'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="branch"
+                        placeholder="{{'actors.freelancers.labels.branch'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['talentPayeeInfo'].controls['branch']?.errors?.checkRequired && (managePaymentForm.controls['talentPayeeInfo'].controls['branch'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.clabe'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="clabe"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" minlength="18"
+                        placeholder="{{'actors.freelancers.labels.clabe'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['talentPayeeInfo'].controls['clabe']?.errors?.checkRequired && (managePaymentForm.controls['talentPayeeInfo'].controls['clabe'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'common.labels.taxIdRFC' | translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="rfcCode"
+                        placeholder="{{'common.labels.taxIdRFC' | translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['talentPayeeInfo'].controls['rfcCode']?.errors?.checkRequired && (managePaymentForm.controls['talentPayeeInfo'].controls['rfcCode'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.address'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="address"
+                        placeholder="{{'actors.freelancers.labels.address'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['talentPayeeInfo'].controls['address']?.errors?.checkRequired && (managePaymentForm.controls['talentPayeeInfo'].controls['address'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+
+            <ng-container formGroupName="vendorPayeeInfo"
+              *ngIf="paymentInvoiceData?.payeeAccountInfoFor ==  PURCHASE_ORDER_TYPE.vendor">
+
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'projects.labels.accountName'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="accountName"
+                        placeholder="{{'projects.labels.accountName'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['accountName']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['accountName'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.accNumber'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                        formControlName="accountNumber"
+                        placeholder="{{'actors.freelancers.labels.accNumber'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['accountNumber']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['accountNumber'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.bankname'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="bankName"
+                        placeholder="{{'actors.freelancers.labels.bankname'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['bankName']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['bankName'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.branch'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="branch"
+                        placeholder="{{'actors.freelancers.labels.branch'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['branch']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['branch'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <ng-container *ngIf="paymentInvoiceData?.paymentType == PAYMENT_TYPES_CONST.domestic">
+
+                <div class="row">
+                  <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div class="form-group">
+                      <label
+                        class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'common.labels.taxIdRFC' | translate}}
+                        <span class="bb-error">*</span>
+                      </label>
+
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <input class="form-control" formControlName="rfcCode"
+                          placeholder="{{'common.labels.taxIdRFC' | translate}}" />
+                        <div class="bb-error"
+                          *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['rfcCode']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['rfcCode'].touched || submitPaymentForm)">
+                          {{'pages.errorMessages.fieldRequired'| translate}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div class="form-group">
+                      <label
+                        class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.clabe'| translate}}
+                        <span class="bb-error">*</span>
+                      </label>
+
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <input class="form-control" formControlName="clabe"
+                          oninput="this.value = this.value.replace(/[^0-9]/g, '');" minlength="18" maxlength="18"
+                          placeholder="{{'actors.freelancers.labels.clabe'| translate}}" />
+                        <div class="bb-error"
+                          *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['clabe']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['clabe'].touched || submitPaymentForm)">
+                          {{'pages.errorMessages.fieldRequired'| translate}}
+                        </div>
+                        <div class="bb-error"
+                          *ngIf="!managePaymentForm.controls['vendorPayeeInfo'].controls['clabe']?.errors?.checkRequired && managePaymentForm.controls['vendorPayeeInfo'].controls['clabe']?.errors && (managePaymentForm.controls['vendorPayeeInfo'].controls['clabe'].touched || submitPaymentForm)">
+                          {{'projects.labels.lengthMsg' | translate}}</div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </ng-container>
+              <ng-container *ngIf="paymentInvoiceData?.paymentType == PAYMENT_TYPES_CONST.international">
+                <div class="row">
+                  <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div class="form-group">
+                      <label
+                        class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.vendors.labels.swiftCode'| translate}}
+                        <span class="bb-error">*</span>
+                      </label>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <input class="form-control" formControlName="swiftCode"
+                          placeholder="{{'actors.vendors.labels.swiftCode'| translate}}" />
+                        <div class="bb-error"
+                          *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['swiftCode']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['swiftCode'].touched || submitPaymentForm)">
+                          {{'pages.errorMessages.fieldRequired'| translate}}
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div class="form-group">
+                      <label
+                        class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.vendors.labels.ABAcode'| translate}}
+                        <span class="bb-error">*</span>
+                      </label>
+
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <input class="form-control" formControlName="abaCode"
+                          placeholder="{{'actors.vendors.labels.ABAcode'| translate}}" />
+                        <div class="bb-error"
+                          *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['abaCode']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['abaCode'].touched || submitPaymentForm)">
+                          {{'pages.errorMessages.fieldRequired'| translate}}
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
+                  *ngIf="paymentInvoiceData?.paymentType == PAYMENT_TYPES_CONST.domestic">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.vendors.labels.sortCode'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                      <input class="form-control" formControlName="sortCode"
+                        placeholder="{{'actors.vendors.labels.sortCode'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['sortCode']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['sortCode'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'common.labels.mode'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                      <ngx-select [items]="operation" [allowClear]="true" formControlName="mode"
+                        placeholder="{{'common.labels.mode'| translate}}">
+                      </ngx-select>
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['vendorPayeeInfo'].controls['mode']?.errors?.checkRequired && (managePaymentForm.controls['vendorPayeeInfo'].controls['mode'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container formGroupName="locationPayeeInfo"
+              *ngIf="paymentInvoiceData?.payeeAccountInfoFor ==  PURCHASE_ORDER_TYPE.location">
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.accNumber'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                      <input class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                        formControlName="accountNumber"
+                        placeholder="{{'actors.freelancers.labels.accNumber'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['locationPayeeInfo'].controls['accountNumber']?.errors?.checkRequired && (managePaymentForm.controls['locationPayeeInfo'].controls['accountNumber'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.bankname'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                      <input class="form-control" formControlName="bankName"
+                        placeholder="{{'actors.freelancers.labels.bankname'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['locationPayeeInfo'].controls['bankName']?.errors?.checkRequired && (managePaymentForm.controls['locationPayeeInfo'].controls['bankName'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.branch'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="branch"
+                        placeholder="{{'actors.freelancers.labels.branch'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['locationPayeeInfo'].controls['branch']?.errors?.checkRequired && (managePaymentForm.controls['locationPayeeInfo'].controls['branch'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.address'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="address"
+                        placeholder="{{'actors.freelancers.labels.address'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['locationPayeeInfo'].controls['address']?.errors?.checkRequired && (managePaymentForm.controls['locationPayeeInfo'].controls['address'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'actors.freelancers.labels.clabe'| translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                      <input class="form-control" formControlName="clabe"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '');" minlength="18" maxlength="18"
+                        placeholder="{{'actors.freelancers.labels.clabe'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="!managePaymentForm.controls['locationPayeeInfo'].controls['clabe']?.errors?.checkRequired && managePaymentForm.controls['locationPayeeInfo'].controls['clabe']?.errors && (managePaymentForm.controls['locationPayeeInfo'].controls['clabe'].touched || submitPaymentForm)">
+                        {{'projects.labels.lengthMsg' | translate}}</div>
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['locationPayeeInfo'].controls['clabe']?.errors?.checkRequired && (managePaymentForm.controls['locationPayeeInfo'].controls['clabe'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4"
+                  *ngIf="paymentInvoiceData?.isScouterBeneficiary">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'common.labels.taxIdRFC' | translate}}
+                      <span class="bb-error">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                      <input class="form-control" formControlName="rfcCode"
+                        placeholder="{{'common.labels.taxIdRFC' | translate}}" />
+                      <div class="bb-error"
+                        *ngIf="managePaymentForm.controls['locationPayeeInfo'].controls['rfcCode']?.errors?.checkRequired && (managePaymentForm.controls['locationPayeeInfo'].controls['rfcCode'].touched || submitPaymentForm)">
+                        {{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+          </div>
+          <div class="form-group" *ngIf="paymentsHistory?.length > 0">
+            <h4 class="text-dark mt-1 col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <strong>{{'projects.labels.paymentHistory' | translate}}</strong>
+            </h4>
+            <div class="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 table-responsive bt-0">
+              <table class="table table-bordered center">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>{{'projects.labels.paymentId' | translate}}</th>
+                    <th>{{'projects.labels.paymentAmount' | translate}}</th>
+                    <th>{{'projects.labels.scheduleDate' | translate}}</th>
+                    <th>{{'projects.labels.paymentStatus' | translate}}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="paymentsHistory?.length == 0" class="text-center">
+                    <td colspan="5">
+                      <span class="bb-error">{{'projects.labels.noPaymentHistory'| translate}}</span>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let item of paymentsHistory;let i = index;">
+                    <td>{{i+1}}</td>
+
+                    <td>
+                      <ng-container *ngIf="item.paymentElectronicId">{{item.paymentElectronicId}}</ng-container>
+                      <ng-container *ngIf="!item.paymentElectronicId"> - </ng-container>
+                    </td>
+                    <td>
+                      <ng-container *ngIf="item.amount">{{item.amount | twoDecimal}} {{item.currency.code}}
+                      </ng-container>
+                      <ng-container *ngIf="!item.amount"> - </ng-container>
+                    </td>
+                    <td>
+                      <ng-container *ngIf="item.scheduledDate">{{item.scheduledDate | dateFormat}}</ng-container>
+                      <ng-container *ngIf="!item.scheduledDate"> - </ng-container>
+                    </td>
+                    <td>
+                      <ng-container *ngIf="item.status == PAYMENT_STATUS[0].id">
+                        {{'payments.labels.' + PAYMENT_STATUS[0].text | translate}}
+                      </ng-container>
+                      <ng-container *ngIf="item.status == PAYMENT_STATUS[1].id">
+                        {{'payments.labels.' + PAYMENT_STATUS[1].text | translate}}
+                      </ng-container>
+                      <ng-container *ngIf="item.status == PAYMENT_STATUS[2].id">
+                        {{'payments.labels.' + PAYMENT_STATUS[2].text | translate}}
+                      </ng-container>
+                      <ng-container *ngIf="item.status == PAYMENT_STATUS[3].id">
+                        {{'payments.labels.' + PAYMENT_STATUS[3].text | translate}}
+                      </ng-container>
+                      <ng-container *ngIf="item.status == PAYMENT_STATUS[4].id">
+                        {{'payments.labels.' + PAYMENT_STATUS[4].text | translate}}
+                      </ng-container>
+                      <ng-container *ngIf="!item.status && item.status != 0"> - </ng-container>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="form-group mt-4">
+            <h4 class="text-dark mt-1 col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <strong>{{'projects.labels.paymentType' | translate}}</strong>
+            </h4>
+            <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                <div class="form-group">
+                  <input type="radio" (change)="paymentTypeChanged()" formControlName="installmentType" id="full"
+                    value="0">
+                  <label for="full">{{'projects.labels.fullPayment' | translate}}</label>
+                </div>
+              </div>
+              <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                <div class="form-group">
+                  <input type="radio" (change)="paymentTypeChanged()" formControlName="installmentType" id="partial"
+                    value="1">
+                  <label for="partial">{{'projects.labels.partialPayment' | translate}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 table-responsive bt-0">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th class="payment-panel center">{{'projects.labels.paymentOrderDetails' | translate}}</th>
+                      <th class="payment-panel center">{{'projects.labels.paymentDetails' | translate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="payment-panel" width="50%">
+                        <div class="row">
+                          <div class="col-md-5">
+                            <label>{{'projects.labels.paymentOrderAmount' | translate}}</label>
+                          </div>
+                          <div class="col-md-7">{{fixedInvoiceAmount ? fixedInvoiceAmount:'-'}}
+                            {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor ===  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-5">
+                            <label>{{'projects.labels.agengyFee'| translate}} (%)</label>
+                          </div>
+                          <div class="col-md-7">
+                            <div class="row">
+                              <div class="col-md-3">
+                                {{paymentInvoiceData.percentAgencyFee ? paymentInvoiceData.percentAgencyFee:'-'}}
+                              </div>
+                              <div class="col-md-8">
+                                {{'common.labels.amount' | translate}}
+                                <span class="ml-2">{{detailsAgencyAmt | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                   
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor ===  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-5">
+                            <label>{{'projects.labels.iva'| translate}} (%)</label>
+                          </div>
+                          <div class="col-md-7">
+                            <div class="row">
+                              <div class="col-md-3">
+                                {{paymentInvoiceData.percentAgencyFee ? paymentInvoiceData.iva:'-'}}
+                              </div>
+                              <div class="col-md-8">
+                                {{'common.labels.amount' | translate}}
+                                <span class="ml-2">{{detailsIVAAmount | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor ===  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-5">
+                            <label>{{'projects.labels.markup'| translate}} (%)</label>
+                          </div>
+                          <div class="col-md-7">
+                            <div class="row">
+                              <div class="col-md-3">
+                                {{paymentInvoiceData.percentMarkup ? paymentInvoiceData.percentMarkup:'-'}}
+                              </div>
+                              <div class="col-md-8">
+                                {{'common.labels.amount' | translate}}
+                                <span class="ml-2">{{detailsMarkupAmount | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor!==  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-5">
+                            <label>{{'projects.labels.vat' | translate}}(%)</label>
+                          </div>
+                          <div class="col-md-7">
+                            <div class="row">
+                              <div class="col-md-3">
+                                {{paymentInvoiceData.vat ? paymentInvoiceData.vat:'-'}}
+                              </div>
+                              <div class="col-md-8">
+                                {{'common.labels.amount' | translate}}
+                                <span class="ml-2">{{detailsVATAmt | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor!==  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-5">
+                            <label>{{'projects.labels.isrWithholding' | translate}}(%)</label>
+                          </div>
+                          <div class="col-md-7">
+                            <div class="row">
+                              <div class="col-md-3">
+                                {{paymentInvoiceData.isrWithHolding ? paymentInvoiceData.isrWithHolding:'-'}}
+                              </div>
+                              <div class="col-md-8">
+                                {{'common.labels.amount' | translate}}
+                                <span class="ml-2">{{detailsISRWitholdingAmt | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor!==  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-5">
+                            <label>{{'projects.labels.vatWithholding' | translate}}(%)</label>
+                          </div>
+                          <div class="col-md-7">
+                            <div class="row">
+                              <div class="col-md-3">
+                                {{paymentInvoiceData.vatWithHolding ? paymentInvoiceData.vatWithHolding:'-'}}
+                              </div>
+                              <div class="col-md-8">
+                                {{'common.labels.amount' | translate}}
+                                <span class="ml-2">{{detailsVatWitholdingAmt | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </td>
+                      <td class="payment-panel">
+                        <div class="row">
+                          <div class="col-md-4 col-lg-4 col-sm-4">
+                            <label>{{'projects.labels.paymentAmount' | translate}}
+                              <span *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.partial"
+                                class="mandatory">*</span>
+                            </label>
+                          </div>
+                          <div *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.full"
+                            class="col-md-8">
+                            <ng-container *ngIf="paymentInvoiceData.invoiceAmount">
+                              {{paymentInvoiceData.invoiceAmount | twoDecimal}}</ng-container>
+                            <ng-container *ngIf="!paymentInvoiceData.invoiceAmount">0</ng-container>
+                            {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                          </div>
+                          <div *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.partial"
+                            class="col-md-8">
+                            <div class="row mb-2">
+                              <div class="col-md-9">
+                                <input class="form-control" type="text" formControlName="paymentAmount"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g, '');"
+                                  (keyup)="checkPaymentAmount();calculateAllAmounts();">
+                                <div class="bb-error"
+                                  *ngIf="managePaymentForm.controls['paymentAmount']?.errors?.checkRequired && (managePaymentForm.controls['paymentAmount'].touched || submitPaymentForm)">
+                                  {{'pages.errorMessages.fieldRequired'| translate}}
+                                </div>
+                                <div class="bb-error"
+                                  *ngIf="!managePaymentForm.controls['paymentAmount']?.errors?.checkRequired && managePaymentForm.controls['paymentAmount']?.errors?.checkDecimal && (managePaymentForm.controls['paymentAmount'].touched) && managePaymentForm.controls['paymentAmount'].dirty">
+                                  {{'pages.errorMessages.validDecimal'| translate}}
+                                </div>
+                                <div class="bb-error"
+                                  *ngIf="!managePaymentForm.controls['paymentAmount']?.errors?.checkDecimal && !managePaymentForm.controls['paymentAmount']?.errors?.checkRequired && showMsg && managePaymentForm.controls['paymentAmount'].touched">
+                                  {{'projects.labels.paymentMsg'|translate}}</div>
+                              </div>
+                              <div class="col-md-3 no-mg">
+                                <span>{{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor!==  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-4 col-lg-4 col-sm-4">
+                            <label>{{'projects.labels.vat' | translate}}(%)
+
+                            </label>
+                          </div>
+                          <div *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.full"
+                            class="col-md-8">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                <span class="mr-4">
+                                  {{paymentInvoiceData.vat ? paymentInvoiceData.vat:'-'}}
+                                </span>
+
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{vatAmt | twoDecimal}} {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-8"
+                            *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.partial">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                {{paymentInvoiceData.vat ? paymentInvoiceData.vat:'-'}}
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8 no-mg">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{vatAmt | twoDecimal}} {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor!==  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-4">
+                            <label>{{'projects.labels.isrWithholding' | translate}}(%)
+
+                            </label>
+                          </div>
+                          <div *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.full"
+                            class="col-md-8">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                <span class="mr-4">
+                                  {{paymentInvoiceData.isrWithHolding ? paymentInvoiceData.isrWithHolding:'-'}}
+                                </span>
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{isrWitholdingAmt | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-8"
+                            *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.partial">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                {{paymentInvoiceData.isrWithHolding ? paymentInvoiceData.isrWithHolding:'-'}}
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8 no-mg">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{isrWitholdingAmt | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor!==  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-4 col-lg-4 col-sm-4">
+                            <label>{{'projects.labels.vatWithholding' | translate}}(%)
+
+                            </label>
+                          </div>
+                          <div *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.full"
+                            class="col-md-8">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                <span class="mr-4">
+                                  {{paymentInvoiceData.vatWithHolding ? paymentInvoiceData.vatWithHolding:'-'}}
+                                </span>
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{vatWitholdingAmt | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-8"
+                            *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.partial">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                {{paymentInvoiceData.vatWithHolding ? paymentInvoiceData.vatWithHolding:'-'}}
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8 no-mg">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{vatWitholdingAmt | twoDecimal}}
+                                  {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor ===  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-4 col-lg-4 col-sm-4">
+                            <label>{{'projects.labels.agengyFeeAmount' | translate}}(%)
+
+                            </label>
+                          </div>
+                          <div *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.full"
+                            class="col-md-8">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                <span class="mr-4">
+                                  {{paymentInvoiceData.percentAgencyFee ? paymentInvoiceData.percentAgencyFee:'-'}}
+                                </span>
+
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{agencyFeeAmount | twoDecimal}} {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-8"
+                            *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.partial">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                {{paymentInvoiceData.percentAgencyFee ? paymentInvoiceData.percentAgencyFee:'-'}}
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8 no-mg">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{agencyFeeAmount | twoDecimal}} {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor ===  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-4 col-lg-4 col-sm-4">
+                            <label>{{'projects.labels.iva' | translate}}(%)
+
+                            </label>
+                          </div>
+                          <div *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.full"
+                            class="col-md-8">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                <span class="mr-4">
+                                  {{paymentInvoiceData.iva ? paymentInvoiceData.iva:'-'}}
+                                </span>
+
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{ivaAmount | twoDecimal}} {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-8"
+                            *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.partial">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                {{paymentInvoiceData.iva ? paymentInvoiceData.iva:'-'}}
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8 no-mg">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{ivaAmount | twoDecimal}} {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="paymentInvoiceData?.invoiceFor ===  PURCHASE_ORDER_TYPE.talent">
+                          <div class="col-md-4 col-lg-4 col-sm-4">
+                            <label>{{'projects.labels.markup' | translate}}(%)
+
+                            </label>
+                          </div>
+                          <div *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.full"
+                            class="col-md-8">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                <span class="mr-4">
+                                  {{paymentInvoiceData.percentMarkup ? paymentInvoiceData.percentMarkup:'-'}}
+                                </span>
+
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{markupAmount | twoDecimal}} {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-8"
+                            *ngIf="managePaymentForm?.value?.installmentType==INVOICE_PAYMENT_TYPES.partial">
+                            <div class="row mb-2">
+                              <div class="col-md-4 col-lg-4 col-sm-4">
+                                {{paymentInvoiceData.percentMarkup ? paymentInvoiceData.percentMarkup:'-'}}
+                              </div>
+                              <div class="col-md-8 col-lg-8 col-sm-8 no-mg">
+                                <span class="mr-2">
+                                  {{'common.labels.amount' | translate}}
+                                </span>
+                                <span>
+                                  {{markupAmount | twoDecimal}} {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}
+                                </span>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+              <div class="form-group">
+                <label
+                  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'projects.labels.schedulePayment' | translate}}
+                  <span class="mandatory"> *</span>
+                </label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <my-date-picker class="bbdate" [options]="datePickerOptions" formControlName="schedulePaymentDate"
+                    placeholder="{{'payments.labels.date' | translate}}"></my-date-picker>
+                  <div class="bb-error"
+                    *ngIf="managePaymentForm.controls['schedulePaymentDate']?.errors?.checkRequired && (managePaymentForm.controls['schedulePaymentDate'].touched || submitPaymentForm)">
+                    {{'pages.errorMessages.fieldRequired'| translate}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="paymentInvoiceData?.payeeAccountInfoFor !=  PURCHASE_ORDER_TYPE.vendor">
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+              <div class="form-group">
+                <label
+                  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'projects.labels.modeOfPayment' | translate}}
+                  <span class="mandatory">*</span>
+                </label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <ngx-select [items]="operation" [allowClear]="true" formControlName="modeOfPayment"
+                    placeholder="{{'common.labels.select'| translate}}"></ngx-select>
+                  <div class="bb-error"
+                    *ngIf="managePaymentForm.controls['modeOfPayment']?.errors?.checkRequired && (managePaymentForm.controls['modeOfPayment'].touched || submitPaymentForm)">
+                    {{'pages.errorMessages.fieldRequired'| translate}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'projects.labels.notes' | translate}}
+                </label>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <textarea class="form-control" rows="3" formControlName="notes"></textarea>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+            <button (click)="savePayment()" type="submit" [disabled]="disableSaveButtonFlag" class="btn btn-success">
+              <i *ngIf="spinnerFlag"
+                class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'| translate}}</button>
+            <button (click)="navigateTo()" type="button" class="btn btn-danger ml-1">{{'common.labels.cancel'| translate}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

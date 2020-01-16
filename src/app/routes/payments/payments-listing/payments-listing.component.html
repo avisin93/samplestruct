@@ -1,0 +1,2124 @@
+<div id="payment-listing">
+  <div class="content-heading">
+    <!-- Breadcrumb right aligned-->
+    <breadcrumb class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 no-mg" [breadcrumbData]="breadcrumbData"></breadcrumb>
+  </div>
+  <div class="container-fluid">
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <form [formGroup]="paymentsFilterForm">
+          <div class="no-mg mt-1">
+            <div class="row no-mg mb-3">
+              <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 mb-2">
+                <input class="form-control" formControlName="consecutiveNumber"
+                  placeholder="{{'payments.labels.poConsecutive'| translate}}#" data-toggle="tooltip"
+                  data-placement="top" title="{{'payments.labels.poConsecutive'| translate}}#">
+              </div>
+              <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 mb-2">
+                <input class="form-control" formControlName="purchaseOrderNumber"
+                  placeholder="{{'payments.labels.po'| translate}}#" data-toggle="tooltip" data-placement="top"
+                  title="{{'payments.labels.po'| translate}}#">
+              </div>
+              <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 mb-2">
+                <input class="form-control" formControlName="invoiceNumber"
+                  placeholder="{{'payments.labels.paymentOrderNo'| translate}}" data-toggle="tooltip" data-placement="top"
+                  title="{{'payments.labels.paymentOrderNo'| translate}}">
+              </div>
+              <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 mb-2">
+                <ngx-select formControlName="projectId" (remove)="removedProject()" [items]="projectsList" [allowClear]='true'
+                  placeholder="{{'payments.labels.projectName'| translate}}" data-toggle="tooltip" data-placement="top"
+                  title="{{'payments.labels.projectName'| translate}}" (select)="getBudgetList($event)">
+                </ngx-select>
+              </div>
+            </div>
+            <div class="row no-mg mb-3">
+              <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 mb-2">
+                <ngx-select formControlName="budgetType" [items]="budgetList" [allowClear]='true'
+                  placeholder="{{'payments.labels.budgetType'| translate}}" data-toggle="tooltip" data-placement="top"
+                  title="{{'payments.labels.budgetType'| translate}}">
+                </ngx-select>
+              </div>
+              <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 mb-2">
+                <ngx-select formControlName="paymentFor" [allowClear]='true'
+                  [items]="poTypeArr" placeholder="{{'payments.labels.poType'| translate}}"
+                  data-toggle="tooltip" data-placement="top" title="{{'payments.labels.poType'| translate}}">
+                </ngx-select>
+              </div>
+              <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 mb-2">
+                <input class="form-control" formControlName="supplierName"
+                  placeholder="{{'payments.labels.supplierName'| translate}}" data-toggle="tooltip" data-placement="top"
+                  title="{{'payments.labels.supplierName'| translate}}">
+              </div>
+              <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                <my-date-picker class="bbdate input-width" formControlName="invoiceDate" [options]="myDatePickerOptions"
+                  placeholder="{{'payments.labels.paymentOrderDate'| translate}}" data-toggle="tooltip" data-placement="top"
+                  title="{{'payments.labels.paymentOrderDate'| translate}}"></my-date-picker>
+              </div>
+            </div>
+            <div class="row no-mg mb-3">
+              <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                <my-date-picker class="bbdate input-width" formControlName="scheduleDate"
+                  [options]="myDatePickerOptions" placeholder="{{'payments.labels.scheduleDate'| translate}}"
+                  data-toggle="tooltip" data-placement="top" title="{{'payments.labels.scheduleDate'| translate}}">
+                </my-date-picker>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 mb-2">
+                <button class="btn btn-primary" type="submit" (click)="search()"
+                  [disabled]="showLoadingFlg || showLoadingFlags.future || showLoadingFlags.today || showLoadingFlags.tomorrow || showLoadingFlags.overdue">
+                  {{'common.labels.search'| translate}}</button>
+                <button class="btn btn-primary" (click)="clearFormDetails()"
+                  [disabled]="showLoadingFlg || showLoadingFlags.future || showLoadingFlags.today || showLoadingFlags.tomorrow || showLoadingFlags.overdue"
+                  type="button"> {{'common.labels.clear'| translate}}</button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <hr class="">
+        <div *ngIf="showLoadingFlg">
+          <app-loader class="col-md-12 col-lg-12" [loading]="showLoadingFlg"></app-loader>
+        </div>
+        <div class="mt-30" [ngClass]="{'hide-content': showLoadingFlg}">
+          <tabset class="bg-white p-0" justified="true">
+            <tab>
+              <ng-template tabHeading>
+                {{'payments.labels.scheduled'| translate}}
+              </ng-template>
+              <div id="scheduled-tab-content" class="row no-mg pt-20">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <accordion>
+                    <accordion-group>
+                      <div class="ptr" accordion-heading>
+                        <span class="panel-title text-dark">
+                          <div class="row">
+                            <span class="col-md-8">
+                              <strong>{{'payments.labels.overduePayments'| translate}} ({{'payments.labels.count'|
+                                              translate}}
+                                {{totalPaymentsItems?.overdue}})</strong>
+                            </span>
+                            <div class="col-md-4" style="text-align: right;">
+                              <span class="mr-2"> <strong> {{'common.labels.invoiceAmount'| translate}} :
+                                  {{paymentsListsTotal?.overdue | twoDecimal | absolute | numberFormat}}
+                                  MXN</strong></span>
+                              <a class="pull-right"><i class="fa fa-plus show-hide-plus-icon pt-1"></i>
+                                <i class="fa fa-minus pt-1 show-hide-minus-icon"></i>
+                              </a>
+                            </div>
+                          </div>
+
+
+                        </span>
+                      </div>
+                      <div class="panel-body"
+                        [ngStyle]="{'padding':paymentsLists?.overdue?.length == 0 ? '0px' : '15px 2px' }">
+                        <ng-container *ngIf="(paymentsLists?.overdue?.length == 0 && totalPaymentsItems?.overdue == 0)">
+                          <div class="row mt-1">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                              <p class="text-danger">{{'common.labels.recordNotFound' | translate}}</p>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <div class="items" *ngFor="let payment of paymentsLists?.overdue;let i=index;let lst = last">
+                            <div class="row"  *ngIf="(payment?.projectTypeId!==PROJECT_TYPES.corporate) && (payment?.paymentFor!==PURCHASE_ORDER_CONST.talent)">
+                                <div class="col-md-12 text-danger"
+                                *ngIf="!payment?.palAccepted && !payment?.contractAccepted; else showRespectiveMsgs">
+                                <span>
+                                  {{'common.labels.palContractNotAccepted'| translate}}
+                                </span>
+                              </div>
+                              <ng-template #showRespectiveMsgs>
+                                <div class="col-md-12 text-danger" *ngIf="!payment?.palAccepted">
+                                  <span>
+                                    {{'common.labels.palNotAccepted'| translate}}
+                                  </span>
+                                </div>
+                                <div class="col-md-12 text-danger" *ngIf="!payment?.contractAccepted">
+                                  <span>
+                                    {{'common.labels.contractNotAccepted'| translate}}
+                                  </span>
+                                </div>
+                              </ng-template>
+                              </div>
+                          <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentId'| translate}}: </strong>
+                                  </span>
+                                  <span class="payment-id">
+                                    {{payment.paymentNumberId ? payment.paymentNumberId: "-"}}
+                                  </span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.projectName'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.projectName ? payment.projectName: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.scheduleDate'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.scheduleDate ? (payment.scheduleDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-" }}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.poConsecutive'| translate}}#: </strong>
+                                  </span>
+                                  <span class="invoice-number">
+                                    {{payment.consecutiveNumber ? payment.consecutiveNumber: "-"}}
+                                  </span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.po'| translate}}#: </strong>
+                                  </span>
+                                  <span>{{payment.purchaseOrderNumber ? payment.purchaseOrderNumber: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentOrderNumber'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.invoiceNo ? payment.invoiceNo : "NA" }}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-1">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.poType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{(payment.paymentFor || payment.paymentFor === PAYMENT_FOR.freelancer) ?
+                                    poTypeArray[payment.paymentFor]: "-"}}</span>
+                                </div>
+                                <ng-container
+                                  *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                        <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                          ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                        </span>
+                                        <ng-template #elseBlock3>
+                                         
+                                        </ng-template>
+                                      </span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                                  </div>
+                                </ng-container>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentOrderDate'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.invoiceDate ? (payment.invoiceDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-1">
+                                <ng-container
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                        <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                          ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                        </span>
+                                        <ng-template #elseBlock3>
+                                         
+                                        </ng-template>
+                                      </span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paymentOrderAmount'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.invoiceAmount ? (payment.invoiceAmount | twoDecimal): "-"}}
+                                      {{(payment.invoiceAmount && payment.paymentCurrencyCode) ?
+                                      payment.paymentCurrencyCode: ""}}</span>
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.createdBy'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment?.createdBy ? payment?.createdBy: "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div
+                                  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 action-items center display-inline-block">
+                                  <ui-control-permission [fieldName]="'pay'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10">
+                                      <span class="p-5-25"
+                                        (click)="openModal(modalName.payConfirmation, overdue, payment)">
+                                        {{'payments.labels.pay'| translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                  <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                                  [actionType]="ACTION_TYPES.EDIT">
+                                  <div class="display-inline-flex mb-10">
+                                      <span (click)="openModal(modalName.editSchedule, overdue, payment)"
+                                        [ngClass]="payment?.canEdit ? '' : 'ptr-disabled'">
+                                        <i
+                                          class="fa fa-edit edit-icon"></i>{{'payments.labels.editSchedule' |translate}}
+                                      </span>
+                                    </div>
+                                  </action-permission>
+                                  <ui-control-permission [fieldName]="'viewPO'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10">
+                                      <span (click)="viewPO(payment?.purchaseOrderId)">
+                                        <i class="fa fa-eye view-icon"></i>{{'projects.labels.viewPo'| translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                  <ui-control-permission [fieldName]="'viewInvoice'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <ng-container *ngIf="payment?.invoiceFileUrl">
+                                      <div class="display-inline-flex mb-10"
+                                        *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                        <span (click)="viewInvoice(payment?.invoiceFileUrl)" class="">
+                                          <i
+                                            class="fa fa-eye view-icon"></i>{{'projects.labels.viewPaymentOrder'| translate}}
+                                        </span>
+                                      </div>
+                                    </ng-container>
+                                  </ui-control-permission>
+                                  <ui-control-permission [fieldName]="'cancelPayment'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10"
+                                      *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                      <span (click)="cancelPayment(payment);"
+                                        [ngClass]="payment?.canCancel ? '' : 'ptr-disabled'">
+                                        <i class="ptr fa fa-times-circle cancel-icon"></i>{{'payments.labels.cancel'
+                                      |translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                              <div class="amount-details center">
+                                <div class="details">
+                                  <div class="currency">
+                                    {{(payment.paymentAmount && payment.paymentCurrencyCode) ?
+                                    payment.paymentCurrencyCode: ""}}
+                                  </div>
+                                  <div class="amount">
+                                    <strong>{{payment.paymentAmount ? (payment.paymentAmount | twoDecimal | absolute |
+                                      numberFormat): "-" }}</strong>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <hr *ngIf="!lst">
+                        </div>
+                        <div *ngIf="showMoreFlags?.overdue && paymentsLists?.overdue.length > 0">
+                          <div class="text-center" *ngIf="!(showLoadingFlags?.overdue)">
+                            <a class="text-dark ml-1" href="javascript:void(0)"
+                              (click)="loadMorePaymentRecords(paymentsTypeServiceNameObj.overdue)"><u>{{'payments.labels.showMore'|
+                                translate}}
+                              </u></a>
+                          </div>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center"
+                            *ngIf="showLoadingFlags?.overdue">
+                            <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </accordion-group>
+                    <accordion-group>
+                      <div class="ptr" accordion-heading>
+                        <span class="panel-title text-dark">
+                          <div class="row">
+                            <span class="col-md-8">
+                              <strong>{{'payments.labels.todaySchedule'| translate}} ({{'payments.labels.count'|
+                                                  translate}}
+                                {{totalPaymentsItems?.today}})</strong>
+                            </span>
+                            <div class="col-md-4" style="text-align: right;">
+                              <span class="mr-2"> <strong> {{'common.labels.invoiceAmount'| translate}} :
+                                  {{paymentsListsTotal?.today | twoDecimal | absolute | numberFormat}}
+                                  MXN</strong></span>
+                              <a class="pull-right"><i class="fa fa-plus show-hide-plus-icon pt-1"></i>
+                                <i class="fa fa-minus pt-1 show-hide-minus-icon"></i>
+                              </a>
+                            </div>
+                          </div>
+
+                        </span>
+                      </div>
+                      <div class="panel-body"
+                        [ngStyle]="{'padding':paymentsLists?.today?.length == 0 ? '0px' : '15px 2px' }">
+                        <ng-container *ngIf="(paymentsLists?.today?.length == 0 && totalPaymentsItems?.today == 0)">
+                          <div class="row mt-1">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                              <p class="text-danger">{{'common.labels.recordNotFound' | translate}}</p>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <div class="items" *ngFor="let payment of paymentsLists?.today;let i=index;let lst = last">
+                            <div class="row"  *ngIf="(payment?.projectTypeId!==PROJECT_TYPES.corporate) && (payment?.paymentFor!==PURCHASE_ORDER_CONST.talent)">
+                                <div class="col-md-12 text-danger"
+                                *ngIf="!payment?.palAccepted && !payment?.contractAccepted; else showRespectiveMsgs">
+                                <span>
+                                  {{'common.labels.palContractNotAccepted'| translate}}
+                                </span>
+                              </div>
+                              <ng-template #showRespectiveMsgs>
+                                <div class="col-md-12 text-danger" *ngIf="!payment?.palAccepted">
+                                  <span>
+                                    {{'common.labels.palNotAccepted'| translate}}
+                                  </span>
+                                </div>
+                                <div class="col-md-12 text-danger" *ngIf="!payment?.contractAccepted">
+                                  <span>
+                                    {{'common.labels.contractNotAccepted'| translate}}
+                                  </span>
+                                </div>
+                              </ng-template>
+                              </div>
+                          <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentId'| translate}}: </strong>
+                                  </span>
+                                  <span class="payment-id">
+                                    {{payment.paymentNumberId ? payment.paymentNumberId: "-"}}
+                                  </span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.projectName'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.projectName ? payment.projectName: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.scheduleDate'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.scheduleDate ? (payment.scheduleDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-" }}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.poConsecutive'| translate}}#: </strong>
+                                  </span>
+                                  <span class="invoice-number">
+                                    {{payment.consecutiveNumber ? payment.consecutiveNumber: "-"}}
+                                  </span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.po'| translate}}#: </strong>
+                                  </span>
+                                  <span>{{payment.purchaseOrderNumber ? payment.purchaseOrderNumber: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentOrderNumber'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.invoiceNo ? payment.invoiceNo : "NA" }}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-1">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.poType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{(payment.paymentFor || payment.paymentFor === PAYMENT_FOR.freelancer) ?
+                                    poTypeArray[payment.paymentFor]: "-"}}</span>
+                                </div>
+                                <ng-container
+                                  *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                      <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                        ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                      </span>
+                                      <ng-template #elseBlock3>
+                                       
+                                      </ng-template>
+                                    </span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                                  </div>
+                                </ng-container>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentOrderDate'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.invoiceDate ? (payment.invoiceDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-1">
+                                <ng-container
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                        <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                          ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                        </span>
+                                        <ng-template #elseBlock3>
+                                         
+                                        </ng-template>
+                                      </span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paymentOrderAmount'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.invoiceAmount ? (payment.invoiceAmount | twoDecimal): "-"}}
+                                      {{(payment.invoiceAmount && payment.paymentCurrencyCode) ?
+                                      payment.paymentCurrencyCode: ""}}</span>
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.createdBy'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment?.createdBy ? payment?.createdBy: "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div
+                                  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 action-items center display-inline-block">
+                                  <ui-control-permission [fieldName]="'pay'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10">
+                                      <span class="p-5-25"
+                                        (click)="openModal(modalName.payConfirmation, today, payment)">
+                                        {{'payments.labels.pay'| translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                  <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                                  [actionType]="ACTION_TYPES.EDIT">
+                                  <div class="display-inline-flex mb-10">
+                                      <span (click)="openModal(modalName.editSchedule, today, payment)"
+                                        [ngClass]="payment?.canEdit ? '' : 'ptr-disabled'">
+                                        <i
+                                          class="fa fa-edit edit-icon"></i>{{'payments.labels.editSchedule' |translate}}
+                                      </span>
+                                    </div>
+                                  </action-permission>
+                                  <ui-control-permission [fieldName]="'viewPO'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10">
+                                      <span (click)="viewPO(payment?.purchaseOrderId)">
+                                        <i class="fa fa-eye view-icon"></i>{{'projects.labels.viewPo'| translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                  <ui-control-permission [fieldName]="'viewInvoice'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <ng-container *ngIf="payment?.invoiceFileUrl">
+                                      <div class="display-inline-flex mb-10"
+                                        *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                        <span (click)="viewInvoice(payment?.invoiceFileUrl)" class="">
+                                          <i
+                                            class="fa fa-eye view-icon"></i>{{'projects.labels.viewPaymentOrder'| translate}}
+                                        </span>
+                                      </div>
+
+                                    </ng-container>
+
+                                  </ui-control-permission>
+                                  <ui-control-permission [fieldName]="'cancelPayment'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10"
+                                      *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                      <span (click)="cancelPayment(payment);"
+                                        [ngClass]="payment?.canCancel ? '' : 'ptr-disabled'">
+                                        <i class="ptr fa fa-times-circle cancel-icon"></i>{{'payments.labels.cancel'
+                                      |translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                              <div class="amount-details center">
+                                <div class="details">
+                                  <div class="currency">
+                                    {{(payment.paymentAmount && payment.paymentCurrencyCode) ?
+                                    payment.paymentCurrencyCode: ""}}
+                                  </div>
+                                  <div class="amount">
+                                    <strong>{{payment.paymentAmount ? (payment.paymentAmount | twoDecimal | absolute |
+                                      numberFormat): "-" }}</strong>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <hr *ngIf="!lst">
+                        </div>
+                        <div *ngIf="showMoreFlags?.today && paymentsLists?.today.length > 0">
+                          <div class="text-center" *ngIf="!(showLoadingFlags?.today)">
+                            <a class="text-dark ml-1" href="javascript:void(0)"
+                              (click)="loadMorePaymentRecords(paymentsTypeServiceNameObj.today)"><u>{{'payments.labels.showMore'|
+                                translate}}
+                              </u></a>
+                          </div>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center"
+                            *ngIf="showLoadingFlags?.today">
+                            <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </accordion-group>
+                    <accordion-group>
+                      <div class="ptr" accordion-heading>
+                        <span class="panel-title text-dark">
+                          <div class="row">
+                            <span class="col-md-8">
+                              <strong>{{'payments.labels.tomorrowSchedule'| translate}} ({{'payments.labels.count'|
+                                                  translate}}
+                                {{totalPaymentsItems?.tomorrow}})</strong>
+                            </span>
+                            <div class="col-md-4" style="text-align: right;">
+                              <span class="mr-2"> <strong> {{'common.labels.invoiceAmount'| translate}} :
+                                  {{paymentsListsTotal?.tomorrow | twoDecimal | absolute | numberFormat}}
+                                  MXN</strong></span>
+                              <a class="pull-right"><i class="fa fa-plus show-hide-plus-icon pt-1"></i>
+                                <i class="fa fa-minus pt-1 show-hide-minus-icon"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </span>
+                      </div>
+                      <div class="panel-body"
+                        [ngStyle]="{'padding':paymentsLists?.tomorrow?.length == 0 ? '0px' : '15px 2px' }">
+                        <ng-container
+                          *ngIf="(paymentsLists?.tomorrow?.length == 0 && totalPaymentsItems?.tomorrow == 0)">
+                          <div class="row mt-1">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                              <p class="text-danger">{{'common.labels.recordNotFound' | translate}}</p>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <div class="items" *ngFor="let payment of paymentsLists?.tomorrow;let i=index;let lst = last">
+                            <div class="row"  *ngIf="(payment?.projectTypeId!==PROJECT_TYPES.corporate) && (payment?.paymentFor!==PURCHASE_ORDER_CONST.talent)">
+                                <div class="col-md-12 text-danger"
+                                *ngIf="!payment?.palAccepted && !payment?.contractAccepted; else showRespectiveMsgs">
+                                <span>
+                                  {{'common.labels.palContractNotAccepted'| translate}}
+                                </span>
+                              </div>
+                              <ng-template #showRespectiveMsgs>
+                                <div class="col-md-12 text-danger" *ngIf="!payment?.palAccepted">
+                                  <span>
+                                    {{'common.labels.palNotAccepted'| translate}}
+                                  </span>
+                                </div>
+                                <div class="col-md-12 text-danger" *ngIf="!payment?.contractAccepted">
+                                  <span>
+                                    {{'common.labels.contractNotAccepted'| translate}}
+                                  </span>
+                                </div>
+                              </ng-template>
+                              </div>
+                          <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentId'| translate}}: </strong>
+                                  </span>
+                                  <span class="payment-id">
+                                    {{payment.paymentNumberId ? payment.paymentNumberId: "-"}}
+                                  </span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.projectName'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.projectName ? payment.projectName: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.scheduleDate'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.scheduleDate ? (payment.scheduleDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-" }}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.poConsecutive'| translate}}#: </strong>
+                                  </span>
+                                  <span class="invoice-number">
+                                    {{payment.consecutiveNumber ? payment.consecutiveNumber: "-"}}
+                                  </span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.po'| translate}}#: </strong>
+                                  </span>
+                                  <span>{{payment.purchaseOrderNumber ? payment.purchaseOrderNumber: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentOrderNumber'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.invoiceNo ? payment.invoiceNo : "NA" }}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-1">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.poType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{(payment.paymentFor || payment.paymentFor === PAYMENT_FOR.freelancer) ?
+                                    poTypeArray[payment.paymentFor]: "-"}}</span>
+                                </div>
+                                <ng-container
+                                  *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                        <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                          ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                        </span>
+                                        <ng-template #elseBlock3>
+                                         
+                                        </ng-template>
+                                      </span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                                  </div>
+                                </ng-container>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentOrderDate'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.invoiceDate ? (payment.invoiceDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-1">
+                                <ng-container
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                        <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                          ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                        </span>
+                                        <ng-template #elseBlock3>
+                                         
+                                        </ng-template>
+                                      </span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paymentOrderAmount'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.invoiceAmount ? (payment.invoiceAmount | twoDecimal): "-"}}
+                                      {{(payment.invoiceAmount && payment.paymentCurrencyCode) ?
+                                      payment.paymentCurrencyCode: ""}}</span>
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.createdBy'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment?.createdBy ? payment?.createdBy: "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div
+                                  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 action-items center display-inline-block">
+                                  <ui-control-permission [fieldName]="'pay'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10">
+                                      <span class="p-5-25"
+                                        (click)="openModal(modalName.payConfirmation, tomorrow, payment)">
+                                        {{'payments.labels.pay'| translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                  <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                                  [actionType]="ACTION_TYPES.EDIT">
+                                  <div class="display-inline-flex mb-10">
+                                      <span (click)="openModal(modalName.editSchedule, tomorrow, payment)"
+                                        [ngClass]="payment?.canEdit ? '' : 'ptr-disabled'">
+                                        <i
+                                          class="fa fa-edit edit-icon"></i>{{'payments.labels.editSchedule' |translate}}
+                                      </span>
+                                    </div>
+                                  </action-permission>
+                                  <ui-control-permission [fieldName]="'viewPO'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10">
+                                      <span (click)="viewPO(payment?.purchaseOrderId)">
+                                        <i class="fa fa-eye view-icon"></i>{{'projects.labels.viewPo'| translate}}
+                                      </span>
+
+                                    </div>
+                                  </ui-control-permission>
+
+
+                                  <ui-control-permission [fieldName]="'viewInvoice'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <ng-container *ngIf="payment?.invoiceFileUrl">
+                                      <div class="display-inline-flex mb-10"
+                                        *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                        <span (click)="viewInvoice(payment?.invoiceFileUrl)" class="">
+                                          <i
+                                            class="fa fa-eye view-icon"></i>{{'projects.labels.viewPaymentOrder'| translate}}
+                                        </span>
+                                      </div>
+                                    </ng-container>
+
+                                  </ui-control-permission>
+                                  <ui-control-permission [fieldName]="'cancelPayment'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10"
+                                      *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                      <span (click)="cancelPayment(payment);"
+                                        [ngClass]="payment?.canCancel ? '' : 'ptr-disabled'">
+                                        <i class="ptr fa fa-times-circle cancel-icon"></i>{{'payments.labels.cancel'
+                                      |translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                              <div class="amount-details center">
+                                <div class="details">
+                                  <div class="currency">
+                                    {{(payment.paymentAmount && payment.paymentCurrencyCode) ?
+                                    payment.paymentCurrencyCode: ""}}
+                                  </div>
+                                  <div class="amount">
+                                    <strong>{{payment.paymentAmount ? (payment.paymentAmount | twoDecimal | absolute |
+                                      numberFormat): "-" }}</strong>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <hr *ngIf="!lst">
+                        </div>
+                        <div *ngIf="showMoreFlags?.tomorrow && paymentsLists?.tomorrow.length > 0">
+                          <div class="text-center" *ngIf="!(showLoadingFlags?.tomorrow)">
+                            <a class="text-dark ml-1" href="javascript:void(0)"
+                              (click)="loadMorePaymentRecords(paymentsTypeServiceNameObj.tomorrow)"><u>{{'payments.labels.showMore'|
+                                translate}}
+                              </u></a>
+                          </div>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center"
+                            *ngIf="showLoadingFlags?.tomorrow">
+                            <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </accordion-group>
+                    <accordion-group>
+                      <div class="ptr" accordion-heading>
+                        <span class="panel-title text-dark">
+                          <div class="row">
+                            <span class="col-md-8">
+                              <strong>{{'payments.labels.futureSchedule'| translate}} ({{'payments.labels.count'|
+                                        translate}}
+                                {{totalPaymentsItems?.future}})</strong>
+                            </span>
+                            <div class="col-md-4" style="text-align: right;">
+                              <span class="mr-2"> <strong> {{'common.labels.invoiceAmount'| translate}} :
+                                  {{paymentsListsTotal?.future | twoDecimal | absolute | numberFormat}}
+                                  MXN</strong></span>
+                              <a class="pull-right"><i class="fa fa-plus show-hide-plus-icon pt-1"></i>
+                                <i class="fa fa-minus pt-1 show-hide-minus-icon"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </span>
+                      </div>
+                      <div class="panel-body"
+                        [ngStyle]="{'padding':paymentsLists?.future?.length == 0 ? '0px' : '15px 2px' }">
+                        <ng-container *ngIf="(paymentsLists?.future?.length == 0 && totalPaymentsItems?.future == 0)">
+                          <div class="row mt-1">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                              <p class="text-danger">{{'common.labels.recordNotFound' | translate}}</p>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <div class="items" *ngFor="let payment of paymentsLists?.future;let i=index;let lst = last">
+                            <div class="row"  *ngIf="(payment?.projectTypeId!==PROJECT_TYPES.corporate) && (payment?.paymentFor!==PURCHASE_ORDER_CONST.talent)">
+                                <div class="col-md-12 text-danger"
+                                *ngIf="!payment?.palAccepted && !payment?.contractAccepted; else showRespectiveMsgs">
+                                <span>
+                                  {{'common.labels.palContractNotAccepted'| translate}}
+                                </span>
+                              </div>
+                              <ng-template #showRespectiveMsgs>
+                                <div class="col-md-12 text-danger" *ngIf="!payment?.palAccepted">
+                                  <span>
+                                    {{'common.labels.palNotAccepted'| translate}}
+                                  </span>
+                                </div>
+                                <div class="col-md-12 text-danger" *ngIf="!payment?.contractAccepted">
+                                  <span>
+                                    {{'common.labels.contractNotAccepted'| translate}}
+                                  </span>
+                                </div>
+                              </ng-template>
+                              </div>
+                          <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentId'| translate}}: </strong>
+                                  </span>
+                                  <span class="payment-id">
+                                    {{payment.paymentNumberId ? payment.paymentNumberId: "-"}}
+                                  </span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.projectName'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.projectName ? payment.projectName: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.scheduleDate'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.scheduleDate ? (payment.scheduleDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-" }}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.poConsecutive'| translate}}#: </strong>
+                                  </span>
+                                  <span class="invoice-number">
+                                    {{payment.consecutiveNumber ? payment.consecutiveNumber: "-"}}
+                                  </span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.po'| translate}}#: </strong>
+                                  </span>
+                                  <span>{{payment.purchaseOrderNumber ? payment.purchaseOrderNumber: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentOrderNumber'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.invoiceNo ? payment.invoiceNo : "NA" }}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-1">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                                </div>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.poType'| translate}}: </strong>
+                                  </span>
+                                  <span>{{(payment.paymentFor || payment.paymentFor === PAYMENT_FOR.freelancer) ?
+                                    poTypeArray[payment.paymentFor]: "-"}}</span>
+                                </div>
+                                <ng-container
+                                  *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                        <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                          ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                        </span>
+                                        <ng-template #elseBlock3>
+                                         
+                                        </ng-template>
+                                      </span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                                  </div>
+                                </ng-container>
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <span>
+                                    <strong>{{'payments.labels.paymentOrderDate'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment.invoiceDate ? (payment.invoiceDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row mb-1">
+                                <ng-container
+                                  *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                        <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                          ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                        </span>
+                                        <ng-template #elseBlock3>
+                                         
+                                        </ng-template>
+                                      </span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                                  </div>
+                                  <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                    <span>
+                                      <strong>{{'payments.labels.paymentOrderAmount'| translate}}: </strong>
+                                    </span>
+                                    <span>{{payment.invoiceAmount ? (payment.invoiceAmount | twoDecimal): "-"}}
+                                      {{(payment.invoiceAmount && payment.paymentCurrencyCode) ?
+                                      payment.paymentCurrencyCode: ""}}</span>
+                                  </div>
+                                </ng-container>
+                              </div>
+                              <div class="row mb-2">
+                                <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                  <span>
+                                    <strong>{{'payments.labels.createdBy'| translate}}: </strong>
+                                  </span>
+                                  <span>{{payment?.createdBy ? payment?.createdBy: "-"}}</span>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div
+                                  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 action-items center display-inline-block">
+                                  <ui-control-permission [fieldName]="'pay'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10">
+                                      <span class="p-5-25"
+                                        (click)="openModal(modalName.payConfirmation, future, payment)">
+                                        {{'payments.labels.pay'| translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                  <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                                  [actionType]="ACTION_TYPES.EDIT">
+                                  <div class="display-inline-flex mb-10">
+                                      <span (click)="openModal(modalName.editSchedule, future, payment)"
+                                        [ngClass]="payment?.canEdit ? '' : 'ptr-disabled'">
+                                        <i
+                                          class="fa fa-edit edit-icon"></i>{{'payments.labels.editSchedule' |translate}}
+                                      </span>
+                                    </div>
+                                  </action-permission>
+                                  <ui-control-permission [fieldName]="'viewPO'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10">
+                                      <span (click)="viewPO(payment?.purchaseOrderId)">
+                                        <i class="fa fa-eye view-icon"></i>{{'projects.labels.viewPo'| translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                  <ui-control-permission [fieldName]="'viewInvoice'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <ng-container *ngIf="payment?.invoiceFileUrl">
+                                      <div class="display-inline-flex mb-10"
+                                        *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                        <span (click)="viewInvoice(payment?.invoiceFileUrl)" class="">
+                                          <i
+                                            class="fa fa-eye view-icon"></i>{{'projects.labels.viewPaymentOrder'| translate}}
+                                        </span>
+                                      </div>
+                                    </ng-container>
+
+                                  </ui-control-permission>
+                                  <ui-control-permission [fieldName]="'cancelPayment'"
+                                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                                    [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <div class="display-inline-flex mb-10"
+                                      *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                                      <span (click)="cancelPayment(payment);"
+                                        [ngClass]="payment?.canCancel ? '' : 'ptr-disabled'">
+                                        <i class="ptr fa fa-times-circle cancel-icon"></i>{{'payments.labels.cancel'
+                                      |translate}}
+                                      </span>
+                                    </div>
+                                  </ui-control-permission>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                              <div class="amount-details center">
+                                <div class="details">
+                                  <div class="currency">
+                                    {{(payment.paymentAmount && payment.paymentCurrencyCode) ?
+                                    payment.paymentCurrencyCode: ""}}
+                                  </div>
+                                  <div class="amount">
+                                    <strong>{{payment.paymentAmount ? (payment.paymentAmount | twoDecimal | absolute |
+                                      numberFormat): "-" }}</strong>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <hr *ngIf="!lst">
+                        </div>
+                        <div *ngIf="showMoreFlags?.future && paymentsLists?.future.length > 0">
+                          <div class="text-center" *ngIf="!(showLoadingFlags?.future)">
+                            <a class="text-dark ml-1" href="javascript:void(0)"
+                              (click)="loadMorePaymentRecords(paymentsTypeServiceNameObj.future)"><u>{{'payments.labels.showMore'|
+                                translate}}
+                              </u></a>
+                          </div>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center"
+                            *ngIf="showLoadingFlags?.future">
+                            <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </accordion-group>
+                  </accordion>
+                </div>
+              </div>
+            </tab>
+            <tab>
+              <ng-template tabHeading>
+                {{'payments.labels.paid'| translate}}
+              </ng-template>
+              <div id="paid-tab-content" class="row no-mg pt-20">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <ng-container *ngIf="(paymentsLists?.paid?.length == 0 && totalPaymentsItems?.paid == 0)">
+                    <div class="row mt-1">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                        <p class="text-danger">{{'common.labels.recordNotFound' | translate}}</p>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <div class="items"
+                    *ngFor="let payment of paymentsLists?.paid;let i=index;let lst=last;let fst=first;let lst = last">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
+                        <div class="row mb-2">
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <span>
+                              <strong>{{'payments.labels.paymentId'| translate}}: </strong>
+                            </span>
+                            <span class="payment-id">
+                              {{payment.paymentNumberId ? payment.paymentNumberId: "-"}}
+                            </span>
+                          </div>
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <span>
+                              <strong>{{'payments.labels.projectName'| translate}}: </strong>
+                            </span>
+                            <span>{{payment.projectName ? payment.projectName: "-"}}</span>
+                          </div>
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <span>
+                              <strong>{{'payments.labels.scheduleDate'| translate}}: </strong>
+                            </span>
+                            <span>{{payment.scheduleDate ? (payment.scheduleDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-" }}</span>
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <span>
+                              <strong>{{'payments.labels.poConsecutive'| translate}}#: </strong>
+                            </span>
+                            <span class="invoice-number">
+                              {{payment.consecutiveNumber ? payment.consecutiveNumber: "-"}}
+                            </span>
+                          </div>
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <span>
+                              <strong>{{'payments.labels.po'| translate}}#: </strong>
+                            </span>
+                            <span>{{payment.purchaseOrderNumber ? payment.purchaseOrderNumber: "-"}}</span>
+                          </div>
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                            *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                            <span>
+                              <strong>{{'payments.labels.paymentOrderNumber'| translate}}: </strong>
+                            </span>
+                            <span>{{payment.invoiceNo ? payment.invoiceNo : "NA" }}</span>
+                          </div>
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                            *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                            <span>
+                              <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                            </span>
+                            <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                            *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                            <span>
+                              <strong>{{'payments.labels.budgetType'| translate}}: </strong>
+                            </span>
+                            <span>{{payment.budgetType ? payment.budgetType: "-"}}</span>
+                          </div>
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <span>
+                              <strong>{{'payments.labels.poType'| translate}}: </strong>
+                            </span>
+                            <span>{{(payment.paymentFor || payment.paymentFor === PAYMENT_FOR.freelancer) ? poTypeArray[payment.paymentFor]:
+                              "-"}}</span>
+                          </div>
+                          <ng-container
+                            *ngIf="(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                            <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                              <span>
+                                <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                              </span>
+                              <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                  <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                    ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                  </span>
+                                  <ng-template #elseBlock3>
+                                   
+                                  </ng-template>
+                                </span>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                              <span>
+                                <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                              </span>
+                              <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                            </div>
+                          </ng-container>
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                            *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                            <span>
+                              <strong>{{'payments.labels.paymentOrderDate'| translate}}: </strong>
+                            </span>
+                            <span>{{payment.invoiceDate ? (payment.invoiceDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-"}}</span>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <ng-container
+                            *ngIf="!(payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || payment?.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                            <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                              <span>
+                                <strong>{{'payments.labels.supplier'| translate}}: </strong>
+                              </span>
+                              <span>{{payment.supplierName ? payment.supplierName: "-"}}
+                                  <span *ngIf = "payment.supplierType;else elseBlock3;">                      
+                                    ({{ 'common.labels.'+supplierTtpeArr[payment?.supplierType] | translate }})
+                                  </span>
+                                  <ng-template #elseBlock3>
+                                   
+                                  </ng-template>
+                                </span>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                              <span>
+                                <strong>{{'payments.labels.paidVia'| translate}}: </strong>
+                              </span>
+                              <span>{{payment.thirdPartyVendor ? payment.thirdPartyVendor : "NA" }}</span>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                              <span>
+                                <strong>{{'payments.labels.paymentOrderAmount'| translate}}: </strong>
+                              </span>
+                              <span>{{payment.invoiceAmount ? (payment.invoiceAmount | twoDecimal): "-"}}
+                                {{(payment.invoiceAmount && payment.paymentCurrencyCode) ? payment.paymentCurrencyCode:
+                                ""}}</span>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <span>
+                              <strong>{{'payments.labels.createdBy'| translate}}: </strong>
+                            </span>
+                            <span>{{payment?.createdBy ? payment?.createdBy: "-"}}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                        <div class="amount-details center">
+                          <div class="details">
+                            <div class="currency">
+                              {{(payment.paymentAmount && payment.paymentCurrencyCode) ? payment.paymentCurrencyCode:
+                              ""}}
+                            </div>
+                            <div class="amount">
+                              <strong>{{payment.paymentAmount ? (payment.paymentAmount | twoDecimal | absolute |
+                                numberFormat): "-" }}</strong>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr *ngIf="!lst">
+                  </div>
+                  <div *ngIf="showMoreFlags?.paid && paymentsLists?.paid.length > 0">
+                    <div class="text-center pb-15" *ngIf="!(showLoadingFlags?.paid)">
+                      <a class="text-dark ml-1" href="javascript:void(0)"
+                        (click)="loadMorePaymentRecords(paymentsTypeServiceNameObj.paid)"><u>{{'payments.labels.showMore'|
+                          translate}}
+                        </u></a>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center"
+                      *ngIf="showLoadingFlags?.paid">
+                      <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </tab>
+          </tabset>
+        </div>
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" bsModal #editScheduleClassicModal="bs-modal" (onShow) = "checkModalOpen(true, 'edit')" (onHide) = "checkModalOpen(false, 'edit')">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <p class="modal-title"><strong>{{'payments.labels.editSchedule'| translate}}</strong></p>
+          <button type="button" class="close ptr" data-dismiss="modal"
+            (click)="closeModal(modalName.editSchedule)">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="form-group">
+            <form [formGroup]="editScheduleForm">
+              <div class="row"
+                *ngIf="!(editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <label>{{'payments.labels.paymentOrderNo'|translate}}</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <label>{{editScheduleForm.value?.invoiceNumber ? editScheduleForm.value.invoiceNumber: "-"}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="true">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <label>{{'payments.labels.rfcCode'| translate}}</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <label>{{editScheduleForm.value?.RFCcode ? editScheduleForm.value.RFCcode: "-"}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row"
+                *ngIf="(editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <label>{{'payments.labels.po'| translate}}#</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <label>{{editScheduleForm.value?.purchaseOrderNumber
+                        ?editScheduleForm.value.purchaseOrderNumber:"-"}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row"
+                *ngIf="(editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <label>{{'payments.labels.poConsecutive'| translate}}#</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <label>{{editScheduleForm.value?.consecutiveNumber
+                        ?editScheduleForm.value.consecutiveNumber:"-"}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <label>{{'payments.labels.supplierName'| translate}}</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <label>
+                        <span>
+                          {{editScheduleForm.value?.supplierName ?editScheduleForm.value.supplierName:"-"}}
+                        </span>
+                        <span *ngIf="editScheduleForm.value?.thirdPartyVendor">(ThirdParty:
+                          {{editScheduleForm.value?.thirdPartyVendor}})
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row"
+                *ngIf="!(editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <label>{{'payments.labels.paymentOrderDate'| translate}}</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <label>{{editScheduleForm.value?.invoiceDate ?
+                        (editScheduleForm.value.invoiceDate
+                        | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT): "-"}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row"
+                *ngIf="!(editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <label>{{'payments.labels.paymentOrderAmount'| translate}}</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <label>{{editScheduleForm.value?.invoiceAmount ?
+                        (editScheduleForm.value.invoiceAmount
+                        | twoDecimal): "-"}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="row">
+                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                      <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                        <label>{{'payments.labels.paymentAmount'| translate}}</label>
+                        <span class="mandatory">*</span>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                      <div class="row">
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                          <input [attr.disabled]="installmentType === 0 ? 'disabled' : null" class=" form-control"
+                            (keyup)="checkPaymentAmount(paymentDetailsFor);" formControlName="paymentAmount"
+                            placeholder="{{'payments.labels.paymentAmount'| translate}}"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '');" />
+                        </div>
+                      </div>
+                      <div class="bb-error"
+                        *ngIf="editScheduleForm.controls['paymentAmount']?.errors?.checkRequired && (editScheduleForm.controls['paymentAmount'].touched || submitEditScheduleForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                      <div class="bb-error"
+                        *ngIf="!editScheduleForm.controls['paymentAmount']?.errors?.checkDecimal && !editScheduleForm.controls['paymentAmount']?.errors?.checkRequired && showMsg">
+                        {{'payments.labels.paymentMsg'|translate}}</div>
+                      <div class="bb-error"
+                        *ngIf="!editScheduleForm.controls['paymentAmount']?.errors?.checkRequired && editScheduleForm.controls['paymentAmount']?.errors?.checkDecimal && editScheduleForm.controls['paymentAmount'].dirty">{{'pages.errorMessages.validDecimal'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row pt-10"
+                    *ngIf="!(editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                      <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                        <label>{{'payments.labels.paymentHistoryAmount'| translate}}</label>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                      <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                          <label>{{paymentHistoryTotal | twoDecimal | absolute | numberFormat}}
+                            {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ng-container
+                *ngIf="!(editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment )">
+                <div class="row" *ngIf="editScheduleForm.value.paymentFor === PURCHASE_ORDER_CONST.talent" >
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'projects.labels.agengyFee'| translate}} (%)</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{(paymentInvoiceData && paymentInvoiceData.percentAgencyFee) ? paymentInvoiceData.percentAgencyFee : 0}}%</label>
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'payments.labels.vatAmount'| translate}}</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{agencyFeeAmount | twoDecimal | absolute | numberFormat}} {{paymentInvoiceData ?
+                      paymentInvoiceData.currencyCode:'-'}}</label>
+                    <!-- </div> -->
+                  </div>
+                </div>
+                <div class="row" *ngIf="editScheduleForm.value.paymentFor === PURCHASE_ORDER_CONST.talent" >
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'projects.labels.iva'| translate}} (%)</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{(paymentInvoiceData && paymentInvoiceData.iva) ? paymentInvoiceData.iva : 0}}%</label>
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'payments.labels.vatAmount'| translate}}</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{ivaAmount | twoDecimal | absolute | numberFormat}} {{paymentInvoiceData ?
+                      paymentInvoiceData.currencyCode:'-'}}</label>
+                    <!-- </div> -->
+                  </div>
+                </div>
+                <div class="row" *ngIf="editScheduleForm.value.paymentFor === PURCHASE_ORDER_CONST.talent" >
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'projects.labels.markup'| translate}} (%)</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{(paymentInvoiceData && paymentInvoiceData.percentMarkup) ? paymentInvoiceData.percentMarkup : 0}}%</label>
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'payments.labels.vatAmount'| translate}}</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{markupAmount | twoDecimal | absolute | numberFormat}} {{paymentInvoiceData ?
+                      paymentInvoiceData.currencyCode:'-'}}</label>
+                    <!-- </div> -->
+                  </div>
+                </div>
+                <div class="row" *ngIf="editScheduleForm.value.paymentFor!==PURCHASE_ORDER_CONST.talent" >
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'payments.labels.vatPercent'| translate}}</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{(paymentInvoiceData && paymentInvoiceData.vat) ? paymentInvoiceData.vat : 0}}%</label>
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'payments.labels.vatAmount'| translate}}</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{vatAmt | twoDecimal | absolute | numberFormat}} {{paymentInvoiceData ?
+                      paymentInvoiceData.currencyCode:'-'}}</label>
+                    <!-- </div> -->
+                  </div>
+                </div>
+                <div class="row" *ngIf="editScheduleForm.value.paymentFor!==PURCHASE_ORDER_CONST.talent" >
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'payments.labels.vatWithHoldingPercent'| translate}}</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{(paymentInvoiceData && paymentInvoiceData.vatWithHolding) ?
+                      paymentInvoiceData.vatWithHolding: 0}}%</label>
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'payments.labels.vatWithHoldingAmount'| translate}}</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{vatWitholdingAmt | twoDecimal | absolute | numberFormat}}
+                      {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</label>
+                    <!-- </div> -->
+                  </div>
+                </div>
+                <div class="row" *ngIf="editScheduleForm.value.paymentFor!==PURCHASE_ORDER_CONST.talent" >
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'payments.labels.isrWithHoldingPercent'| translate}}</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{(paymentInvoiceData && paymentInvoiceData.isrWithHolding) ?
+                      paymentInvoiceData.isrWithHolding: 0}}%</label>
+                    <!-- </div> -->
+                  </div>
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label>{{'payments.labels.isrWithHoldingAmount'| translate}}</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <!-- <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12"> -->
+                    <label>{{isrWitholdingAmt | twoDecimal | absolute | numberFormat}}
+                      {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</label>
+                    <!-- </div> -->
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                      <label><b>{{'payments.labels.payableAmount'|
+                          translate}}</b></label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div class="row">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <label>{{payableAmount | twoDecimal | absolute | numberFormat}}
+                          {{paymentInvoiceData?paymentInvoiceData.currencyCode:'-'}}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <div class="row"
+                [ngClass]="(editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.advance || editScheduleForm.value.paymentFor == PURCHASE_ORDER_TYPES_CONST.adjustment ) ? 'pt-20' : ''">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <label>{{'payments.labels.scheduleDate'| translate}}
+                      <span class="mandatory">*</span></label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <my-date-picker class="bbdate" formControlName="scheduleDate" [options]="scheduleDatePickerOptions"
+                        placeholder="{{DATE_FORMAT}}"></my-date-picker>
+                      <div class="bb-error" *ngIf="editScheduleForm.controls['scheduleDate']?.errors?.checkRequired && (editScheduleForm.controls['scheduleDate'].touched || submitEditScheduleForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+                <button (click)="submitEditSchedule()" [disabled]="enableEditScheduleSaveButtonFlag"
+                  class="btn btn-success">
+                  <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'payments.labels.confirm'|
+                  translate}}</button>
+                <button (click)="closeModal(modalName.editSchedule)" [disabled]="enableEditScheduleSaveButtonFlag"
+                  class="btn btn-danger ml-1">{{'common.labels.cancel'|
+                  translate}}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Modal footer -->
+        <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="classicModal.hide()">Close</button>
+          </div> -->
+
+      </div>
+    </div>
+  </div>
+  <div class="modal" bsModal #payConfirmationClassicModal="bs-modal" (onShow) = "checkModalOpen(true, 'pay')" (onHide) = "checkModalOpen(false, 'pay')">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <p class="modal-title"><strong>{{'payments.labels.payConfirmationScreen'| translate}}</strong></p>
+          <button type="button" class="close ptr" data-dismiss="modal"
+            (click)="closeModal(modalName.payConfirmation)">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="form-group">
+            <form [formGroup]="payConfirmationForm">
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{'payments.labels.accNumber'|
+                      translate}}</label>
+                    <span>{{payConfirmationForm.value?.accountNumber ? payConfirmationForm.value.accountNumber: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="payConfirmationForm.value.accountName" class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{'payments.labels.accName'| translate}}</label>
+                    <span>{{payConfirmationForm.value?.accountName ? payConfirmationForm.value.accountName: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{'payments.labels.bankname'| translate}}</label>
+                    <span>{{payConfirmationForm.value?.bankName ? payConfirmationForm.value.bankName: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{'payments.labels.branch'| translate}}</label>
+                    <span>{{payConfirmationForm.value?.branchName ? payConfirmationForm.value.branchName: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="(payConfirmationForm.value.CLABE)" class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{'payments.labels.clabe'| translate}}</label>
+                    <span>{{payConfirmationForm.value?.CLABE ? payConfirmationForm.value.CLABE: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="(payConfirmationForm.value.RFCcode)" class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{'payments.labels.rfcCode'| translate}}</label>
+                    <span>{{payConfirmationForm.value?.RFCcode ? payConfirmationForm.value.RFCcode: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="(payConfirmationForm.value.sortCode)" class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label
+                      class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{'payments.labels.sortCode'| translate}}</label>
+                    <span>{{payConfirmationForm.value?.sortCode ? payConfirmationForm.value.sortCode: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="(payConfirmationForm.value.swiftCode)" class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{'payments.labels.swiftCode'|
+                      translate}}</label>
+                    <span>{{payConfirmationForm.value?.swiftCode ? payConfirmationForm.value.swiftCode: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="(payConfirmationForm.value.ABAcode)" class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{ 'payments.labels.ABAcode'| translate
+                      }}</label>
+                    <span>{{payConfirmationForm.value?.ABAcode ? payConfirmationForm.value.ABAcode: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div
+                *ngIf="(payConfirmationForm.value?.paymentFor == PAYMENT_FOR.freelancer && !(payConfirmationForm.value?.thirdPartyVendor)) || (payConfirmationForm.value?.paymentFor == PAYMENT_FOR.location && !(payConfirmationForm.value?.thirdPartyVendor))"
+                class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">{{ 'payments.labels.address'| translate
+                      }}</label>
+                    <span>{{payConfirmationForm.value?.address ? payConfirmationForm.value.address: "-"}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'payments.labels.modeOfPayment'|
+                      translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <ngx-select (select)="checkModeOfPayment($event)"  [allowClear]="true"  formControlName="modeOfPayment"
+                        [items]="operationTypesArr" placeholder="{{'common.labels.select'| translate}}"></ngx-select>
+                      <div class="bb-error"
+                        *ngIf="payConfirmationForm.controls['modeOfPayment']?.errors?.checkRequired && (payConfirmationForm.controls['modeOfPayment'].touched || submitPayConfirmationForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                  *ngIf="payConfirmationForm?.value?.modeOfPayment==paymentModes.wireTransfer">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'payments.labels.transactionNumber'|
+                      translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="wireTransactionNumber"
+                        oninput="this.value = this.value.replace(/[^0-9()+-\s]/g, '');"
+                        placeholder="{{'payments.labels.transactionNumber'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="payConfirmationForm.controls['wireTransactionNumber']?.errors?.checkRequired && (payConfirmationForm.controls['wireTransactionNumber'].touched || submitPayConfirmationForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                  *ngIf="payConfirmationForm?.value?.modeOfPayment==paymentModes.cheque">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'payments.labels.chequeNumber'|
+                      translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="chequeNumber"
+                        oninput="this.value = this.value.replace(/[^0-9()+-\s]/g, '');"
+                        placeholder="{{'payments.labels.chequeNumber'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="payConfirmationForm.controls['chequeNumber']?.errors?.checkRequired && (payConfirmationForm.controls['chequeNumber'].touched || submitPayConfirmationForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                  *ngIf="payConfirmationForm?.value?.modeOfPayment==paymentModes.wireTransfer">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'payments.labels.transactionBankName'|
+                      translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="wireTransactionBankName"
+                        placeholder="{{'payments.labels.transactionBankName'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="payConfirmationForm.controls['wireTransactionBankName']?.errors?.checkRequired && (payConfirmationForm.controls['wireTransactionBankName'].touched || submitPayConfirmationForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                  *ngIf="payConfirmationForm?.value?.modeOfPayment==paymentModes.wireTransfer">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'payments.labels.transactionDate'|
+                      translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <my-date-picker class="bbdate" formControlName="wireTransactionDate" [options]="myDatePickerOptions"
+                        placeholder="{{DATE_FORMAT}}"></my-date-picker>
+                      <div class="bb-error" *ngIf="payConfirmationForm.controls['wireTransactionDate']?.errors?.checkRequired && (payConfirmationForm.controls['wireTransactionDate'].touched || submitPayConfirmationForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                  *ngIf="payConfirmationForm?.value?.modeOfPayment==paymentModes.cheque">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'payments.labels.checkBankName'|
+                      translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <input class="form-control" formControlName="chequeBankName"
+                        placeholder="{{'payments.labels.checkBankName'| translate}}" />
+                      <div class="bb-error"
+                        *ngIf="payConfirmationForm.controls['chequeBankName']?.errors?.checkRequired && (payConfirmationForm.controls['chequeBankName'].touched || submitPayConfirmationForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                  *ngIf="payConfirmationForm?.value?.modeOfPayment==paymentModes.cheque">
+                  <div class="form-group">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'payments.labels.chequeDate'|
+                      translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <my-date-picker formControlName="chequeDate" [options]="myDatePickerOptions" class="bbdate"
+                        placeholder="{{DATE_FORMAT}}"></my-date-picker>
+                      <div class="bb-error" *ngIf="payConfirmationForm.controls['chequeDate']?.errors?.checkRequired && (payConfirmationForm.controls['chequeDate'].touched || submitPayConfirmationForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">{{'payments.labels.notes'|
+                      translate}}
+                    </label>
+                    <div class="row col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <textarea formControlName="notes" class="form-control" rows="3"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h5 class="text-dark">
+                  <strong>{{'payments.labels.attachments'| translate}}</strong>
+                </h5>
+                <div class="panel panel-primary">
+                  <div class="panel-heading document-panel">
+                    <h5 class="text-dark">
+                      <strong>{{'payments.labels.documents'| translate}}
+                      </strong>
+                      <em class="pull-right d-inline-flex" style="margin-bottom:5%;">
+                        <div class="small f-italic mr-15 mt-10">{{'common.labels.documentTypes' | translate}}</div>
+                        <label for="file2" class="file-upload">
+                          <button class="btn btn-default">{{'common.labels.browse'| translate}}</button>
+                          <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}"
+                            accept="{{ACCEPT_ATTACHMENT_FILE_FORMATS}}" multiple ng2FileSelect
+                            [uploader]="documentsAttached" (change)="addFiles()" />
+                        </label>
+                      </em>
+                    </h5>
+                  </div>
+                  <div class="panel-body">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                      <div class="row w-100">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                          <div ng2FileDrop [uploader]="documentsAttached" class="my-drop-zone dropzone">
+                            <div class="attachUpload" *ngIf="documentsAttached.queue.length > 0">
+                              <div class="listItem  mb-2" *ngFor="let item of documentsAttached.queue;let i=index;">
+                                <div class="row w-100" *ngIf="item?.file !== undefined">
+                                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" *ngIf="item?.url == ''">
+                                    <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                                  </div>
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" *ngIf="item?.url">
+                                    <div class="row">
+                                      <div class="col-md-12 col-lg-12 textElipses  pt-10" *ngIf="item?.url">
+                                        <a class="fileName document-link" data-toggle="tooltip" data-placement="top"
+                                          title="{{ item?.file?.name }}" target="_blank" href="{{item.url}}"
+                                          download="{{item.url}}">
+                                          {{ item?.file?.name }}
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 pt-10" *ngIf="item?.url">
+                                    <a class="attachRemoveBtn btn-default">
+                                      <em class="fa fa-trash c-pointer" (click)="removeFiles(i, item);"></em>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
+                <button (click)="submitPayConfimation()" class="btn btn-success"
+                  [disabled]="enablePayConfimationSaveButtonFlag">
+                  <i *ngIf="enablePayConfimationSaveButtonFlag && showLoaderOnSaveButtonFlag"
+                    class="fa fa-spinner fa-spin margin-right-5"></i>{{'payments.labels.confirm'|
+                  translate}}</button>
+                <button (click)="closeModal(modalName.payConfirmation)" class="btn btn-danger ml-1"
+                  [disabled]="enablePayConfimationSaveButtonFlag">{{'common.labels.cancel'|
+                  translate}}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,282 @@
+<ng-container *ngIf="this.manageBidData.showLoaderFlag">
+  <app-loader class="col-md-12" [loading]="this.manageBidData.showLoaderFlag"></app-loader>
+</ng-container>
+<div id="business-terms" *ngIf="!this.manageBidData.showLoaderFlag">
+  <div class="container-fluid">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <form class="form-horizontal" [formGroup]="buisnessTermsForm" (change)="updateFormStatus()" novalidate>
+            <div class="row">
+              <div id="wrapper" class="col-sm-12 col-md-10 col-lg-8 col-xl-8">
+                <div class="child-wrapper">
+                  <div class="row w-600">
+                    <div class="col-4 offset-4">
+                      <div class="form-group text-center">
+                        <label class="col-12 control-label">
+                          {{'biddings.labels.markup'| translate}}
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div class="form-group text-center">
+                        <label class="col-12 control-label">
+                          {{'biddings.labels.insurance'| translate}}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container formArrayName="budgetLineMarkup" *ngFor="let item of buisnessTermsForm['controls'].budgetLineMarkup['controls']; let index=index;let lst=last">
+                    <ng-container [formGroupName]="index">
+                      <div class="row w-600">
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label class="col-12 control-label">
+                              {{item?.value?.sectionName}}
+                              <span class="text-danger">*</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            <div class="col-12 btn-group">
+
+                              <input formControlName="markup" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                (change)="checkIntegerValue(item, 'markup');" class="form-control ng-pristine ng-invalid ng-touched w-85 text-right"
+                                placeholder="">
+
+                              <i class="fa fa-percent fa-6" aria-hidden="true"></i>
+
+                            </div>
+                            <div class="text-danger text-left " *ngIf="item.controls['markup']?.errors?.checkRequired && (item.controls['markup'].touched || submmitedFormFlag)">{{'pages.errorMessages.fieldRequired'|
+                              translate}}</div>
+
+
+                          </div>
+
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            <div class="col-12 btn-group">
+                              <input formControlName="insurance" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                (change)="checkIntegerValue(item, 'insurance');" class="form-control ng-pristine ng-invalid ng-touched w-85 text-right"
+                                placeholder="">
+                              <i class="fa fa-percent fa-6" aria-hidden="true"></i>
+                            </div>
+                            <div class="text-danger text-left" *ngIf="item.controls['insurance']?.errors?.checkRequired && (item.controls['insurance'].touched || submmitedFormFlag)">{{'pages.errorMessages.fieldRequired'|
+                              translate}}</div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="row no-mg mt-10">
+              <div class="col-12 col-md-3">
+                <div class="form-group">
+                  <label> {{'biddings.labels.commission'| translate}}</label>
+                  <div class="col-12 btn-group no-mg">
+                    <input formControlName="commission" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                      (change)="updateNumeriValues('commission')" class="form-control">
+                    <i class="fa fa-percent fa-6" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="form-group">
+                  <label>{{'biddings.labels.financialcost'| translate}}</label>
+                  <div class="col-12 btn-group no-mg">
+                    <div class="col-12 btn-group no-mg">
+                      <input formControlName="financialCost" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                        (change)="updateNumeriValues('financialCost')" class="form-control">
+                      <i class="fa fa-percent fa-6" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="form-group">
+                  <label>{{'biddings.labels.erAdjustmentonRates'| translate}}</label>
+                  <div class="col-12 btn-group no-mg">
+                    <input formControlName="erAdjustment" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                      (change)="updateNumeriValues('erAdjustment')" class="form-control">
+                    <i class="fa fa-percent fa-6" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="form-group">
+                  <label>{{'biddings.labels.baseRateAdjustment'| translate}}</label>
+                  <div class="col-12 btn-group no-mg">
+                    <input formControlName="baseRateAdjustment" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                      (change)="updateNumeriValues('baseRateAdjustment')" class="form-control">
+                    <i class="fa fa-percent fa-6" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row no-mg mt-10">
+              <div class="col-12 col-md-3">
+                <div class="form-group">
+                  <label>{{'biddings.labels.talentAgencyFees'| translate}}</label>
+                  <div class="col-12 btn-group no-mg">
+                    <input formControlName="targetAgencyFees" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                      (change)="updateNumeriValues('targetAgencyFees')" class="form-control">
+                    <i class="fa fa-percent fa-6" aria-hidden="true"></i>
+
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-3">
+                <div class="form-group">
+                  <label>{{'biddings.labels.talentPayrollService'| translate}}</label>
+                  <div class="col-12 btn-group no-mg">
+                    <input formControlName="targetPayrollFees" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                      (change)="updateNumeriValues('targetPayrollFees')" class="form-control">
+                    <i class="fa fa-percent fa-6" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="form-group">
+                  <label>{{'biddings.labels.talentLabourMarkup'| translate}}</label>
+                  <div class="col-12 btn-group no-mg">
+                    <input formControlName="targetLabourFees" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                      (change)="updateNumeriValues('targetLabourFees')" class="form-control">
+                    <i class="fa fa-percent fa-6" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row no-mg">
+              <div class="col-12 col-sm-3">
+                <div class="form-group">
+                  <label>{{'biddings.labels.defaultCurrency'| translate}}
+                  </label>
+                  <span class="mandatory">*</span>
+                  <div>
+                    <!-- <ngx-select  formControlName = "currency" [items]="allCurrenciesList" name="currency" placeholder="{{'common.labels.select'| translate}}"></ngx-select> -->
+                    <select class="form-control" name="operation" formControlName="currency" (change)="checkDefaultCurrencyErrorFlag()">
+                      <ng-container *ngFor="let currency of this.manageBidData.currencies">
+                        <option [value]="currency.id">{{currency?.text}}</option>
+                      </ng-container>
+                    </select>
+                    <div class="text-danger" *ngIf="buisnessTermsForm.controls['currency']?.errors?.checkRequired && (buisnessTermsForm.controls['currency'].touched || submmitedFormFlag)">{{'pages.errorMessages.fieldRequired'|
+                      translate}}</div>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row no-mg mt-10 mb-10">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h5 class="text-dark">
+                  <strong>{{'biddings.labels.exchangeRate'| translate}}</strong>
+                  <span class="mandatory">*</span>
+                </h5>
+                <div class="panel panel-primary panel-inner-wrapper">
+                  <div class="panel-body panel-inner-body">
+                    <div class="row w-780">
+                      <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 text-center">
+                        <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-pd">
+                          {{'biddings.labels.unit'| translate}}
+                        </label>
+                      </div>
+                      <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-center">
+                        <label class="">{{'biddings.labels.sourceCurrency'| translate}}
+                        </label>
+                        <span class="mandatory">*</span>
+                      </div>
+                      <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 text-center">
+                      </div>
+                      <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <label>
+                          {{'biddings.labels.exchangeRate'| translate}}
+                        </label>
+                        <span class="mandatory">*</span>
+                      </div>
+                      <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-pd">
+                          {{'biddings.labels.targetCurrency'| translate}}
+                          <span class="mandatory">*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <ng-container formArrayName="exchangeRate" *ngFor="let item of buisnessTermsForm['controls'].exchangeRate['controls'];  let index=index;let lst=last ">
+                      <ng-container [formGroupName]="index">
+                        <div class="w-780">
+                          <div class="row mt-10 w-780">
+                            <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 text-center mt-5">
+                              <label> {{ item?.value?.unit }} </label>
+                            </div>
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-center mt-5">
+                              <label> {{ currencyKeyArr[item?.value?.targetCurrency] }} </label>
+                            </div>
+                            <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 mt-5">
+                              <label> = </label>
+                            </div>
+                            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                              <input formControlName="exchangeRate" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                class="form-control" type="text" (change)="checkIntegerValue(item, 'exchangeRate')">
+                              <div class="text-danger" *ngIf="item.controls['exchangeRate']?.errors?.checkRequired && (item.controls['exchangeRate'].touched || submmitedFormFlag)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                              <div class="text-danger" *ngIf="!item.controls['exchangeRate']?.errors?.checkRequired && item.controls['exchangeRate']?.errors?.checkDecimal && (item.controls['exchangeRate'].touched) && item.controls['exchangeRate'].dirty">{{'pages.errorMessages.validDecimal'|
+                                translate}}</div>
+                            </div>
+                            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                              <select (change)="sourceCurrencyChanged();checkDefaultCurrencyErrorFlag()" class="form-control"
+                                formControlName="sourceCurrencyId">
+                                <option value=" ">{{'common.labels.select'| translate}}</option>
+                                <option *ngFor="let currencyDetails of item.value?.currencies" [value]="currencyDetails?.id">{{currencyDetails?.text}}</option>
+                              </select>
+                              <div class="text-danger" *ngIf="item.controls['sourceCurrencyId']?.errors?.checkRequired && (item.controls['sourceCurrencyId'].touched || submmitedFormFlag)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                            </div>
+                            <div class="col-md-2 pt-10 pl-0 positive-add-class">
+                              <!-- <a class="click-cursor mr-2" *ngIf="buisnessTermsForm.controls.exchangeRate['controls'].length > 1"
+                                (click)="removeExchangeRate(index)">
+                                <i class="fa fa-minus"></i>
+                              </a> -->
+                              <a class="click-cursor" *ngIf="lst && buisnessTermsForm.controls.exchangeRate['controls'].length > 0 &&  (buisnessTermsForm.controls.exchangeRate['controls'].length < this.manageBidData.filteredCurrencies.length)"
+                                (click)="addExchangeRate(true,item);">
+                                <i class="fa fa-plus"></i>
+                              </a>
+                            </div>
+                          </div>
+
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <div class="row mt-1 text-danger no-mg" *ngIf="defaultCurrencyErrorFlag && buisnessTermsForm?.value?.currency">
+                      {{'biddings.labels.pleaseEnterExchangeRate' | translate}}
+                      {{currencyKeyArr[buisnessTermsForm?.value?.currency]}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <action-permission [actionType]="ACTION_TYPES.ADD" [MODULE_ID]="MODULE_ID"
+            [permissionArr]="permissionObject">
+            <div class="row p-0 m-0">
+              <div class="col-12 pull-right">
+                <button class="btn save-btn btn-success pull-right" (click)="openAICPReflectionIntimationPopup()"
+                  [disabled]="this.manageBidData.disableButtonFlag">
+                  <i *ngIf="this.manageBidData.spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>
+                  {{'biddings.buttons.next'|
+                  translate}}</button>
+              </div>
+            </div>
+            </action-permission>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

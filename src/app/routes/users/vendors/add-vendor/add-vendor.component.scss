@@ -1,0 +1,116 @@
+// import variables scss
+@import "../../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../../assets/styles/mixins.style.scss";
+
+#add-vendor-page{
+  @include parent-subcategory-name();
+  @include selected-category();
+  // @include expander();
+  @include padding-classes();
+  .category-plus {
+    display: none;
+  }
+  .fa.fa-check {
+    @include color($white-color);
+  }
+  .c-pointer {
+    @include cursor(pointer);
+  }
+  .min-ht{
+    min-height: 47px !important;
+  }
+  #category-table .category-name, #category-table .subcategory-name, #category-table .sub-sub-category-name {
+      text-align: left;
+  }
+}
+
+@media (min-width:992px) {
+  .add-vendor-page {
+    #category-table{
+      width:50%;
+    }
+  }
+};
+
+// .add-vendor-page .categoryMapping {
+//   margin-top: 20px;
+// }
+
+// .add-vendor-page .row {
+//   width: 100%;
+// }
+
+// .add-vendor-page .mappingClass {
+//   margin-top: 10px;
+// }
+
+// .add-vendor-page .mt-4 {
+//   margin-top: 2.2rem !important;
+// }
+
+// .add-vendor-page .fa-plus {
+//   color: #6e9eec !important;
+// }
+
+// .add-vendor-page .fa-minus {
+//   color: #6e9eec !important;
+// }
+
+// .add-vendor-page .category-name {
+//   text-align: left;
+//   padding-left: 20px;
+// }
+
+// .add-vendor-page .subcategory-name {
+//   text-align: left;
+//   padding-left: 60px;
+// }
+
+// .add-vendor-page .sub-category.parent-node .subcategory-name {
+//   text-align: left;
+//   padding-left: 40px;
+// }
+
+
+// .add-vendor-page .sub-sub-category-name {
+//   text-align: left;
+//   padding-left: 80px;
+// }
+
+// // .add-vendor-page .sub-category.parent-node .sub-sub-category-name {
+// //   padding-left: 80px;
+// // }
+
+
+// .add-vendor-page .category-plus {
+//   display: none;
+// }
+// //
+// // .sub-category {
+// //   display: none;
+// // }
+// //
+// // .sub-sub-category {
+// //   display: none;
+// // }
+
+// .add-vendor-page .expander {
+//   margin-left: 10px;
+//   cursor: pointer;
+// }
+
+// .add-vendor-page .selected-category {
+//   background-color: #f9dcda;
+// }
+
+// .add-vendor-page .fa.fa-check {
+//   color: white;
+// }
+
+// .add-vendor-page .c-pointer {
+//   cursor: pointer;
+// }
+// .min-ht{
+//   min-height: 47px !important;
+// }

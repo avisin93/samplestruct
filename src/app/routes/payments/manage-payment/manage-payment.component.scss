@@ -1,0 +1,25 @@
+// import variables scss
+@import "../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../assets/styles/mixins.style.scss";
+
+
+#manage-payment-page{
+    .payment-panel{
+        border-width: 2px;
+        // border-color: black;
+    }
+    a {
+        color: #656565;
+    }
+    a:hover {
+        color: #656565;
+    }
+    .bt-0{
+        border-top: 0px;
+    }
+    .td-none{
+        text-decoration:none;
+    }
+}
+

@@ -1,0 +1,65 @@
+{
+    "budgetLines" : [
+        {
+            "category"		: "A",
+            "categoryName"	: "String // PRE PROD WRAPS",
+            "budgetLineNo"	: "101",
+            "headName"		: "Prewrap",
+            "description"	: "gfhdfgh",
+            "rate"			: "20",
+            "currencyId"	: "1212231143",
+            "currencyCode"	: "USD"
+        },
+        {
+            "category"		: "A",
+            "categoryName"	: "gggggg",
+            "budgetLineNo"	: "103",
+            "headName"		: "Producer",
+            "description"	: "sdfafaegyhyh",
+            "rate"			: "134",
+            "currencyId"	: "243234234",
+            "currencyCode"	: "MEX"
+        },
+        {
+            "category"		: "A",
+            "categoryName"	: "yyyyyy",
+            "budgetLineNo"	: "104",
+            "headName"		: "Producer",
+            "description"	: "sdfafaegyhyh",
+            "rate"			: "134",
+            "currencyId"	: "243234234",
+            "currencyCode"	: "MEX"
+        },
+        {
+            "category"		: "B",
+            "categoryName"	: "POST WRAPS",
+            "budgetLineNo"	: "105",
+            "headName"		: "DIRECTOR",
+            "description"	: "setghdyhdtdt sdfsdf",
+            "rate"			: "50",
+            "currencyId"	: "6598566",
+            "currencyCode"	: "MEX"
+        },
+        {
+            "category"		: "B",
+            "categoryName"	: "wewe",
+            "budgetLineNo"	: "106",
+            "headName"		: "Actor",
+            "description"	: "stsrthrh sdfsdf",
+            "rate"			: "505",
+            "currencyId"	: "8935745",
+            "currencyCode"	: "USD"
+        },
+        {
+            "category"		: "B",
+            "categoryName"	: "qqqqq",
+            "budgetLineNo"	: "107",
+            "headName"		: "Actor",
+            "description"	: "stsrthrh sdfsdf",
+            "rate"			: "506",
+            "currencyId"	: "8935745",
+            "currencyCode"	: "USD"
+        }
+
+    ]
+}

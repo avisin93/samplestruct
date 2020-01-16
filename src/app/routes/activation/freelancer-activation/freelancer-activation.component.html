@@ -1,0 +1,584 @@
+<div id="freelancer-activation">
+  <div class="activation-heading" *ngIf="showPage">
+    <div class="">
+      <app-activation-header class="topnavbar-wrapper"></app-activation-header>
+    </div>
+    <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 heading mt-10">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 activation-heading no-mg" *ngIf="showStep2">
+        <h4 class="ml-30 mt-10">{{'common.labels.updateProfileInfo' | translate}}</h4>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 step-two-change-Language switch-field block-center no-mg text-right"
+        *ngIf="showStep2">
+        <input type="radio" id="switch_right" name="switch_2" [value]="LANGUAGE_CODES.en_US" (click)="setLanguage(LANGUAGE_CODES.en_US)"
+        />
+        <label [ngClass]="selectedLang == LANGUAGE_CODES.en_US ? 'selected-lang' : ''" class="ptr" for="switch_right">ENGLISH</label>
+        <input type="radio" id="switch_left" name="switch_2" [value]="LANGUAGE_CODES.es_MX" (click)="setLanguage(LANGUAGE_CODES.es_MX)"
+        />
+        <label [ngClass]="selectedLang == LANGUAGE_CODES.es_MX ? 'selected-lang' : ''" class="ptr" for="switch_left">ESPAÑOL</label>
+      </div>
+    </div>
+    <div class="container-fluid mt-20">
+
+      <div class="row no-mg">
+        <div class="col-md-12 col-xs-8 col-sm-8 no-mg" *ngIf="showStep1">
+          <step-one-activation (onSubmit)="showStep2Section($event)" #child></step-one-activation>
+        </div>
+        
+          <div class="container-fluid edit-freelancer-section" *ngIf="showStep2">
+              <form class="form-horizontal" [formGroup]="editUserForm" novalidate>
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+              <div class="row no-mg">
+                <div class="modal fade mt-50" bsModal #classicModal="bs-modal" tabindex="-1" (onShow) = "checkModalOpen(true)" (onHide) = "checkModalOpen(false)" role="dialog" aria-labelledby="mySmallModalLabel"
+                  aria-hidden="true" [config]="{backdrop: false}" (onHidden)="onHidden()">
+                  <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                      <div class="modal-header">
+
+                        <h4 class="modal-title">{{'common.labels.imageCropper' | translate}}</h4>
+                        <button type="button" class="close" aria-label="Close" (click)="classicModal.hide()">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <img-cropper #cropper [image]="croppedData" [settings]="cropperSettings"></img-cropper>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-success save-btn pull-left" (click)="cropped()">{{'common.labels.save' | translate}}</button>
+                        <button type="button" class="btn btn-danger ml-1 cancel-btn pull-left" (click)="classicModal.hide()">{{'common.labels.cancel' | translate}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-xs-3 col-sm-3 no-mg mb-vw">
+                  <h5 class="text-dark">
+                    <strong>{{'actors.freelancers.labels.photograph'| translate}}</strong>
+                  </h5>
+                  <div class="panel panel-primary">
+                    <div class="panel-body">
+                      <fieldset>
+                        <div class="form-group col-md-12 imageStyle">
+                          <div class="imgcrop-preview help-block center" data-text="Profile Image">
+                            <img class="img-thumbnail img-circle" width="150" [src]="profileImageUrl ? profileImageUrl:'assets/img/user-5.png'" alt="Avatar"
+                            />
+                          </div>
+                        </div>
+                      </fieldset>
+                      <div align="center" class="selectPicture">
+                        <label for="file1" class="file-upload">
+                          <button type="button" class="btn btn-success upload-pictur-btn save-btn">{{'actors.freelancers.labels.selectPicture'| translate}}
+                          </button>
+                          <input id="file1" type="file" title="{{'common.labels.noFileChosen' | translate}}" accept="image/jpeg,image/jpg,image/png,image/bmp"
+                            (change)="fileChangeListener($event)" />
+                        </label>
+                        <div class="small">{{'common.labels.profilePicTypes' | translate}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 co-xl-9 no-mg">
+                  <h5 class="text-dark">
+                    <strong>{{'actors.freelancers.labels.personalDetails'| translate}}</strong>
+                    <em class="pull-right mr-20 mandatory">*{{'common.labels.mandatoryFields'| translate}}</em>
+                  </h5>
+                  <div class="panel panel-primary freelancer-panel mr-15">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8 control-label">{{'actors.freelancers.labels.electronicIdNumber' | translate}}
+                        </label>
+                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8">
+                          <span>{{editUserForm?.value?.electronicId}}</span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8 control-label">{{'actors.freelancers.labels.firstName' | translate}}
+                          <span class="mandatory">*</span>
+                        </label>
+                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8">
+                          <input name="firstName" class="form-control" formControlName="firstName" placeholder="{{'actors.freelancers.labels.firstName' | translate}}">
+                          <div class="text-danger col-md-12 no-mg" *ngIf="editUserForm.controls['firstName']?.errors?.checkRequired && (editUserForm.controls['firstName'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8 control-label">{{'actors.freelancers.labels.lastName' | translate}}
+                          <span class="mandatory">*</span>
+                        </label>
+                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8">
+                          <input name="lastName" class="form-control" formControlName="lastName" placeholder="{{'actors.freelancers.labels.lastName' | translate}}">
+                          <div class="text-danger col-md-12 no-mg" *ngIf="editUserForm.controls['lastName']?.errors?.checkRequired && (editUserForm.controls['lastName'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                          <label class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8 control-label">{{'actors.freelancers.labels.email' | translate}}
+
+                          </label>
+                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <span>{{editUserForm?.value?.email}}</span>
+                          </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                          <label class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8 control-label">{{'actors.freelancers.labels.phone' | translate}}
+                            <span class="mandatory">*</span>
+                          </label>
+                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <input class="form-control" name="phone" formControlName="phone" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                              placeholder="{{'actors.freelancers.labels.phone' | translate}}">
+                            <div class="text-danger col-md-12 no-mg" *ngIf="editUserForm.controls['phone']?.errors?.checkRequired && (editUserForm.controls['phone'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8 control-label">{{'actors.freelancers.labels.dob' | translate}}
+                          <span class="mandatory">*</span>
+                        </label>
+                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 co-xl-8">
+                          <my-date-picker class="bbdate" id="dateOfBirth" formControlName="dateOfBirth" [options]="dobDatePickerOptions" placeholder="{{'common.labels.datePickerPlaceholder' | translate}}"></my-date-picker>
+                          <div class="text-danger col-md-12 no-mg" *ngIf="editUserForm.controls['dateOfBirth']?.errors?.checkRequired && (editUserForm.controls['dateOfBirth'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-xs-12 col-sm-12 col-md-4 col-lg-4 co-xl-4 control-label">{{'common.labels.taxIdRFC' | translate}}
+                          <span class="mandatory">*</span>
+                        </label>
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 co-xl-4">
+                          <input class="form-control" name="taxId" formControlName="taxId" placeholder="{{'common.labels.taxIdRFC' | translate}}">
+                          <div class="text-danger col-md-12 no-mg" *ngIf="editUserForm.controls['taxId']?.errors?.checkRequired && (editUserForm.controls['taxId'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-xs-12 col-sm-12 col-md-4 col-lg-4 co-xl-4 control-label">{{'actors.freelancers.labels.ssn' | translate}}</label>
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 co-xl-4">
+                          <input class="form-control" name="ssn" formControlName="ssn" placeholder="{{'actors.freelancers.labels.ssn' | translate}}">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-xs-12 col-sm-12 col-md-4 col-lg-4 co-xl-4 control-label">
+                          {{'actors.freelancers.labels.uprc' | translate}} ({{'common.labels.curp'| translate}})
+                          <span class="mandatory">*</span>
+                        </label>
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 co-xl-4">
+                          <input class="form-control" name="uprc" formControlName="uprc" placeholder="{{'actors.freelancers.labels.uprc' | translate}}">
+                          <div class="text-danger col-md-12 no-mg" *ngIf="editUserForm.controls['uprc']?.errors?.checkRequired && (editUserForm.controls['uprc'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 col-xs-3 col-sm-3 no-mg ds-vw">
+                  <h5 class="text-dark">
+                    <strong>{{'actors.freelancers.labels.photograph'| translate}}</strong>
+                  </h5>
+                  <div class="panel panel-primary">
+                    <div class="panel-body">
+                      <fieldset>
+                        <div class="form-group col-md-12 imageStyle text-center">
+                          <div class="imgcrop-preview help-block center" data-text="Profile Image">
+                            <img class="img-thumbnail img-circle" width="150" [src]="profileImageUrl ? profileImageUrl:'assets/img/user-5.png'" alt="Avatar"
+                            />
+                          </div>
+                        </div>
+                      </fieldset>
+                      <div class="center selectPicture pb-10">
+                        <label for="file2" class="file-upload">
+                          <button type="button" class="btn btn-success upload-pictur-btn save-btn">{{'actors.freelancers.labels.selectPicture'| translate}}
+                          </button>
+                          <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" accept="image/jpeg,image/jpg,image/png,image/bmp"
+                            (change)="fileChangeListener($event)" />
+                        </label>
+                        <div class="small f-italic">{{'common.labels.profilePicTypes' | translate}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                <h5 class="text-dark">
+                  <strong>{{'actors.freelancers.labels.paymentDetails'| translate}}</strong>
+
+                </h5>
+                <div class="panel panel-primary">
+                  <div class="panel-body">
+
+                    <div class="row no-mg">
+                      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 no-mg">
+                        <div class="form-group">
+                          <label class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 control-label">{{'common.labels.currency' | translate}}
+                            <span class="mandatory">*</span>
+                          </label>
+                          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <ngx-select [items]="currency" formControlName="currency" placeholder="{{'common.labels.select' | translate}}">
+                            </ngx-select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row no-mg">
+                      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 no-mg">
+                        <div class="form-group">
+                          <label class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 control-label">{{'common.labels.mode' | translate}}
+                            <span class="mandatory">*</span>
+                          </label>
+                          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <ngx-select [items]="operationDropdown" formControlName="mode" placeholder="{{'common.labels.select' | translate}}">
+                            </ngx-select>
+                            <div class="text-danger col-md-12 no-mg" *ngIf="editUserForm.controls['mode']?.errors?.checkRequired &&  (editUserForm.controls['mode'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}
+                            </div>
+
+                          </div>
+                        </div>
+
+                      </div>
+
+                    </div>
+                    <div class="form-group">
+                      <label class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 control-label">
+                        <strong>{{'actors.freelancers.labels.paymentType' | translate}}</strong>
+                        <span class="mandatory">*</span>
+                      </label>
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label class="radio-inline" [ngClass]="(index!=0) ? 'ml-3':''" *ngFor="let paidType of PAID_TYPES;let index=index">
+                          <input id="inlineradio{{index}}" type="radio" formControlName="selfPaid" (change)="paymentTypeChanged()" [value]="paidType.value"
+                            checked="checked" /> {{'actors.freelancers.labels.'+ paidType.label | translate}}</label>
+                      </div>
+                    </div>
+                    <div *ngIf="editUserForm.controls['selfPaid'].value==2">
+                      <div class="row no-mg">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 no-mg">
+                          <div class="form-group">
+                            <label class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 control-label">{{'common.labels.vendor' | translate}}
+                              <span class="mandatory">*</span>
+                            </label>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                              <select class="form-control" name="operation" formControlName="vendorId">
+                                <option value="">{{'common.labels.select' | translate}}</option>
+                                <ng-container *ngFor="let vendor of thirdPartyVendors">
+                                  <option [value]="vendor.id">{{vendor?.i18n?.commercialName}}</option>
+                                </ng-container>
+                              </select>
+                              <div class="text-danger col-md-12 no-mg" *ngIf="editUserForm.controls['vendorId']?.errors?.checkRequired &&  (editUserForm.controls['vendorId'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'| translate}}
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="editUserForm.controls['selfPaid'].value==1">
+                      <div class="row no-mg">
+                        <div class="row col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 no-mg">
+                          <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                            <label class="control-label">{{'actors.freelancers.labels.accNumber' | translate}}</label>
+                            <div class="">
+                              <input class="form-control" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');" name="accNumber"
+                                formControlName="accNumber" placeholder="{{'actors.freelancers.labels.accNo' | translate}}">
+                            </div>
+                          </div>
+                        
+                        <!-- <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 no-mg"> -->
+                          <div class="form-group col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                            <label class="control-label">{{'actors.freelancers.labels.bankname' | translate}}</label>
+                            <div class="">
+                              <input class="form-control" name="bankname" formControlName="bankName" placeholder="{{'actors.freelancers.labels.bankname' | translate}}">
+                            </div>
+                          </div>
+                        <!-- </div> -->
+                      </div>
+                      </div>
+                      <div class="col-md-6 no-mg">
+                        <!-- <div class="form-group">
+                          <label class="col-md-3 control-label">{{'actors.freelancers.labels.clabe' | translate}}</label>
+                          <div class="col-md-12">
+                            <input class="form-control" name="clabe" oninput="this.value = this.value.replace(/[^0-9]/g, '');" minlength="18" maxlength="18"
+                              formControlName="clabe" placeholder="{{'actors.freelancers.labels.clabe' | translate}}">
+                            <div class="col-md-6 text-danger no-mg" *ngIf="editUserForm.controls['clabe']?.errors && (editUserForm.controls['clabe'].touched || submmitedFormFlag)">{{'common.errorMessages.clabeMessage'| translate}}</div>
+                          </div>
+                        </div> -->
+                        <div class="row no-mg">
+                          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 no-mg">
+                            <div class="form-group">
+                              <label class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'actors.freelancers.labels.branch' | translate}}</label>
+                              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <input class="form-control" name="branchName" formControlName="branchName" placeholder="{{'actors.freelancers.labels.branch' | translate}}">
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 no-mg">
+                            <div class="form-group">
+                              <label class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'actors.freelancers.labels.clabe' | translate}}</label>
+                              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <input class="form-control" name="clabe" oninput="this.value = this.value.replace(/[^0-9]/g, '');" minlength="18" maxlength="18" formControlName="clabe" placeholder="{{'actors.freelancers.labels.clabe' | translate}}">
+                                <div class="col-md-6 text-danger no-mg" *ngIf="editUserForm.controls['clabe']?.errors && (editUserForm.controls['clabe'].touched || submmitedFormFlag)">{{'common.errorMessages.clabeMessage'| translate}}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row no-mg">
+                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                            <div class="form-group">
+                              <label class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'actors.freelancers.labels.address' | translate}}</label>
+                              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <textarea class="form-control" name="address" formControlName="address" placeholder="{{'actors.freelancers.labels.address' | translate}}"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row no-mg mt-1">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'actors.vendors.labels.identity'| translate}}</strong>
+
+                    </h5>
+                    <div class="panel panel-primary">
+                      <div class="panel-body">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                          <div class="panel panel-primary">
+                            <div class="panel-heading document-panel">
+                              <h5 class="text-dark">
+                                <strong>{{'actors.freelancers.labels.constancia'| translate}}
+                                  <!-- <span class="bb-error mandatory"> *</span> -->
+                                </strong>
+                                <em class="pull-right d-inline-flex">
+                                  <div class="small f-italic mr-15 mt-10">{{'common.labels.constanciaDocumentType' | translate}}
+                                  </div>
+                                  <label for="file3" class="file-upload">
+                                    <button type="button" class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                                    <input id="file3" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderConstancia"
+                                      (change)="fileChangeEvent($event,DOCUMENT_TYPES.constancia)" />
+                                  </label>
+                                </em>
+                              </h5>
+                            </div>
+                            <div class="panel-body">
+                              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="row">
+                                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div ng2FileDrop [uploader]="uploaderConstancia" class="my-drop-zone dropzone">
+                                      <!-- <div class="text-danger col-md-12 no-mg mb-10  ng-invalid" *ngIf="editUserForm.controls['constantiaDocument']?.errors?.checkRequired &&  (editUserForm.controls['constantiaDocument'].touched  ||submmitedFormFlag)">{{'actors.freelancers.errorMessages.documentRequired'| translate}}
+                                      </div> -->
+                                      <div class="attachUpload" *ngIf="uploaderConstancia.queue.length > 0">
+                                        <div class="listItem mb-2" *ngFor="let item of uploaderConstancia.queue;let i=index;">
+                                          <div class="row" *ngIf="item?.file !== undefined">
+                                            <div class="col-md-2" *ngIf="item?.url == ''">
+                                              <!-- <img class="btn btn-default hide-border" src="../../../../assets/img/ajax-loader.gif" /> -->
+                                              <i class="fa fa-spinner fa-spin margin-right-5"></i>
+
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 textElipses pt-10">
+                                              <a class="fileName document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}" target="_blank"
+                                                *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                                {{ item?.file?.name }}
+                                              </a>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" *ngIf="item?.url">
+                                              <a class="attachRemoveBtn btn-default">
+                                                <em class="fa fa-trash c-pointer delete-file-icon" (click)="removeUploadFileArrItem(i,DOCUMENT_TYPES.constancia,item);"></em>
+                                              </a>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="panel panel-primary">
+                            <div class="panel-heading document-panel">
+                              <h5 class="text-dark">
+                                <strong>{{'actors.freelancers.labels.32d'| translate}}
+                                  <!-- <span class="bb-error mandatory"> *</span> -->
+                                </strong>
+                                <em class="pull-right d-inline-flex">
+                                  <div class="small f-italic mr-15 mt-10">{{'common.labels.constanciaDocumentType' | translate}}
+                                  </div>
+                                  <label for="file4" class="file-upload">
+                                    <button type="button" class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                                    <input id="file4" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploader32D"
+                                      (change)="fileChangeEvent($event,DOCUMENT_TYPES.ttd)" />
+                                  </label>
+                                </em>
+                              </h5>
+                            </div>
+                            <div class="panel-body">
+                              <div class="col-md-12">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div ng2FileDrop [uploader]="uploader32D" class="my-drop-zone dropzone">
+                                      <!-- <div class="text-danger col-md-12 no-mg mb-10  ng-invalid" *ngIf="editUserForm.controls['ttDocument']?.errors?.checkRequired &&  (editUserForm.controls['ttDocument'].touched  ||submmitedFormFlag)">{{'actors.freelancers.errorMessages.documentRequired'| translate}}
+                                      </div> -->
+                                      <div class="attachUpload" *ngIf="uploader32D.queue.length > 0">
+                                        <div class="listItem mb-2" *ngFor="let item of uploader32D.queue;let i=index;">
+                                          <div class="row" *ngIf="item?.file !== undefined">
+                                            <div class="col-md-2" *ngIf="item?.url == ''">
+                                              <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 textElipses  pt-10">
+                                              <a class="fileName document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}" target="_blank"
+                                                *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                                {{ item?.file?.name }}
+                                              </a>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" *ngIf="item?.url">
+                                              <a class="attachRemoveBtn btn-default">
+                                                <em class="fa fa-trash c-pointer delete-file-icon" (click)="removeUploadFileArrItem(i,DOCUMENT_TYPES.ttd,item);"></em>
+                                              </a>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="panel panel-primary">
+                            <div class="panel-heading document-panel">
+                              <h5 class="text-dark">
+                                <strong>{{'actors.freelancers.labels.passportDoc'| translate}}
+                                  <!-- <span class="bb-error mandatory"> *</span> -->
+                                </strong>
+                                <em class="pull-right d-inline-flex">
+                                  <div class="small f-italic mr-15 mt-10">{{'common.labels.documentTypes' | translate}}</div>
+                                  <label for="file5" class="file-upload">
+                                    <button type="button" class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                                    <input id="file5" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderPassport"
+                                      (change)="fileChangeEvent($event,DOCUMENT_TYPES.passport)" />
+                                  </label>
+                                </em>
+                              </h5>
+                            </div>
+                            <div class="panel-body">
+                              <div class="col-md-12">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div ng2FileDrop [uploader]="uploaderPassport" class="my-drop-zone dropzone">
+                                      <div class="text-danger col-md-12 no-mg mb-10  ng-invalid" *ngIf="editUserForm.controls['passportDocument']?.errors?.checkRequired &&  (editUserForm.controls['passportDocument'].touched  ||submmitedFormFlag)">{{'actors.freelancers.errorMessages.documentRequired'| translate}}
+                                      </div>
+                                      <div class="attachUpload" *ngIf="uploaderPassport.queue.length > 0">
+                                        <div class="listItem mb-2" *ngFor="let item of uploaderPassport.queue;let i=index;">
+                                          <div class="row" *ngIf="item?.file !== undefined">
+                                            <div class="col-md-2" *ngIf="item?.url == ''">
+                                              <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 textElipses  pt-10">
+                                              <a class="fileName document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}" target="_blank"
+                                                *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                                {{ item?.file?.name }}
+                                              </a>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" *ngIf="item?.url">
+                                              <a class="attachRemoveBtn btn-default">
+                                                <em class="fa fa-trash c-pointer delete-file-icon" (click)="removeUploadFileArrItem(i,DOCUMENT_TYPES.passport,item);"></em>
+                                              </a>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="panel panel-primary">
+                            <div class="panel-heading document-panel">
+                              <h5 class="text-dark">
+                                <strong>{{'common.labels.others'| translate}} </strong>
+                                <em class="pull-right d-inline-flex">
+                                  <div class="small f-italic mr-15 mt-10">{{'common.labels.documentTypes' | translate}}</div>
+                                  <label for="file6" class="file-upload">
+                                    <button type="button" class="btn btn-default browse-btn">{{'common.labels.browse'| translate}}</button>
+                                    <input id="file6" type="file" title="{{'common.labels.noFileChosen' | translate}}" multiple ng2FileSelect [uploader]="uploaderOthers"
+                                      (change)="fileChangeEvent($event,DOCUMENT_TYPES.others)" />
+                                  </label>
+                                </em>
+                              </h5>
+                            </div>
+                            <div class="panel-body">
+                              <div class="col-md-12">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div ng2FileDrop [uploader]="uploaderOthers" class="my-drop-zone dropzone">
+                                      <div class="attachUpload" *ngIf="uploaderOthers.queue.length > 0">
+                                        <div class="listItem mb-2" *ngFor="let item of uploaderOthers.queue;let i=index;">
+                                          <div class="row" *ngIf="item?.file !== undefined">
+                                            <div class="col-md-2" *ngIf="item?.url == ''">
+                                              <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" *ngIf="item?.url">
+                                              <div class="row">
+                                                <div class="col-md-4 textElipses  " *ngIf="item?.url">
+                                                  <a class="fileName document-link" data-toggle="tooltip" data-placement="top" title="{{ item?.file?.name }}" target="_blank"
+                                                    *ngIf="item?.url" href="{{item.url}}" download="{{item.url}}">
+                                                    {{ item?.file?.name }}
+                                                  </a>
+                                                </div>
+                                                <div class="col-md-8 col-sm-4 col-xs-4">
+                                                  <input class="form-control" id="docName{{i}}" (keyup)="setDocumentName(i)" placeholder="{{'common.labels.enterDocumentName' | translate}}">
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" *ngIf="item?.url">
+                                              <a class="attachRemoveBtn  btn-default">
+                                                <em class="fa fa-trash c-pointer delete-file-icon" (click)="removeUploadFileArrItem(i,DOCUMENT_TYPES.others,item);"></em>
+                                              </a>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 mt-3 mb-3 no-mg">
+
+                  <button type="button" (click)="addUser()" [disabled]="isClicked || disableButtonFlag" class="btn btn-success">
+                    <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.generateContract'| translate}}
+                  </button>
+                  <!-- <button class="btn btn-danger ml-1 cancel-btn" [routerLink]="ROUTER_LINKS_FULL_PATH.login">{{'common.labels.cancel'| translate}}
+                  </button> -->
+
+                </div>
+              </div>
+              <!-- this below div changed by someone. -->
+            </div>
+          </form>
+            </div>
+        
+        </div>
+        <div class="col-md-12 col-xs-12 col-sm-12" *ngIf="showStep3">
+          <step-three-activation #step3Child (onSubmitStep3Form)="contractAccepted()"  [contractFileUrl]="contractFileUrl"></step-three-activation>
+        </div>
+
+      </div>
+
+    </div>
+  </div>

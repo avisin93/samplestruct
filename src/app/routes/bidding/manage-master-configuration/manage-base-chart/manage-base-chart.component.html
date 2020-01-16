@@ -1,0 +1,104 @@
+<div id="bid-base-rate">
+  <div class="container-fluid">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <ng-container *ngIf="!renderPage">
+            <app-loader class="col-md-12" [loading]="!renderPage"></app-loader>
+          </ng-container>
+          <form [formGroup]="dealsBaseRateForm" novalidate [hidden]="!renderPage">
+            <div class="row m-0">
+
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+
+                <div id="base-rate-list" class="table-responsive">
+                  <table id="base-rate-list-table" class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th class=" text-center w-40">
+                          <strong>{{'common.labels.name'| translate}}</strong>
+                        </th>
+                        <th class="text-center w-25 w-md-35">
+                          <strong>{{'biddings.labels.rate' | translate}}</strong>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="baseChartList?.baseRate?.categories?.length == 0">
+                        <tr>
+                          <td colspan="12">
+                            <p class="text-danger text-center">{{'common.labels.noRecord' | translate}}</p>
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-container formArrayName="baseRateArr" *ngIf="baseChartList?.baseRate?.categories?.length > 0">
+                        <ng-container *ngFor="let item of dealsBaseRateForm.controls.baseRateArr['controls']; let i=index;let lst=last;">
+                          <ng-container [formGroupName]="i">
+                            <tr>
+                              <td>
+                                <div *ngIf="!item?.value?.extra">{{item?.value?.headName}}</div>
+                                <div *ngIf="item?.value?.extra">
+                                  <input name="headName" formControlName="headName" class="form-control">
+                                  <div class="bb-error" *ngIf="item.controls['headName']?.errors?.checkRequired && (item.controls['headName'].touched || submitBaseForm)">{{'pages.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </td>
+                              <td class="d-flex">
+                                <div class="col-md-4">
+                                  <select class="form-control" formControlName="currencyId">
+                                    <option *ngFor="let item of currencyDropdown" [value]="item?.id">{{item?.code}}</option>
+                                  </select>
+                                </div>
+                                <div class="col-md-8">
+                                  <div class="row">
+                                    <div class="col-md-8">
+                                      <input name="rate" (change) = "updateRate(i)" formControlName="rate" maxlength="8" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '');"
+                                        placeholder="{{'biddings.labels.ratePerday'| translate}}" title="{{'biddings.labels.ratePerday'| translate}}">
+                                    </div>
+                                    <div class="col-md-4">
+                                      <a class="click-cursor" *ngIf="item?.value?.extra">
+                                        <i class="fa fa-minus" (click)="removeDeals(i)"></i>
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <span class="text-danger" *ngIf="item.controls['rate']?.errors?.checkDecimal && (item.controls['rate'].touched || submitBaseForm) && item.controls['rate'].dirty">
+                                        {{'pages.errorMessages.validDecimal'| translate}}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr *ngIf="lst && count != 5 && !isBiddingListParentPath">
+                              <td colspan="2" class="text-right">
+                                <button class="btn btn-success" (click)="addDeals(true,'', i)" [disabled]="isAddClicked">
+                                  <i *ngIf="spinnerAddFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'projects.labels.addProject'
+                                  | translate}}</button>
+
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+
+            </div>
+          </form>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 p-0" *ngIf="renderPage && baseChartList?.baseRate?.categories?.length > 0">
+            <button class="btn btn-success" (click)="saveBaseRateChart()" [disabled]="isClicked">
+              <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'|
+              translate}}
+            </button>
+            <button (click)="navigateTo()" class="btn btn-primary ml-1">{{'biddings.buttons.cancel'| translate}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

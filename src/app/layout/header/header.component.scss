@@ -1,0 +1,60 @@
+.navbar-nav {
+    margin: 0;
+}
+
+.navbar-header{
+    background-color: #d70827;
+}
+.topnavbar .navbar-header .brand-logo {
+    padding: 0px 4px;
+}
+.navbar-brand{
+    margin:0;
+    background-color: transparent;
+    background-image: linear-gradient(90deg,#d70026 0,#d70026);
+ 
+
+}
+.custom-margin-toogle {
+    margin-left: 110px;
+  }
+
+    .logout-btn {
+      color: white !important;
+      z-index: 999999;
+      margin-top: -65px;
+    }
+  
+  a:hover {color:white;}
+  .topnavbar {
+    background-color: #d70026;
+    background-image: -webkit-gradient(linear, left top, right top, from(#d70026), to(#d70026));
+    background-image: linear-gradient(to right, #d70026 0%, #d70026 100%);
+    background-repeat: repeat-x;
+}
+.topnavbar .navbar-header {
+    position: relative;
+    z-index: 11;
+    padding: 5px 0 0px 0px;
+    background-color: transparent;
+    background-image: linear-gradient(90deg,#d70026 0,#d70026);
+}
+.topnavbar .navbar-header .brand-logo-collapsed {
+
+    padding: 0px 4px;
+}
+
+.role-dropdown-label {
+    margin-right: 10px;
+    margin: 10px 10px 0 0;
+    label {
+        color: #fff;
+        font-weight: bold;
+    }
+}
+.role-dropdown {
+    margin-right: 15px;
+    select {
+        min-width: 160px;
+    }
+}

@@ -1,0 +1,158 @@
+<div class="row text-center" *ngIf="projectTypeId!==PROJECT_TYPES.corporate">
+  <div class="col-md-12 text-danger"
+    *ngIf="!listDetails?.palAccepted && !listDetails?.contractAccepted; else showRespectiveMsgs">
+    <span>
+      {{'common.labels.palContractNotAccepted'| translate}}
+    </span>
+  </div>
+  <ng-template #showRespectiveMsgs>
+    <div class="col-md-12 text-danger" *ngIf="!listDetails?.palAccepted">
+      <span>
+        {{'common.labels.palNotAccepted'| translate}}
+      </span>
+    </div>
+    <div class="col-md-12 text-danger" *ngIf="!listDetails?.contractAccepted">
+      <span>
+        {{'common.labels.contractNotAccepted'| translate}}
+      </span>
+    </div>
+  </ng-template>
+</div>
+<div class="approval-status-bar">
+  <div class="progress" style="width:450px;">
+    <div class="progress-bar" style="width:450px;background:#bbbbbb;">
+
+      <div class="progress-value approved" tooltip="{{('common.labels.generated'| translate) | titlecase}}"
+        placement="right" [ngStyle]="{'left' : 'calc(0% - 15px)'}">
+        <span>
+          <i class="fa fa-check"></i>
+        </span>
+      </div>
+      <div class="approver-name" [ngStyle]="{'left' : 'calc(0% - 5px)'}">
+        <div>{{('common.labels.generated'| translate) | titlecase}}</div>
+      </div>
+      <ng-container *ngFor="let approval of listDetails.approvalList; let srNo = index; let first = first">
+        <div class="progress-value {{statusKeyArr[approval?.status] | lowercase}}"
+          [ngSwitch]="approval?.status"
+          tooltip="{{('projects.labels.' + statusKeyArr[approval?.status] | translate) | titlecase}}"
+          placement="right" [ngStyle]="{'left' : 'calc(' + approval?.percent + '% - 15px)'}">
+
+          <span *ngSwitchCase="APPROVAL_STATUS.approved">
+            <i class="fa fa-check"></i>
+          </span>
+          <span *ngSwitchCase="APPROVAL_STATUS.autoapproved">
+            <i class="fa fa-check"></i>
+          </span>
+          <span *ngSwitchCase="APPROVAL_STATUS.pending">
+            <i class="fa fa-question"></i>
+          </span>
+          <span *ngSwitchCase="APPROVAL_STATUS.cancelled">
+            <i class="fa fa-ban"></i>
+          </span>
+          <span *ngSwitchCase="APPROVAL_STATUS.rejected">
+            <i class="fa fa-remove"></i>
+          </span>
+        </div>
+
+        <div class="approver-name" [ngStyle]="{'left' : 'calc(' + approval?.percent + '% - 5px)'}">
+          <div>{{ approval?.approverName }}</div>
+          <div *ngIf="approval?.approverRole">
+            <small>({{ approval?.approverRole }})</small>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mt-20"
+  *ngIf="((listDetails?.status===INVOICE_APPROVAL_CONST.pending || listDetails?.status===INVOICE_APPROVAL_CONST.generated) && (listDetails?.approverId==userInfo.id))">
+  <div class="form-group"  *ngIf="lisType === LISTING_TYPE.purchaseOrder">
+    <label>
+      <strong>
+        {{'projects.labels.poApprovalWaiting'| translate}}
+      </strong>
+    </label>
+  </div>
+  <div class="form-group"  *ngIf="lisType === LISTING_TYPE.invoice">
+    <label>
+      <strong>
+        {{'projects.labels.invoiceApprovalWaiting'| translate}}
+      </strong>
+    </label>
+  </div>
+  <div class="form-group">
+    <button class="btn btn-warning" [disabled]="disableButtonFlag"
+      (click)="showReasons('pending')">{{'projects.labels.onHold'| translate}}</button>
+    <button [disabled]="disableButtonFlag" class="btn btn-success" (click)="approve()">
+      <i *ngIf="approvedSpinnerFlag"
+        class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.approve'| translate}}</button>
+    <button class="btn btn-danger ml-1" [disabled]="disableButtonFlag"
+      (click)="showReasons('reject')">{{'common.labels.reject'| translate}}</button>
+  </div>
+</div>
+<ng-container *ngIf="showReasonsBox">
+  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-20  reason-section">
+    <h4 class="text-center"> <u>
+        {{(selectedStatus == 'pending') ? ('projects.labels.onHoldeReason'| translate):('projects.labels.rejectionReason'| translate)}}</u>
+    </h4>
+    <form [formGroup]="reasonsForm">
+      <ng-container *ngIf="(selectedStatus === 'pending');else elseBlock">
+        <ng-container formArrayName="onHoldReasonsArr"
+          *ngFor="let item of reasonsForm['controls'].onHoldReasonsArr['controls']; let index=index;let lst=last">
+          <ng-container [formGroupName]="index">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+              <div class="form-check mb-2 mr-sm-2">
+                <div class="checkbox c-checkbox">
+                  <label>
+                    <input formControlName="selected" type="checkbox" class="ptr" value="1" name="check"
+                      (click)="selectReason(item,$event)" />
+                    <span class="fa fa-check"></span> {{item?.value?.text}}</label>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-template #elseBlock>
+        <ng-container formArrayName="rejectionReasonsArr"
+          *ngFor="let item of reasonsForm['controls'].rejectionReasonsArr['controls']; let index=index;let lst=last">
+          <ng-container [formGroupName]="index">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+              <div class="form-check mb-2 mr-sm-2">
+                <div class="checkbox c-checkbox">
+                  <label>
+                    <input formControlName="selected" type="checkbox" class="ptr" value="1" name="check"
+                      (click)="selectReason(item,$event)" />
+                    <span class="fa fa-check"></span> {{item?.value?.text}}</label>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+
+
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-2"
+        *ngIf="reasonsForm?.value?.showOthersReason">
+        <textarea placeholder="Reason" formControlName="othersReason" class="form-control ml-1"
+          rows="3"></textarea>
+      </div>
+      <div class="text-danger col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
+        *ngIf="!reasonsForm?.value?.showOthersReason && showSelectAtLeastOneReasonMsg">
+        {{'projects.errorMessages.pleaseSelectOneReasonMsg'| translate}}</div>
+      <div class="text-danger col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
+        *ngIf="reasonsForm?.value?.showOthersReason && reasonsForm.controls['othersReason']?.errors?.checkRequired && (reasonsForm.controls['othersReason']?.touched || submittedReasonFlag)">
+        {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  mt-20  text-center">
+        <div class="form-group">
+          <button class="btn btn-success" [disabled]="disableButtonFlag" (click)="submitReason()">
+            <i *ngIf="submitSpinnerFlag"
+              class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.submit'| translate}}</button>
+          <button class="btn btn-danger ml-1" [disabled]="disableButtonFlag"
+            (click)="hideReasons()">{{'common.labels.cancel'| translate}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-container>

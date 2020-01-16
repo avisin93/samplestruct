@@ -1,0 +1,53 @@
+// import variables scss
+@import "../../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../../assets/styles/mixins.style.scss";
+
+#bid-base-rate{
+    ngx-select .ngx-select.dropdown {
+        width: 100px;
+    }
+    .panel-body {
+        padding: 15px 15px 15px 15px;
+    }
+    
+    .table-responsive{
+        border-top: 0px;
+    }
+    
+    .w-33{
+        width: 33%;
+    }
+    .w-15{
+        width: 15%;
+    }
+    .w-90{
+        width: 90px;
+    }
+    .w-40{
+        width: 40%;
+    }
+    .d-inline-block{
+        display: inline-block;
+    }
+    
+    .mr-10{
+        margin-right: 10px;
+    }
+    
+    .ngx-select.dropdown .ngx-select__selected-single{
+        padding: 0px 10px;
+    }
+}
+@media (max-width: 768px){
+    #bid-base-rate{
+        // table responsive
+        #base-rate-list-table .w-md-35{
+            width: 35%!important;
+        }
+
+        #base-rate-list-table{
+            width: 650px;
+        }
+    }
+}

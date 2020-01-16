@@ -1,0 +1,15 @@
+// import variables scss
+@import "../../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../../assets/styles/mixins.style.scss";
+
+#manage-lead{
+    #date-picker-wrapper{
+        .mydrp {
+            width: 100% !important;
+        }
+    }
+    .fl-right {
+        float: right;
+    }
+}

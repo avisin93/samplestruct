@@ -1,0 +1,664 @@
+<div class="container-fluid">
+
+
+  <div class="row no-mg">
+
+    <div class="col-md-12 no-mg">
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="container">
+            <ng-container *ngIf="showLoadingFlg;else showForm">
+              <app-loader class="col-md-12" [loading]="showLoadingFlg"></app-loader>
+            </ng-container>
+            <ng-template #showForm>
+              <form [formGroup]="approvalHierarchyForm">
+                <div class="row no-mg po-approval">
+                  <div class="col-md-12">
+                    <span>{{'projects.labels.poApprovalHierarchy' | translate}}</span>
+
+                  </div>
+                </div>
+                <div class="row">
+                  <div formArrayName="approvalHierarchy" class="col-md-12 col-xs-12 col-sm-12">
+                    <div class="row no-mg">
+                      <div class="col-md-1 col-xs-12">
+                        <label class="pull-left col-md-12">{{'projects.labels.level'| translate}}
+                        </label>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="col-md-12 no-pd">{{'projects.labels.role'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-3 col-xs-12">
+                        <div class="row">
+                          <label class="col-md-12">{{'projects.labels.user'| translate}}
+                            <span class="text-danger">*</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.startLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.endLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      *ngFor="let item of approvalHierarchyForm.controls.approvalHierarchy['controls']; let i=index;let lst=last;let fst=first;">
+                      <div [formGroupName]="i">
+
+                        <div class="row no-mg " [ngClass]="!fst ? 'mt-3' : ''">
+                          <div class="col-md-1 col-xs-12">
+                            <span class="col-md-12 text-center ml-2">{{i+1}}</span>
+                          </div>
+                          <div class="col-md-3 col-xs-12">
+                            <div class="row">
+                              <ngx-select class="col-md-12" (remove)="removedRole(item)"
+                                (select)="getApprovalHierarchyUsers($event,i,true,'approvalHierarchy')"
+                                formControlName="role" [allowClear]="true" [items]="approvalRoles"
+                                placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                              <div class="text-danger col-md-12"
+                                *ngIf="item.controls['role']?.errors?.checkRequired && (item.controls['role'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-3 col-xs-12">
+                            <div class="row">
+                              <ngx-select class="col-md-12" formControlName="user" [allowClear]="true"
+                                [items]="item?.value?.filteredUsersList"
+                                placeholder="{{'common.labels.select' | translate}}"
+                                (select)="userChanged($event,'approvalHierarchy')"></ngx-select>
+                              <div class="text-danger col-md-12"
+                                *ngIf="item.controls['user']?.errors?.checkRequired && (item.controls['user'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-xs-12">
+                            <div class="col-md-12 col-xs-12 col-sm-12 no-mg">
+                              <input class="form-control" style="width: 100%;" name="startLimit"
+                                formControlName="startLimit" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                              <div class="text-danger"
+                                *ngIf="item.controls['startLimit']?.errors?.checkRequired && (item.controls['startLimit'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                              <!-- <div class="text-danger" *ngIf="item.controls['startLimit'].hasError('checkLimit') && (item.controls['startLimit'].dirty || item.controls['startLimit'].touched)">sdasdasd</div> -->
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-xs-12">
+                            <input class="form-control" style="width: 100%;" name="endLimit"
+                              oninput="this.value = this.value.replace(/[^0-9]/g, '');" formControlName="endLimit">
+                            <div class="text-danger"
+                              *ngIf="item.controls['endLimit']?.errors?.checkRequired && (item.controls['endLimit'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                              translate}}</div>
+                            <div class="text-danger"
+                              *ngIf="item.controls['endLimit'].hasError('checkLimit') && (item.controls['endLimit'].dirty || item.controls['endLimit'].touched || item.controls['startLimit'].dirty || item.controls['startLimit'].touched)">{{'pages.errorMessages.limit'
+                              | translate}}</div>
+                          </div>
+                          <div class="col-md-1 col-xs-12 col-sm-12 add-minus">
+                            <a class="ml-2 click-cursor" (click)="removeRole(i,'approvalHierarchy',item)"
+                              *ngIf="approvalHierarchyForm.controls.approvalHierarchy['controls'].length > 1">
+                              <i class="fa fa-minus"></i>
+                            </a>
+                            <a (click)="addRole(true,i,'approvalHierarchy')" class="click-cursor ml-2"
+                              *ngIf="lst && approvalHierarchyForm.controls.approvalHierarchy['controls'].length > 0">
+                              <i class="fa fa-plus"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <hr id="line">
+                <div class="col-md-12">
+                  <span>{{'projects.labels.talentPoApprovalHierarchy' | translate}}</span>
+                </div>
+                <div class="row">
+                  <div formArrayName="talentApprovalHierarchy" class="col-md-12 col-xs-12 col-sm-12">
+                    <div class="row no-mg">
+                      <div class="col-md-1 col-xs-12">
+                        <label class="pull-left col-md-12">{{'projects.labels.level'| translate}}
+                        </label>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="col-md-12 no-pd">{{'projects.labels.role'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-3 col-xs-12">
+                        <div class="row">
+                          <label class="col-md-12">{{'projects.labels.user'| translate}}
+                            <span class="text-danger">*</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.startLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.endLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      *ngFor="let item of approvalHierarchyForm.controls.talentApprovalHierarchy['controls']; let i=index;let lst=last;let fst=first;">
+                      <div [formGroupName]="i">
+
+                        <div class="row no-mg " [ngClass]="!fst ? 'mt-3' : ''">
+                          <div class="col-md-1 col-xs-12">
+                            <span class="col-md-12 text-center ml-2">{{i+1}}</span>
+                          </div>
+                          <div class="col-md-3 col-xs-12">
+                            <div class="row">
+                              <ngx-select class="col-md-12" (remove)="removedRole(item)"
+                                (select)="getApprovalHierarchyUsers($event,i,true,'talentApprovalHierarchy')"
+                                formControlName="role" [allowClear]="true" [items]="approvalRoles"
+                                placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                              <div class="text-danger col-md-12"
+                                *ngIf="item.controls['role']?.errors?.checkRequired && (item.controls['role'].touched || submitTalentApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                  translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-3 col-xs-12">
+                            <div class="row">
+                              <ngx-select class="col-md-12" formControlName="user" [allowClear]="true"
+                                [items]="item?.value?.filteredUsersList"
+                                placeholder="{{'common.labels.select' | translate}}"
+                                (select)="userChanged($event,'talentApprovalHierarchy')"></ngx-select>
+                              <div class="text-danger col-md-12"
+                                *ngIf="item.controls['user']?.errors?.checkRequired && (item.controls['user'].touched || submitTalentApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                  translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-xs-12">
+                            <div class="col-md-12 col-xs-12 col-sm-12 no-mg">
+                              <input class="form-control" style="width: 100%;" name="startLimit"
+                                formControlName="startLimit" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                              <div class="text-danger"
+                                *ngIf="item.controls['startLimit']?.errors?.checkRequired && (item.controls['startLimit'].touched || submitTalentApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                  translate}}</div>
+                              <!-- <div class="text-danger" *ngIf="item.controls['startLimit'].hasError('checkLimit') && (item.controls['startLimit'].dirty || item .controls['startLimit'].touched)">sdasdasd</div> -->
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-xs-12">
+                            <input class="form-control" style="width: 100%;" name="endLimit"
+                              oninput="this.value = this.value.replace(/[^0-9]/g, '');" formControlName="endLimit">
+                            <div class="text-danger"
+                              *ngIf="item.controls['endLimit']?.errors?.checkRequired && (item.controls['endLimit'].touched || submitTalentApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                            <div class="text-danger"
+                              *ngIf="item.controls['endLimit'].hasError('checkLimit') && (item.controls['endLimit'].dirty || item.controls['endLimit'].touched || item.controls['startLimit'].dirty || item.controls['startLimit'].touched)">{{'pages.errorMessages.limit'
+                                | translate}}</div>
+                          </div>
+                          <div class="col-md-1 col-xs-12 col-sm-12 add-minus">
+                            <a class="ml-2 click-cursor" (click)="removeRole(i,'talentApprovalHierarchy',item)"
+                              *ngIf="approvalHierarchyForm.controls.talentApprovalHierarchy['controls'].length > 1">
+                              <i class="fa fa-minus"></i>
+                            </a>
+                            <a (click)="addRole(true,i,'talentApprovalHierarchy')" class="click-cursor ml-2"
+                              *ngIf="lst && approvalHierarchyForm.controls.talentApprovalHierarchy['controls'].length > 0">
+                              <i class="fa fa-plus"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <hr id="line">
+                <div class="col-md-12">
+                  <span>{{'projects.labels.settlePoApprovalHierarchy' | translate}}</span>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 col-xs-12 col-sm-12">
+                    <div class="row no-mg">
+                      <div class="col-md-1 col-xs-12">
+                        <label class="pull-left col-md-12">{{'projects.labels.level'| translate}}
+                        </label>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="col-md-12 no-pd">{{'projects.labels.role'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-3 col-xs-12">
+                        <label class="col-md-12 no-pd">{{'projects.labels.user'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <!-- <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.startLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.endLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div> -->
+                    </div>
+                    <div>
+                      <div>
+                        <div formArrayName="settlementApprovalHierarchy">
+                          <div
+                            *ngFor="let item of approvalHierarchyForm.controls.settlementApprovalHierarchy['controls'];  let i=index;let lst=last;let fst=first;"
+                            [formGroupName]="i">
+                            <div class="row no-mg " [ngClass]="!fst ? 'mt-3' : ''">
+                              <div class="col-md-1 col-xs-12">
+                                <span class="col-md-12 text-center ml-2">{{i+1}}</span>
+                              </div>
+                              <div class="col-md-3 col-xs-12">
+                                <div class="row">
+                                  <ngx-select class="col-md-12" (remove)="removedRole(item)"
+                                    (select)="getApprovalHierarchyUsers($event,i,true,'settlementApprovalHierarchy')"
+                                    formControlName="role" [allowClear]="true" [items]="approvalRoles"
+                                    placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                                  <div class="text-danger col-md-12"
+                                    *ngIf="item.controls['role']?.errors?.checkRequired && (item.controls['role'].touched || submitSettlementApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                              <div class="col-md-3 col-xs-12">
+                                <div class="row">
+                                  <ngx-select class="col-md-12" formControlName="user" [allowClear]="true"
+                                    [items]="item?.value?.filteredUsersList"
+                                    (select)="userChanged($event,'settlementApprovalHierarchy')"
+                                    placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                                  <div class="text-danger col-md-12"
+                                    *ngIf="item.controls['user']?.errors?.checkRequired && (item.controls['user'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                              <!-- <div class="col-md-2 col-xs-12">
+                                <div class="col-md-12 col-xs-12 col-sm-12 no-mg">
+                                  <input class="form-control" style="width: 100%;" name="startLimit" formControlName="startLimit" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                  <div class="text-danger" *ngIf="item.controls['startLimit']?.errors?.checkRequired && (item.controls['startLimit'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                              <div class="col-md-2 col-xs-12">
+                                <input class="form-control" style="width: 100%;" name="endLimit" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                                  formControlName="endLimit">
+                                <div class="text-danger" *ngIf="item.controls['endLimit']?.errors?.checkRequired && (item.controls['endLimit'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                  translate}}</div>
+                                <div class="text-danger" *ngIf="item.controls['endLimit'].hasError('checkLimit') && (item.controls['endLimit'].dirty || item.controls['endLimit'].touched || item.controls['startLimit'].dirty || item.controls['startLimit'].touched)">{{'pages.errorMessages.limit'
+                                  | translate}}</div>
+                              </div> -->
+                              <div class="col-md-1 col-xs-12" style="margin-top:10px;">
+                                <a class="ml-2 click-cursor" (click)="removeRole(i,'settlementApprovalHierarchy',item)"
+                                  *ngIf="approvalHierarchyForm.controls.settlementApprovalHierarchy['controls'].length > 1">
+                                  <i class="fa fa-minus"></i>
+                                </a>
+                                <a (click)="addRole(true,i,'settlementApprovalHierarchy')" class="click-cursor ml-2"
+                                  *ngIf="lst && approvalHierarchyForm.controls.settlementApprovalHierarchy['controls'].length > 0">
+                                  <i class="fa fa-plus"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr id="line">
+                <div class="col-md-12">
+                  <span>{{'projects.labels.paymentOrdersApprovalHierarchy'| translate}}</span>
+                </div>
+                <div class="row ">
+                  <div formArrayName="invoiceApprovalHierarchy" class="col-md-12 col-xs-12 col-sm-12">
+                    <div class="row no-mg">
+                      <div class="col-md-1 col-xs-12">
+                        <label class="pull-left col-md-12">{{'projects.labels.level'| translate}}
+                        </label>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="col-md-12 no-pd">{{'projects.labels.role'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-3 col-xs-12">
+                        <div class="row">
+                          <label class="col-md-12">{{'projects.labels.user'| translate}}
+                            <span class="text-danger">*</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.startLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.endLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      *ngFor="let item of approvalHierarchyForm.controls.invoiceApprovalHierarchy['controls']; let i=index;let lst=last;let fst=first;">
+                      <div [formGroupName]="i">
+                        <div class="row no-mg " [ngClass]="!fst ? 'mt-3' : ''">
+                          <div class="col-md-1 col-xs-12">
+                            <span class="col-md-12 text-center ml-2">{{i+1}}</span>
+                          </div>
+                          <div class="col-md-3 col-xs-12">
+                            <div class="row">
+                              <ngx-select class="col-md-12" (remove)="removedRole(item)"
+                                (select)="getApprovalHierarchyUsers($event,i,true,'invoiceApprovalHierarchy')"
+                                formControlName="role" [allowClear]="true" [items]="approvalRoles"
+                                placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                              <div class="text-danger col-md-12"
+                                *ngIf="item.controls['role']?.errors?.checkRequired && (item.controls['role'].touched || submitInvoiceApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-3 col-xs-12">
+                            <div class="row">
+                              <ngx-select class="col-md-12" formControlName="user" [allowClear]="true"
+                                [items]="item?.value?.filteredUsersList"
+                                placeholder="{{'common.labels.select' | translate}}"
+                                (select)="userChanged($event,'invoiceApprovalHierarchy')"></ngx-select>
+                              <div class="text-danger col-md-12"
+                                *ngIf="item.controls['user']?.errors?.checkRequired && (item.controls['user'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-xs-12">
+                            <div class="col-md-12 col-xs-12 col-sm-12 no-mg">
+                              <input class="form-control" style="width: 100%;" name="startLimit"
+                                formControlName="startLimit" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                              <div class="text-danger"
+                                *ngIf="item.controls['startLimit']?.errors?.checkRequired && (item.controls['startLimit'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-xs-12">
+                            <input class="form-control" style="width: 100%;" name="endLimit"
+                              oninput="this.value = this.value.replace(/[^0-9]/g, '');" formControlName="endLimit">
+                            <div class="text-danger"
+                              *ngIf="item.controls['endLimit']?.errors?.checkRequired && (item.controls['endLimit'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                              translate}}</div>
+                            <div class="text-danger"
+                              *ngIf="item.controls['endLimit'].hasError('checkLimit') && (item.controls['endLimit'].dirty || item.controls['endLimit'].touched || item.controls['startLimit'].dirty || item.controls['startLimit'].touched)">{{'pages.errorMessages.limit'
+                              | translate}}</div>
+                          </div>
+                          <div class="col-md-1 col-xs-12 col-sm-12 add-minus">
+                            <a class="ml-2 click-cursor" (click)="removeRole(i,'invoiceApprovalHierarchy',item)"
+                              *ngIf="approvalHierarchyForm.controls.invoiceApprovalHierarchy['controls'].length > 1">
+                              <i class="fa fa-minus"></i>
+                            </a>
+                            <a (click)="addRole(true,i,'invoiceApprovalHierarchy')" class="click-cursor ml-2"
+                              *ngIf="lst && approvalHierarchyForm.controls.invoiceApprovalHierarchy['controls'].length > 0">
+                              <i class="fa fa-plus"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <hr id="line">
+                <div class="col-md-12">
+                  <span>{{'projects.labels.talentInvoiceApprovalHierarchy' | translate}}</span>
+                </div>
+                <div class="row">
+                  <div formArrayName="talentInvoiceApprovalHierarchy" class="col-md-12 col-xs-12 col-sm-12">
+                    <div class="row no-mg">
+                      <div class="col-md-1 col-xs-12">
+                        <label class="pull-left col-md-12">{{'projects.labels.level'| translate}}
+                        </label>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="col-md-12 no-pd">{{'projects.labels.role'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-3 col-xs-12">
+                        <div class="row">
+                          <label class="col-md-12">{{'projects.labels.user'| translate}}
+                            <span class="text-danger">*</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.startLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-2 col-xs-12">
+                        <label>{{'projects.labels.endLimit'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      *ngFor="let item of approvalHierarchyForm.controls.talentInvoiceApprovalHierarchy['controls']; let i=index;let lst=last;let fst=first;">
+                      <div [formGroupName]="i">
+
+                        <div class="row no-mg " [ngClass]="!fst ? 'mt-3' : ''">
+                          <div class="col-md-1 col-xs-12">
+                            <span class="col-md-12 text-center ml-2">{{i+1}}</span>
+                          </div>
+                          <div class="col-md-3 col-xs-12">
+                            <div class="row">
+                              <ngx-select class="col-md-12" (remove)="removedRole(item)"
+                                (select)="getApprovalHierarchyUsers($event,i,true,'talentInvoiceApprovalHierarchy')"
+                                formControlName="role" [allowClear]="true" [items]="approvalRoles"
+                                placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                              <div class="text-danger col-md-12"
+                                *ngIf="item.controls['role']?.errors?.checkRequired && (item.controls['role'].touched || submitTalentInvoiceApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                  translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-3 col-xs-12">
+                            <div class="row">
+                              <ngx-select class="col-md-12" formControlName="user" [allowClear]="true"
+                                [items]="item?.value?.filteredUsersList"
+                                placeholder="{{'common.labels.select' | translate}}"
+                                (select)="userChanged($event,'talentInvoiceApprovalHierarchy')"></ngx-select>
+                              <div class="text-danger col-md-12"
+                                *ngIf="item.controls['user']?.errors?.checkRequired && (item.controls['user'].touched || submitTalentInvoiceApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                  translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-xs-12">
+                            <div class="col-md-12 col-xs-12 col-sm-12 no-mg">
+                              <input class="form-control" style="width: 100%;" name="startLimit"
+                                formControlName="startLimit" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                              <div class="text-danger"
+                                *ngIf="item.controls['startLimit']?.errors?.checkRequired && (item.controls['startLimit'].touched || submitTalentInvoiceApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                  translate}}</div>
+                              <!-- <div class="text-danger" *ngIf="item.controls['startLimit'].hasError('checkLimit') && (item.controls['startLimit'].dirty || item .controls['startLimit'].touched)">sdasdasd</div> -->
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-xs-12">
+                            <input class="form-control" style="width: 100%;" name="endLimit"
+                              oninput="this.value = this.value.replace(/[^0-9]/g, '');" formControlName="endLimit">
+                            <div class="text-danger"
+                              *ngIf="item.controls['endLimit']?.errors?.checkRequired && (item.controls['endLimit'].touched || submitTalentInvoiceApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                            <div class="text-danger"
+                              *ngIf="item.controls['endLimit'].hasError('checkLimit') && (item.controls['endLimit'].dirty || item.controls['endLimit'].touched || item.controls['startLimit'].dirty || item.controls['startLimit'].touched)">{{'pages.errorMessages.limit'
+                                | translate}}</div>
+                          </div>
+                          <div class="col-md-1 col-xs-12 col-sm-12 add-minus">
+                            <a class="ml-2 click-cursor" (click)="removeRole(i,'talentInvoiceApprovalHierarchy',item)"
+                              *ngIf="approvalHierarchyForm.controls.talentInvoiceApprovalHierarchy['controls'].length > 1">
+                              <i class="fa fa-minus"></i>
+                            </a>
+                            <a (click)="addRole(true,i,'talentInvoiceApprovalHierarchy')" class="click-cursor ml-2"
+                              *ngIf="lst && approvalHierarchyForm.controls.talentInvoiceApprovalHierarchy['controls'].length > 0">
+                              <i class="fa fa-plus"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <hr id="line">
+                <!-- <div class="col-md-12">
+                  <span>{{'payments.labels.advancePaymentApprovalHierarchy' | translate}}</span>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 col-xs-12 col-sm-12">
+                    <div class="row no-mg">
+                      <div class="col-md-1 col-xs-12">
+                        <label class="pull-left col-md-12">{{'projects.labels.level'| translate}}
+                        </label>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="col-md-12 no-pd">{{'projects.labels.role'| translate}}
+                        </label>
+                      </div>
+                      <div class="col-md-3 col-xs-12">
+                        <label class="col-md-12 no-pd">{{'projects.labels.user'| translate}}
+                        </label>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <div formArrayName="advancesApprovalHierarchy">
+                          <div *ngFor="let item of approvalHierarchyForm.controls.advancesApprovalHierarchy['controls'];  let i=index;let lst=last;let fst=first;"
+                            [formGroupName]="i">
+                            <div class="row no-mg " [ngClass]="!fst ? 'mt-3' : ''">
+                              <div class="col-md-1 col-xs-12">
+                                <span class="col-md-12 text-center ml-2">{{i+1}}</span>
+                              </div>
+                              <div class="col-md-3 col-xs-12">
+                                <div class="row">
+                                  <ngx-select [disabled]='true' class="col-md-12" (select)="getApprovalHierarchyUsers($event,i,true,'advancesApprovalHierarchy')" formControlName="role"
+                                    [allowClear]="true" [items]="approvalRoles" placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                                  <div class="text-danger col-md-12" *ngIf="item.controls['role']?.errors?.checkRequired && (item.controls['role'].touched || submitAdvanceApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                              <div class="col-md-3 col-xs-12">
+                                <div class="row">
+                                  <ngx-select [disabled]='true' class="col-md-12" formControlName="user" [allowClear]="true" [items]="item?.value?.filteredUsersList" (select)="userChanged($event,'advancesApprovalHierarchy')"
+                                    placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                                  <div class="text-danger col-md-12" *ngIf="item.controls['user']?.errors?.checkRequired && (item.controls['user'].touched || submitAdvanceApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                    translate}}</div>
+                                </div>
+                              </div>
+                              <div class="col-md-1 col-xs-12"  style="margin-top:10px;">
+                                <a class="ml-2 click-cursor" (click)="removeRole(i,'advancesApprovalHierarchy',item)" *ngIf="approvalHierarchyForm.controls.advancesApprovalHierarchy['controls'].length > 1">
+                                  <i class="fa fa-minus"></i>
+                                </a>
+                                <a (click)="addRole(true,i,'advancesApprovalHierarchy')" class="click-cursor ml-2" *ngIf="lst && approvalHierarchyForm.controls.advancesApprovalHierarchy['controls'].length > 0">
+                                  <i class="fa fa-plus"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr id="line"> -->
+                <div class="col-md-12 ml-2">
+                  {{'projects.labels.projectVisibility'| translate}}
+                </div>
+                <div class="row">
+
+                  <div formArrayName="projectVisibility" class="col-md-12 col-xs-12 col-sm-12">
+                    <div class="row no-mg project-visibility">
+                      <div class="col-md-1 col-xs-12">
+
+                      </div>
+                      <div class="col-md-3 col-xs-12">
+                        <label>{{'projects.labels.role'| translate}}
+
+                        </label>
+                      </div>
+                      <div class="col-md-4 col-xs-12">
+                        <label>{{'projects.labels.user'| translate}}
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      *ngFor="let item of approvalHierarchyForm.controls.projectVisibility['controls']; let i=index;let lst=last;let fst=first;">
+                      <div [formGroupName]="i">
+                        <div class="row no-mg mt-2">
+                          <div class="col-md-1 col-xs-12">
+
+                          </div>
+                          <div class="col-md-3 col-xs-12">
+                            <!-- <div class="row">
+                                    <label class="col-md-12" *ngIf="fst">{{'projects.labels.role'| translate}}
+                                      <span class="text-danger">*</span>
+                                    </label>
+                                  </div> -->
+                            <div class="row">
+                              <ngx-select class="col-md-12" (remove)="removedVissibilityRole(i)"
+                                (select)="getVisibilityUsers($event,i)" formControlName="visibilityRole"
+                                [allowClear]="true" [items]="approvalVisibiltyRoles"
+                                placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                              <div class="text-danger col-md-12" *ngIf="showMsg[i]">{{'pages.errorMessages.fieldRequired'|
+                                translate}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 col-xs-12">
+                            <!-- <div class="row">
+                                    <label class="col-md-12" *ngIf="fst">{{'projects.labels.user'| translate}}
+
+                                    </label>
+                                  </div> -->
+                            <div class="row">
+                              <ngx-select class="col-md-9" formControlName="visibilityUser" [multiple]="true"
+                                [allowClear]="true" [items]="approvalVisibiltyUsers[i]"
+                                placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+
+                            </div>
+                          </div>
+                          <div class="col-md-1 col-xs-12 col-sm-12 add-minus" style="margin-left: -8%">
+                            <a class="click-cursor" style="margin-right: 20%" (click)="removeVisibility(i)"
+                              *ngIf="approvalHierarchyForm.controls.projectVisibility['controls'].length > 1">
+                              <i class="fa fa-minus"></i>
+                            </a>
+
+                            <a (click)="addVisibility(true,i)" class="click-cursor"
+                              *ngIf="lst && approvalHierarchyForm.controls.projectVisibility['controls'].length > 0">
+                              <i class="fa fa-plus"></i>
+                            </a>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </form>
+            </ng-template>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 mt-3 no-mg">
+        <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID" [actionType]="ACTION_TYPES.EDIT">
+          <button [disabled]="disableButton || showLoadingFlg" (click)="saveApprovalHierarchy()"
+            class="btn btn-success"><i *ngIf="spinnerFlag"
+              class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'| translate}}</button>
+        </action-permission>
+        <button (click)="navigateTo()" class="btn btn-danger ml-1">{{'common.labels.cancel'| translate}}</button>
+
+      </div>
+    </div>

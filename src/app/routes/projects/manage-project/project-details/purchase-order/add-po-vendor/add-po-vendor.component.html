@@ -1,0 +1,398 @@
+<ng-container *ngIf="!renderPage">
+  <app-loader class="col-md-12" [loading]="!renderPage"></app-loader>
+</ng-container>
+<ng-container *ngIf="renderPage">
+  <div class="add-po-vendor">
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="form-group ng-star-inserted">
+            <h5 class="text-dark mt-1">
+              <strong *ngIf="!vendorPOId">{{'projects.labels.addVendorPurchaseOrder'| translate}}</strong>
+              <strong *ngIf="vendorPOId">{{'projects.labels.editVendorPurchaseOrder'| translate}}</strong>
+              <button class="btn btn-primary pull-right" (click)="navigateTo()" type="button"> {{'common.labels.backToList'|
+                translate}}</button>
+            </h5>
+          </div>
+          <form class="form-horizontal" [formGroup]="vendorSubmitForm" novalidate>
+            <div class="col-lg-12 col-md-12 col-sm-12 no-mg">
+              <div class="col-md-3 no-mg">
+                <label>
+                  <strong>
+                    <u>{{'common.labels.currency'| translate}}</u>
+                    <span class="bb-error"> *</span>
+                  </strong>
+                </label>
+                <ngx-select [items]="currencyArr"  [allowClear] = "true"  (select)="changeDisplayCurrency($event)" formControlName="currencyId"
+                  placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                <div class="bb-error" *ngIf="vendorSubmitForm.controls['currencyId']?.errors?.checkRequired && (vendorSubmitForm.controls['currencyId'].touched || saveVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                  translate}}
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-12 col-lg-12 col-sm-12">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.services'| translate}}</u>
+                  </strong>
+                </label>
+              </div>
+            </div>
+            <div class="row mt-1 mb-2">
+              <div class="col-md-12 col-lg-12 col-sm-12">
+                <button class="btn btn-primary ng-invalid" (click)="addService()" type="button">+ {{'common.labels.addService'|
+                  translate}}</button>
+                <div class="bb-error" *ngIf="tabledata.length == 0 && saveVendorForm">{{'common.errorMessages.budgetline'|
+                  translate}}
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3" *ngIf="showtable  && tabledata.length > 0">
+              <div class="col-md-9">
+                <div class="col-md-11">
+                  <div class="row mt-1">
+
+                    <table class="table table-bordered text-center service-table">
+                      <thead>
+                        <tr>
+                          <th>{{'projects.labels.budgetLine'| translate}}</th>
+                          <th>{{'projects.labels.itemDescription'| translate}}</th>
+                          <th>{{'projects.labels.quantity'| translate}}</th>
+                          <th>{{'projects.labels.rate'| translate}}</th>
+                          <th>{{'projects.labels.totalRate'| translate}}</th>
+                          <th>{{'common.labels.action'| translate}}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of tabledata;let i = index;">
+                          <td>{{budgetLineName[item.budgetline]}}</td>
+                          <td>{{item.description}}</td>
+                          <td>{{item.quantity}}</td>
+                          <td>{{item.amount | twoDecimal}}</td>
+                          <td>{{item.quantity * item.amount | twoDecimal}}</td>
+                          <td>
+                            <i class="fa fa-pencil pencil-icon ptr" (click)="editBudgetLine(item,i)" data-toggle="tooltip"
+                              data-placement="top" title="{{'common.labels.edit' | translate}}"></i>
+                            <i class="fa fa-trash ml-1 ptr" *ngIf="tabledata.length > 1" (click)="deleteRecord(i)" data-toggle="tooltip"
+                              data-placement="top" title="{{'common.labels.delete' | translate}}"></i>
+                          </td>
+
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 col-lg-12 col-sm-12">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.supplier'| translate}}</u>
+                  </strong>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <label>{{'common.labels.vendor'| translate}}
+                  <span class="bb-error">*</span>
+                </label>
+                <ngx-select [items]="poVendorDropdown" [allowClear] = "true"  (select)="setMode($event)" formControlName="vendorName"
+                  placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                <div class="bb-error" *ngIf="vendorSubmitForm.controls['vendorName']?.errors?.checkRequired && (vendorSubmitForm.controls['vendorName'].touched || saveVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                  translate}}
+                </div>
+                <!-- <div class="text-danger col-md-12 no-mg" *ngIf="incompleteProfileDetailsFlag">{{'actors.errorMessages.incompleteProfile'|
+                    translate}}</div> -->
+              </div>
+              <div class="col-md-4">
+                <label>{{'common.labels.mode'| translate}}
+                  <span class="bb-error">*</span>
+                </label>
+                <ngx-select [items]="mode" [allowClear] = "true"  formControlName="mode" placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                <div class="bb-error" *ngIf="vendorSubmitForm.controls['mode']?.errors?.checkRequired && (vendorSubmitForm.controls['mode'].touched || saveVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                  translate}}
+                </div>
+              </div>
+            </div>
+            <div class="form-group mt-2">
+              <div class="row">
+                <div class="col-md-6">
+
+                    <label>
+                      <strong>
+                        <u>{{'projects.labels.poNotes'| translate}}</u>
+                      </strong>
+                    </label>
+
+                  <div class="col-lg-12 no-mg">
+                    <textarea name="notes" class="form-control" formControlName="notes"></textarea>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-4">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.paymentDate'| translate}}</u>
+                  </strong>
+                  <span class="text-danger">*</span>
+                </label>
+                <my-date-picker class="bbdate" placeholder="{{'common.labels.datePickerPlaceholder' | translate}}" formControlName="paymentDate" [options]="datePickerOptions"></my-date-picker>
+                <div class="text-danger col-md-12 no-mg" *ngIf="vendorSubmitForm.controls['paymentDate']?.errors?.checkRequired && (vendorSubmitForm.controls['paymentDate'].touched  || saveVendorForm)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-12 col-lg-12 col-sm-12">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.poAmt'| translate}}</u>
+                  </strong>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 col-lg-12 col-sm-12">
+                <p>{{'projects.labels.totalRequested' | translate}}</p>
+                <span class="mr-2"> {{totalAmount?(totalAmount | twoDecimal):0.00}}</span>
+                <span>{{selectedCurrency}}</span>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-12 col-lg-12 col-sm-12">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.cfdiType'| translate}}</u>
+                  </strong>
+                </label>
+              </div>
+
+              <div class="col-md-4">
+                <span>
+                  <label class="ptr">
+                    <input type="radio" class="ptr" [value]="0" formControlName="typeSelection" (click)="changeType(0)">
+                    {{'projects.labels.factura'| translate}}</label>
+                </span>
+                <span class="ml-5">
+                  <label class="ptr">
+                    <input type="radio" class="ptr" [value]="1" formControlName="typeSelection" (click)="changeType(1)">
+                    {{'projects.labels.honorarious'| translate}}</label>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <label>{{'payments.labels.vatPercent' | translate}}</label>
+                <input type="text" (keyup)="updateSubtotal();updatePayableAmount();" (blur)="setValueZero('vat')" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                  formControlName="vat" class="form-control">
+              </div>
+              <div class="col-md-3">
+                <label>{{'projects.labels.subTotal'| translate}}</label>
+                <div class="mt-5">
+                  <span class="mr-2">{{ subTotal ? (subTotal | twoDecimal):0.00}}</span>
+                  <span>{{selectedCurrency}}</span>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-12 no-mg">
+              <div class="bb-error" *ngIf="vendorSubmitForm.controls['vat']?.errors?.checkUptoFourDecimal && (vendorSubmitForm.controls['vat'].touched || saveVendorForm) && vendorSubmitForm.controls['vat'].dirty">{{'pages.errorMessages.validFourDecimal'|
+                translate}}
+              </div>
+            </div>
+            <div class="row mt-3" *ngIf="vendorSubmitForm.controls['typeSelection'].value==CFDI_CONST.honorarious">
+              <div class="col-md-2">
+                <label>{{'projects.labels.isrWithholding'| translate}}(%)</label>
+                <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g,'');" (blur)="setValueZero('isrWithholding')" (keyup)="updateISRWitholding();updatePayableAmount();"
+                  formControlName="isrWithholding" class="form-control">
+              </div>
+              <div class="col-md-3">
+                <label>{{'projects.labels.isrWithholdingAmount'| translate}}</label>
+                <div class="mt-5">
+                  <span class="mr-2">{{isrWitholdingAmt | twoDecimal :0.00}}</span>
+                  <span>{{selectedCurrency}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 no-mg">
+              <div class="bb-error" *ngIf="vendorSubmitForm.controls['isrWithholding']?.errors?.checkUptoFourDecimal && (vendorSubmitForm.controls['isrWithholding'].touched || saveVendorForm) && vendorSubmitForm.controls['isrWithholding'].dirty">{{'pages.errorMessages.validFourDecimal'|
+                translate}}
+              </div>
+            </div>
+            <div class="row mt-3" *ngIf="vendorSubmitForm.controls['typeSelection'].value==CFDI_CONST.honorarious">
+              <div class="col-md-2">
+                <label>{{'projects.labels.vatWithholding'| translate}}(%)</label>
+                <input type="text" (blur)="setValueZero('vatWithholding')" oninput="this.value = this.value.replace(/[^0-9.]/g,'');" (keyup)="updateVatWitholding();updatePayableAmount();"
+                  formControlName="vatWithholding" class="form-control">
+              </div>
+              <div class="col-md-3">
+                <label>{{'projects.labels.vatWithholdingAmount'| translate}}</label>
+                <div class="mt-5">
+                  <span class="mr-2">{{vatWitholdingAmt| twoDecimal :0.00}}</span>
+                  <span>{{selectedCurrency}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 no-mg">
+              <div class="bb-error" *ngIf="vendorSubmitForm.controls['vatWithholding']?.errors?.checkUptoFourDecimal && (vendorSubmitForm.controls['vatWithholding'].touched || saveVendorForm) && vendorSubmitForm.controls['vatWithholding'].dirty">{{'pages.errorMessages.validFourDecimal'|
+                translate}}
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row no-mg mt-3">
+                <div class="col-md-3 no-mg">
+                  <label><b>{{'projects.labels.total'|
+                      translate}}</b></label>
+                  <div class="mt-5">
+                    <span class="mr-2">{{payableAmount | twoDecimal :0.00}}</span>
+                    <span>{{selectedCurrency}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-3">
+
+    <button (click)="addVendorPO()" [disabled]="buttonDisable" class="btn save-btn btn-success"  type="Submit">
+      <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'| translate}} PO
+    </button>
+    <button (click)="navigateTo()" [routerLink]="ROUTER_LINKS_FULL_PATH.projects" class="btn cancel-btn btn-danger ml-1" type="button">{{'common.labels.cancel'|
+      translate}}
+    </button>
+
+  </div>
+  <div class="modal" bsModal #addServiceModal="bs-modal" (onShow) = "checkModalOpen(true)" (onHide) = "checkModalOpen(false)">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <p class="modal-title">
+            <strong *ngIf="!showUpdateButton">{{'common.labels.addService'| translate}}</strong>
+            <strong *ngIf="showUpdateButton">{{'common.labels.editService'| translate}}</strong>
+          </p>
+          <button type="button" class="close ptr" data-dismiss="modal" (click)="addServiceModal.hide()">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+              <form class="form-horizontal" [formGroup]="vendorService" novalidate>
+                <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                  <div class="row">
+                    <div class="col-md-6 no-mg">
+                      <div class="form-group">
+                        <label class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-sm-8">{{'projects.labels.budgetLine'|
+                          translate}}
+                          <span style="color:red;">*</span>
+                        </label>
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-sm-8 mt-1">
+                          <div>
+                            <ngx-select [items]="budgetLineList" [allowClear] = "true"  placeholder="{{'common.labels.select' | translate}}" formControlName="budgetline"></ngx-select>
+                            <div class="bb-error" *ngIf="vendorService.controls['budgetline']?.errors?.checkRequired && (vendorService.controls['budgetline'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                              translate}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 no-mg">
+                      <div class="form-group">
+                        <label class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-sm-8">{{'projects.labels.quantity'|
+                          translate}}
+                          <span style="color:red;">*</span>
+                        </label>
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-sm-8 mt-1">
+                          <div>
+                            <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g,'');" class="form-control"
+                              formControlName="quantity">
+                            <div class="bb-error" *ngIf="vendorService.controls['quantity']?.errors?.checkRequired && (vendorService.controls['quantity'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                              translate}}
+                            </div>
+                            <div class="bb-error" *ngIf="!vendorService.controls['quantity']?.errors?.checkRequired && vendorService.controls['quantity']?.errors?.checkDecimal && (vendorService.controls['quantity'].touched || submitVendorForm) && vendorService.controls['quantity'].dirty">{{'pages.errorMessages.validDecimal'|
+                              translate}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 no-mg">
+                      <div class="form-group">
+                        <label class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-sm-8budgetline">{{'projects.labels.rate'|
+                          translate}}
+                          <span style="color:red;">*</span>
+                        </label>
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-sm-8 mt-1">
+                          <div>
+                            <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g,'');" class="form-control" (change)="checkAmount()"
+                              formControlName="amount">
+                            <div class="bb-error" *ngIf="vendorService.controls['amount']?.errors?.checkRequired && (vendorService.controls['amount'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                              translate}}
+                            </div>
+                            <div class="bb-error" *ngIf="!vendorService.controls['amount']?.errors?.checkRequired && vendorService.controls['amount']?.errors?.checkDecimal && (vendorService.controls['amount'].touched || submitVendorForm) && vendorService.controls['amount'].dirty">{{'pages.errorMessages.validDecimal'|
+                              translate}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-10 no-mg">
+                      <div class="form-group">
+                        <label class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-sm-8">{{'common.labels.description'|
+                          translate}}
+                          <span style="color:red;">*</span>
+                        </label>
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-sm-8 mt-1">
+                          <div>
+                            <textarea class="form-control" rows="5" formControlName="description"></textarea>
+                            <div class="bb-error" *ngIf="vendorService.controls['description']?.errors?.checkRequired && (vendorService.controls['description'].touched || submitVendorForm)">{{'pages.errorMessages.fieldRequired'|
+                              translate}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-1">
+                    <div class="form-group">
+                      <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-sm-8 mt-1">
+                        <div style="width:100%;">
+                          <button (click)="vendorPOAdd()" type="submit" [disabled]="disableAddButton" *ngIf="!showUpdateButton" class="btn add-btn btn-primary">
+                            {{'common.labels.add'| translate}}</button>
+                          <button (click)="vendorPOAdd()" [disabled]="disableAddButton" *ngIf="showUpdateButton" class="btn add-btn btn-primary" type="submit">
+                            {{'common.labels.update'| translate}} </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

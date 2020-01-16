@@ -1,0 +1,39 @@
+
+// import variables scss
+@import "../../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../../assets/styles/mixins.style.scss";
+
+#add-individual-page{
+  .fl-right {
+    float: right;
+  }
+  @include parent-subcategory-name();
+  @include selected-category();
+  @include browse-btn();
+  // @include expander();
+  @include padding-classes();
+  .category-plus {
+    display: none;
+  }
+  .fa.fa-check {
+    @include color($white-color);
+  }
+  .c-pointer {
+    @include cursor(pointer);
+  }
+  .min-ht{
+    min-height: 47px !important;
+  }
+  #category-table .category-name, #category-table .subcategory-name, #category-table .sub-sub-category-name {
+      text-align: left;
+  }
+}
+
+@media (min-width:992px) {
+  #add-individual-page {
+    #category-table{
+      width:50%;
+    }
+  }
+};

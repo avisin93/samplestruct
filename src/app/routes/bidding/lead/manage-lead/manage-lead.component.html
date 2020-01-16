@@ -1,0 +1,247 @@
+<div id="manage-lead">
+  <div class="content-heading">
+    <breadcrumb class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 no-mg" [breadcrumbData]="breadcrumbData"></breadcrumb>
+    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-right no-mg">
+      <button mat-button class="btn save-btn btn-primary" (click)="navigateTo(ROUTER_LINKS_FULL_PATH.leads)" type="button">
+        {{'common.labels.backToList'| translate}}</button>
+    </div>
+  </div>
+  <div class="card card-default" *ngIf="!showLoaderFlag">
+    <div class="card-body">
+      <form [formGroup]="manageLeadForm" class="form-horizontal">
+        <div class="row">
+          <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">
+                {{'biddings.labels.dealName' | translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <input [attr.disabled]="disableDealTitleFlag ? '' : null" class="form-control" formControlName="dealTitle" maxlength="100"
+                  (change)="checkDealTitle();" name="dealName" placeholder="{{'biddings.labels.dealName' | translate}}">
+                <div class="bb-error" *ngIf="(manageLeadForm.controls['dealTitle']?.errors?.checkRequired && (manageLeadForm.controls['dealTitle']?.touched || submitManageLeadForm)) && !dealTitleFlag">{{'biddings.errorMessages.fieldRequired'|
+                  translate}}</div>
+                <div class="bb-error" *ngIf="dealTitleFlag && !(manageLeadForm.controls['dealTitle']?.errors?.checkRequired && (manageLeadForm.controls['dealTitle']?.touched || submitManageLeadForm))">{{dealTitleFlagMessage}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.dealValue'
+                | translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <input class="form-control" formControlName="dealValue" name="dealValue" placeholder="{{'biddings.labels.dealValue' | translate}}"
+                  oninput="this.value = this.value.replace(/[^0-9\.]+/g, '');"  (keyup)='checkIntegerValue();'>
+                <div class="bb-error" *ngIf="manageLeadForm.controls['dealValue']?.errors?.checkRequired && (manageLeadForm.controls['dealValue']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                  translate}}</div>
+                <div class="bb-error" *ngIf="!(manageLeadForm.controls['dealValue']?.errors?.checkRequired) && manageLeadForm.controls['dealValue']?.errors?.checkDecimal && (manageLeadForm.controls['dealValue']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.validDecimal'|
+                  translate}}</div>
+                  <div class="bb-error" *ngIf="!(manageLeadForm.controls['dealValue']?.errors?.checkRequired) && dealValueMustNotBeZeroFlag  && (manageLeadForm.controls['dealValue']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.dealValueMustBeGreaterThanZero'|
+                      translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.jobNumber'
+                | translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <input class="form-control" formControlName="jobNumber" name="dealValue" placeholder="{{'biddings.labels.jobNumber' | translate}}">
+                <div class="bb-error" *ngIf="manageLeadForm.controls['jobNumber']?.errors?.checkRequired && (manageLeadForm.controls['jobNumber']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.organizationName'
+                | translate}}
+                <span class="mandatory">*</span>
+              </label>
+
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <ngx-select (typed)="searchTypedOrganizationName.next($event)" (close)='disableSearchFlag();'
+                    formControlName="organizationName" (select)="setIntProdCompValue($event)" [items]="organizationsList" placeholder="{{'biddings.labels.organizationName'| translate}}">
+                    <ng-template ngx-select-option let-option let-text="text">
+                      <ng-container *ngIf="(option.data.type != 'new')">
+                        {{option.data.text}}
+                      </ng-container>
+                      <ng-container *ngIf="(option.data.type == 'new')">
+                        <button class="btn save-btn btn-success fl-right new-organization-name" [disabled]='searchClicked' (click)="addOrganizationOrContactPerson(organizationAndContactPersonNameConst.organizationName)">
+                          <span>{{'biddings.labels.addNew' | translate}}</span></button>
+                      </ng-container>
+                    </ng-template>
+                    <ng-template ngx-select-option-not-found *ngIf="!isEmptyOrganizationName">
+                      <ng-container *ngIf="isLoadingOrganizationName">
+                          {{'biddings.labels.loading' | translate}}
+                        <span class="fl-right">
+                          <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                        </span>
+                      </ng-container>
+                      <button  class="btn save-btn btn-success fl-right" [disabled]='searchClicked' *ngIf="dropDownDataNotFoundFlag" (click)="addOrganizationOrContactPerson(organizationAndContactPersonNameConst.organizationName)">
+                        <span>{{'biddings.labels.addNew' | translate}}</span></button>
+                    </ng-template>
+                  </ngx-select>
+                  <div class="bb-error" *ngIf="manageLeadForm.controls['organizationName']?.errors?.checkRequired && (manageLeadForm.controls['organizationName']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                    translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.contactPersonName' | translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                  <ngx-select (typed)="searchTypedContactPersonName.next($event)" (close)='disableSearchFlag();'
+                    formControlName="contactPersonName" [items]="contactPersonsList" placeholder="{{'biddings.labels.contactPersonName' | translate}}">
+                    <ng-template ngx-select-option let-option let-text="text">
+                      <ng-container *ngIf="(option.data.type != 'new')">
+                        {{option.data.text}}
+                      </ng-container>
+                      <ng-container *ngIf="(option.data.type == 'new')">
+                        <button class="btn save-btn btn-success fl-right new-contactPerson-name" [disabled]='searchClicked' (click)="addOrganizationOrContactPerson(organizationAndContactPersonNameConst.contactPersonName)">
+                          <span>{{'biddings.labels.addNew' | translate}}</span></button>
+                      </ng-container>
+                    </ng-template>
+                    <ng-template ngx-select-option-not-found *ngIf="!isEmptyContactPersonName">
+                      <ng-container *ngIf="isLoadingContactPersonName">
+                          {{'biddings.labels.loading' | translate}}
+                        <span class="fl-right">
+                          <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                        </span>
+                      </ng-container>
+                      <button class="btn save-btn btn-success fl-right" [disabled]='searchClicked' *ngIf="dropDownDataNotFoundFlag" (click)="addOrganizationOrContactPerson(organizationAndContactPersonNameConst.contactPersonName)">
+                        <span>{{'biddings.labels.addNew' | translate}}</span></button>
+                    </ng-template>
+                  </ngx-select>
+                  <div class="bb-error" *ngIf="manageLeadForm.controls['contactPersonName']?.errors?.checkRequired && (manageLeadForm.controls['contactPersonName']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                    translate}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'common.labels.currency' |
+                translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <select class="form-control" formControlName="currencyId" name="currency">
+                  <option *ngFor="let currency of currencies" [value]="currency.id">{{currency.code}}</option>
+                </select>
+                <div class="bb-error" *ngIf="manageLeadForm.controls['currencyId']?.errors?.checkRequired && (manageLeadForm.controls['currencyId']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.brand' |
+                translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <input class="form-control" formControlName="brand" name="brand" maxlength="50" placeholder="{{'biddings.labels.brand' | translate}}">
+                <div class="bb-error" *ngIf="manageLeadForm.controls['brand']?.errors?.checkRequired && (manageLeadForm.controls['brand']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.client' |
+                translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <input class="form-control" formControlName="client" name="client" maxlength="50" placeholder="{{'biddings.labels.client' | translate}}">
+                <div class="bb-error" *ngIf="manageLeadForm.controls['client']?.errors?.checkRequired && (manageLeadForm.controls['client']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.agency' |
+                translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <input class="form-control" formControlName="agency" name="agency" maxlength="50" placeholder="{{'biddings.labels.agency' | translate}}">
+                <div class="bb-error" *ngIf="manageLeadForm.controls['agency']?.errors?.checkRequired && (manageLeadForm.controls['agency']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.internationalProductionCo'
+                | translate}}
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <input class="form-control" readonly formControlName="internationalProdCo" name="internationalProductionCo" maxlength="50"
+                  placeholder="{{'biddings.labels.internationalProductionCo' | translate}}">
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.productionCoordinatorAssignedProducer'
+                | translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <input class="form-control" formControlName="prodCoAssignedProducer" name="productionCoordinatorAssignedProducer"
+                  placeholder="{{'biddings.labels.productionCoordinatorAssignedProducer' | translate}}">
+                <div class="bb-error" *ngIf="manageLeadForm.controls['prodCoAssignedProducer']?.errors?.checkRequired && (manageLeadForm.controls['prodCoAssignedProducer']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 no-mg">
+            <div class="form-group">
+              <label class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 control-label">{{'biddings.labels.expectedCloseDate'
+                | translate}}
+                <span class="mandatory">*</span>
+              </label>
+              <div id="date-picker-wrapper" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <my-date-picker class="expectedCloseDate" formControlName="expectedCloseDate" [options]="myDatePickerOptions"
+                  placeholder="{{'biddings.labels.expectedCloseDate' | translate}}" data-toggle="tooltip"
+                  data-placement="top"></my-date-picker>
+                <div class="bb-error" *ngIf="manageLeadForm.controls['expectedCloseDate']?.errors?.checkRequired && (manageLeadForm.controls['expectedCloseDate']?.touched || submitManageLeadForm)">{{'biddings.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row no-mg">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 no-mg">
+            <button class="btn save-btn btn-success" [disabled]='enableSaveButtonFlag' (click)="updateLeadDetails()">
+              <i *ngIf="showLoaderOnSaveButtonFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'|
+              translate}}</button>
+            <button class="btn cancel-btn btn-danger ml-1" [disabled]='enableSaveButtonFlag' (click)="navigateTo(ROUTER_LINKS_FULL_PATH.leads)">{{'common.labels.cancel'|
+              translate}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <ng-container *ngIf="showLoaderFlag">
+    <app-loader class="col-md-12" [loading]="showLoaderFlag"></app-loader>
+  </ng-container>
+</div>

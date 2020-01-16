@@ -1,0 +1,28 @@
+<div class="col-md-9 no-mg project-tabs">
+  <ul class="nav nav-pills nav-justified">
+    <!-- <ui-control-permission [fieldName]="'projecPalTab'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields" [uiPermissionObj]="uiAccessPermissionsObj">
+
+      <li class="nav-item" *ngIf="project?.type!=PROJECT_TYPES.corporate">
+        <a class="nav-link" [routerLink]="ROUTER_LINKS.assignment"  routerLinkActive="active">{{'projects.labels.projectAssignmentLetter'| translate}}</a>
+      </li>
+    </ui-control-permission> -->
+    <ui-control-permission [fieldName]="'projecPoTab'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeTabs" [uiPermissionObj]="uiAccessPermissionsObj">
+
+      <li class="nav-item">
+        <a class="nav-link"  [routerLink]="ROUTER_LINKS.purchaseOrder"  routerLinkActive="active">{{'projects.labels.purchaseOrder'| translate}}</a>
+      </li>
+    </ui-control-permission>
+    <ui-control-permission [fieldName]="'projectSettlementTab'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeTabs" [uiPermissionObj]="uiAccessPermissionsObj">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="ROUTER_LINKS?.settlement" routerLinkActive="active">{{'projects.labels.settlement'| translate}}</a>
+      </li>
+
+    </ui-control-permission>
+    <ui-control-permission [fieldName]="'invoiceModuleTab'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeTabs" [uiPermissionObj]="uiAccessPermissionsObj">
+        <li class="nav-item">
+          <a class="nav-link" id = "invoice-tab" [routerLink]="ROUTER_LINKS?.paymentOrder" routerLinkActive="active">{{'projects.labels.paymentorder'| translate}}</a>
+        </li>
+      </ui-control-permission>
+  </ul>
+</div>
+<router-outlet></router-outlet>

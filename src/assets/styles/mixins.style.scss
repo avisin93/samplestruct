@@ -1,0 +1,301 @@
+// import variables scss
+@import "variables.style";
+
+// background-color
+@mixin background-color($bg-color) {
+    background-color: $bg-color;
+}
+// color
+@mixin color($color){
+    color: $color;
+}
+
+// padding
+@mixin padding($padding){
+    padding: $padding;
+}
+@mixin padding-top($pt){
+    padding-top: $pt;
+}
+@mixin padding-left($pl){
+    padding-left: $pl;
+}
+@mixin padding-classes(){
+      .pl-80{
+        @include padding-left(80px);
+      }
+      .pl-60{
+        @include padding-left(60px);
+      }
+      .pl-40{
+        @include padding-left(40px);
+      }
+      .pl-20{
+        @include padding-left(20px);
+      }
+}
+
+// margin
+@mixin margin($margin){
+    margin: $margin;
+}
+
+// border
+@mixin border($brd, $brd-type, $brd-color){
+    border: $brd $brd-type $brd-color;
+}
+@mixin border-color($border){
+    border-color: $border;
+}
+@mixin border-radius($border-radius){
+    border-radius: $border-radius;
+}
+
+// width and height
+@mixin width($width){
+    width: $width;
+}
+@mixin height($height){
+    height: $height;
+}
+@mixin min-ht(){
+    .min-ht{
+        @include min-height(47px);
+    }
+}
+@mixin min-height($min-height){
+    min-height: $min-height;
+}
+
+// cursor
+@mixin cursor($c-type){
+    cursor: $c-type;
+}
+
+// switch-field
+@mixin switch-field(){
+    .switch-field {
+        label {
+            display: inline-block;
+            @include width(78px);
+            @include background-color ($theme-color2);
+            color: $theme-color1;
+            font-size: 14px;
+            font-weight: 400;
+            text-align: center;
+            text-shadow: none;
+            padding: 6px 10px;
+            margin-left: -3px;
+            float: none;
+            &.selected-lang{
+                @include background-color ($theme-color1);
+                @include color($white-color);
+                box-shadow: none;
+            }
+        }
+        input {
+            position: absolute;
+            clip: rect(0,0,0,0);
+            height: 1px;
+            width: 1px;
+            border: 0;
+            overflow: hidden;
+        }
+    }
+}
+
+// Activation header
+@mixin activation-heading(){
+    .activation-heading{
+        h4{
+            color: $black-color;
+       }
+    }
+}
+
+// json-block
+@mixin json-block(){
+    .json-block {
+        overflow-y: scroll;
+        @include width(350px);
+        border: solid 1px rgb(169, 169, 169);
+    }
+}
+
+@mixin upload-pictur-btn($width){
+    .upload-pictur-btn{
+        @include width($width);
+    }
+}
+
+// common
+@mixin expander() {
+    .expander{
+        margin-left: 10px;
+        cursor: pointer;
+    }
+}
+@mixin selected-category() {
+    .selected-category{
+        @include background-color($theme-color3);
+    }
+}
+@mixin browse-btn (){
+    .browse-btn {
+        color: black;
+        background-color: lightgray;
+        width: 70px !important;
+        padding: 6px !important;
+        font-style: normal;
+    }
+}
+@mixin parent-subcategory-name(){
+    .sub-category{
+        &.parent-node {
+          .subcategory-name {
+            text-align: left;
+            padding-left: 40px;
+          }
+        }
+      }
+}
+
+@mixin manage-project-btn(){
+    .manage-project-btn{
+        color: black;
+        border: #eae7e7 solid 1px;
+        background-color: white;
+        font-size: 14px;
+    }
+}
+
+// po and settelement listing start
+@mixin status-color(){
+    &.pending {
+        background: yellow;
+    }
+    &.approved {
+        background: #65C438;
+    }
+    &.cancelled {
+        background: gray;
+    }
+    &.rejected {
+        background: red;
+    }
+    &.draft {
+        background: yellow;
+    }
+    &.paid {
+        background: #65C438;
+    }
+    &.scheduled {
+        background: orange;
+    }
+}
+
+@mixin status-code-css(){
+        .progress-icon.approved, .progress-value.approved,
+        .progress-icon.autoapproved, .progress-value.autoapproved,
+        .progress-icon.APPROVED, .progress-value.APPROVED,
+        .progress-icon.AUTOAPPROVED, .progress-value.ATUAPPROVED {
+            background: #65C438;
+            border: 7px solid #65C438;
+        }
+        .progress-icon.pending, .progress-value.pending,
+        .progress-value.PENDING, .progress-icon.PENDING {
+            background: yellow;
+            border: 7px solid yellow;
+        }
+        .progress-icon.cancelled, .progress-value.cancelled,
+        .progress-icon.CANCELLED, .progress-value.CANCELLED {
+            background: gray;
+            border: 7px solid gray;
+        }
+        .progress-icon.rejected, .progress-value.rejected,
+        .progress-icon.REJECTED, .progress-value.REJECTED {
+            background: red;
+            border: 7px solid red;
+        }
+}
+
+@mixin progess-icon-value(){
+    progress-icon, .progress-value {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        line-height: 18px;
+        background: #1f75c4;
+        border: 7px solid #1f75c4;
+        font-size: 15px;
+        font-weight: 600;
+        color: #1f75c4;
+        position: absolute;
+        top: -12px;
+        right: -5px;
+    }
+    .progress-icon{
+        right: auto;
+        left: -5px;
+    }
+}
+
+@mixin fa-icon-margin(){
+    i.fa {
+        margin-right: 5px;
+      }
+}
+@mixin progress (){
+    .progress{
+        height: 10px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        margin-bottom: 30px;
+        overflow: visible;
+        position: relative;
+        left: 0;
+        right: 0px;
+        margin: 0 auto;
+        .progress-bar{
+            border-radius: 15px;
+            box-shadow: none;
+            position: relative;
+            animation: animate-positive 2s;
+        }
+        @include progess-icon-value();
+        @include status-code-css();
+        .approver-name {
+            position: absolute;
+            top: 25px;
+            margin-left: -15px;
+            color: #656565;
+            text-align: left;
+            text-align: center;
+            width: 150px;
+            margin-left: -75px;
+            font-size: 0.875rem;
+        }
+    }
+}
+// po and settelement listing end
+
+// media query
+@mixin date-action-btns (){
+    position:relative;
+    top: 35px;
+}
+@mixin textElipses() {
+    .textElipses{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@mixin textElipses() {
+    .textElipses{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

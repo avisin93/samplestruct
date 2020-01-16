@@ -1,0 +1,138 @@
+<div class="budget-module-list">
+  <form [formGroup]="budgetListForm">
+    <div class="container-fluid">
+      <div class="col-md-12 no-mg">
+        <div class="row project-list no-mg">
+          <div class="row" style="width:100%;">
+            <ng-container formArrayName="budgetSheetsArr">
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="width:100%;" [formGroupName]="i"
+                *ngFor="let budget of budgetListForm.controls.budgetSheetsArr['controls'];let i = index;">
+                <div class="panel panel-default">
+                  <div class="panel-heading projectList">
+                    <div class="row panelTitle">
+                      <div class="col-md-9">
+                        <h4 style="margin-left: 48px;" class="text-center project-name textElipses">
+                          <span data-toggle="tooltip" data-placement="top"
+                            title="{{budget?.value?.name}}">{{budget?.value?.name}}</span>
+
+                        </h4>
+                      </div>
+                      <div class="col-md-3" style="text-align: right;">
+                        <ui-control-permission [fieldName]="'downloadBudget'"
+                          [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                          [uiPermissionObj]="uiAccessPermissionsObj">
+                          <span>
+                            <a style="color: #656565;" href="{{budget?.value?.budgetSheetUrl}}" target="_blank"
+                              [download]="budget?.value?.budgetSheetUrl">
+                              <i class="fa fa-download download-icon"></i>
+                            </a>
+                          </span>
+                        </ui-control-permission>
+                        <span *ngIf="budget?.value?.errorsCount > 0" data-toggle="tooltip" data-placement="top"
+                          title="{{budget?.value?.errorsCount}}">
+                          <em class="fa fa-exclamation-circle text-danger ml-1"></em>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <ui-control-permission [fieldName]="'pricing'"
+                    [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                    [uiPermissionObj]="uiAccessPermissionsObj">
+                    <div class="panel-body project-details">
+                      <div class="col-md-12 col-sm-12 col-xs-12 pricing-border">
+                        {{budget?.value?.currencySymbol}} ({{budget?.value?.currencyCode}})
+                      </div>
+                      <div class="row amount">
+                        <div class="col-md-4 col-sm-4 col-xs-4 center p3" data-toggle="tooltip" data-placement="top"
+                          title="{{budget?.value?.projectEstimation | twoDecimal | absolute | numberFormat}}">
+                          <p class="budget-list-amount">
+                            {{budget?.value?.projectEstimation | twoDecimal | absolute | numberFormat}}</p>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-4 center p3" data-toggle="tooltip" data-placement="top"
+                          title="{{budget?.value?.purchaseOrderEstimation | twoDecimal | absolute | numberFormat}}">
+                          <p class="budget-list-amount">
+                            {{budget?.value?.purchaseOrderEstimation | twoDecimal | absolute | numberFormat}}</p>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-4 center p3" data-toggle="tooltip" data-placement="top"
+                          title="{{budget?.value?.actualEstimation | twoDecimal | absolute | numberFormat}}">
+                          <p class="budget-list-amount">
+                            {{budget?.value?.actualEstimation | twoDecimal | absolute | numberFormat}}</p>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 col-sm-4 col-xs-4 center">
+                          <span>{{'projects.labels.estimate'| translate}}</span>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-4 center">
+                          <span>{{'projects.labels.working'| translate}}</span>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-xs-4 center">
+                          <span>{{'projects.labels.actual'| translate}}</span>
+                        </div>
+                      </div>
+                      <div class="row"
+                        *ngIf="(!project.projectTypeId || (project.projectTypeId == PROJECT_TYPES.commercial))">
+                        <div *ngIf="!addWorkingFlag" [ngClass]="viewBudgetFlag ? 'text-center col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'text-center col-lg-6 col-md-6 col-sm-12 col-xs-12 p-2p'">
+                          <ui-control-permission [fieldName]="'viewBudget'"
+                            [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                            [uiPermissionObj]="uiAccessPermissionsObj">
+                            <h5 class="label-align"><span id="underL" (click)="budgetInfo(budget?.value)" class="ptr">{{'budgetView.labels.viewBudget'|
+                              translate}}</span></h5>
+                          </ui-control-permission>
+                        </div>
+                        <div *ngIf="!viewBudgetFlag" [ngClass]="addWorkingFlag ? 'text-center col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'text-center col-lg-6 col-md-6 col-sm-12 col-xs-12 p-2p'">
+                          <ui-control-permission [fieldName]="'addWorking'"
+                          [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+                          [uiPermissionObj]="uiAccessPermissionsObj">
+                            <h5 class="label-align"><span id="underL" (click)="navigateToBudgetWorking(budget?.value)"
+                                class="ptr">{{'budgetView.labels.addWorking'|
+                            translate}}</span></h5>
+                          </ui-control-permission>
+                        </div>
+                      </div>
+
+                    </div>
+                  </ui-control-permission>
+
+                  <div class="panel-heading">
+                    <div class="row">
+                      <div class="p0 m0"
+                        [ngClass]="hideCurrencyDropdownFlag ? 'center col-lg-12 col-md-12 col-sm-12 col-xs-12' : 'col-lg-6 col-md-6 col-sm-12 col-xs-12 p-2p'">
+                        <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID"
+                          [actionType]="ACTION_TYPES.VIEW">
+                          <button type="button" (click)="manageBudgetSheet(budget?.value)"
+                            class="p-5-10 textElipses w-100 btn btn-default manage-project-btn {{langCode}}"
+                            title="{{'projects.labels.manageBudget'| translate}}">
+                            <span>{{'projects.labels.manageBudget'| translate}}</span></button>
+                        </action-permission>
+
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 p0 m0 p-2p">
+                        <ui-control-permission [fieldName]="'currency'"
+                          [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeFields"
+                          [uiPermissionObj]="uiAccessPermissionsObj">
+                          <ngx-select [items]="budget?.value?.currencyConversions" formControlName="currencyId"
+                            (select)="currencyChanged(budget,i)">
+                          </ngx-select>
+                        </ui-control-permission>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <ng-container *ngIf="showLoaderFlag">
+            <app-loader class="col-md-12" [loading]="showLoaderFlag"></app-loader>
+          </ng-container>
+          <div class="col-md-12" *ngIf="budgetSheetsArr?.length == 0 && !showLoaderFlag">
+            <h5 class="text-center text-danger">
+              {{'common.labels.noRecord' | translate}}
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

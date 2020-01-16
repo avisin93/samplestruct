@@ -1,0 +1,18 @@
+
+<div class="panel panel-primary">
+    <!-- <div class="panel-body"> -->
+
+  <div class="col-md-9 no-mg project-tabs">
+          <ul class="nav nav-pills nav-justified">
+            <li class="nav-item">
+              <a class="nav-link" id="advances-tab" [routerLink]="'../'+ROUTER_LINKS.advances">{{'sidebar.advances' | translate}}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="settlement-tab" [routerLink]="ROUTER_LINKS?.settlementList">{{'sidebar.settlement' | translate}}</a>
+              <!-- <a class="nav-link" id="settlement-tab" >Settlement</a> -->
+            </li>
+          </ul>
+        </div>
+        <router-outlet></router-outlet>
+      <!-- </div> -->
+  </div>

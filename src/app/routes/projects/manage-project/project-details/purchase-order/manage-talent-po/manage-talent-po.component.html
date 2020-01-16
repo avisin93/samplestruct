@@ -1,0 +1,456 @@
+<ng-container *ngIf="showLoadingFlag">
+  <app-loader class="col-md-12" [loading]="showLoadingFlag"></app-loader>
+</ng-container>
+
+<ng-container *ngIf="!showLoadingFlag">
+  <div class="manage-talent-po">
+
+    <div class="panel panel-primary">
+
+      <div class="panel-body">
+
+
+        <div class="form-group">
+          <h5 class="text-dark mt-1">
+            <strong>{{ talentPoId ? ('projects.labels.editTalentPurchaseOrder'| translate) : ('projects.labels.addTalentPurchaseOrder'| translate)}}</strong>
+            <button class="btn btn-primary pull-right mr-3" (click)="navigateTo()" type="button"> {{'common.labels.backToList'|
+              translate}}</button>
+          </h5>
+        </div>
+        <form class="form-horizontal" [formGroup]="manageTalentPOForm">
+          <div class="col-lg-12 col-md-12 col-lg-12 col-sm-12 col-sm-12">
+
+            <div class="row">
+              <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                <label class="radio-inline ptr" [ngClass]="(index!=0) ? 'ml-3':''"
+                  *ngFor="let type of TALENT_TYPES;let index=index">
+                  <input id="inlineradio{{index}}" type="radio"
+                    (change)="setTalentDropdownLists();updateAgencyValidation()" formControlName="talentType"
+                    [value]="type.id" />
+                  {{'common.labels.'+ type.text | translate}}</label>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label>{{'projects.labels.budgetLine'  | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <ngx-select [allowClear]="true" (remove)="resetTalentDropdownLists(true);"
+                  (select)="getAllDependentLists($event);" [items]="budgetLineList" formControlName="budgetLine"
+                  placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['budgetLine']?.errors?.checkRequired && (manageTalentPOForm.controls['budgetLine'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label>{{'projects.labels.itemDescription' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <div>
+                  <textarea class="form-control" formControlName="itemDescription"
+                    placeholder="{{'projects.labels.itemDescription' | translate}}"></textarea>
+                  <div class="text-danger col-md-12 no-mg"
+                    *ngIf="manageTalentPOForm.controls['itemDescription']?.errors?.checkRequired && (manageTalentPOForm.controls['itemDescription'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row mt-3"
+              *ngIf="manageTalentPOForm.value.talentType == TALENT_TYPES_OBJ.agency; else elseBlock">
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label> {{'common.labels.agency' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <ngx-select [allowClear]="true" [items]="agencyList" formControlName="agency"
+                  (typed)="searchTypedAgencyName.next($event)" placeholder="{{'common.labels.select' | translate}}">
+                  <ng-template ngx-select-option-not-found>
+                    <ng-container *ngIf="isLoadingAgencyName; else elseBlock">
+                      {{'biddings.labels.loading' | translate}}
+                      <span class="fl-right">
+                        <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                      </span>
+                    </ng-container>
+                    <ng-template #elseBlock>
+                      {{ 'common.labels.recordNotFound' | translate }}
+                    </ng-template>
+                  </ng-template>
+                </ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['agency']?.errors?.checkRequired && (manageTalentPOForm.controls['agency'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label> {{'common.labels.talent' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <ngx-select [allowClear]="true" [items]="individualList" formControlName="talent"
+                  (typed)="searchTypedIndividualName.next($event)" placeholder="{{'common.labels.select' | translate}}">
+                  <ng-template ngx-select-option-not-found>
+                    <ng-container *ngIf="isLoadingIndividualName; else elseBlock">
+                      {{'biddings.labels.loading' | translate}}
+                      <span class="fl-right">
+                        <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                      </span>
+                    </ng-container>
+                    <ng-template #elseBlock>
+                      {{ 'common.labels.recordNotFound' | translate }}
+                    </ng-template>
+                  </ng-template>
+                </ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['talent']?.errors?.checkRequired && (manageTalentPOForm.controls['talent'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+              </div>
+            </div>
+
+            <ng-template #elseBlock>
+              <div class="row mt-3">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <label> {{'common.labels.talent' | translate}}
+                    <span class="text-danger">*</span>
+                  </label>
+                  <ngx-select [allowClear]="true" [items]="individualList" formControlName="talent"
+                    (typed)="searchTypedIndividualName.next($event)"
+                    placeholder="{{'common.labels.select' | translate}}">
+                    <ng-template ngx-select-option-not-found>
+                      <ng-container *ngIf="isLoadingIndividualName; else elseBlock">
+                        {{'biddings.labels.loading' | translate}}
+                        <span class="fl-right">
+                          <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                        </span>
+                      </ng-container>
+                      <ng-template #elseBlock>
+                        {{ 'common.labels.recordNotFound' | translate }}
+                      </ng-template>
+                    </ng-template>
+                  </ngx-select>
+                  <div class="text-danger col-md-12 no-mg"
+                    *ngIf="manageTalentPOForm.controls['talent']?.errors?.checkRequired && (manageTalentPOForm.controls['talent'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                  <label> {{'common.labels.agency' | translate}}
+                  </label>
+                  <ngx-select [allowClear]="true" [items]="agencyList" formControlName="agency"
+                    (typed)="searchTypedAgencyName.next($event)" placeholder="{{'common.labels.select' | translate}}">
+                    <ng-template ngx-select-option-not-found>
+                      <ng-container *ngIf="isLoadingAgencyName; else elseBlock">
+                        {{'biddings.labels.loading' | translate}}
+                        <span class="fl-right">
+                          <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                        </span>
+                      </ng-container>
+                      <ng-template #elseBlock>
+                        {{ 'common.labels.recordNotFound' | translate }}
+                      </ng-template>
+                    </ng-template>
+                  </ngx-select>
+                </div>
+              </div>
+            </ng-template>
+
+
+            <div class="row mt-3">
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label>{{'common.labels.service' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <ngx-select [allowClear]="true" [items]="servicesList" formControlName="service"
+                  placeholder="{{'common.labels.select' | translate}}" col-md-6placeholder="Select"></ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['service']?.errors?.checkRequired && (manageTalentPOForm.controls['service'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                [ngClass]="manageTalentPOForm.value.category.length > 0 ? 'col-sm-8 col-md-8 col-lg-8 col-xl-8' : ''">
+                <label>{{'common.labels.category' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <ngx-select [multiple]="true" name="category" formControlName="category" [items]="categoriesList"
+                  placeholder="{{'common.labels.select' | translate}}" data-toggle="tooltip" data-placement="top">
+                </ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['category']?.errors?.checkRequired && (manageTalentPOForm.controls['category'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+              translate}}</div>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label>{{'common.labels.role' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <ngx-select [allowClear]="true" [multiple]="true" [items]="rolesList" formControlName="role"
+                  placeholder="{{'common.labels.select' | translate}}">
+                </ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['role']?.errors?.checkRequired && (manageTalentPOForm.controls['role'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                  translate}}</div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label>{{'projects.labels.media' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <angular2-multiselect [data]="mediaList" [settings]="settings" formControlName="media">
+                </angular2-multiselect>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['media']?.errors?.checkRequired && (manageTalentPOForm.controls['media'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label>{{'projects.labels.territory' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <ngx-select [allowClear]="true" [multiple]="true" formControlName="territory" [items]="territoryList"
+                  placeholder="{{'common.labels.select' | translate}}">
+                </ngx-select>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['territory']?.errors?.checkRequired && (manageTalentPOForm.controls['territory'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label>{{'common.labels.mode' | translate}}</label>
+                <ngx-select [allowClear]="true" [items]="modes" formControlName="modeOfOperation"
+                  placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <label>
+                  <strong>
+                    <u>{{'projects.labels.usageTerm' | translate}} <span class="text-danger">*</span></u>
+                  </strong>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                <div class="row">
+                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <label>{{'projects.labels.years' | translate}}
+                    </label>
+                    <ngx-select [allowClear]="true" [items]="YEARS" formControlName="years"
+                      placeholder="{{'common.labels.select' | translate}}" (remove)="checkTermsFieldValidation();"
+                      (select)="checkTermsFieldValidation();">
+                    </ngx-select>
+                  </div>
+
+                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <label>{{'projects.labels.months' | translate}}
+                    </label>
+                    <ngx-select [allowClear]="true" [items]="MONTHS" formControlName="months"
+                      placeholder="{{'common.labels.select' | translate}}" (remove)="checkTermsFieldValidation();"
+                      (select)="checkTermsFieldValidation();">
+                    </ngx-select>
+                  </div>
+                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <label>{{'projects.labels.weeks' | translate}}
+                    </label>
+                    <ngx-select [allowClear]="true" [items]="WEEKS" (select)="checkTermsFieldValidation();"
+                      (remove)="checkTermsFieldValidation();" formControlName="weeks"
+                      placeholder="{{'common.labels.select' | translate}}">
+                    </ngx-select>
+                  </div>
+                </div>
+              </div>
+              <div class="text-danger col-md-12 ng-invalid"
+                *ngIf="(!manageTalentPOForm?.value?.termsSelected && submittedTermsFlag )">{{'projects.errorMessages.pleaseSelectOneValueMsg'|
+        translate}}</div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                <label>
+                  <strong>
+                    <u> {{'projects.labels.poNotes' | translate}}</u>
+                  </strong>
+                  <span class="text-danger">*</span>
+                </label>
+                <div>
+                  <textarea class="form-control" formControlName="notes"
+                    placeholder="{{'projects.labels.notes' | translate}}"></textarea>
+                  <div class="text-danger col-md-12 no-mg"
+                    *ngIf="manageTalentPOForm.controls['notes']?.errors?.checkRequired && (manageTalentPOForm.controls['notes'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <label>
+                  <strong>
+                    <u> {{'projects.labels.poAmountDetails' | translate}}</u>
+                  </strong>
+                </label>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                <div class="row">
+
+                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <label>{{'common.labels.amount' | translate}}
+                      <span class="text-danger">*</span>
+                    </label>
+                    <input class="form-control" formControlName="amount"
+                      (keyup)="checkIntegerValue('amount'); calculateAllAmounts()"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                      placeholder="{{'common.labels.amount' | translate}}" type="text">
+                    <div class="text-danger col-md-12 no-mg"
+                      *ngIf="manageTalentPOForm.controls['amount']?.errors?.checkRequired && (manageTalentPOForm.controls['amount'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+                    <div class="text-danger"
+                      *ngIf="!manageTalentPOForm.controls['amount']?.errors?.checkRequired && manageTalentPOForm.controls['amount']?.errors?.checkDecimal && (manageTalentPOForm.controls['amount'].touched) && manageTalentPOForm.controls['amount'].dirty">{{'pages.errorMessages.validDecimal'|
+                translate}}</div>
+                  </div>
+                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <label>{{'common.labels.currency' | translate}}
+                      <span class="text-danger">*</span>
+                    </label>
+                    <ngx-select [items]="currencies" [allowClear]="true" (select)="onCurrencyChange($event)"
+                      formControlName="currencyId" placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                    <div class="text-danger col-md-12 no-mg"
+                      *ngIf="manageTalentPOForm.controls['currencyId']?.errors?.checkRequired && (manageTalentPOForm.controls['currencyId'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="row mt-3">
+              <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                <label>{{'projects.labels.agengyFee' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <div class="row">
+                  <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                    <input type="text" placeholder="{{'projects.labels.agengyFee' | translate}}"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');" formControlName="agencyFee"
+                    (keyup)="checkIntegerValue('agencyFee');calculateAllAmounts()" (change) = "updateInput('agencyFee');" class="form-control">
+
+                  </div>
+                  <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 no-mg pt-1">%</div>
+                </div>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['agencyFee']?.errors?.checkRequired && (manageTalentPOForm.controls['agencyFee'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                  translate}}</div>
+                <div class="text-danger"
+                  *ngIf="!manageTalentPOForm.controls['agencyFee']?.errors?.checkRequired && manageTalentPOForm.controls['agencyFee']?.errors?.checkUptoFourDecimal && (manageTalentPOForm.controls['agencyFee'].touched) && manageTalentPOForm.controls['agencyFee'].dirty">{{'pages.errorMessages.validFourDecimal'|
+                  translate}}</div>
+              </div>
+              <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <label>{{'projects.labels.agengyFeeAmount' | translate}}</label>
+                <div class="mt-5">
+                  <span class="mr-2">{{agencyFeeAmount ? (agencyFeeAmount | twoDecimal) : 0.00}}</span>
+                  <span>{{defaultCurrency.name}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                <label>{{'projects.labels.iva' | translate}}
+                  <span class="text-danger">*</span>
+                </label>
+                <div class="row">
+                  <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                    <input type="text" placeholder="{{'projects.labels.iva' | translate}}"
+                      (keyup)="checkIntegerValue('iva');calculateAllAmounts()"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g,'');" (change) = "updateInput('iva');" formControlName="iva"
+                      class="form-control">
+
+                  </div>
+                  <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 no-mg pt-1">%</div>
+                </div>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['iva']?.errors?.checkRequired && (manageTalentPOForm.controls['iva'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+              translate}}</div>
+                <div class="text-danger"
+                  *ngIf="!manageTalentPOForm.controls['iva']?.errors?.checkRequired && manageTalentPOForm.controls['iva']?.errors?.checkUptoFourDecimal && (manageTalentPOForm.controls['iva'].touched) && manageTalentPOForm.controls['iva'].dirty">{{'pages.errorMessages.validFourDecimal'|
+              translate}}</div>
+              </div>
+              <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <label>{{'projects.labels.ivaAmount' | translate}}</label>
+                <div class="mt-5">
+                  <span class="mr-2">{{ivaAmount ? (ivaAmount | twoDecimal) : 0.00}}</span>
+                  <span>{{defaultCurrency.name}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                <label>{{'projects.labels.markup' | translate}}
+                  <!-- <span class="text-danger">*</span> -->
+                </label>
+                <div class="row">
+                  <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
+                    <input type="text" placeholder="{{'projects.labels.markup' | translate}}"
+                    (keyup)="checkIntegerValue('markup');calculateAllAmounts()"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g,'');" (change) = "updateInput('markup');" formControlName="markup"
+                    class="form-control">
+
+                  </div>
+                  <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 no-mg pt-1">%</div>
+                </div>
+                <div class="text-danger col-md-12 no-mg"
+                *ngIf="manageTalentPOForm.controls['markup']?.errors?.checkRequired && (manageTalentPOForm.controls['markup'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+            translate}}</div>
+              <div class="text-danger"
+                *ngIf="!manageTalentPOForm.controls['markup']?.errors?.checkRequired && manageTalentPOForm.controls['markup']?.errors?.checkUptoFourDecimal && (manageTalentPOForm.controls['markup'].touched) && manageTalentPOForm.controls['markup'].dirty">{{'pages.errorMessages.validFourDecimal'|
+            translate}}</div>
+              </div>
+              <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <label>{{'projects.labels.markupAmount' | translate}}</label>
+                <div class="mt-5">
+                  <span class="mr-2">{{markupAmount ? (markupAmount | twoDecimal) : 0.00}}</span>
+                  <span>{{defaultCurrency.name}}</span>
+                </div>
+              </div>
+            </div>
+          
+            <div class="row mt-3">
+              <div class="col-12 col-sm-12 col-md-12">
+                <label>{{'projects.labels.total' | translate}}</label>
+
+              </div>
+              <div class="col-12 col-sm-12 col-md-12">
+                <label><span class="mr-2">{{totalAmount ? (totalAmount | twoDecimal) : 0.00}}</span>
+                  <span>{{defaultCurrency.name}}</span></label>
+
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <label>
+                  <strong>
+                    <u>{{'common.labels.paymentDate' | translate}} <span class="text-danger">*</span></u>
+                  </strong>
+                </label>
+                <my-date-picker placeholder="{{'common.labels.datePickerPlaceholder' | translate}}"
+                  formControlName="paymentDate" [options]="datePickerOptions"></my-date-picker>
+                <div class="text-danger col-md-12 no-mg"
+                  *ngIf="manageTalentPOForm.controls['paymentDate']?.errors?.checkRequired && (manageTalentPOForm.controls['paymentDate'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                translate}}</div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <button [disabled]="disableButtonFlag" (click)="saveTalentPODetails()" class="btn btn-success" type="submit">
+                  <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.savePO'|
+                translate}}</button>
+                <button (click)="navigateTo(ROUTER_LINKS?.purchaseOrderList)" class="btn btn-danger ml-1"
+                  value="Cancel" type="button">{{'common.labels.cancel' | translate}}</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</ng-container>

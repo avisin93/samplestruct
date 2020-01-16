@@ -1,0 +1,60 @@
+// import variables scss
+@import "../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../assets/styles/mixins.style.scss";
+
+
+  .fl-right {
+    float: right;
+  }
+ 
+
+  // .fa-globe:before {
+  //     @include color($white-color);
+  //  }
+  .approval-status-bar {
+    margin: 30px 0 80px 0;
+
+    i.fa {
+      @include color($white-color);
+    }
+  }
+
+  .display-inline-block {
+    display: inline-block;
+  }
+
+  .display-inline-flex {
+    display: inline-flex;
+  }
+
+  @include progress ();
+
+  .ptr-disabled {
+    cursor: not-allowed !important;
+  }
+
+  #date-picker-wrapper .mydrp {
+    width: 100% !important;
+  }
+
+  .pb0 {
+    padding-bottom: 0px;
+  }
+
+
+@media (max-width: 991px) {
+  #list-invoice {
+    .search-field-box {
+      border-right: 0px !important;
+    }
+  }
+}
+
+.custom-pagination {
+  float: right;
+}
+
+.reason-section {
+  border: 1px solid #000;
+}

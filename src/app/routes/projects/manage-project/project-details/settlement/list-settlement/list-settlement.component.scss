@@ -1,0 +1,207 @@
+.pagination-sm {
+  float: right;
+}
+.fl-right {
+  float: right;
+}
+.searchClear {
+  margin-left: 55px;
+}
+
+.selectClass {
+  width: 29% !important;
+}
+
+.pagination-row {
+  margin: 0px;
+}
+
+.list-settlement .settelement-list-details .items {
+  padding: 15px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+}
+
+.list-settlement .settelement-list-details .items .consecutive-number,
+.list-settlement .settelement-list-details .items .po-number {
+  padding: 2px 5px;
+  font-size: 18px;
+  color: #000;
+}
+
+.list-settlement .settelement-list-details .items span.po-number i.fa {
+  margin-right: 5px;
+}
+
+.list-settlement .settelement-list-details .items .settlement-status {
+  padding: 3px 15px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  width: 150px;
+  text-align: center;
+  color: #000;
+}
+
+.list-settlement .settelement-list-details .items .settlement-status.pending {
+  background: yellow;
+}
+
+.list-settlement .settelement-list-details .items .settlement-status.settled {
+  background: #65C438;
+}
+
+.list-settlement .settelement-list-details .items .settlement-status.cancelled {
+  background: gray;
+}
+
+.list-settlement .settelement-list-details .items .settlement-status.rejected {
+  background: red;
+}
+
+.list-settlement .settelement-list-details .items .settlement-status span i.fa {
+  padding-right: 5px;
+}
+
+.list-settlement .settelement-list-details .items .action-items span {
+  padding: 5px 10px;
+  margin: 0 10px;
+  background-color: #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.list-settlement .settelement-list-details .items .action-items span i.fa {
+  margin-right: 5px;
+}
+
+.list-settlement .settelement-list-details .items .amount-details .details {
+  background: #f44336;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 0px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.list-settlement .settelement-list-details .items .amount-details .amount {
+  color: white;
+  font-size: 18px;
+}
+
+.list-settlement .settelement-list-details .items .approval-details {
+  text-align: center;
+  margin-top: 10px;
+}
+
+//  .display-inline-flex{
+//     display: inline-flex;
+//  }
+
+.display-inline-block {
+  display: inline-block;
+}
+
+.display-inline-flex {
+  display: inline-flex;
+}
+
+
+.m-b-5 {
+  margin-bottom: 5px !important;
+}
+
+@media (max-width: 767px) {
+  .display-content {
+    display: contents;
+  }
+}
+
+
+
+.list-settlement .approval-status-bar {
+  margin: 30px 0 80px 0;
+}
+.list-settlement .approval-status-bar i.fa {
+ color: #fff;
+}
+.list-settlement .progress{
+ height: 10px;
+ background: rgba(0, 0, 0, 0.1);
+ border-radius: 15px;
+ margin-bottom: 30px;
+ overflow: visible;
+ position: relative;
+ left: 0;
+ right: 0px;
+ margin: 0 auto;
+}
+.list-settlement .progress .progress-bar{
+ border-radius: 15px;
+ box-shadow: none;
+ position: relative;
+ animation: animate-positive 2s;
+}
+.list-settlement .progress .progress-icon,
+.list-settlement .progress .progress-value {
+ width: 30px;
+ height: 30px;
+ border-radius: 50%;
+ line-height: 18px;
+ background: #1f75c4;
+ border: 7px solid #1f75c4;
+ font-size: 15px;
+ font-weight: 600;
+ color: #1f75c4;
+ position: absolute;
+ top: -12px;
+ right: -5px;
+}
+.list-settlement .progress .progress-icon.approved,
+.list-settlement .progress .progress-value.approved,.list-settlement .progress .progress-icon.autoapproved,
+.list-settlement .progress .progress-value.autoapproved {
+ background: #65C438;
+ border: 7px solid #65C438;
+}
+.list-settlement .progress .progress-icon.pending,
+.list-settlement .progress .progress-value.pending {
+ background: yellow;
+ border: 7px solid yellow;
+}
+.list-settlement .progress .progress-icon.cancelled,
+.list-settlement .progress .progress-value.cancelled {
+ background: gray;
+ border: 7px solid gray;
+}
+.list-settlement .progress .progress-icon.rejected,
+.list-settlement .progress .progress-value.rejected {
+ background: red;
+ border: 7px solid red;
+}
+
+.list-settlement .progress .progress-icon{
+ right: auto;
+ left: -5px;
+}
+
+.list-settlement .progress .approver-name {
+ position: absolute;
+ top: 25px;
+ margin-left: -15px;
+ color: #656565;
+ text-align: left;
+ text-align: center;
+ width: 150px;
+ margin-left: -75px;
+ font-size: 0.875rem;
+}
+
+.list-settlement .ptr-disabled {
+ cursor: not-allowed !important;
+}
+.list-settlement .custom-pagination {
+ float: right;
+}
+.list-settlement .range-picker .mydrp {
+  width: 100% !important;
+}

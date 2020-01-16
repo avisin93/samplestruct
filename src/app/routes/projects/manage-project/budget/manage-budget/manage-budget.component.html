@@ -1,0 +1,53 @@
+<div id="manage-budget-page" class="container-fluid">
+  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-10 no-mg">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+        <span class="text-dark">
+          <strong class="project-title">{{'common.labels.budgetType' | translate}} -
+            {{project?.budgetName ? project?.budgetName:projectDetails?.budget?.name}}</strong>
+        </span>
+      </div>
+      <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
+        <div class="row pull-right no-mg">
+          
+             <h5 class="text-dark currency-dropdown">
+              <strong class="project-title convert-to">{{'common.labels.convertTo' | translate}}  </strong>
+            </h5>
+            <ngx-select [items]="currencies" (select)="currencyChanged($event)" [(ngModel)]="currency" style="width: 150px;"
+              placeholder="Currencies" class="currency-dropdown">
+            </ngx-select>
+            <div class="btn-group">
+            <ui-control-permission [fieldName]="'projectDetailsButton'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeTabs"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <button class="btn default-tab-btn btn-secondary budget-details-tab ml-15" routerLinkActive="active"
+                [routerLink]="(project?.type!=PROJECT_TYPES.corporate) ? ROUTER_LINKS.budgetDetails: ROUTER_LINKS.purchaseOrder2">
+                <i class="fa fa-file"></i> {{'common.labels.budgetDetails' | translate}}</button>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'projectSettingButton'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeTabs"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <button class="btn default-tab-btn btn-secondary budget-settings-tab" routerLinkActive="active"
+                [routerLink]="ROUTER_LINKS.budgetSettings">
+                <i class="fa fa-cog mr-1"></i>{{'common.labels.budgetSetting' | translate}}</button>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'syncButton'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <button class="btn default-tab-btn btn-secondary project-settings-tab" (click)="syncBudgetSheetData()">
+                <i class="fa fa-refresh"></i> {{'projects.labels.sync' | translate}}</button>
+            </ui-control-permission>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12 no-mg mb-20" *ngIf="projectErrorsArr?.length>0">
+      <div class="error-block">
+        <h4>{{'common.errorMessages.error' | translate}}
+          <span class="pull-right" (click)="clearErrorArr()"> <i class="fa fa-times f-15 c-pointer"></i> </span>
+        </h4>
+        <div *ngFor="let error of projectErrorsArr">{{error}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>

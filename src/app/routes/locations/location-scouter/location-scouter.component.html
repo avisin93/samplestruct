@@ -1,0 +1,80 @@
+<div id="scouter-listing">
+  <div class="content-heading">
+    <!-- Breadcrumb right aligned-->
+    <breadcrumb class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 no-mg" [breadcrumbData]="breadcrumbData"></breadcrumb>
+
+  </div>
+  <div class="card card-default">
+    <div class="card-body">
+      <form [formGroup]="scouterAccessFilterForm">
+        <div class="row mb-3">
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <input class="form-control input-width" formControlName="scouterName" id="" type="text"
+              placeholder="{{'common.labels.name'| translate}}" />
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <input class="form-control input-width" formControlName="scouterEmail" id="" type="text"
+              placeholder="{{'common.labels.email'| translate}}" />
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10 category">
+            <ngx-select class="list-freelancer-dropdown" [allowClear]='true' formControlName="accessStatus"
+              [items]="SCOUTER_LIST_ACCESS" placeholder="Access">
+            </ngx-select>
+          </div>
+          <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3">
+            <button class="btn btn-primary search-btn mb-10" type="submit" (click)="search()"
+              [disabled]="showLoadingFlg">
+              {{'common.labels.search'| translate}}</button>
+            <button class="btn btn-primary clear-btn mb-10" type="button" (click)="clear()" [disabled]="showLoadingFlg">
+              {{'common.labels.clear'| translate}}</button>
+          </div>
+        </div>
+      </form>
+      <hr class="no-mg" *ngIf="scoutersList?.length === 0 && !showLoadingFlg" />
+      <div class="row">
+        <app-loader class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-3" [loading]="showLoadingFlg"></app-loader>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-pd" *ngIf="scoutersList?.length !== 0">
+        <div class="table-responsive">
+          <table class=" table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th class="">{{'common.labels.name'| translate}}</th>
+                <th class="">{{'common.labels.email'| translate}}</th>
+                <th class="">{{'common.labels.action' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let scouter of scoutersList; let i=index">
+                <td>{{scouter.name}}</td>
+                <td>{{scouter.email}}</td>
+                <td class="center">
+                  <div class="d-inline-flex">
+                    <label class="switch switch-md">
+                      <input id="{{ 'checkbox-' + i }}" type="checkbox" [checked]="scouter.rolePermission.view"
+                        (click)='openSwapPopUp($event, scouter, i);' />
+                      <span id="{{ 'checkbox-' + i }}"></span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row no-mg list-pagination" [ngClass]="{'hide-content': showLoadingFlg}">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" *ngIf="totalItems>itemsPerPage">
+        <pagination class="pagination-sm pull-right" [(ngModel)]="page" [totalItems]="totalItems"
+          [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [firstText]="'common.labels.first' | translate"
+          [lastText]="'common.labels.last' | translate" [previousText]="'common.labels.previous' | translate"
+          [nextText]="'common.labels.next' | translate" [boundaryLinks]="true" [rotate]="false"
+          (pageChanged)="pageChanged($event)" (numPages)="numPages = $event">
+        </pagination>
+      </div>
+    </div>
+    <ng-container *ngIf="scoutersList?.length == 0 && !showLoadingFlg">
+      <p class="text-danger text-center">{{'common.labels.recordNotFound' | translate}}</p>
+    </ng-container>
+  </div>
+</div>

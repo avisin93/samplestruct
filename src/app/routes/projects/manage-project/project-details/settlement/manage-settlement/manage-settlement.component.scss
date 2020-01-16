@@ -1,0 +1,22 @@
+.settle-po-vendor .panel-body {
+  padding: 15px;
+}
+.settled-status {
+  padding: 5px;
+  background-color: #4caf50;
+  color: white;
+}
+.non-settled-status {
+  padding: 5px;
+  background-color: yellow;
+}
+.receipt-modal .receipt-doc em {
+  color: white !important;
+  background-color: red;
+  padding: 10px;
+  border-radius: 4px;
+}
+.settle-po-vendor .receipt-table th,  .settle-po-vendor .advances-table th {
+  background-color: #efefef;
+  border: #ebeaea solid 1px;
+}

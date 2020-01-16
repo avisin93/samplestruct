@@ -1,0 +1,33 @@
+<div>
+    <div class="content-heading row">
+      <!-- Breadcrumb right aligned-->
+      <breadcrumb [breadcrumbData]="breadcrumbData" class="col-12 col-sm-6 col-md-6 col-lg-8 col-xl-8 mb-10 p-0"></breadcrumb>
+      <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 p-0 text-right">
+      <button *ngIf = "!projectId" class="btn btl-btn btn-primary" (click)="navigateTo()" type="button">
+        {{'common.labels.backToList'| translate}}</button>
+        <button class="btn btl-btn btn-primary" *ngIf = "projectId" (click)="navigateTo()" type="button">
+          {{'biddings.labels.back'| translate}}</button>
+    </div>
+  </div>
+  
+  <div class="col-md- no-mg project-tabs">
+    <ul class="nav nav-pills nav-justified">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="BIDDING_ROUTER_LINKS.manageBaseRate" routerLinkActive="active">
+          {{'biddings.tabs.baseRate'| translate}}
+        </a>
+      </li>
+  
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="BIDDING_ROUTER_LINKS.manageRateChart" routerLinkActive="active">
+          {{'biddings.tabs.rateChart'| translate}}
+        </a>
+      </li>
+  
+  
+    </ul>
+  </div>
+  </div>
+  
+  <router-outlet></router-outlet>
+  

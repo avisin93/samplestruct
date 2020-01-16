@@ -1,0 +1,180 @@
+<div class="add-project">
+  <ng-container *ngIf="!renderPage">
+    <app-loader class="col-md-12" [loading]="!renderPage"></app-loader>
+  </ng-container>
+  <div *ngIf="renderPage">
+    <div class="content-heading">
+      <!-- Breadcrumb right aligned-->
+      <breadcrumb [breadcrumbData]="breadcrumbData"></breadcrumb>
+      <div class="right-btn">
+        <button class="btn btn-primary btl-btn" (click)="navigateTo()" type="button">
+          {{'common.labels.backToList'| translate}}</button>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <form class="form-horizontal" [formGroup]="addProjectForm" novalidate>
+        <div class="col-md-12 no-mg">
+          <div class="row no-mg">
+
+            <div class="col-md-12 no-mg">
+              <h5 class="text-dark">
+                <strong>{{'projects.labels.projectDetails'| translate}}</strong>
+                <em class="pull-right mandatory">*{{'common.labels.mandatory'| translate}}</em>
+              </h5>
+              <div class="panel panel-primary">
+
+                <div class="panel-body">
+                  <div class="form-group">
+                    <label class="col-md-12 col-12 col-sm-8">{{'projects.labels.company'| translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-md-8 col-12 col-sm-8">
+                      <ngx-select [items]="company" formControlName="company" placeholder="{{'common.labels.select' | translate}}">
+                      </ngx-select>
+                      <div class="text-danger" *ngIf="addProjectForm.controls['company']?.errors?.checkRequired && (addProjectForm.controls['company'].touched || submmitedProjectForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-12 col-12 col-sm-8">{{'projects.labels.projectName'| translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-md-8 col-12 col-sm-8">
+                      <input class="form-control" formControlName="projectName" placeholder="{{'projects.labels.projectName' | translate}}">
+
+                      <div class="text-danger" *ngIf="addProjectForm.controls['projectName']?.errors?.checkRequired && (addProjectForm.controls['projectName'].touched || submmitedProjectForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-12 col-12 col-sm-8">{{'projects.labels.projectType'| translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-md-8 col-12 col-sm-8">
+                      <ngx-select [items]="projectType" formControlName="projectType" (select)="projectTypeChanged($event)"
+                        placeholder="{{'common.labels.select' | translate}}">
+                      </ngx-select>
+                      <!-- <select class="form-control" name="roleId" (change)="projectTypeChanged()" formControlName="projectType">
+                      <option value="">{{'common.labels.select'| translate}}</option>
+                      <option *ngFor="let projectType of projectTypes"  [value]="projectType.id"> {{projectType.name}}</option>
+                    </select> -->
+                      <div class="text-danger" *ngIf="addProjectForm.controls['projectType']?.errors?.checkRequired && (addProjectForm.controls['projectType'].touched || submmitedProjectForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-12 col-12 col-sm-8">{{'projects.labels.projectDivision'| translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-md-8 col-12 col-sm-8">
+                      <ngx-select [items]="PROJECT_DIVISION" formControlName="division" placeholder="{{'common.labels.select' | translate}}">
+                      </ngx-select>
+                      <!-- <select class="form-control" name="roleId" id="division" formControlName="division">
+                            <option value="">{{(addProjectForm.value.projectType==PROJECT_TYPES.corporate) ? ('common.labels.na'| translate) : ('common.labels.select'| translate)}}</option>
+                        <ng-container  *ngIf="addProjectForm.value.projectType" >
+                          <option *ngFor="let division of PROJECT_DIVISION" [value]="division.id">{{'projects.labels.'+ division.name |translate}}</option>
+                        </ng-container>
+                    </select> -->
+                      <div class="text-danger" *ngIf="addProjectForm.controls['division']?.errors?.checkRequired && (addProjectForm.controls['division'].touched || submmitedProjectForm)">{{'pages.errorMessages.fieldRequired'|
+                        translate}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="table-structure-using-div">
+                    <div class="col-lg-8 col-xl-8 w-450">
+                      <div class="row">
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                          {{'common.labels.srNo'| translate}}
+                        </div>
+                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                          {{'common.labels.budgetType'| translate}}
+                          <span class="mandatory">*</span>
+                        </div>
+                        <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                          {{'common.labels.budgetsheet'| translate}}
+                          <span class="mandatory">*</span>
+                        </div>
+                        <!-- <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+
+                    </div> -->
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                        </div>
+                      </div>
+                      <div formArrayName="budgetSheetArr">
+                        <div *ngFor="let item of addProjectForm.controls.budgetSheetArr['controls'];  let i=index;let lst=last;let fst=first;"
+                          [formGroupName]="i">
+                          <div class="row mt-10">
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                              {{i+1}}
+                            </div>
+                            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                              <ngx-select [items]="item?.value?.filteredBudgetList" (select)="budgetTypeChanged($event)"
+                                formControlName="budgetSheetType" placeholder="{{'common.labels.select' | translate}}">
+                              </ngx-select>
+                              <div class="text-danger" *ngIf="item.controls['budgetSheetType']?.errors?.checkRequired && (item.controls['budgetSheetType'].touched || addBudgetSheetForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}
+                              </div>
+                            </div>
+                            <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 upload-budget-sheet-wrapper">
+
+                              <ul class="list-inline mb-0 d-inline-flex">
+                                <li>
+                                  <label for="file2" class="file-upload">
+                                    <button class="btn btn-default default-btn">{{'common.labels.upload'| translate}}</button>
+                                    <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}"
+                                      (change)="fileChangeEvent($event,i)" />
+
+                                  </label>
+                                </li>
+                                <li>
+                                  <div class="textElipses">
+                                    <i *ngIf="item?.value?.showLoader" class="fa fa-spinner fa-spin ml-2"></i>
+                                    <span id="budget-sheet-name" *ngIf="item?.value?.budgetSheetName && !item?.value?.showLoader"
+                                      class="" title="{{item?.value?.budgetSheetName}}">{{item?.value?.budgetSheetName}}</span>
+                                  </div>
+                                </li>
+                              </ul>
+
+                              <div class="text-danger" style="margin-top: -7px;" *ngIf="item.controls['budgetSheetFileId']?.errors?.checkRequired && (item.controls['budgetSheetFileId'].touched || addBudgetSheetForm)">{{'pages.errorMessages.fieldRequired'|
+                                translate}}
+                              </div>
+                            </div>
+                            <!-- <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 text-left textElipses no-mg">
+                            <i *ngIf="item?.value?.showLoader" class="fa fa-spinner fa-spin ml-2"></i>
+                            <span *ngIf="item?.value?.budgetSheetName && !item?.value?.showLoader" class="" title="{{item?.value?.budgetSheetName}}">{{item?.value?.budgetSheetName}}</span>
+                        </div> -->
+                            <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 add-minus">
+                              <a class="ml-2 click-cursor" (click)="removeBudgetType(i,item)" *ngIf="addProjectForm.controls.budgetSheetArr['controls'].length > 1">
+                                <i class="fa fa-minus"></i>
+                              </a>
+                              <a (click)="addBudgetSheet(true,i)" class="click-cursor ml-2" *ngIf="lst && addProjectForm.controls.budgetSheetArr['controls'].length > 0 && addProjectForm.controls.budgetSheetArr['controls'].length < budgetTypesArr?.length">
+                                <i class="fa fa-plus"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 mt-3 no-mg">
+
+            <button (click)="addProject()" [disabled]="isClicked || disablebutton" class="btn btn-success save-btn">
+              <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'|
+              translate}}</button>
+            <button (click)="navigateTo()" class="btn btn-danger ml-1 cancel-btn">{{'common.labels.cancel'| translate}}</button>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

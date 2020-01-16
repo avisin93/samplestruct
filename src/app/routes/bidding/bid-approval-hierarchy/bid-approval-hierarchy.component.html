@@ -1,0 +1,106 @@
+<div class="content-heading row">
+  <!-- Breadcrumb right aligned-->
+  <breadcrumb [breadcrumbData]="breadcrumbData" class="col-12 col-sm-6 col-md-6 col-lg-8 col-xl-8 mb-10 p-0">
+  </breadcrumb>
+  <ui-control-permission class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 p-0">
+    <div class="text-right">
+      <button class="btn btl-btn btn-primary" (click)="navigateTo()" type="button">
+          {{'biddings.labels.back'| translate}}</button>
+    </div>
+  </ui-control-permission>
+</div>
+<div id="approval-hirerachy-budegt-setting" class="container-fluid">
+  <div class="row no-mg">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="container">
+            <ng-container *ngIf="showLoadingFlg;else showForm">
+              <app-loader class="col-md-12" [loading]="showLoadingFlg"></app-loader>
+            </ng-container>
+            <ng-template #showForm>
+              <form [formGroup]="approvalHierarchyForm">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 project-visibility mb-10">
+                  {{'biddings.labels.projectApprovalHierarchy'| translate}}
+                </div>
+                <div class="row">
+                  <div class="col-md-12 col-xs-12 col-sm-12">
+                    <div class="row no-mg">
+                      <div class="col-md-1 col-xs-12">
+                        <label class="pull-left col-md-12">{{'biddings.labels.level'| translate}}
+                        </label>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="col-md-12 no-pd">{{'biddings.labels.role'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div class="col-md-3 col-xs-12">
+                        <label class="col-md-12 no-pd">{{'biddings.labels.user'| translate}}
+                          <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        <div formArrayName="bidApprovalHierarchy">
+                          <div
+                            *ngFor="let item of approvalHierarchyForm.controls.bidApprovalHierarchy['controls'];  let i=index;let lst=last;let fst=first;"
+                            [formGroupName]="i">
+                            <div class="row no-mg " [ngClass]="!fst ? 'mt-3' : ''">
+                              <div class="col-md-1 col-xs-12">
+                                <span class="col-md-12 text-center ml-2">{{i+1}}</span>
+                              </div>
+                              <div class="col-md-3 col-xs-12">
+                                <div class="row">
+                                  <ngx-select class="col-md-12"
+                                    (select)="getApprovalHierarchyUsers($event,i,true,'bidApprovalHierarchy')"
+                                    formControlName="role" [allowClear]="true" [items]="approvalRoles"
+                                    placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                                  <div class="text-danger col-md-12"
+                                    *ngIf="item.controls['role']?.errors?.checkRequired && (item.controls['role'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                  translate}}</div>
+                                </div>
+                              </div>
+                              <div class="col-md-3 col-xs-12">
+                                <div class="row">
+                                  <ngx-select class="col-md-12" formControlName="user" [allowClear]="true"
+                                    [items]="item?.value?.filteredUsersList"
+                                    (select)="userChanged($event,'bidApprovalHierarchy')"
+                                    placeholder="{{'common.labels.select' | translate}}"></ngx-select>
+                                  <div class="text-danger col-md-12"
+                                    *ngIf="item.controls['user']?.errors?.checkRequired && (item.controls['user'].touched || submitApprovalForm)">{{'pages.errorMessages.fieldRequired'|
+                                  translate}}</div>
+                                </div>
+                              </div>
+                              <div class="col-md-1 col-xs-12" style="margin-top:10px;">
+                                <a class="ml-2 click-cursor" (click)="removeRole(i,'bidApprovalHierarchy',item)"
+                                  *ngIf="approvalHierarchyForm.controls.bidApprovalHierarchy['controls'].length > 1">
+                                  <i class="fa fa-minus"></i>
+                                </a>
+                                <a (click)="addRole(true,i,'bidApprovalHierarchy')" class="click-cursor ml-2"
+                                  *ngIf="lst && approvalHierarchyForm.controls.bidApprovalHierarchy['controls'].length > 0">
+                                  <i class="fa fa-plus"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 no-mg">
+        <button [disabled]="disableButton || showLoadingFlg" (click)="saveBidApprovalHeirarchy()"
+          class="btn btn-success"><i *ngIf="spinnerFlag"
+            class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'| translate}}</button>
+        <button (click)="navigateTo()"
+          class="btn cancel-btn btn-danger ml-1">{{'common.labels.cancel'| translate}}</button>
+      </div>
+    </div>
+  </div>

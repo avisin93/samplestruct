@@ -1,0 +1,103 @@
+<div id="zip-images-selection-view-page">
+  <div class="container-fluid">
+    <div id="folder-structure" class="container">
+      <div class="row">
+
+        <div id="folder-structure-wrapper" class="col-12">
+          <div class="card">
+            <div class="card-body d-flex">
+
+              <div class="col-md-4">
+                <strong class="pl-1">{{'common.labels.location' | translate}}</strong>
+                <ng-container>
+                  <div class="list">
+                    <div class="list-item-wrapper p-1">
+                      <div class="row mt-1"
+                        *ngFor="let location of listLocation?.zipDetails?.locations;let index=index;">
+                        <div class="col-9">
+                          <label class="ptr textElipses loc-name" title="{{location?.locationName  | uppercase}}"
+                            (click)="showCategory(location,index);">
+                            <span>
+                              <i class="fa mr-1 f-17" class="fa location-folder"
+                                [ngClass]="location?.active ? 'fa-folder-open open-folder-color' : 'fa-folder closed-folder-color'"
+                                aria-hidden="true"></i>
+                              {{location?.locationName  | uppercase}} </span>
+                          </label>
+                        </div>
+                        <div class="col-3 no-mg select-img-count">
+
+                          <label class="count-style f-12">
+                            {{location?.images?.length}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+
+              <div class="col-md-4" *ngIf="showCategorySection">
+                <strong class="pl-1">{{'common.labels.category' | translate}}</strong>
+                <ng-container>
+                  <div class="list">
+                    <div class="list-item-wrapper p-1">
+                      <div class="row mt-1">
+                        <div class="col-9">
+                          <label class="ptr textElipses loc-name"
+                            title="{{selectedlocationDetails?.parentCategoryName | uppercase}}"
+                            (click)="showSelectedImagesList();">
+                            <span>
+                              <i class="fa mr-1 f-17" class="fa"
+                                [ngClass]="showImageSection ? 'fa-folder-open open-folder-color' : 'fa-folder closed-folder-color'"
+                                aria-hidden="true"></i>
+                              {{selectedlocationDetails?.parentCategoryName | uppercase}}
+                            </span>
+                          </label>
+                        </div>
+                        <div class="col-3 no-mg select-img-count" >
+                          <label class="count-style">
+                            {{selectedlocationDetails?.images?.length}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+
+              </div>
+
+              <div class="col-md-4" *ngIf="showImageSection">
+                <strong class="pl-1">{{'location.labels.image' | translate}}</strong>
+                <ng-container>
+                  <div class="list">
+                    <div class="list-item-wrapper p-1">
+                      <div class="row mt-1" *ngFor="let image of selectedImagesList;let index=index">
+                        <div class="col-md-9">
+                          <label class="ptr  textElipses loc-name" title="{{image?.name}}"
+                            (click)="openZipGalleryPreview(index);">
+                            <u>
+                              {{image?.name}}
+                            </u>
+                          </label>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="ptr text-right" (click)="removeImageFromZipLocationsArr(index)">
+                            <i class="fa fa-minus-circle img-minus-btn" title="{{'common.labels.remove'|translate}}"
+                              aria-hidden="true"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="zip-gallery-preview" *ngIf="this.zipGalleryImages.length>0">
+  <ngx-gallery #zipGallery [options]="galleryOptions" [images]="zipGalleryImages"
+    (previewChange)="setOrientationToImage($event)" (previewClose)="previewClose();">
+  </ngx-gallery>
+</div>

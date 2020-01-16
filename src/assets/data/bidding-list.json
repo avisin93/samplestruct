@@ -1,0 +1,59 @@
+{
+    "biddingList": [
+        {
+            "id": "1",
+            "biddingDetails": {
+                "name": "S.100.01.02.00",
+                "client": "-",
+                "agency": "N/A",
+                "currencyType": "USD",
+                "cost": "356,354.00",
+                "status": "In progress"
+            }
+        },
+        {
+            "id": "2",
+            "biddingDetails": {
+                "name": "L.100.20.00.00",
+                "client": "Sears Brands / Mastercard",
+                "agency": "N/A",
+                "currencyType": "USD",
+                "cost" : "756,24.00",
+                "status": "Won"
+            }
+        },
+        {
+            "id": "3",
+            "biddingDetails": {
+                "name": "S.100.02.01.00",
+                "client": "Visa",
+                "agency": "N/A",
+                "currencyType": "USD",
+                "cost" : "270,896.00",
+                "status": "Lost"
+            }
+        },
+        {
+            "id": "4",
+            "biddingDetails": {
+                "name": "S.103.01.01.00",
+                "client": "Reebok",
+                "agency": "Pretty Bird",
+                "currencyType": "USD",
+                "cost" : "115,000.00",
+                "status": "Inactive"
+            }
+        },
+        {
+            "id": "5",
+            "biddingDetails": {
+                "name": "S.103.01.01.00",
+                "client": "Nike",
+                "agency": "Pretty Bird",
+                "currencyType": "USD",
+                "cost" : "115,000.00",
+                "status": "Won"
+            }
+        }
+    ]
+}

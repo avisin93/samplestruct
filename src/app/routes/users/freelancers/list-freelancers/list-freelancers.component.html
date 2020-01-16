@@ -1,0 +1,143 @@
+<div id="freelancer-listing">
+  <div class="content-heading">
+    <!-- Breadcrumb right aligned-->
+    <breadcrumb class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 no-mg" [breadcrumbData]="breadcrumbData"></breadcrumb>
+ 
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-right no-mg">
+          <action-permission [actionType]="ACTION_TYPES.ADD" [MODULE_ID]="MODULE_ID" [permissionArr]="permissionObject">
+        <button class="btn btn-primary add-btn" [routerLink]="ROUTER_LINKS_FULL_PATH.addFreelancer" type="button">
+          {{'common.labels.add'| translate}}</button>
+
+    </action-permission>
+      </div>
+  </div>
+  <div class="card card-default list-freelancer-page">
+    <div class="card-body">
+      <form [formGroup]="freelancersFilterForm">
+        <div class="row mb-3">
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <input class="form-control input-width" id="" type="text" formControlName="name"
+              placeholder="{{'common.labels.name'| translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.name'| translate}}" />
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <input class="form-control input-width" id="" type="text" formControlName="email"
+              placeholder="{{'common.labels.email'| translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.email'| translate}}" />
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <input class="form-control input-width" id="" type="text" formControlName="electronicId"
+              placeholder="{{'common.labels.electronicIdNumber'| translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.electronicIdNumber'| translate}}" />
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10">
+            <ngx-select [allowClear]="true" [items]="CONTRACT_STATUS" formControlName="contractStatus"
+              placeholder="{{'common.labels.contractStatus' | translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.contractStatus' | translate}}">
+            </ngx-select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10 project-type">
+            <ngx-select [allowClear]="true" [items]="projectType" formControlName="projectType"
+              (remove)="getProjectCategories(false)" (select)="getProjectCategories(true)"
+              placeholder="{{'common.labels.projectType'| translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.projectType'| translate}}">
+            </ngx-select>
+          </div>
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 mb-10 category">
+            <ngx-select [allowClear]="true" [items]="category" formControlName="category"
+              placeholder="{{'common.labels.category'| translate}}" data-toggle="tooltip" data-placement="top"
+              title="{{'common.labels.category'| translate}}">
+            </ngx-select>
+            <!-- <div class="text-danger mb-3 mt-1" *ngIf="!freelancersFilterForm.value.projectType && freelancersFilterForm.controls['category'].touched">{{'common.errorMessages.selectProjectType'| translate}}</div> -->
+          </div>
+          <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3">
+            <button class="btn btn-primary search-btn mb-10" (click)="search()" [disabled]="showLoadingFlg"
+              type="button"> {{'common.labels.search'| translate}}</button>
+            <button class="btn btn-primary clear-btn mb-10" (click)="clearForm()" [disabled]="showLoadingFlg"
+              type="button"> {{'common.labels.clear'| translate}}</button>
+
+          </div>
+        </div>
+      </form>
+
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-pd">
+        <app-loader class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" [loading]="showLoadingFlg"></app-loader>
+        <div class="table-responsive" [ngClass]="{'hide-content': showLoadingFlg}">
+          <table class=" table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th class="">{{'common.labels.hash'| translate}}</th>
+                <th class="">{{'common.labels.name'| translate}}</th>
+                <th class="">{{'common.labels.email'| translate}}</th>
+                <th class="">{{'common.labels.phone'| translate}}</th>
+                <th class="">{{'common.labels.electronicIdNumber' | translate}}</th>
+                <th class="">{{'common.labels.contractStatus' | translate}}</th>
+                <th class="center" style="min-width:100px">{{'common.labels.action' | translate}}</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let freelancer of freelancerList; let i=index">
+                <td>{{i+index}}</td>
+                <td>{{freelancer?.i18n?.displayName}}</td>
+                <td>{{freelancer?.emailId}}</td>
+                <td> {{freelancer?.phoneNo ? freelancer?.phoneNo : '-'}}</td>
+                <td>{{freelancer?.electronicIDNumber}}</td>
+                <td>
+                  <ng-container *ngIf="freelancer?.contracts[0]?.fileUrl else elseBlock">
+                    <a href="{{freelancer?.contracts[0]?.fileUrl}}" target="_blank"
+                      download="{{freelancer?.contracts[0]?.fileUrl}}" *ngIf="freelancer?.contracts[0]">
+                      <i class="fa fa-file-excel-o"
+                        [ngClass]="(freelancer?.contracts[0]?.status==CONTRACT_STATUS_CONST.activeContracts) ? 'c-green':'c-red'"></i>
+                    </a>
+                  </ng-container>
+                  <ng-template #elseBlock>
+                    <span>-</span>
+                  </ng-template>
+                </td>
+
+                <td class="center">
+                  <div class="d-inline-flex">
+                    <action-permission [actionType]="ACTION_TYPES.EDIT" [MODULE_ID]="MODULE_ID"
+                      [permissionArr]="permissionObject">
+                      <i class="edit fa edit-icon fa-edit edit-ico f-17 mr-5 c-pointer"
+                        [ngClass]="(freelancer.id != userInfo.id) ? '' : 'ptr-disabled'"
+                        (click)="editUser(freelancer)"></i>
+                    </action-permission>
+                    <label class="switch switch-md">
+                      <input type="checkbox" [checked]="freelancer.status === 1"
+                        [disabled]="freelancer.id === userInfo.id" (change)="openSwapPopUp($event, i, freelancer)" />
+                      <span></span>
+                    </label>
+                  </div>
+                  <!-- <i class="fa fa-toggle-on arrow f-18" (click)="changeStatus(freelancer?.id,freelancer?.status)"></i> -->
+                </td>
+              </tr>
+              <ng-container *ngIf="freelancerList?.length == 0">
+                <tr>
+                  <td colspan="12">
+                    <p class="text-danger text-center">{{'common.labels.recordNotFound' | translate}}</p>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" *ngIf="totalItems>itemsPerPage"
+      [ngClass]="{'hide-content': showLoadingFlg}">
+      <pagination *ngIf="config.paging" class="pagination-sm pull-right" [(ngModel)]="page" [totalItems]="totalItems"
+        [itemsPerPage]="itemsPerPage" [firstText]="'common.labels.first' | translate"
+        [lastText]="'common.labels.last' | translate" [previousText]="'common.labels.previous' | translate"
+        [nextText]="'common.labels.next' | translate" [maxSize]="maxSize" [boundaryLinks]="true" [rotate]="false"
+        (pageChanged)="pageChanged($event)" (numPages)="numPages = $event">
+      </pagination>
+    </div>
+  </div>
+</div>
+<!-- <pre *ngIf="config.paging" class="card card-block card-header">Page: {{page}} / {{numPages}}</pre> -->

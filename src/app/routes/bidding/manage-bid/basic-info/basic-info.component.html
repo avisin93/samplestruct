@@ -1,0 +1,625 @@
+<ng-container *ngIf="this.manageBidData.showLoaderFlag">
+  <app-loader class="col-md-12" [loading]="this.manageBidData.showLoaderFlag"></app-loader>
+</ng-container>
+<div id="basic-info" *ngIf="!this.manageBidData.showLoaderFlag">
+  <div class="container-fluid">
+    <form class="form-horizontal" [formGroup]="basicInfoForm" (change)="updateFormStatus()" novalidate>
+      <div class="panel panel-primary">
+        <div class="panel-body panel-outer-body">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="row">
+              <div class="col-12 col-sm-6">
+                <ui-control-permission [fieldName]="'projectName'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+                  [uiPermissionObj]="uiAccessPermissionsObj">
+                  <div class="form-group">
+                    <label>{{'biddings.placeholder.projectName'| translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div>
+                      <input readonly class="form-control" formControlName="projectName" placeholder="{{'biddings.placeholder.projectName'| translate}}">
+                      <div class="text-danger col-md-12 no-mg" *ngIf="basicInfoForm.controls['projectName']?.errors?.checkRequired && (basicInfoForm.controls['projectName'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                        translate}}</div>
+                    </div>
+                  </div>
+                </ui-control-permission>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <ui-control-permission [fieldName]="'jobNumber'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+                  [uiPermissionObj]="uiAccessPermissionsObj">
+                  <div class="form-group">
+                    <label>{{'biddings.labels.jobNumber'| translate}}</label>
+                    <div>
+                      <input readonly class="form-control" formControlName="jobNumber" placeholder="{{'biddings.labels.jobNumber'| translate}}">
+                    </div>
+                  </div>
+                </ui-control-permission>
+              </div>
+            </div>
+            <ui-control-permission [fieldName]="'shootingLocation'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>{{'biddings.labels.shootLocation'| translate}}</label>
+                    <div>
+                      <input class="form-control" formControlName="shootingLocation" placeholder="{{'biddings.labels.shootLocation'| translate}}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ui-control-permission>
+            <div id="logos" class="row m-0">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                <h5 class="text-dark">
+                  <strong>{{'biddings.labels.logos'| translate}}</strong>
+                </h5>
+                <div class="panel panel-primary panel-inner-wrapper">
+                  <div class="panel-body panel-inner-body">
+                    <div class="row m-0">
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-3 p-0 text-center">
+                        <ui-control-permission [fieldName]="'brand'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+                          [uiPermissionObj]="uiAccessPermissionsObj">
+                          <ng-container formGroupName="brand">
+                            <h5 class="text-dark">
+                              <strong>{{'biddings.labels.brand'| translate}}</strong>
+                            </h5>
+                            <div class="row no-mg">
+                              <div class="col-md-12 mb-10 p-0">
+                                <div class="project-image-container text-center">
+                                  <div class="image-container mb-1">
+                                    <div class="upload-logo project-image-hover">
+                                      <div class="fileDiv" *ngIf="!basicInfoForm?.value?.brand?.showLoader">
+                                        <label for="brand-logo" class="file-upload">
+                                          <button class="btn btn-success" (click)="openFileBrowser($event,'brand-logo')"
+                                            title="{{'biddings.labels.noFileChosen' | translate}}">
+                                            {{'biddings.labels.uploadImage'| translate}}</button>
+                                          <input id="brand-logo" type="file" (change)="fileChangeListener($event,'brand')"
+                                            class="display-none" />
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <img class="project-logo" *ngIf="!basicInfoForm?.value?.brand?.showLoader" [src]="basicInfoForm?.value?.brand?.logoUrl ? basicInfoForm?.value?.brand?.logoUrl:'assets/img/placeholder.png'"
+                                      alt="">
+                                    <div class="d-flex h-inherit" *ngIf="basicInfoForm?.value?.brand?.showLoader">
+                                      <i class="fa fa-spinner fa-spin item-center d-flex m-auto" style="font-size:24px"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                                <em class="text-center text-dark">
+                                  <p class="small f-italic">
+                                    {{'biddings.labels.profilePicTypes' | translate}}
+                                  </p>
+                                </em>
+                              </div>
+                            </div>
+                            <div class="row no-mg">
+                              <div class="col-12 col-sm-12">
+                                <div class="form-group">
+                                  <div>
+                                    <input readonly class="form-control" formControlName="name" placeholder="{{'biddings.labels.brandName'| translate}}"
+                                      title="{{'biddings.labels.brandName'| translate}}">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </ui-control-permission>
+                      </div>
+
+
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-3 p-0 text-center">
+                        <ui-control-permission [fieldName]="'client'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+                          [uiPermissionObj]="uiAccessPermissionsObj">
+                          <ng-container formGroupName="client">
+                            <h5 class="text-dark">
+                              <strong>{{'biddings.labels.client'| translate}}</strong>
+                            </h5>
+                            <div class="row no-mg">
+                              <div class="col-md-12 mb-10 p-0">
+                                <div class="project-image-container text-center">
+                                  <div class="image-container mb-1">
+                                    <div class="upload-logo project-image-hover">
+                                      <div class="fileDiv" *ngIf="!basicInfoForm?.value?.client?.showLoader">
+                                        <label for="client-logo" class="file-upload">
+                                          <button class="btn btn-success" (click)="openFileBrowser($event,'client-logo')"
+                                            title="{{'biddings.labels.noFileChosen' | translate}}">{{'biddings.labels.uploadImage'|
+                                            translate}}</button>
+                                          <input id="client-logo" class="display-none" type="file" (change)="fileChangeListener($event,'client')" />
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <img class="project-logo" *ngIf="!basicInfoForm?.value?.client?.showLoader" [src]="basicInfoForm?.value?.client?.logoUrl ? basicInfoForm?.value?.client?.logoUrl:'assets/img/placeholder.png'">
+                                    <div class="d-flex h-inherit" *ngIf="basicInfoForm?.value?.client?.showLoader">
+                                      <i class="fa fa-spinner fa-spin item-center d-flex m-auto" style="font-size:24px"></i>
+                                    </div>
+                                  </div>
+                                  <em class="text-center text-dark">
+                                    <p class="small f-italic">
+                                      {{'biddings.labels.profilePicTypes' | translate}}
+                                    </p>
+                                  </em>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row no-mg">
+                              <div class="col-md-12 text-center">
+                                <div class="form-group">
+                                  <div>
+                                    <input readonly class="form-control" formControlName="name" formc placeholder="{{'biddings.labels.clientName'| translate}}"
+                                      title="{{'biddings.labels.clientName'| translate}}">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </ui-control-permission>
+                      </div>
+
+
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-3 p-0 text-center">
+                        <h5 class="text-dark">
+                          <strong>{{'biddings.labels.agency'| translate}}</strong>
+                        </h5>
+                        <ui-control-permission [fieldName]="'agency'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+                          [uiPermissionObj]="uiAccessPermissionsObj">
+                          <ng-container formGroupName="agency">
+                            <div class="row no-mg">
+                              <div class="col-md-12 mb-10 p-0">
+                                <div class="project-image-container text-center">
+                                  <div class="image-container mb-1">
+                                    <div class="upload-logo project-image-hover">
+                                      <div class="fileDiv" *ngIf="!basicInfoForm?.value?.agency?.showLoader">
+                                        <label for="agency-logo" class="file-upload">
+                                          <button class="btn btn-success" (click)="openFileBrowser($event,'agency-logo')"
+                                            title="{{'biddings.labels.noFileChosen' | translate}}">{{'biddings.labels.uploadImage'|
+                                            translate}}</button>
+                                          <input id="agency-logo" class="display-none" type="file" (change)="fileChangeListener($event,'agency')" />
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <img class="project-logo" *ngIf="!basicInfoForm?.value?.agency?.showLoader" [src]="basicInfoForm?.value?.agency?.logoUrl ? basicInfoForm?.value?.agency?.logoUrl:'assets/img/placeholder.png'">
+                                    <div class="d-flex h-inherit" *ngIf="basicInfoForm?.value?.agency?.showLoader">
+                                      <i class="fa fa-spinner fa-spin item-center d-flex m-auto" style="font-size:24px"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                                <em class="text-center text-dark">
+                                  <p class="small f-italic">
+                                    {{'biddings.labels.profilePicTypes' | translate}}
+                                  </p>
+                                </em>
+                              </div>
+                            </div>
+                            <div class="row no-mg">
+                              <div class="col-md-12 text-center">
+                                <div class="form-group">
+                                  <div>
+                                    <input readonly class="form-control" formControlName="name" placeholder="{{'biddings.labels.agencyName'| translate}}"
+                                      title="{{'biddings.labels.agencyName'| translate}}">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </ui-control-permission>
+                      </div>
+
+
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-3 p-0 text-center">
+                        <h5 class="text-dark">
+                          <strong>{{'biddings.labels.productionCo'| translate}}</strong>
+                        </h5>
+                        <ui-control-permission [fieldName]="'productionCompany'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+                          [uiPermissionObj]="uiAccessPermissionsObj">
+                          <ng-container formGroupName="productionCompany">
+                            <div class="row no-mg">
+                              <div class="col-md-12 mb-10 p-0">
+                                <div class="project-image-container text-center">
+                                  <div class="image-container mb-1">
+                                    <div class="upload-logo project-image-hover">
+                                      <div class="fileDiv" *ngIf="!basicInfoForm?.value?.productionCompany?.showLoader">
+                                        <label for="production-co-logo" class="file-upload">
+                                          <button class="btn btn-success" (click)="openFileBrowser($event,'production-co-logo')"
+                                            title="{{'biddings.labels.noFileChosen' | translate}}">{{'biddings.labels.uploadImage'|
+                                            translate}}</button>
+                                          <input id="production-co-logo" class="display-none" type="file" (change)="fileChangeListener($event,'productionCompany')" />
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <img class="project-logo" *ngIf="!basicInfoForm?.value?.productionCompany?.showLoader"
+                                      [src]="basicInfoForm?.value?.productionCompany?.logoUrl ? basicInfoForm?.value?.productionCompany?.logoUrl:'assets/img/placeholder.png'">
+                                    <div class="d-flex h-inherit" *ngIf="basicInfoForm?.value?.productionCompany?.showLoader">
+                                      <i class="fa fa-spinner fa-spin item-center d-flex m-auto" style="font-size:24px"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                                <em class="text-center text-dark">
+                                  <p class="small f-italic">
+                                    {{'biddings.labels.profilePicTypes' | translate}}
+                                  </p>
+                                </em>
+                              </div>
+
+                            </div>
+                            <div class="row no-mg">
+                              <div class="col-md-12 text-center">
+                                <div class="form-group">
+                                  <div>
+                                    <input readonly class="form-control" formControlName="name" placeholder="{{'biddings.labels.productionCoName'| translate}}"
+                                      title="{{'biddings.labels.productionCoName'| translate}}">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </ui-control-permission>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <ui-control-permission [fieldName]="'brand'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="brand">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.brand'| translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+                        <div class="row">
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.brandName'| translate}}</label>
+                              <div>
+                                <input class="form-control" formControlName="name" placeholder="{{'biddings.labels.brandName'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group file-upload">
+                              <div>
+                                <label for="brand-logo" class="">
+                                  {{'biddings.labels.brandLogo' | translate}}
+                                  <input id="brand-logo" (change)="fileChangeListener($event,'brand')" type="file" />
+                                </label>
+                              </div>
+                              <button class="btn btn-default browse-btn">{{'biddings.labels.browse'| translate}}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission> -->
+            <!-- <ui-control-permission [fieldName]="'client'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="client">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.client'| translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+                        <div class="row">
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.clientName'| translate}}</label>
+                              <div>
+                                <input class="form-control" formControlName="name" placeholder="{{'biddings.labels.clientName'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group file-upload">
+                              <div>
+                                <label for="client-logo" class="">
+                                  {{'biddings.labels.clientLogo' | translate}}
+                                  <input id="client-logo" (change)="fileChangeListener($event,'client')" type="file" />
+                                </label>
+                              </div>
+                              <button class="btn btn-default browse-btn">{{'biddings.labels.browse'| translate}}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission> -->
+            <ui-control-permission [fieldName]="'agency'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="agency">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.agency'| translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+                        <!-- <div class="row">
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.agencyName'| translate}}</label>
+                              <div>
+                                <input class="form-control" formControlName="name" placeholder="{{'biddings.labels.agencyName'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group file-upload">
+                              <div>
+                                <label for="agency-logo" class="">
+                                  {{'biddings.labels.agencyLogo' | translate}}
+                                  <input id="agency-logo" (change)="fileChangeListener($event,'agency')" type="file" />
+                                </label>
+                              </div>
+                              <button class="btn btn-default browse-btn">{{'biddings.labels.browse'| translate}}</button>
+                            </div>
+                          </div>
+                        </div> -->
+                        <div class="row">
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>
+                                {{'biddings.labels.creative' | translate}}
+                              </label>
+                              <div>
+                                <input class="form-control" formControlName="creative" placeholder="{{'biddings.labels.name'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.agencyProducer'| translate}}</label>
+                              <div>
+                                <input class="form-control" formControlName="agencyProducer" placeholder="{{'biddings.labels.name'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>
+                                {{'biddings.labels.accounts' | translate}}
+                              </label>
+                              <div>
+                                <input class="form-control" formControlName="accounts" placeholder="{{'biddings.labels.name'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.visitingCrew'| translate}}</label>
+                              <div>
+                                <input class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g,'');"
+                                  formControlName="visitingCrew" placeholder="{{'biddings.labels.numberOfPeople'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'productionCompany'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="productionCompany">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.productionCo'| translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+                        <!-- <div class="row">
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.productionCoName'| translate}}</label>
+                              <div>
+                                <input class="form-control" formControlName="name" placeholder="{{'biddings.labels.productionCoName'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <div class="form-group file-upload">
+                                <div>
+                                  <label for="production-co-logo" class="">
+                                    {{'biddings.labels.productionCoLogo' | translate}}
+                                    <input id="production-co-logo" (change)="fileChangeListener($event,'productionCompany')"
+                                      type="file" />
+                                  </label>
+                                </div>
+                                <button class="btn btn-default browse-btn">{{'biddings.labels.browse'| translate}}</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div> -->
+                        <div class="row">
+                          <div class="col-12 col-sm-6 p-0">
+                            <div class="col-12">
+                              <div class="form-group">
+                                <label>{{'biddings.labels.address'| translate}}</label>
+                                <div>
+                                  <textarea class="form-control" formControlName="address" rows="5" placeholder="{{'biddings.labels.address'| translate}}"></textarea>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-6 p-0">
+                            <div class="col-12">
+                              <div class="form-group">
+                                <label>{{'biddings.labels.telephone'| translate}}</label>
+                                <div>
+                                  <input class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                    formControlName="telephone" placeholder="{{'biddings.labels.telephone'| translate}}">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-12">
+                              <div class="form-group">
+                                <label>Website</label>
+                                <div>
+                                  <input class="form-control" formControlName="website" placeholder="{{'biddings.labels.url'| translate}}">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission>
+            <ui-control-permission [fieldName]="'biddingProducer'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <ng-container formGroupName="biddingProducer">
+                <div class="row m-0">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+                    <h5 class="text-dark">
+                      <strong>{{'biddings.labels.biddingProducer'| translate}}</strong>
+                    </h5>
+                    <div class="panel panel-primary panel-inner-wrapper">
+                      <div class="panel-body panel-inner-body">
+                        <div class="row">
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>
+                                {{'biddings.labels.biddingProducerName' | translate}}
+                              </label>
+                              <div>
+                                <input readonly class="form-control" formControlName="name" placeholder="{{'biddings.labels.name'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>
+                                {{'biddings.labels.email' | translate}}
+                              </label>
+                              <div>
+                                <input class="form-control" formControlName="email" oninput="this.value = this.value.replace(/[^@a-zA-Z0-9._-]/g, '');"
+                                  placeholder="{{'biddings.labels.email'| translate}}">
+                                <div class="text-danger col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg" *ngIf="getFormGroupControls('biddingProducer', 'email')?.errors?.checkEmail && (getFormGroupControls('biddingProducer', 'email')?.touched && getFormGroupControls('biddingProducer', 'email')?.dirty   || submmitedFormFlag)">{{'actors.freelancers.errorMessages.invalidEmailId'
+                                  | translate}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                              <label>{{'biddings.labels.mobile'| translate}}</label>
+                              <div>
+                                <input class="form-control" formControlName="mobile" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+                                  placeholder="{{'biddings.labels.mobile'| translate}}">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ui-control-permission>
+            <div class="row">
+              <div class="col-12 col-sm-6">
+                <ui-control-permission [fieldName]="'director'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+                  [uiPermissionObj]="uiAccessPermissionsObj">
+                  <div class="form-group">
+                    <label>{{'biddings.labels.director'| translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div>
+                      <input class="form-control" formControlName="director" placeholder="{{'biddings.labels.director'| translate}}">
+                      <div class="text-danger col-md-12 no-mg" *ngIf="basicInfoForm.controls['director']?.errors?.checkRequired && (basicInfoForm.controls['director'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                        translate}}</div>
+                    </div>
+                  </div>
+                </ui-control-permission>
+              </div>
+              <div class="col-12 col-sm-6">
+                <ui-control-permission [fieldName]="'directorOfPhotography'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+                  [uiPermissionObj]="uiAccessPermissionsObj">
+                  <div class="form-group">
+                    <label>{{'biddings.labels.directorOfPhotography'| translate}}
+                      <span class="mandatory">*</span>
+                    </label>
+                    <div>
+                      <input class="form-control" formControlName="dp" placeholder="{{'biddings.labels.directorOfPhotography'| translate}}">
+                      <div class="text-danger col-md-12 no-mg" *ngIf="basicInfoForm.controls['dp']?.errors?.checkRequired && (basicInfoForm.controls['dp'].touched  || submmitedFormFlag)">{{'actors.freelancers.errorMessages.fieldRequired'|
+                        translate}}</div>
+                    </div>
+                  </div>
+                </ui-control-permission>
+              </div>
+            </div>
+            <ui-control-permission [fieldName]="'commercialTitle'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.disableFields"
+              [uiPermissionObj]="uiAccessPermissionsObj">
+              <div class="commercial-wrapper">
+                <div class="row">
+                  <div class="col-10 col-sm-6">
+                    <label>
+                      {{'biddings.labels.commercial' | translate}}
+                    </label>
+                  </div>
+                </div>
+                <ng-container formArrayName="commercialTitle" *ngFor="let item of basicInfoForm['controls'].commercialTitle['controls']; let index=index;let lst=last">
+                  <ng-container [formGroupName]="index">
+                    <div class="row">
+                      <div class="col-10 col-sm-6">
+                        <div class="form-group">
+                          <div>
+                            <input class="form-control" formControlName="title" placeholder="{{'biddings.labels.commercial'| translate}}">
+                            <div class="text-danger col-md-12 no-mg" *ngIf="item.controls['title']?.errors?.checkRequired">{{'actors.freelancers.errorMessages.fieldRequired'|
+                              translate}}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-2 col-sm-2 pt-10 pl-0 positive-add-class">
+                        <a class="click-cursor mr-2" *ngIf="basicInfoForm.controls.commercialTitle['controls'].length > 1 "
+                          (click)="removeCommercialTitle(index)">
+                          <i class="fa fa-minus"></i>
+                        </a>
+                        <a class="click-cursor" *ngIf="lst && basicInfoForm.controls.commercialTitle['controls'].length > 0 &&  basicInfoForm.controls.commercialTitle['controls'].length<5"
+                          (click)="addCommercialTitle(true,item);">
+                          <i class="fa fa-plus"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </ui-control-permission>
+          </div>
+          <action-permission [actionType]="ACTION_TYPES.ADD" [MODULE_ID]="MODULE_ID"
+          [permissionArr]="permissionObject">
+          <div class="row p-0 m-0">
+            <div class="col-12 pull-right">
+              <button type="submit" class="btn save-btn btn-success pull-right" (click)="saveBasicInfoData()"
+                [disabled]="this.manageBidData.disableButtonFlag || disableNextButton">
+                <i *ngIf="this.manageBidData.spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>
+                {{'biddings.buttons.next'|
+                translate}}</button>
+            </div>
+          </div>
+          </action-permission>
+        </div>
+      </div>
+
+
+    </form>
+  </div>
+</div>

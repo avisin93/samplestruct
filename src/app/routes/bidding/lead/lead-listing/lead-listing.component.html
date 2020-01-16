@@ -1,0 +1,91 @@
+<div id="lead-listing">
+  <div class="content-heading">
+    <breadcrumb class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8 no-mg" [breadcrumbData]="breadcrumbData"></breadcrumb>
+    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-right no-mg">
+      <button mat-button class="btn save-btn btn-primary" (click)="navigateTo()" type="button">
+        {{'biddings.labels.createLead'| translate}}</button>
+    </div>
+  </div>
+  <div class="card card-default">
+    <div class="card-body">
+      <form [formGroup]="leadListFilterForm">
+        <div class="row mb-3">
+          <div class="col-12 col-sm-4 mb-10">
+            <input class="form-control input-width" formControlName="dealTitle" id="" type="text" placeholder="{{'biddings.labels.dealName'| translate}}" />
+          </div>
+          <div class="col-12 col-sm-4 mb-10">
+            <input class="form-control input-width" formControlName="brand" id="" type="text" placeholder="{{'biddings.labels.brand'| translate}}" />
+          </div>
+          <div class="col-12 col-sm-4 mb-10">
+            <input class="form-control input-width" formControlName="agency" id="" type="text" placeholder="{{'biddings.labels.agency'| translate}}" />
+          </div>
+        </div>
+
+
+        <div class="row mb-3">
+          <div class="col-12 col-sm-4 mb-10">
+            <input class="form-control input-width" formControlName="internationalProdCo" id="" type="text" placeholder="{{'biddings.labels.internationalProductionCo'| translate}}" />
+          </div>
+          <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3">
+            <button class="btn search-btn btn-primary mb-10" [disabled]='showLoaderFlag' type="submit" (click)='search();'>
+              {{'common.labels.search'| translate}}</button>
+            <button class="btn cancel-btn btn-primary mb-10" [disabled]='showLoaderFlag' type="button" (click)='clear();'> {{'common.labels.clear'|
+              translate}}</button>
+          </div>
+        </div>
+      </form>
+      <ng-container *ngIf="showLoaderFlag">
+        <app-loader class="col-md-12" [loading]="showLoaderFlag"></app-loader>
+      </ng-container>
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-pd" *ngIf="!showLoaderFlag">
+        <div class="table-responsive">
+          <table class=" table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th class="">{{'biddings.labels.dealName'| translate}}</th>
+                <th class="">{{'biddings.labels.dealValue'| translate}}</th>
+                <th class="">{{'biddings.labels.brand'| translate}}</th>
+                <th class="">{{'biddings.labels.agency'| translate}}</th>
+                <th class="">{{'biddings.labels.internationalProductionCo' | translate}}</th>
+                <th class="">{{'biddings.labels.dealCreated' | translate}}</th>
+                <th class="wd-12">{{'common.labels.action' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let lead of leadListingArr; let fIndex=index">
+                <td>{{lead.dealTitle}}</td>
+                <td>{{lead.dealValue}}</td>
+                <td>{{lead.brand}}</td>
+                <td>{{lead.agency}}</td>
+                <td>{{lead.internationalProdCo}}</td>
+                <td *ngIf='lead.isCreated'>{{'biddings.labels.yes' | translate}}</td>
+                <td *ngIf='!lead.isCreated'>-</td>
+                <td class="center" *ngIf="!lead.isCreated">
+                  <i class="fa fa-gavel ptr f-17 mr-5" *ngIf="!lead.isCreated" aria-hidden="true" title="{{'biddings.labels.createBid'| translate}}"
+                  (click)="triggerBidCreation(lead)"></i>
+                  <i class="f-17 mr-5 ptr edit fa fa-edit edit-icon edit-ico" *ngIf="!lead.isCreated" (click)="navigateTo(lead.id)"
+                    data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                </td>
+                <td class="center" *ngIf="lead.isCreated">-</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" *ngIf="(totalItems > itemsPerPage)"  [ngClass]="{'hide-content': showLoaderFlag}">
+      <pagination class="pagination-sm pull-right" [(ngModel)]="page" [totalItems]="totalItems"
+        [itemsPerPage]="itemsPerPage" [firstText]="'common.labels.first' | translate" [lastText]="'common.labels.last' | translate"
+        [previousText]="'common.labels.previous' | translate" [nextText]="'common.labels.next' | translate" [maxSize]="maxSize"
+        [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)" (numPages)="numPages = $event">
+      </pagination>
+    </div>
+    <div class="col-md-12">
+      <ng-container *ngIf="leadListingArr?.length == 0 && !showLoaderFlag">
+        <p class="text-danger text-center">{{'common.labels.recordNotFound' | translate}}</p>
+      </ng-container>
+    </div>
+  </div>
+</div>

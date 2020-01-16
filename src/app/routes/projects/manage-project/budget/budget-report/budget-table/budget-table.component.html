@@ -1,0 +1,117 @@
+<ng-container *ngIf="showLoadingFlg;else block5">
+  <app-loader class="col-md-12" [loading]="showLoadingFlg"></app-loader>
+</ng-container>
+<ng-template #block5>
+  <div class="budget-table table-responsive">
+    <table class="table table-bordered">
+      <thead class="text-center">
+
+        <tr>
+          <ng-container *ngIf="tabSelectType == BUDGET_TYPE.topsheet;else block1">
+            <th>{{'budgetView.labels.srNo' | translate}}</th>
+            <th>{{'budgetView.labels.summary' | translate}}</th>
+          </ng-container>
+          <ng-template #block1>
+            <th>
+              {{'budgetView.labels.budgetLine' | translate}}
+              <div *ngIf="aicpData?.category[0]"> {{ aicpData?.category[0]?.budgetLine }} </div>
+            </th>
+            <th>{{ aicpData?.category[0]?.i18nModel?.name }}</th>
+          </ng-template>
+
+          <th>{{'budgetView.labels.estimateC' | translate}}</th>
+          <th>{{'budgetView.labels.workingC' | translate}}</th>
+          <th>{{'budgetView.labels.actualC' | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="aicpData?.length == BUDGET_TYPE.topsheet && !showLoadingFlg">
+          <tr>
+            <td colspan="12">
+              <p class="text-danger text-center">{{'common.labels.noRecords' | translate}}</p>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-container *ngFor='let item of aicpData?.category;let i=index;let fst = first;'>
+
+          <tr *ngIf="!fst || tabSelectType == BUDGET_TYPE.topsheet">
+            <ng-container *ngIf="tabSelectType == BUDGET_TYPE.topsheet;else block2">
+              <td class="text-center" *ngIf="!item?.isSubtotal">
+                {{item?.topSheetIndex}}
+              </td>
+              <ng-container *ngIf="item?.isSubtotal; else blockTemp">
+                <td colspan="2">
+                  <span class="pull-right"> <strong>{{item?.budgetLine}}</strong></span>
+                </td>
+              </ng-container>
+              <ng-template #blockTemp>
+                <td>{{item?.i18nModel?.name}} <span class="pull-right">{{item?.budgetLine}}</span></td>
+              </ng-template>
+            </ng-container>
+            <ng-template #block2>
+
+              <td class="text-center"><strong>{{item.budgetLine}}</strong></td>
+              <td class="text-center"><strong>{{item?.i18nModel?.name}}</strong></td>
+
+            </ng-template>
+
+            <td><span *ngIf="item?.estimate || (item?.estimate===BUDGET_TYPE.topsheet)">${{item?.estimate | twoDecimal
+                |
+                absolute |
+                numberFormat }}</span></td>
+            <ng-container *ngIf="tabSelectType == BUDGET_TYPE.topsheet; else pageCategory">
+              <td><span *ngIf="item?.working || (item?.working===BUDGET_TYPE.topsheet)">${{item?.working | twoDecimal |
+                  numberFormat }}
+                </span> <span *ngIf="(item?.estimate-item.working)!=0 " [ngClass]="item?.estimate-item.working > 0 ? 'positive':'negative'"
+                  class="rate"> ({{item?.estimate-item.working | twoDecimal | absolute | numberFormat }})</span>
+              </td>
+              <td><span *ngIf="item?.actual || (item?.actual===BUDGET_TYPE.topsheet)">${{item?.actual | twoDecimal |
+                  numberFormat }}
+                </span> <span *ngIf="(item?.estimate-item.actual)!=0" [ngClass]="item?.estimate-item.actual > 0 ? 'positive':'negative'"
+                  class="rate"> ({{item?.estimate-item.actual | twoDecimal | absolute | numberFormat}})</span></td>
+            </ng-container>
+            <ng-template #pageCategory>
+              <td></td>
+              <td></td>
+            </ng-template>
+
+          </tr>
+          <ng-container *ngIf="item?.subCategories?.length == 0 && !showLoadingFlg && tabSelectType !== BUDGET_TYPE.topsheet">
+            <tr>
+              <td colspan="12">
+                <p class="text-danger text-center">{{'common.labels.noRecords' | translate}}</p>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-container *ngFor='let subitem of item?.subCategories;let subindex = index'>
+            <tr>
+              <!-- <ng-container *ngIf="tabSelectType == BUDGET_TYPE.topsheet;">
+              <td>{{subitem?.budgetLine}}</td>
+            </ng-container> -->
+              <ng-container *ngIf="subitem?.isSubtotal;else block3">
+                <td colspan="2" *ngIf="tabSelectType !== BUDGET_TYPE.topsheet;">
+                  <span class="pull-right"> <strong>{{subitem?.budgetLine}}</strong></span>
+                </td>
+              </ng-container>
+              <ng-template #block3>
+                <td class="text-center" *ngIf="tabSelectType !== BUDGET_TYPE.topsheet;">{{subitem?.budgetLine}}</td>
+              </ng-template>
+              <td *ngIf="!subitem?.isSubtotal">{{subitem.i18nModel?.name}}</td>
+              <td><span *ngIf="subitem?.estimate || (subitem?.estimate===BUDGET_TYPE.topsheet)">${{subitem?.estimate |
+                  twoDecimal |
+                  numberFormat }}</span></td>
+              <td><span *ngIf="subitem?.working || (subitem?.working===BUDGET_TYPE.topsheet)">${{subitem?.working |
+                  twoDecimal |
+                  numberFormat}} </span> <span *ngIf="(subitem.estimate-subitem.working)!=0" [ngClass]="subitem?.estimate-subitem.working > 0 ? 'positive':'negative'"
+                  class="rate"> ({{subitem?.estimate-subitem.working | twoDecimal | absolute | numberFormat }})</span></td>
+              <td><span *ngIf="subitem?.actual || (subitem?.actual===BUDGET_TYPE.topsheet)">${{subitem?.actual |
+                  twoDecimal |
+                  numberFormat }} </span> <span *ngIf="(subitem.estimate-subitem.actual)!=0" [ngClass]="subitem?.estimate-subitem.actual > 0 ? 'positive':'negative'"
+                  class="rate"> ({{ subitem?.estimate - subitem.actual | twoDecimal | absolute | numberFormat }})</span></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</ng-template>

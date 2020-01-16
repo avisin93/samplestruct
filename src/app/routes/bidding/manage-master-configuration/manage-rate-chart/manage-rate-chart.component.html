@@ -1,0 +1,123 @@
+<div id="bid-rate-chart">
+  <div class="container-fluid">
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <ng-container *ngIf="!renderPage">
+          <app-loader class="col-md-12" [loading]="!renderPage"></app-loader>
+        </ng-container>
+        <form [formGroup]="ratesBaseRateForm" novalidate [hidden]="!renderPage">
+          <div class="row m-0">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 no-mg">
+              <div id="base-rate-list" class="table-responsive">
+                <table id="rate-list-table" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th class=" text-center">
+                        <strong>{{'projects.labels.BudgetLine'| translate}}</strong>
+                      </th>
+                      <th class=" text-center">
+                        <strong>{{'common.labels.name'| translate}}</strong>
+                      </th>
+                      <th class="w-25 text-center w-md-35" *ngIf="showAdditionalColumns">
+                        <strong>{{'biddings.labels.description'| translate}}</strong>
+                      </th>
+                      <th class="w-25 text-center w-md-35" *ngIf="showAdditionalColumns">
+                        <strong>{{'biddings.labels.rate' | translate}}</strong>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="showNoRecord">
+                      <tr>
+                        <td colspan="12">
+                          <p class="text-danger text-center">{{'common.labels.noRecord' | translate}}</p>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    <ng-container formArrayName="ratesArr">
+                      <ng-container *ngFor="let category of ratesBaseRateForm.controls.ratesArr['controls']; let categoryIndex = index;let lst=last;">
+                        <ng-container [formGroupName]="categoryIndex">
+                          <tr>
+                            <td>
+                              <h4 class="text-dark fs-14">
+                                {{category?.value?.section}}
+                              </h4>
+                            </td>
+                            <td [attr.colspan]="(showAdditionalColumns && count != 0) ? '3':'4'" class="ptr category-plus category_{{category?.value?.section}}"
+                              (click)="showHideCategoryDetails(category,'show',$event);">
+                              <h4 class="text-dark pull-left">
+                                {{category?.value?.dealName}}
+                              </h4>
+                              <div class="pull-right">
+                                <a class="click-cursor">
+                                  <i class="fa fa-plus"></i>
+                                </a>
+                              </div>
+                            </td>
+                            <td [attr.colspan]="(showAdditionalColumns && count != 0) ? '3':'4'" class="ptr category-minus category_{{category?.value?.section}}"
+                              (click)="showHideCategoryDetails(category,'hide',$event);">
+                              <h4 class="text-dark pull-left">
+                                {{category?.value?.dealName}}
+                              </h4>
+                              <div class="pull-right">
+                                <a class="click-cursor">
+                                  <i class="fa fa-minus"></i>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                          <ng-container formArrayName="subRatesArr">
+                            <ng-container *ngFor="let subCategory of category?.controls.subRatesArr['controls'];let subCategoryIndex = index;">
+                              <ng-container *ngIf="subCategory?.value?.isVisible" [formGroupName]="subCategoryIndex">
+                                <tr class="sub-category_{{category?.value?.section}} sub-categories" *ngIf = "subCategory?.value?.subDealName">
+                                  <td>
+                                    <h4 class="mb-0 fs-14">
+                                      {{subCategory?.value?.reference ? subCategory?.value?.budgetLineNoToShow : subCategory?.value?.subBudgetLine}}
+                                    </h4>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark">
+                                      {{subCategory?.value?.subDealName}}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <span class="text-dark">
+                                      {{subCategory?.value?.description ? subCategory?.value?.description : '-'}}
+                                    </span>
+                                  </td>
+                                  <td class="d-flex">
+                                    <div class="d-inline-block mr-10">
+                                      <select class="form-control" formControlName="currency" style="width:90px">
+                                          <option *ngFor="let item of currencyDropdown" [value]="item?.id">{{item?.code}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-inline-block">
+                                      <input formControlName="rate" maxlength="8" (change) = "updateRate(categoryIndex, subCategoryIndex)" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" class="form-control" placeholder="{{subCategory?.value?.placeHolder ? subCategory?.value?.placeHolder : '-'}}" title="{{subCategory?.value?.placeHolder ? subCategory?.value?.placeHolder : '-'}}">
+                                      <div class="text-danger" *ngIf="subCategory.controls['rate']?.errors?.checkDecimal && (subCategory.controls['rate'].touched || submitRateForm) && subCategory.controls['rate'].dirty">
+                                          {{'pages.errorMessages.validDecimal'| translate}}</div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </ng-container>
+                            </ng-container>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 p-0" *ngIf="renderPage && !showNoRecord">
+            <button class="btn btn-success" (click)="saveRateChart()" [disabled]="isClicked">
+              <i *ngIf="spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'|
+              translate}}
+            </button>
+            <button (click) = "navigateTo()" class="btn btn-primary ml-1">{{'biddings.buttons.cancel'| translate}}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

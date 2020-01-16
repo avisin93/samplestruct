@@ -1,0 +1,207 @@
+<div id="manage-location-review-page">
+  <div class="content-heading row">
+    <breadcrumb [breadcrumbData]="breadcrumbData" class="col-12 col-sm-6 col-md-6 col-lg-8 col-xl-8 mb-10 p-0">
+    </breadcrumb>
+    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 text-right p-0">
+      <button class="btn btl-btn btn-primary" (click)="navigateTo()" type="button">
+        {{'location.labels.back' |translate}}
+      </button>
+    </div>
+  </div>
+  <div class="review-list">
+    <div class="container-fluid">
+      <div class="card card-default">
+        <div class="card-body">
+
+          <ng-container *ngIf="isLoadingTagName; else elseBlock">
+            <app-loader class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" [loading]="isLoadingTagName">
+            </app-loader>
+          </ng-container>
+          <ng-template #elseBlock>
+            <div class="row col-12">
+              <h5>
+                <strong>{{'location.labels.locationName' |translate}}:</strong> {{locationName}}
+              </h5>
+            </div>
+            <div class="row">
+              <div class="col-lg-4 ">
+                <div *ngIf="tagsArrTopTenCount.length > 0" class="row col-lg-12 no-mg">
+                  <div class="col-lg-12 no-mg">
+                    <strong>{{'location.labels.allTags' |translate}}</strong>
+                  </div>
+                  <div class="col-lg-12 fix-h" id="filter-tags">
+                    <div class="row">
+                      <div class="col-lg-6" *ngFor="let tag of tagsArrTopTenCount; let srNo = index;">
+                        <div *ngIf="tag" class="checkbox c-checkbox">
+                          <label class="ellipsis width" title="{{ tag?.tag }} ({{ tag?.count }}) ">
+                            <input type="checkbox" [(ngModel)]="tag.isChecked"
+                              (change)="checkBoxValue(tag,$event,false)">
+                            <span class="fa fa-check"></span>
+                            {{ tag?.tag }} ({{ tag?.count }})
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <!-- <div class="col-lg-12 total-tags">
+                                                <span *ngIf="showMoreTagCount" (click)="openModal()" > +
+                                                    {{moreSelectCount}}{{'location.labels.more' |translate}} </span>
+                                                ({{selectedTagCount}} {{'location.labels.selected' |translate}})
+                                            </div> -->
+                      <div class="col-lg-12 total-tags">
+                        <ng-container *ngIf="showMoreTagCount">
+                          <span class="ptr" (click)="openModal()">
+                            +{{totalTags - MAX_TAGS_COUNT}} {{'location.labels.more' |translate}}
+                          </span> (</ng-container><span>{{selectedTagCount}}
+                          {{'location.labels.selected' |translate}}</span>
+                        <ng-container *ngIf="showMoreTagCount">)</ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row col-lg-12 mt-15 no-mg">
+                  <div class="col-lg-12 no-mg">
+                    <strong>{{'location.labels.myTags' |translate}}</strong>
+                  </div>
+                  <div class="col-lg-12" id="my-tags">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <tag-input class="tag-input-class" [(ngModel)]="myTags" (onAdd)="tagInputValidation()"
+                          [editable]='true' placeholder="+ {{'location.labels.tag' |translate}}"
+                          secondaryPlaceholder="{{'location.labels.secondaryPlaceholderTag' |translate}}">
+                        </tag-input>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="validation" *ngIf="validationMsg">
+                    {{'common.errorMessages.reviewSelect' |translate}}</div>
+                </div>
+              </div>
+
+              <div class="col-lg-8">
+                <form [formGroup]="reviewInputForm">
+                  <div formArrayName="tags">
+                    <div class="col-lg-12" id="review-input-images">
+
+                      <div class="row">
+
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 panel-alignment"
+                          *ngFor="let item of reviewInputForm.controls.tags['controls']; let i=index;">
+                          <div class="text-center review-panel" [formGroupName]="i">
+                            <img (click)="open(i)" class="image-size img-fluid ptr" *ngIf="item.value.locationImage"
+                              [src]="item.value.locationImage" alt="No image" />
+                            <tag-input class="tag-input-class" formControlName="tagNames" [editable]='true'
+                              placeholder="+ {{'location.labels.tag' |translate}}"
+                              secondaryPlaceholder="{{'location.labels.secondaryPlaceholderTag' |translate}}">
+                            </tag-input>
+                            <button type="button" class="btn btn-success btn-sm mt-2 saveBtn"
+                              (click)="saveIndividualLocation(item.value.locationImageId,item.value.tagNames,item)"
+                              [disabled]="disabledSaveFlag">
+                              <i *ngIf="item?.value?.spinnerFlag" class="fa fa-spinner fa-spin margin-right-5"></i>
+                              {{'common.labels.save' | translate}}</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="row mr-10">
+              <div class="col-lg-12 no-mg text-center">
+                <button class="btn btn-success save-btn mb-10" [disabled]="disabledSaveFlag"
+                  (click)="saveAllLocationTags()" type="submit">
+                  {{'common.labels.save'| translate}}
+                  <i *ngIf="spinnerSaveFlag" class="fa fa-spinner fa-spin margin-right-5"></i>
+                </button>
+
+                <button class="btn btn-primary clear-btn mb-10" type="button" (click)="cancel()">
+                  {{'common.labels.cancel'| translate}}</button>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+
+        <div class="modal fade" id="tagListModal" bsModal #tagsListModal="bs-modal" tabindex="-1" role="dialog"
+          aria-labelledby="mySmallModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <div class="row col-lg-12 no-mg">
+                  <div class="col-8 no-mg">
+                    <h4 class="modal-title">{{'location.labels.allTags' |translate}}</h4>
+                  </div>
+                  <div class="col-4 text-right no-mg"><span class="clear-all ptr" (click)="clearAllSelectedTags()">{{'location.labels.clearAll'
+                                            |translate}}
+                    </span> <i aria-label="Close" (click)="tagsListModal.hide();" class="ptr fa fa-times"></i></div>
+                </div>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <ul class="col-12 no-pd FilterDirectory-list">
+                    <ng-container *ngFor="let data of allTagsModalData; let i = index;">
+
+                      <ng-container *ngIf="!data?.isSpecialCharater; else elseBlock;">
+                        <li class="FilterDirectory-listTitle" *ngIf="data?.group; else elseBlock">
+                          <strong>{{data.group}}</strong>
+                        </li>
+                        <li *ngFor="let item of data.children; let i = index;">
+                          <div class="checkbox c-checkbox">
+                            <label>
+                              <input type="checkbox" (change)="checkBoxValue(item,$event,true)"
+                                [(ngModel)]="item.isChecked">
+                              <span class="fa fa-check "></span>
+                              {{item.tag}} ({{item.count}})
+                            </label>
+                          </div>
+                        </li>
+                      </ng-container>
+                      <ng-template #elseBlock>
+                        <li *ngFor="let item of data.children; let i = index;">
+                          <div class="checkbox c-checkbox">
+                            <label>
+                              <input type="checkbox" (change)="checkBoxValue(item,$event,true)"
+                                [(ngModel)]="item.isChecked">
+                              <span class="fa fa-check "></span>
+                              {{item.tag}} ({{item.count}})
+                            </label>
+                          </div>
+                        </li>
+                      </ng-template>
+                    </ng-container>
+                  </ul>
+                  <!-- <div class="col-lg-4" *ngFor="let data of allTagsModalData; let i = index;">
+                                        <div class="col-lg-12 no-mg mb-10"><strong>{{data.group}}</strong></div>
+                                        <div class="col-lg-12 no-mg">
+                                            <div class="checkbox c-checkbox"
+                                                *ngFor="let item of data.children; let i = index;">
+                                                <label>
+                                                    <input type="checkbox" (change)="checkBoxValue(item,$event,true)"
+                                                        [(ngModel)]="item.isChecked">
+                                                    <span class="fa fa-check "></span>
+                                                    {{item.tag}} ({{item.count}})
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal gallery-modal" bsModal #galleryModal="bs-modal" tabindex='-1'>
+    <div class="modal-dialog modal-dialog-centered modal-lg gallery-modal-dialog">
+      <div class="modal-content gallery-modal-content">
+        <div class="modal-body text-center">
+          <ngx-gallery #gallery [options]="galleryOptions" [images]="galleryImages"
+            (previewChange)="setOrientationToImage($event)" (previewClose)="previewClose();">
+          </ngx-gallery>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

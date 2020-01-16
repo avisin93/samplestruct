@@ -1,0 +1,65 @@
+// import variables scss
+@import "../../../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../../../assets/styles/mixins.style.scss";
+
+#budget-working-page{
+    #currency-dropdown {
+        width: 100px;
+    }
+    .t-28 {
+        top:28%;
+      }
+    .panel-body {
+        padding: 15px 15px 15px 15px;
+    }
+    
+    .table-responsive{
+        border-top: 0px;
+    }
+    .w-15{
+        width: 15%;
+    }
+    .w-33{
+        width: 33%;
+    }
+    // .ngx-select.dropdown .ngx-select__selected-single{
+    //     padding: 0px 10px;
+    // }
+    .text-dark-custom {
+        color: #5f7d8b;
+        font-size: 14px;
+    }
+    
+    .d-inline-block{
+        display: inline-block;
+    }
+    
+    .mr-10{
+        margin-right: 10px;
+    }
+    
+    .fs-14{
+        font-size: 14px;
+    }
+    .category-minus,.sub-categories {
+        display: none;
+      }
+      .currency-val {
+          margin-left: 3%;
+          margin-top: 2%;
+      }
+}
+
+@media (max-width: 768px){
+    #budget-working-page{
+        // table responsive
+        #rate-list-table .w-md-35{
+            width: 35%!important;
+        }
+
+        #rate-list-table{
+            width: 750px;
+        }
+    }
+}

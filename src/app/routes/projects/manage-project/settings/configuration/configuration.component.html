@@ -1,0 +1,533 @@
+<div class="project-configuration-page">
+
+  <div class="container-fluid">
+
+
+    <div class="row no-mg">
+      <form class="form-horizontal" [formGroup]="configurationForm" style="width:100%" novalidate>
+
+        <div class="col-md-12 no-mg">
+
+          <div class="panel panel-primary">
+            <div class="panel-body">
+              <div class="container">
+                <ng-container *ngIf="showLoadingFlg">
+                  <app-loader class="col-md-12" [loading]="showLoadingFlg"></app-loader>
+                </ng-container>
+                <table class="table table-bordered" style="width:100%;" [ngClass]="{'hide-content': showLoadingFlg}">
+                  <thead>
+                    <tr>
+                      <th>{{'projects.labels.budgetLine'| translate}}</th>
+                      <th>{{'common.labels.category'| translate}}/{{'common.labels.account'| translate}}</th>
+                      <th>{{'common.labels.freelancer'| translate}}</th>
+                      <th>{{'common.labels.vendor'| translate}}</th>
+                      <th>{{'common.labels.location'| translate}}</th>
+                      <th>{{'sidebar.talent'| translate}}</th>
+                      <th>{{'sidebar.annualContract'| translate}}</th>
+                      <th>{{'sidebar.projectContract'| translate}}</th>
+                      <th>{{'sidebar.advances'| translate}}</th>
+                    </tr>
+                  </thead>
+
+                  <tbody class="text-center">
+
+                    <ng-container formArrayName="configurationTreeArr">
+                      <ng-container [formGroupName]="l1Index"
+                        *ngFor="let level1Data of configurationForm.controls.configurationTreeArr['controls']; let l1Index=index">
+                        <tr>
+                          <td>{{level1Data?.value?.budgetLine}}</td>
+                          <td class="category1-name">
+                            <ng-container *ngIf="level1Data?.value?.accounts && level1Data?.value?.accounts.length>0">
+                              <span class="expander">
+                                <i class="category-plus fa fa-plus-circle" [ngClass]="'category_'+level1Data?.value?.id"
+                                  (click)="toggleLevels(level1Data,true)"></i>
+                              </span>
+                              <span class="expander">
+                                <i class="category-minus fa fa-minus-circle"
+                                  [ngClass]="'category_'+level1Data?.value?.id"
+                                  (click)="toggleLevels(level1Data,false)"></i>
+                              </span>
+                            </ng-container>
+                            <span
+                              [ngClass]="level1Data?.value?.accounts && level1Data?.value?.accounts.length>0 ?'':'ml-15'">
+                              {{level1Data?.value?.i18n?.mappingName}}</span>
+                          </td>
+                          <td class="checkbox c-checkbox">
+                            <label>
+                              <input type="checkbox" class="check-box" formControlName="freelancerApplicable"
+                                (change)="checked(level1Data,'freelancerApplicable',$event.target.checked)" />
+                              <span class="fa fa-check"></span>
+                            </label>
+                          </td>
+                          <td class="checkbox c-checkbox">
+                            <label>
+                              <input type="checkbox" class="check-box" formControlName="vendorApplicable"
+                                (change)="checked(level1Data,'vendorApplicable',$event.target.checked)" />
+                              <span class="fa fa-check"></span>
+                            </label>
+                          </td>
+                          <td class="checkbox c-checkbox">
+                            <label>
+                              <input type="checkbox" class="check-box" formControlName="locationApplicable"
+                                (change)="checked(level1Data,'locationApplicable',$event.target.checked)" />
+                              <span class="fa fa-check"></span>
+                            </label>
+                          </td>
+                          <td class="checkbox c-checkbox">
+                            <label>
+                              <input type="checkbox" class="check-box" formControlName="talentApplicable"
+                                (change)="checked(level1Data,'talentApplicable',$event.target.checked)" />
+                              <span class="fa fa-check"></span>
+                            </label>
+                          </td>
+                          <td class="checkbox c-checkbox">
+                            <label>
+                              <input type="checkbox" class="check-box" formControlName="annualContractRequired"
+                                (change)="checked(level1Data,'annualContractRequired',$event.target.checked)" />
+                              <span class="fa fa-check"></span>
+                            </label>
+                          </td>
+                          <td class="checkbox c-checkbox">
+                            <label>
+                              <input type="checkbox" class="check-box" formControlName="projectContractRequired"
+                                (change)="checked(level1Data,'projectContractRequired',$event.target.checked)" />
+                              <span class="fa fa-check"></span>
+                            </label>
+                          </td>
+                          <td class="checkbox c-checkbox">
+                            <label>
+                              <input type="checkbox" class="check-box" formControlName="advancesApplicable"
+                                (change)="checked(level1Data,'advancesApplicable',$event.target.checked)" />
+                              <span class="fa fa-check"></span>
+                            </label>
+                          </td>
+                        </tr>
+                        <ng-container formArrayName="accounts" *ngIf="level1Data?.value?.showLevel">
+                          <ng-container [formGroupName]="l2Index"
+                            *ngFor="let level2Data of level1Data.controls.accounts['controls']; let l2Index=index">
+
+                            <tr>
+                              <td>{{level2Data?.value?.budgetLine}}</td>
+                              <td class="category2-name">
+                                <ng-container
+                                  *ngIf="level2Data?.value?.accounts && level2Data?.value?.accounts.length>0">
+                                  <span class="expander">
+                                    <i class="category-plus fa fa-plus-circle"
+                                      [ngClass]="'category_'+level2Data?.value?.id"
+                                      (click)="toggleLevels(level2Data,true)"></i>
+                                  </span>
+                                  <span class="expander">
+                                    <i class="category-minus fa fa-minus-circle"
+                                      [ngClass]="'category_'+level2Data?.value?.id"
+                                      (click)="toggleLevels(level2Data,false)"></i>
+                                  </span>
+                                </ng-container>
+                                <span
+                                  [ngClass]="level2Data?.value?.accounts && level2Data?.value?.accounts.length>0 ?'':'ml-15'">
+                                  {{level2Data?.value?.i18n?.mappingName}}</span>
+                              </td>
+                              <td class="checkbox c-checkbox">
+                                <label>
+                                  <input type="checkbox" class="check-box" formControlName="freelancerApplicable"
+                                    (change)="checked(level2Data,'freelancerApplicable',$event.target.checked,false)" />
+                                  <span class="fa fa-check"></span>
+                                </label>
+                              </td>
+                              <td class="checkbox c-checkbox">
+                                <label>
+                                  <input type="checkbox" class="check-box" formControlName="vendorApplicable"
+                                    (change)="checked(level2Data,'vendorApplicable',$event.target.checked,false)" />
+                                  <span class="fa fa-check"></span>
+                                </label>
+                              </td>
+                              <td class="checkbox c-checkbox">
+                                <label>
+                                  <input type="checkbox" class="check-box" formControlName="locationApplicable"
+                                    (change)="checked(level2Data,'locationApplicable',$event.target.checked,false)" />
+                                  <span class="fa fa-check"></span>
+                                </label>
+                              </td>
+                              <td class="checkbox c-checkbox">
+                                <label>
+                                  <input type="checkbox" class="check-box" formControlName="talentApplicable"
+                                    (change)="checked(level2Data,'talentApplicable',$event.target.checked,false)" />
+                                  <span class="fa fa-check"></span>
+                                </label>
+                              </td>
+                              <td class="checkbox c-checkbox">
+                                <label>
+                                  <input type="checkbox" class="check-box" formControlName="annualContractRequired"
+                                    (change)="checked(level2Data,'annualContractRequired',$event.target.checked,false)" />
+                                  <span class="fa fa-check"></span>
+                                </label>
+                              </td>
+                              <td class="checkbox c-checkbox">
+                                <label>
+                                  <input type="checkbox" class="check-box" formControlName="projectContractRequired"
+                                    (change)="checked(level2Data,'projectContractRequired',$event.target.checked,false)" />
+                                  <span class="fa fa-check"></span>
+                                </label>
+                              </td>
+                              <td class="checkbox c-checkbox">
+                                <label>
+                                  <input type="checkbox" class="check-box" formControlName="advancesApplicable"
+                                    (change)="checked(level2Data,'advancesApplicable',$event.target.checked,false)" />
+                                  <span class="fa fa-check"></span>
+                                </label>
+                              </td>
+                            </tr>
+                            <ng-container formArrayName="accounts" *ngIf="level2Data?.value?.showLevel">
+                              <ng-container [formGroupName]="l3Index"
+                                *ngFor="let level3Data of level2Data.controls.accounts['controls']; let l3Index=index;let lst=last;">
+
+                                <tr>
+                                  <td>{{level3Data?.value?.budgetLine}}</td>
+                                  <td class="category3-name">
+                                    <ng-container
+                                      *ngIf="level3Data?.value?.accounts && level3Data?.value?.accounts.length>0">
+                                      <span class="expander">
+                                        <i class="category-plus fa fa-plus-circle"
+                                          [ngClass]="'category_'+level3Data?.value?.id"
+                                          (click)="toggleLevels(level3Data,true)"></i>
+                                      </span>
+                                      <span class="expander">
+                                        <i class="category-minus fa fa-minus-circle"
+                                          [ngClass]="'category_'+level3Data?.value?.id"
+                                          (click)="toggleLevels(level3Data,false)"></i>
+                                      </span>
+                                    </ng-container>
+                                    <span
+                                      [ngClass]="level3Data?.value?.accounts && level3Data?.value?.accounts.length>0 ?'':'ml-15'">
+                                      {{level3Data?.value?.i18n?.mappingName}}</span>
+                                  </td>
+                                  <td class="checkbox c-checkbox">
+                                    <label>
+                                      <input type="checkbox" class="check-box" formControlName="freelancerApplicable"
+                                        (change)="checked(level3Data,'freelancerApplicable',$event.target.checked,false)" />
+                                      <span class="fa fa-check"></span>
+                                    </label>
+                                  </td>
+                                  <td class="checkbox c-checkbox">
+                                    <label>
+                                      <input type="checkbox" class="check-box" formControlName="vendorApplicable"
+                                        (change)="checked(level3Data,'vendorApplicable',$event.target.checked,false)" />
+                                      <span class="fa fa-check"></span>
+                                    </label>
+                                  </td>
+                                  <td class="checkbox c-checkbox">
+                                    <label>
+                                      <input type="checkbox" class="check-box" formControlName="locationApplicable"
+                                        (change)="checked(level3Data,'locationApplicable',$event.target.checked,false)" />
+                                      <span class="fa fa-check"></span>
+                                    </label>
+                                  </td>
+                                  <td class="checkbox c-checkbox">
+                                    <label>
+                                      <input type="checkbox" class="check-box" formControlName="talentApplicable"
+                                        (change)="checked(level3Data,'talentApplicable',$event.target.checked,false)" />
+                                      <span class="fa fa-check"></span>
+                                    </label>
+                                  </td>
+                                  <td class="checkbox c-checkbox">
+                                    <label>
+                                      <input type="checkbox" class="check-box" formControlName="annualContractRequired"
+                                        (change)="checked(level3Data,'annualContractRequired',$event.target.checked,false)" />
+                                      <span class="fa fa-check"></span>
+                                    </label>
+                                  </td>
+                                  <td class="checkbox c-checkbox">
+                                    <label>
+                                      <input type="checkbox" class="check-box" formControlName="projectContractRequired"
+                                        (change)="checked(level3Data,'projectContractRequired',$event.target.checked,false)" />
+                                      <span class="fa fa-check"></span>
+                                    </label>
+                                  </td>
+                                  <td class="checkbox c-checkbox">
+                                    <label>
+                                      <input type="checkbox" class="check-box" formControlName="advancesApplicable"
+                                        (change)="checked(level3Data,'advancesApplicable',$event.target.checked,false)" />
+                                      <span class="fa fa-check"></span>
+                                    </label>
+                                  </td>
+                                </tr>
+                                <ng-container formArrayName="accounts" *ngIf="level3Data?.value?.showLevel">
+                                  <ng-container [formGroupName]="l4Index"
+                                    *ngFor="let level4Data of level3Data.controls.accounts['controls']; let l4Index=index;let lst=last;">
+
+                                    <tr>
+                                      <td>{{level4Data?.value?.budgetLine}}</td>
+                                      <td class="category4-name">
+                                        <ng-container
+                                          *ngIf="level4Data?.value?.accounts && level4Data?.value?.accounts.length>0">
+                                          <span class="expander">
+                                            <i class="category-plus fa fa-plus-circle"
+                                              [ngClass]="'category_'+level4Data?.value?.id"
+                                              (click)="toggleLevels(level4Data,true)"></i>
+                                          </span>
+                                          <span class="expander">
+                                            <i class="category-minus fa fa-minus-circle"
+                                              [ngClass]="'category_'+level4Data?.value?.id"
+                                              (click)="toggleLevels(level4Data,false)"></i>
+                                          </span>
+                                        </ng-container>
+                                        <span
+                                          [ngClass]="level4Data?.value?.accounts && level4Data?.value?.accounts.length>0 ?'':'ml-15'">
+                                          {{level4Data?.value?.i18n?.mappingName}}</span>
+                                      </td>
+                                      <td class="checkbox c-checkbox">
+                                        <label>
+                                          <input type="checkbox" class="check-box"
+                                            formControlName="freelancerApplicable"
+                                            (change)="checked(level4Data,'freelancerApplicable',$event.target.checked,false)" />
+                                          <span class="fa fa-check"></span>
+                                        </label>
+                                      </td>
+                                      <td class="checkbox c-checkbox">
+                                        <label>
+                                          <input type="checkbox" class="check-box" formControlName="vendorApplicable"
+                                            (change)="checked(level4Data,'vendorApplicable',$event.target.checked,false)" />
+                                          <span class="fa fa-check"></span>
+                                        </label>
+                                      </td>
+                                      <td class="checkbox c-checkbox">
+                                        <label>
+                                          <input type="checkbox" class="check-box" formControlName="locationApplicable"
+                                            (change)="checked(level4Data,'locationApplicable',$event.target.checked,false)" />
+                                          <span class="fa fa-check"></span>
+                                        </label>
+                                      </td>
+                                      <td class="checkbox c-checkbox">
+                                        <label>
+                                          <input type="checkbox" class="check-box" formControlName="talentApplicable"
+                                            (change)="checked(level4Data,'talentApplicable',$event.target.checked,false)" />
+                                          <span class="fa fa-check"></span>
+                                        </label>
+                                      </td>
+                                      <td class="checkbox c-checkbox">
+                                        <label>
+                                          <input type="checkbox" class="check-box"
+                                            formControlName="annualContractRequired"
+                                            (change)="checked(level4Data,'annualContractRequired',$event.target.checked,false)" />
+                                          <span class="fa fa-check"></span>
+                                        </label>
+                                      </td>
+                                      <td class="checkbox c-checkbox">
+                                        <label>
+                                          <input type="checkbox" class="check-box"
+                                            formControlName="projectContractRequired"
+                                            (change)="checked(level4Data,'projectContractRequired',$event.target.checked,false)" />
+                                          <span class="fa fa-check"></span>
+                                        </label>
+                                      </td>
+                                      <td class="checkbox c-checkbox">
+                                        <label>
+                                          <input type="checkbox" class="check-box" formControlName="advancesApplicable"
+                                            (change)="checked(level4Data,'advancesApplicable',$event.target.checked,false)" />
+                                          <span class="fa fa-check"></span>
+                                        </label> </td>
+                                    </tr>
+                                    <ng-container formArrayName="accounts" *ngIf="level4Data?.value?.showLevel">
+                                      <ng-container [formGroupName]="l5Index"
+                                        *ngFor="let level5Data of level4Data.controls.accounts['controls']; let l5Index=index;let lst=last;">
+
+                                        <tr>
+                                          <td>{{level5Data?.value?.budgetLine}}</td>
+                                          <td class="category5-name">
+                                            <ng-container
+                                              *ngIf="level5Data?.value?.accounts && level5Data?.value?.accounts.length>0">
+                                              <span class="expander">
+                                                <i class="category-plus fa fa-plus-circle"
+                                                  [ngClass]="'category_'+level5Data?.value?.id"
+                                                  (click)="toggleLevels(level5Data,true)"></i>
+                                              </span>
+                                              <span class="expander">
+                                                <i class="category-minus fa fa-minus-circle"
+                                                  [ngClass]="'category_'+level5Data?.value?.id"
+                                                  (click)="toggleLevels(level5Data,false)"></i>
+                                              </span>
+                                            </ng-container>
+                                            <span
+                                              [ngClass]="level5Data?.value?.accounts && level5Data?.value?.accounts.length>0 ?'':'ml-15'">
+                                              {{level5Data?.value?.i18n?.mappingName}}</span>
+                                          </td>
+                                          <td class="checkbox c-checkbox">
+                                            <label>
+                                              <input type="checkbox" class="check-box"
+                                                formControlName="freelancerApplicable"
+                                                (change)="checked(level5Data,'freelancerApplicable',$event.target.checked,false)" />
+                                              <span class="fa fa-check"></span>
+                                            </label>
+                                          </td>
+                                          <td class="checkbox c-checkbox">
+                                            <label>
+                                              <input type="checkbox" class="check-box"
+                                                formControlName="vendorApplicable"
+                                                (change)="checked(level5Data,'vendorApplicable',$event.target.checked,false)" />
+                                              <span class="fa fa-check"></span>
+                                            </label>
+                                          </td>
+                                          <td class="checkbox c-checkbox">
+                                            <label>
+                                              <input type="checkbox" class="check-box"
+                                                formControlName="locationApplicable"
+                                                (change)="checked(level5Data,'locationApplicable',$event.target.checked,false)" />
+                                              <span class="fa fa-check"></span>
+                                            </label>
+                                          </td>
+                                          <td class="checkbox c-checkbox">
+                                            <label>
+                                              <input type="checkbox" class="check-box"
+                                                formControlName="talentApplicable"
+                                                (change)="checked(level5Data,'talentApplicable',$event.target.checked,false)" />
+                                              <span class="fa fa-check"></span>
+                                            </label>
+                                          </td>
+                                          <td class="checkbox c-checkbox">
+                                            <label>
+                                              <input type="checkbox" class="check-box"
+                                                formControlName="annualContractRequired"
+                                                (change)="checked(level5Data,'annualContractRequired',$event.target.checked,false)" />
+                                              <span class="fa fa-check"></span>
+                                            </label>
+                                          </td>
+                                          <td class="checkbox c-checkbox">
+                                            <label>
+                                              <input type="checkbox" class="check-box"
+                                                formControlName="projectContractRequired"
+                                                (change)="checked(level5Data,'projectContractRequired',$event.target.checked,false)" />
+                                              <span class="fa fa-check"></span>
+                                            </label>
+                                          </td>
+                                          <td class="checkbox c-checkbox">
+                                            <label>
+                                              <input type="checkbox" class="check-box"
+                                                formControlName="advancesApplicable"
+                                                (change)="checked(level5Data,'advancesApplicable',$event.target.checked,false)" />
+                                              <span class="fa fa-check"></span>
+                                            </label> </td>
+                                        </tr>
+                                        <ng-container formArrayName="accounts" *ngIf="level5Data?.value?.showLevel">
+                                          <ng-container [formGroupName]="l6Index"
+                                            *ngFor="let level6Data of level5Data.controls.accounts['controls']; let l6Index=index;let lst=last;">
+
+                                            <tr>
+                                              <td>{{level6Data?.value?.budgetLine}}</td>
+                                              <td class="category6-name">
+                                                <!-- <ng-container *ngIf="level6Data?.value?.accounts && level6Data?.value?.accounts.length>0">
+                                                <span class="expander">
+                                          <i class="category-plus fa fa-plus-circle" [ngClass]="'category_'+level6Data?.value?.id" (click)="subMenuShow(level6Data?.value?.id, 'show')"></i>
+                                      </span>
+                                                <span class="expander">
+                                          <i class="category-minus fa fa-minus-circle" [ngClass]="'category_'+level6Data?.value?.id" (click)="subMenuShow(level6Data?.value?.id, 'hide')"></i>
+                                      </span>
+                                              </ng-container> -->
+                                                <span class="ml-15"> {{level6Data?.value?.i18n?.mappingName}}</span>
+                                              </td>
+                                              <td class="checkbox c-checkbox">
+                                                <label>
+                                                  <input type="checkbox" class="check-box"
+                                                    formControlName="freelancerApplicable"
+                                                    (change)="checked(level6Data,'freelancerApplicable',$event.target.checked,false)" />
+                                                  <span class="fa fa-check"></span>
+                                                </label>
+                                              </td>
+                                              <td class="checkbox c-checkbox">
+                                                <label>
+                                                  <input type="checkbox" class="check-box"
+                                                    formControlName="vendorApplicable"
+                                                    (change)="checked(level6Data,'vendorApplicable',$event.target.checked,false)" />
+                                                  <span class="fa fa-check"></span>
+                                                </label>
+                                              </td>
+                                              <td class="checkbox c-checkbox">
+                                                <label>
+                                                  <input type="checkbox" class="check-box"
+                                                    formControlName="locationApplicable"
+                                                    (change)="checked(level6Data,'locationApplicable',$event.target.checked,false)" />
+                                                  <span class="fa fa-check"></span>
+                                                </label>
+                                              </td>
+                                              <td class="checkbox c-checkbox">
+                                                <label>
+                                                  <input type="checkbox" class="check-box"
+                                                    formControlName="talentApplicable"
+                                                    (change)="checked(level6Data,'talentApplicable',$event.target.checked,false)" />
+                                                  <span class="fa fa-check"></span>
+                                                </label>
+                                              </td>
+                                              <td class="checkbox c-checkbox">
+                                                <label>
+                                                  <input type="checkbox" class="check-box"
+                                                    formControlName="annualContractRequired"
+                                                    (change)="checked(level6Data,'annualContractRequired',$event.target.checked,false)" />
+                                                  <span class="fa fa-check"></span>
+                                                </label>
+                                              </td>
+                                              <td class="checkbox c-checkbox">
+                                                <label>
+                                                  <input type="checkbox" class="check-box"
+                                                    formControlName="projectContractRequired"
+                                                    (change)="checked(level6Data,'projectContractRequired',$event.target.checked,false)" />
+                                                  <span class="fa fa-check"></span>
+                                                </label>
+                                              </td>
+                                              <td class="checkbox c-checkbox">
+                                                <label>
+                                                  <input type="checkbox" class="check-box"
+                                                    formControlName="advancesApplicable"
+                                                    (change)="checked(level6Data,'advancesApplicable',$event.target.checked,false)" />
+                                                  <span class="fa fa-check"></span>
+                                                </label>
+                                              </td>
+                                            </tr>
+                                          </ng-container>
+                                        </ng-container>
+                                      </ng-container>
+                                    </ng-container>
+                                  </ng-container>
+                                </ng-container>
+                              </ng-container>
+                            </ng-container>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+
+
+            </div>
+
+          </div>
+          <div class="floating-btn" *ngIf="showFloatingBtn">
+            <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID" [actionType]="ACTION_TYPES.EDIT">
+
+              <button (click)="updateConfigurationDetails()" [disabled]="isClicked || showLoadingFlg"
+                class="btn btn-success save-btn"><i *ngIf="spinnerFlag"
+                  class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'|
+              translate}}</button>
+            </action-permission>
+            <button (click)="navigateTo()"
+              class="btn btn-danger ml-1 cancel-btn">{{'common.labels.cancel'| translate}}</button>
+
+          </div>
+          <div class="col-md-12 mt-3 no-mg" id="fixed-btn">
+            <action-permission [permissionArr]="permissionObj" [MODULE_ID]="MODULE_ID" [actionType]="ACTION_TYPES.EDIT">
+
+              <button (click)="updateConfigurationDetails()" [disabled]="isClicked || showLoadingFlg"
+                class="btn btn-success save-btn"><i *ngIf="spinnerFlag"
+                  class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'|
+              translate}}</button>
+            </action-permission>
+            <button (click)="navigateTo()"
+              class="btn btn-danger ml-1 cancel-btn">{{'common.labels.cancel'| translate}}</button>
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+  </div>
+</div>

@@ -1,0 +1,226 @@
+// import variables scss
+@import "../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../assets/styles/mixins.style.scss";
+
+#payment-listing{
+    .items {
+        @include padding(0px 15px);
+        font-size: 15px;
+        .payment-id, .invoice-number {
+            @include padding(2px 5px);
+            font-size: 18px;
+            @include color($black-color);
+        }
+        span{
+            &.invoice-number{
+                @include fa-icon-margin();
+            }
+        }
+        .action-items{
+            span {
+                @include padding(5px 10px);
+                margin: 0 10px;
+                @include background-color($border-color2);
+                @include border-radius(10px);
+                cursor: pointer;
+                @include fa-icon-margin();
+            }
+        }
+        .amount-details{
+            .details {
+                @include background-color($theme-color5);
+                @include color($white-color);
+                @include border-radius(5px);
+                @include padding(5px 10px);
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+            }
+            .amount {
+                @include color($white-color);
+                font-size: 18px;
+            }
+        }
+    }
+    .display-inline-block {
+        display: inline-block;
+    }
+    .display-inline-flex {
+        display: inline-flex;
+    }
+    // #scheduled-tab-content .card .card-header, #scheduled-tab-content .card .panel-heading{
+    //     background-color: #edf1f2!important;
+    // }
+    #scheduled-tab-content{
+         .card {
+             .card-header, .panel-heading{
+                background-color: #edf1f2;
+             }
+        }
+        .panel-open {
+            .show-hide-plus-icon{
+                display: none;
+            }
+            .show-hide-minus-icon{
+                display: block;
+            }
+        }
+        .show-hide-plus-icon{
+            display: block;
+        }
+        .show-hide-minus-icon{
+            display: none;
+        }
+    }
+    .pt-20{
+        padding-top: 20px;
+    }
+    .pb-15{
+        padding-bottom: 15px;
+    }
+    .pl-20{
+        padding-left:20px;
+    }
+    .pt-10{
+        padding-top:10px;
+    }
+    .mt-30{
+        margin-top: 30px;
+    }.textElipses {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    // #scheduled-tab-content .panel-open .show-hide-plus-icon{
+    //     display: none;
+    // }
+    // #scheduled-tab-content .show-hide-plus-icon{
+    //     display: block;
+    // }
+    // #scheduled-tab-content .panel-open .show-hide-minus-icon{
+    //     display: block;
+    // }
+    // #scheduled-tab-content .show-hide-minus-icon{
+    //     display: none;
+    // }
+    .p-5-25{
+        padding: 5px 25px !important;
+    }
+    .sch-pmnt-div1{
+        padding-left: 20px;
+    }
+    .sch-pmnt-div2{
+        margin-right:40px;
+        min-width:45px;
+    }
+    .sch-pmnt-div3{
+        margin-right:25px;
+    }
+}
+
+
+// OLD CSS
+// .fa-trash{
+//     cursor:pointer;
+//   }
+//   .attachRemoveBtn em {
+//     margin: 0 auto;
+//     color: white !important;
+//     background-color: red;
+//     padding: 10px;
+//     border-radius: 4px;
+//   }
+  
+//   .textElipses {
+//     white-space: nowrap;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//   }
+  
+//   .attachment-section{
+//     width:100%;
+//   }
+//   .sch-pmnt-div1{
+//     padding-left: 20px;
+//   }
+//   .sch-pmnt-div2{
+//     margin-right:40px;
+//     min-width:45px;
+//   }
+  
+//   .sch-pmnt-div3{
+//     margin-right:25px;
+//   }
+//   .pay-icon{
+//     position: relative;
+//     top: -2px;
+//   }
+//   .payment-list .action-col {
+//     min-width: 120px;
+//   }
+
+//   // import variables scss
+// @import "../../../../assets/styles/variables.style.scss";
+// // import mixins scss
+// @import "../../../../assets/styles/mixins.style.scss";
+
+// #payment-listing{
+//     .items {
+//         @include padding(0px 15px);
+//         font-size: 15px;
+//         .payment-id, .invoice-number {
+//             @include padding(2px 5px);
+//             font-size: 18px;
+//             @include color($black-color);
+//         }
+//         span{
+//             &.invoice-number{
+//                 @include fa-icon-margin();
+//             }
+//         }
+//         .action-items{
+//             span {
+//                 @include padding(5px 10px);
+//                 margin: 0 10px;
+//                 @include background-color($border-color2);
+//                 @include border-radius(10px);
+//                 cursor: pointer;
+//                 @include fa-icon-margin();
+//             }
+//         }
+//         .amount-details{
+//             .details {
+//                 @include background-color($theme-color5);
+//                 @include color($white-color);
+//                 @include border-radius(5px);
+//                 @include padding(5px 10px);
+//                 left: 0;
+//                 right: 0;
+//                 margin: 0 auto;
+//             }
+//             .amount {
+//                 @include color($white-color);
+//                 font-size: 18px;
+//             }
+//         }
+//     }
+//     .display-inline-block {
+//         display: inline-block;
+//     }
+//     .display-inline-flex {
+//         display: inline-flex;
+//     }
+//     #scheduled-tab-content .card-header{
+//         background-color: #edf1f2;
+//     }
+//     .pt-20{
+//         padding-top: 20px;
+//     }
+//     .mt-30{
+//         margin-top: 30px;
+//     }
+//     .p-5-25{
+//         padding: 5px 25px!important;
+//     }
+// }

@@ -1,0 +1,310 @@
+<ng-container *ngIf="!renderPage">
+  <app-loader class="col-md-12" [loading]="!renderPage"></app-loader>
+</ng-container>
+<ng-container *ngIf="renderPage">
+  <form [formGroup]="locationPOForm">
+    <div class="panel-body sublocation-body">
+      <div class="form-group">
+        <h5 class="text-dark ml-3">
+          <strong>{{'projects.labels.addLocationSublocationPO'| translate}}</strong>
+          <button class="btn btn-primary pull-right mr-3 btl-btn" (click)="navigateTo()" type="button">
+            {{'common.labels.backToList'| translate}}</button>
+        </h5>
+      </div>
+      <!-- <div class="form-group">
+        <label class="col-md-12 col-xs-12 col-sm-12">{{'common.labels.locationType'| translate}}
+        </label>
+        <div class="row col-xs-12 col-sm-8">
+          <div class="col-md-9">
+            <input type="checkbox" class="ptr" formControlName="isSubLocation" (change)="subLocationCheckSelected($event.target.checked)">
+            <span class="ml-2">{{'projects.labels.subLocation'| translate}}</span>
+          </div>
+        </div>
+      </div> -->
+      <div class="form-group" *ngIf="locationPOForm?.value?.isSubLocation">
+        <label class="col-md-12 col-xs-12 col-sm-12">{{'projects.labels.masterLocation'| translate}}
+          <span class="mandatory">*</span>
+        </label>
+        <div class="row col-xs-12 col-sm-8">
+          <div class="col-md-9">
+            <ngx-select [items]="masterLocations" [allowClear]="true" placeholder="Select"
+              formControlName="masterLocation">
+            </ngx-select>
+            <div class="text-danger col-md-12 no-mg"
+              *ngIf="locationPOForm.controls['masterLocation']?.errors?.checkRequired && (locationPOForm.controls['masterLocation'].touched  || submmitedFormFlag)">
+              {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-12 col-xs-12 col-sm-12">{{'projects.labels.budgetLine'| translate}}
+          <span class="mandatory">*</span>
+        </label>
+        <div class="row col-xs-12 col-sm-8">
+          <div class="col-md-9">
+            <ngx-select [items]="budgetLineList" [allowClear]="true" placeholder="{{'common.labels.select'| translate}}"
+              formControlName="budgetLine">
+            </ngx-select>
+            <div class="text-danger col-md-12 no-mg"
+              *ngIf="locationPOForm.controls['budgetLine']?.errors?.checkRequired && (locationPOForm.controls['budgetLine'].touched  || submmitedFormFlag)">
+              {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label class="col-md-12 col-xs-12 col-sm-12">{{'common.labels.location' | translate}}
+          <span class="mandatory">*</span>
+        </label>
+        <div class="row col-xs-12 col-sm-12">
+          <div class="col-md-6" style="max-width: 49%;">
+            <ngx-select [items]="locations" (typed)="searchLocation.next($event)" [allowClear]="true" name="roleId"
+              placeholder="{{'common.labels.select'| translate}}" (select)="checkFinancialDetails($event)"
+              formControlName="locationId">
+            </ngx-select>
+            <ng-template ngx-select-option-not-found>
+              <ng-container *ngIf="isLoadingLocationName; else elseBlock">
+                {{'biddings.labels.loading' | translate}}
+                <span class="fl-right">
+                  <i class="fa fa-spinner fa-spin margin-right-5"></i>
+                </span>
+              </ng-container>
+              <ng-template #elseBlock>
+                {{ 'common.labels.recordNotFound' | translate }}
+              </ng-template>
+            </ng-template>
+            <div class="text-danger col-md-12 no-mg"
+              *ngIf="locationPOForm.controls['locationId']?.errors?.checkRequired && (locationPOForm.controls['locationId'].touched  || submmitedFormFlag)">
+              {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+          </div>
+          <div class="col-md-6" *ngIf="financialDetails">
+            <span class="bb-error">{{'location.labels.nofinancialDetails'| translate}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-12 col-xs-12 col-sm-12">{{'projects.labels.scouter'| translate}}
+          <span class="mandatory">*</span>
+        </label>
+        <div class="row col-xs-12 col-sm-8">
+          <div class="col-md-9">
+            <ngx-select [items]="scouter" [allowClear]="true" name="roleId"
+              placeholder="{{'common.labels.select'| translate}}" (select)="scouterSelected($event)"
+              formControlName="scouterId">
+            </ngx-select>
+            <div class="text-danger col-md-12 no-mg"
+              *ngIf="locationPOForm.controls['scouterId']?.errors?.checkRequired && (locationPOForm.controls['scouterId'].touched  || submmitedFormFlag)">
+              {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+          </div>
+          <div class="col-md-3  mt-2">
+            <input type="checkbox" class="ptr" formControlName="beneficiary">
+            <span class="ml-2">{{'projects.labels.isBeneficiary'| translate}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-3">
+          <label>{{'projects.labels.paidVia' | translate}}:</label>
+          <span>
+            <ng-container *ngIf="paidVia else elseBlock">{{ paidVia }}</ng-container>
+            <ng-template #elseBlock>{{'common.labels.na'| translate}}</ng-template>
+          </span>
+        </div>
+        <div class="row no-mg">
+
+          <div class="col-md-3">
+            <label class=" control-label"
+              oninput="this.value = this.value.replace(/[^0-9]/g,'');">{{'projects.labels.preparationDays'| translate}}</label>
+            <input type="text" OnlyNumber="true" class="form-control"
+              (keyup)="checkField('preparationDays');updateAmount();" formControlName="preparationDays">
+          </div>
+          <div class="col-md-3">
+            <label class="control-label"
+              oninput="this.value = this.value.replace(/[^0-9]/g,'');">{{'projects.labels.shootingDays'| translate}}</label>
+            <input type="text" OnlyNumber="true" class="form-control"
+              (keyup)="checkField('shootingDays');updateAmount();" formControlName="shootingDays">
+          </div>
+          <div class="col-md-3">
+            <label class=" control-label">{{'projects.labels.dismantleDays'| translate}}</label>
+            <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g,'');" class="form-control"
+              (keyup)="checkField('dismantleDays');updateAmount();" formControlName="dismantleDays">
+          </div>
+        </div>
+
+      </div>
+      <div class="form-group">
+        <div class="row no-mg">
+
+
+          <div class="col-md-3">
+            <label class="control-label">{{'projects.labels.dailyRate'| translate}}</label>
+            <span class="mandatory">*</span>
+            <input class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+              formControlName="dailyRate" (keyup)="updateAmount()">
+            <div class="text-danger col-md-12 no-mg"
+              *ngIf="locationPOForm.controls['dailyRate']?.errors?.checkRequired && (locationPOForm.controls['dailyRate'].touched  || submmitedFormFlag)">
+              {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+          </div>
+
+          <div class="col-md-3">
+            <label class=" control-label">{{'common.labels.totalAmount'| translate}}</label>
+            <div class="col-md-3">
+              <span>{{totalAmt ? (totalAmt | twoDecimal) : 0.00}}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'common.labels.currency'| translate}}
+          <span class="mandatory">*</span>
+        </label>
+
+        <div class="col-md-3">
+          <ngx-select [items]="currency" [allowClear]="true" placeholder="{{'common.labels.select'| translate}}"
+            formControlName="currencyId"></ngx-select>
+          <div class="text-danger col-md-12 no-mg"
+            *ngIf="locationPOForm.controls['currencyId']?.errors?.checkRequired && (locationPOForm.controls['currencyId'].touched  || submmitedFormFlag)">
+            {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg">
+          <div class="col-md-2">
+            <label>{{'projects.labels.vat'| translate}}(%)</label>
+            <input name="firstName" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g,'');"
+              formControlName="percentVat" (blur)="setValueZero('percentVat')" (keyup)="updateSubtotal()">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="text-danger"
+            *ngIf="!locationPOForm.controls['percentVat']?.errors?.checkRequired && locationPOForm.controls['percentVat']?.errors?.checkUptoFourDecimal && (locationPOForm.controls['percentVat'].touched) && locationPOForm.controls['percentVat'].dirty">
+            {{'pages.errorMessages.validFourDecimal'| translate}}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">
+          {{'projects.labels.subTotal'| translate}}
+        </label>
+        <div class="col-md-3">
+          <span>{{ subTotal ? (subTotal | twoDecimal) : 0.00}}</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg mt-3">
+          <div class="col-md-3">
+            <label>{{'projects.labels.isrWithholding'| translate}}(%)</label>
+            <input name="firstName" class="form-control max-width"
+              (keyup)="checkField('percentIsrWithholding');updatePayableAmount();"
+              formControlName="percentIsrWithholding" (blur)="setValueZero('percentIsrWithholding')" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
+            <!-- <input type="text" [(ngModel)]="isrWithholding" class="form-control"> -->
+          </div>
+          <div class="col-md-3">
+            <label>{{'common.labels.amount'| translate}}</label>
+            <div class="mt-5">
+              <span class="mr-2">{{(totalAmt && locationPOForm?.value?.percentIsrWithholding) ? (((totalAmt* locationPOForm?.value?.percentIsrWithholding)/100)
+                | twoDecimal) :0.00}}</span>
+              <!-- <span class="mr-2">{{(amount && isrWithholding) ? ((((amount * isrWithholding)/100)) | twoDecimal) :0.00}}</span> -->
+              <!-- <span>{{defaultCurrency.name}}</span> -->
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="text-danger"
+            *ngIf="!locationPOForm.controls['percentIsrWithholding']?.errors?.checkRequired && locationPOForm.controls['percentIsrWithholding']?.errors?.checkUptoFourDecimal && (locationPOForm.controls['percentIsrWithholding'].touched) && locationPOForm.controls['percentIsrWithholding'].dirty">
+            {{'pages.errorMessages.validFourDecimal'| translate}}</div>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row no-mg mt-3">
+          <div class="col-md-3">
+            <label>{{'projects.labels.vatWithholding'| translate}}(%)</label>
+            <input name="firstName" (blur)="setValueZero('percentVatWithholding')" (keyup)="checkField('percentVatWithholding');updatePayableAmount();"
+              formControlName="percentVatWithholding" class="form-control max-width"
+              oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
+            <!-- <input type="text" [(ngModel)]="isrWithholding" class="form-control"> -->
+          </div>
+          <div class="col-md-3">
+            <label>{{'common.labels.amount'| translate}}</label>
+            <div class="mt-5">
+              <span class="mr-2">{{(totalAmt && locationPOForm?.value?.percentVatWithholding) ? (((totalAmt* locationPOForm?.value?.percentVatWithholding)/100)
+                | twoDecimal) :0.00}}</span>
+              <!-- <span class="mr-2">{{(amount && isrWithholding) ? ((((amount * isrWithholding)/100)) | twoDecimal) :0.00}}</span> -->
+              <!-- <span>{{defaultCurrency.name}}</span> -->
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="text-danger"
+            *ngIf="!locationPOForm.controls['percentVatWithholding']?.errors?.checkRequired && locationPOForm.controls['percentVatWithholding']?.errors?.checkUptoFourDecimal && (locationPOForm.controls['percentVatWithholding'].touched) && locationPOForm.controls['percentVatWithholding'].dirty">
+            {{'pages.errorMessages.validFourDecimal'| translate}}</div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-2">
+          <label class="col-md-3 control-label max-width"><b>{{'projects.labels.total'|
+            translate}}</b></label>
+          <div class="col-md-3">
+            <span class="mr-2">{{payableAmount | twoDecimal :0.00}}</span>
+            <!-- <span>{{selectedCurrency}}</span> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'common.labels.mode'| translate}}
+          <span class="mandatory">*</span>
+        </label>
+        <div class="col-md-3">
+          <ngx-select [items]="mode" [allowClear]="true" formControlName="operationId" name="operationId"
+            placeholder="{{'common.labels.select'| translate}}">
+          </ngx-select>
+          <div class="text-danger col-md-12 no-mg"
+            *ngIf="locationPOForm.controls['operationId']?.errors?.checkRequired && (locationPOForm.controls['operationId'].touched  || submmitedFormFlag)">
+            {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'projects.labels.requestedBy'| translate}}
+        </label>
+        <div class="col-md-3">
+          <ngx-select [items]="requestedByList" [allowClear]="true" formControlName="requesteByUserId"
+            name="requesteByUserId" placeholder="{{'common.labels.select'| translate}}">
+          </ngx-select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'projects.labels.notes'| translate}}
+        </label>
+        <div class="col-md-8">
+          <textarea class="form-control" rows="2" cols="5" formControlName="notes"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{'projects.labels.paymentDate'| translate}}
+          <span class="mandatory">*</span>
+        </label>
+        <div class="col-md-6">
+          <my-date-picker class="bbdate" formControlName="paymentDate" [options]="dobDatePickerOptions"
+            placeholder="{{'common.labels.datePickerPlaceholder' | translate}}"></my-date-picker>
+          <div class="text-danger col-md-12 no-mg"
+            *ngIf="locationPOForm.controls['paymentDate']?.errors?.checkRequired && (locationPOForm.controls['paymentDate'].touched  || submmitedFormFlag)">
+            {{'actors.freelancers.errorMessages.fieldRequired'| translate}}</div>
+
+        </div>
+      </div>
+      <div class="col-md-12 mt-3">
+        <button class="btn btn-success save-btn" [disabled]="isClicked" (click)="addLocationPO()"  type="submit">
+          <i *ngIf="spinnerFlag"
+            class="fa fa-spinner fa-spin margin-right-5"></i>{{'common.labels.save'| translate}}</button>
+        <button class="btn btn-danger ml-1 cancel-btn"
+          (click)="navigateTo()"  type="button">{{'common.labels.cancel'| translate}}</button>
+      </div>
+    </div>
+  </form>
+</ng-container>

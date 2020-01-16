@@ -1,0 +1,487 @@
+<div *ngIf="showLoadingFlg; else elseBlock" style="margin-top: 150px;">
+  <app-loader class="col-md-12" [loading]="showLoadingFlg"></app-loader>
+</div>
+<ng-template #elseBlock>
+  <div *ngIf="downloadPoURLFlag">
+    <span >
+      <a class="download-btn" href="{{downloadPoUrl}}" target="_blank"
+        [download]="downloadPoUrl">
+        {{'common.labels.download' | translate }} <i class="fa fa-download download-icon"></i>
+      </a>
+    </span>
+  </div>
+  <div id="view-po" class="view-po table-responsive">
+    <table class="view-table-structure" cellpadding='0' cellspacing='0'>
+      <tbody>
+        <tr>
+          <td colspan="2" style="padding: 0px 15px;">
+            <table style="border-collapse: collapse;table-layout: fixed; width:100%;">
+              <tr style="text-align: center;">
+                <td *ngIf="!(PODetails.purchaseOrderFor === PAYMENT_FOR.advance) && !(PODetails.purchaseOrderFor === PAYMENT_FOR.adjustment) && PODetails.purchaseOrderFor !== PAYMENT_FOR.talent"
+                  style="overflow: hidden;vertical-align:bottom;" colspan="2">
+                  <span style="font-size:30px;color:#8793c9;">{{'projects.labels.viewPurchaseOrderName' | translate}}</span>
+                </td>
+                <td *ngIf="PODetails.purchaseOrderFor === PAYMENT_FOR.advance && PODetails.purchaseOrderFor !== PAYMENT_FOR.talent" style="overflow: hidden;vertical-align:bottom;"
+                  colspan="2">
+                  <span style="font-size:30px;color:#8793c9;">{{'projects.labels.viewAdvancePurchaseOrderName' |
+                    translate}}
+                  </span>
+                </td>
+                <td *ngIf="PODetails.purchaseOrderFor === PAYMENT_FOR.adjustment && PODetails.purchaseOrderFor !== PAYMENT_FOR.talent" style="overflow: hidden;vertical-align:bottom;"
+                  colspan="2">
+                  <span style="font-size:30px;color:#8793c9;">{{'projects.labels.viewAdjustmentPurchaseOrderName' |
+                    translate}}
+                  </span>
+                </td>
+                <td *ngIf="PODetails.purchaseOrderFor === PAYMENT_FOR.talent" style="overflow: hidden;vertical-align:bottom;"
+                  colspan="2">
+                  <span style="font-size:30px;color:#8793c9;">{{'projects.labels.viewTalentPurchaseOrderName' |
+                    translate}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td style="vertical-align: top;">
+                  <table style="border-collapse: collapse;table-layout: fixed; width:100%;">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <img [src]="PODetails?.companyLogoUrl" style="max-width:100px;color:black;margin-top: 6px"
+                            alt="lift-image;">
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <span>
+                            {{PODetails?.companyName | uppercase}}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 10px 0px;">
+                          <span style="background:#4b558c;color:white;padding: 0px 30px;"> {{actualPurchaseOrderFor}}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <strong>
+                            {{supplierDetails?.name}}
+                          </strong>
+                        </td>
+                      </tr>
+                      <tr *ngIf="supplierDetailsType != PAYMENT_FOR.freelancer">
+                        <td style="line-height: normal;">
+                          <span>
+                            {{ 'projects.labels.poAddress' | translate }}: {{supplierDetails?.address ?
+                            supplierDetails?.address : '-'}}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="line-height: normal;">
+                          <span>
+                            {{ 'projects.labels.poPhone' | translate }}: {{supplierDetails?.phoneNumber ?
+                            supplierDetails?.phoneNumber : '-'}}
+                          </span>
+                        </td>
+                      </tr>
+                      <tr *ngIf="!(PODetails.purchaseOrderFor === PAYMENT_FOR.location && !supplierDetails?.taxId)">
+                        <td style="line-height: normal;">
+                          <span>
+                            {{ 'projects.labels.poTaxId' | translate }}: {{supplierDetails?.taxId ?
+                            supplierDetails?.taxId : '-'}}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td>
+                  <table style="border-collapse: collapse;table-layout: fixed; width:100%;">
+                    <tr>
+                      <td style="width:50%;text-align:right; vertical-align: top;line-height:normal;">{{'projects.labels.poDate'|
+                        translate}}: </td>
+                      <td style="text-align:left;padding-left: 5px;line-height:normal;">
+                        <strong>
+                          {{(PODetails.purchaseOrderDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT)}}
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width:50%;text-align:right; vertical-align: top;line-height:normal;">{{'projects.labels.viewPONumber'
+                        | translate}}: </td>
+                      <td style="text-align:left;padding-left: 5px;line-height:normal;">
+                        <strong>
+                          {{PODetails?.purchaseOrderNumber? PODetails?.purchaseOrderNumber : '-'}}
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width:50%;text-align:right; vertical-align: top;line-height:normal;">{{'projects.labels.project'
+                        | translate}}: </td>
+                      <td style="text-align:left;padding-left: 5px;line-height:normal;">
+                        <strong>
+                          {{PODetails?.projectName ? PODetails?.projectName : '-'}}
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width:50%;text-align:right; vertical-align: top;line-height:normal;">{{'projects.labels.budgetType'
+                        | translate}}: </td>
+                      <td style="text-align:left;padding-left: 5px;line-height:normal;">
+                        <strong>
+                          {{PODetails?.budgetName ? PODetails?.budgetName : '-'}}
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width:50%;text-align:right; vertical-align: top;line-height:normal;">{{'common.labels.consecutiveNo'
+                        | translate}}: </td>
+                      <td style="text-align:left;padding-left: 5px;line-height:normal;">
+                        <strong>
+                          {{PODetails?.consecutiveNumber ? PODetails?.consecutiveNumber : '-'}}
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width:50%;text-align:right; vertical-align: top;line-height:normal;">{{'projects.labels.jobNumber'
+                        | translate}}: </td>
+                      <td style="text-align:left;padding-left: 5px;line-height:normal;">
+                        <strong>
+                          {{PODetails?.jobNumber ? PODetails?.jobNumber : '-'}}
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width:50%;text-align:right; vertical-align: top;line-height:normal;">
+                        {{'projects.labels.poPaymentDate' | translate}}:
+                      </td>
+                      <td style="text-align:left;padding-left: 5px;line-height:normal;">
+                        <strong>
+                          {{PODetails?.paymentDate ? (PODetails.paymentDate | dateFormat : DATE_FORMATS.CORE_DATE_FORMAT) : '-'}}
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="width:50%;text-align:right; vertical-align: top;line-height:normal;">
+                        {{'projects.labels.poModeOfOperation' | translate}}:
+                      </td>
+                      <td style="text-align:left;padding-left: 5px;line-height:normal;">
+                        <strong>
+                          {{PODetails?.modeofOperationName ? PODetails?.modeofOperationName : '-'}}
+                        </strong>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding: 0px 15px;">
+            <table style="border-collapse: collapse; font-family:Times New Roman !important; margin: auto; width: 100%; margin-top: 20px;"
+              cellpadding="0" cellspacing="0" width="700">
+              <tbody>
+                <tr>
+                  <td>
+                    <table style="width:100%;border-collapse: collapse;border: 1px solid black;">
+                      <tr style="background:#4b558c;color:white;border-collapse: collapse;">
+                        <th style="border: 1px solid black;text-align:center;width: 10%;">{{'projects.labels.poLineNumber'
+                          | translate}}</th>
+                        <th style="border: 1px solid black;text-align:center;width: 30%;">{{'projects.labels.poItemDesc'
+                          | translate}}</th>
+                        <th *ngIf="(PODetails.purchaseOrderFor === PAYMENT_FOR.vendor)" style="border: 1px solid black;text-align:center;width: 10%;">
+                          {{'projects.labels.poQTY' | translate}}</th>
+                        <th style="border: 1px solid black;text-align:center;width: 20%;">
+                          {{'projects.labels.poAmount' | translate}}
+                        </th>
+                        <th style="border: 1px solid black;text-align:right;width: 25%;padding-right: 5px;">
+                          {{'projects.labels.poTotal' | translate}}
+                        </th>
+                      </tr>
+
+                      <ng-container *ngIf="PODetails?.purchaseOrderFor == PAYMENT_FOR.adjustment; else elseBlock">
+                        <tr>
+                          <td class="center" style="padding-left:5px;border:1px solid black;vertical-align: text-top;">
+                            {{PODetails?.BudgetLineInfo[0].budgetLine ? PODetails?.BudgetLineInfo[0].budgetLine : "-"}}
+                          </td>
+                          <td style="padding-left:5px;border:1px solid black; vertical-align: text-top;">
+                            {{PODetails?.BudgetLineInfo[0].itemDescription ?
+                            PODetails?.BudgetLineInfo[0].itemDescription : "-"}}
+                          </td>
+                          <td style="padding-left:5px;border: 1px solid black;text-align:center; vertical-align: text-top;">
+                            {{PODetails?.totalAmountRequested | twoDecimal  | numberFormat}}
+                          </td>
+                          <td style="font-weight:bold;border:1px solid black;text-align:right;padding-right:5px;background:#f3f3f3;vertical-align: text-top;">
+                            {{PODetails?.totalAmountRequested | twoDecimal  | numberFormat}}
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <ng-template #elseBlock>
+                        <tr *ngFor="let budgetLine of PODetails.BudgetLineInfo;let i=index">
+                          <td class="center" style="padding-left:5px;border:1px solid black;vertical-align: text-top;">
+                            {{budgetLine.budgetLine ? budgetLine.budgetLine : "-"}}
+                          </td>
+                          <td style="padding-left:5px;border:1px solid black; vertical-align: text-top;">
+                            {{budgetLine.itemDescription ? budgetLine.itemDescription : "-"}}
+                          </td>
+                          <td class="center" *ngIf="(PODetails.purchaseOrderFor === PAYMENT_FOR.vendor)" style="padding-left:5px;border:1px solid black; vertical-align: text-top;">
+                            {{budgetLine.quantity ? budgetLine.quantity : "-"}}
+                          </td>
+                          <td style="padding-left:5px;border: 1px solid black;text-align:center; vertical-align: text-top;">
+                            {{budgetLine?.amount | twoDecimal | numberFormat}}
+                          </td>
+                          <td style="font-weight:bold;border:1px solid black;text-align:right;padding-right:5px;background:#f3f3f3;vertical-align: text-top;">
+                            {{budgetLine?.totalAmount | twoDecimal | numberFormat}}
+                          </td>
+                        </tr>
+
+                      </ng-template>
+
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 40%; vertical-align: bottom; padding-left:15px;">
+            <table style="border-collapse: collapse;table-layout: fixed; width:100%;">
+              <tbody>
+                <tr>
+                  <td style="font-weight: bold;">
+                    <u><strong>{{'projects.labels.poBankDetails' | translate}}</strong></u>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td style="vertical-align: top; padding-right:15px;">
+            <table style="border-collapse: collapse;table-layout: fixed; width:100%;">
+              <tbody>
+                <tr *ngIf="!(PODetails.purchaseOrderFor === PAYMENT_FOR.advance) && !(PODetails.purchaseOrderFor === PAYMENT_FOR.adjustment)" >
+                  <td style="width: 55%; vertical-align: top; padding-left: 8px;">
+                    {{'projects.labels.poTotalReq' | translate}}:
+                  </td>
+                  <td style="text-align: right; padding-right: 5px;">
+                    {{PODetails?.currencyCode}} {{PODetails?.totalAmountRequested | twoDecimal | numberFormat}}
+                  </td>
+                </tr>
+                   
+                <tr *ngIf="PODetails.purchaseOrderFor === PAYMENT_FOR.talent">
+                  <td style="width: 55%; vertical-align: top; padding-left: 8px;">
+                    {{'projects.labels.agengyFee' | translate}} ({{PODetails?.percentAgencyFee}} %):
+                  </td>
+                  <td style="text-align: right; padding-right: 5px;">
+                   {{PODetails?.currencyCode}} {{agencyFeeAmount | twoDecimal | numberFormat}}
+                  </td>
+                </tr>
+                <tr *ngIf="PODetails.purchaseOrderFor === PAYMENT_FOR.talent">
+                  <td style="width: 55%; vertical-align: top; padding-left: 8px;">
+                    {{'projects.labels.iva' | translate}}({{PODetails?.iva}} %):
+                  </td>
+                  <td style="text-align: right; padding-right: 5px;">
+                    {{PODetails?.currencyCode}} {{ivaAmount | twoDecimal | numberFormat}}
+                  </td>
+                </tr>
+                <tr *ngIf="PODetails.purchaseOrderFor === PAYMENT_FOR.talent">
+                  <td style="width: 55%; vertical-align: top; padding-left: 8px;">
+                    {{'projects.labels.markup' | translate}} ({{PODetails?.percentMarkup}} %):
+                  </td>
+                  <td style="text-align: right; padding-right: 5px;">
+                    {{PODetails?.currencyCode}} {{markupAmount | twoDecimal | numberFormat}}
+                  </td>
+                </tr>
+                <tr *ngIf="!(PODetails.purchaseOrderFor === PAYMENT_FOR.advance) && !(PODetails.purchaseOrderFor === PAYMENT_FOR.adjustment) && (PODetails.purchaseOrderFor !== PAYMENT_FOR.talent)">
+                  <td style="width: 55%; vertical-align: top; padding-left: 8px;">
+                    {{'projects.labels.poVAT' | translate}} ({{PODetails?.percentVAT}} %):
+                  </td>
+                  <td style="text-align: right; padding-right: 5px;">
+                    {{PODetails?.currencyCode}} {{vatAmount | twoDecimal | numberFormat}}
+                  </td>
+                </tr>
+                <tr *ngIf="showIsrOrVatWithholdingAmount && !(PODetails.purchaseOrderFor === PAYMENT_FOR.advance) && !(PODetails.purchaseOrderFor === PAYMENT_FOR.adjustment)">
+                  <td style="width: 55%; vertical-align: top; padding-left: 8px;">
+                    {{'projects.labels.vatWithholding' | translate}} ({{(PODetails?.percentVATWithholding) ? PODetails?.percentVATWithholding : 0}} %):
+                  </td>
+                  <td style="text-align: right; padding-right: 5px;">
+                    (-) {{PODetails?.currencyCode}} {{this.amountObj?.vatWithHoldingAmount | twoDecimal | numberFormat}}
+                  </td>
+                </tr>
+                <tr *ngIf="showIsrOrVatWithholdingAmount && !(PODetails.purchaseOrderFor === PAYMENT_FOR.advance) && !(PODetails.purchaseOrderFor === PAYMENT_FOR.adjustment)">
+                  <td style="width: 55%; vertical-align: top; padding-left: 8px;">
+                    {{'projects.labels.isrWithholding' | translate}} ({{(PODetails?.percentISRWithholding) ? PODetails?.percentISRWithholding : 0}} %):
+                  </td>
+                  <td style="text-align: right; padding-right: 5px;">
+                    (-) {{PODetails?.currencyCode}} {{this.amountObj?.isrWithHoldingAmount | twoDecimal | numberFormat}}
+                  </td>
+                </tr>
+
+
+          
+
+
+
+                <tr>
+                  <td style="padding-left: 8px; background-color: lightgray;font-weight:bold;vertical-align:text-top;white-space: nowrap;text-align:left;"
+                    [ngStyle]="{'border-top':((PODetails.purchaseOrderFor === PAYMENT_FOR.advance) || (PODetails.purchaseOrderFor === PAYMENT_FOR.adjustment)) ? '' : '1px solid #000' }">
+                    {{'projects.labels.poTotal' | translate}}: </td>
+                  <td *ngIf = "PODetails.purchaseOrderFor !== PAYMENT_FOR.talent" style="background-color: lightgray;font-weight:bold;text-align:right;white-space: nowrap;padding: 5px 0px 5px 0px;vertical-align: text-top;"
+                    [ngStyle]="{'border-top':((PODetails.purchaseOrderFor === PAYMENT_FOR.advance) || (PODetails.purchaseOrderFor === PAYMENT_FOR.adjustment)) ? '' : '1px solid #000' }">
+                    <span style="padding-right:5px;">
+                      {{PODetails?.currencyCode}} {{((PODetails.totalAmountRequested + vatAmount) -
+                      (this.amountObj?.isrWithHoldingAmount + this.amountObj?.vatWithHoldingAmount))
+                      | twoDecimal | numberFormat}}
+                    </span>
+                  </td>
+                  <td *ngIf = "PODetails.purchaseOrderFor === PAYMENT_FOR.talent" style="border-top:1px solid #000;background-color: lightgray;font-weight:bold;text-align:right;white-space: nowrap;padding: 5px 0px 5px 0px;vertical-align: text-top;">
+                  <span style="padding-right:5px;">
+                    {{PODetails?.currencyCode}} {{totalTalentPOAmount | twoDecimal | numberFormat}}
+                  </span>
+                </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding: 0px 15px;">
+            <table style="border-collapse: collapse;table-layout: fixed; width:60%;">
+              <tbody>
+                <tr style="margin:4px 0px">
+                  <td style="line-height: normal;">
+                    <span>
+                      {{ supplierDetails?.name ? supplierDetails?.name : "-" }}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="line-height: normal;">
+                    <span>
+                      {{'projects.labels.poBankAccountNo' | translate}}: {{ PODetails?.bankAccountNumber ?
+                      PODetails?.bankAccountNumber : "-"}}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="PODetails.BankAccountName">
+                  <td style="line-height: normal;">
+                    <span>
+                      {{'projects.labels.poBankAccountName' | translate}}: {{ PODetails?.BankAccountName ?
+                      PODetails?.BankAccountName : "-"}}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="line-height: normal;">
+                    <span>
+                      {{'projects.labels.poBankName' | translate}}: {{ PODetails?.bankName ? PODetails?.bankName : "-"
+                      }}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="line-height: normal;">
+                    <span>
+                      {{'projects.labels.poBranchName' | translate}}: {{ PODetails?.branchName ? PODetails?.branchName
+                      : "-" }}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td *ngIf="PODetails.clabe" style="line-height: normal;">
+                    <span>
+                      {{'projects.labels.poCLABE' | translate}}: {{PODetails?.clabe ? PODetails?.clabe : '-'}}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="PODetails.sortCode">
+                  <td style="line-height: normal;">
+                    <span>
+                      {{'projects.labels.poSORTCode' | translate}}: {{PODetails?.sortCode ? PODetails?.sortCode : '-'}}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="PODetails.abaCode">
+                  <td style="line-height: normal;">
+                    <span>
+                      {{'projects.labels.poABACode' | translate}}: {{PODetails?.abaCode ? PODetails?.abaCode : '-'}}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="PODetails.swiftCode">
+                  <td style="line-height: normal;">
+                    <span>
+                      {{'projects.labels.poSWIFTCode' | translate}}: {{ PODetails?.swiftCode ? PODetails?.swiftCode :
+                      '-'}}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding: 0px 15px;">
+            <table style="border-collapse: collapse;table-layout: fixed; width:100%; margin-top: 15px;border:1px solid #c2c2c2;">
+              <tr style="background:#4b558c;border-collapse: collapse;">
+                <th style="padding-left:5px;background:#c2c2c2;border:1px solid #c2c2c2;text-align:left;">
+                  {{'projects.labels.ViewPoNotes' | translate}}
+                </th>
+              </tr>
+              <tr>
+                <td style="min-height: 20px;height: 20px;padding-left:5px;vertical-align: text-top;border: 1px solid #c2c2c2;">
+                  {{ PODetails?.notes ? PODetails?.notes : '-'}}
+                </td>
+              </tr>
+            </table>
+            <hr style="margin: 15px 0px 15px 0px;border-color: #000;border-width: 0.5px;border-bottom: 1px;">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:center; padding: 0px 15px;">
+            <table style="border-collapse: collapse; font-family:Times New Roman !important; margin: auto; width: 100%;"
+              cellpadding="0" cellspacing="0" width="700">
+              <tbody>
+                <tr style="margin:0; text-align: center;">
+                  <td>
+                    <span style="overflow-wrap: break-word;word-wrap: break-word;white-space: normal;color:#333333">
+                      {{PODetails?.companyAddressLine1}}
+                    </span>
+                    <span style="text-decoration:none;color:#333333">
+                      {{PODetails?.companyAddressLine2}};
+                    </span>
+                    <span style="text-decoration:none;color:#333333">
+                      {{'projects.labels.poPhone' | translate}}:
+                      {{PODetails?.companyPhoneNo}}
+                    </span>
+                  </td>
+                </tr>
+                <tr style="margin:0;padding-top: 5px; text-align: center;">
+                  <td>
+                    <span style="text-decoration:none;color:#333333">
+                      {{'projects.labels.poTaxId' | translate}}:
+                      {{PODetails?.comanyTaxId}}
+                    </span>
+                  </td>
+                </tr>
+                <tr style="margin:0;padding-top: 10px; text-align: center;">
+                  <td>
+                    <span style="text-decoration:none;color:#333333">
+                      <!-- <a href="https://thelift.mx/" style='text-decoration:none;color:#333333' target='_blank'> -->
+                      {{PODetails?.companyWebsite}}
+                      <!-- </a> -->
+                    </span>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>

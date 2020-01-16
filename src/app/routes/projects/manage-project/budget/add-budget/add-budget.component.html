@@ -1,0 +1,113 @@
+<!-- <div class="modal" id="myModal">
+  <div class="modal-dialog modal-sm"> -->
+<!-- <div class="modal-content"> -->
+<div class="add-budget">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left"> {{'common.labels.addBudget'| translate}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="renderPage">
+    <form class="form-horizontal" [formGroup]="addBudgetForm" novalidate>
+      <div id="table-structure-using-div">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 w-450">
+          <div class="row">
+            <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+              {{'common.labels.srNo'| translate}}
+            </div>
+            <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+              {{'common.labels.budgetType'| translate}}
+              <span class="mandatory">*</span>
+            </div>
+            <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+              {{'common.labels.budgetsheet'| translate}}
+              <span class="mandatory">*</span>
+            </div>
+            <!-- <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+  
+            </div> -->
+            <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+  
+            </div>
+          </div>
+          <div formArrayName="budgetSheetArr">
+            <div *ngFor="let item of addBudgetForm.controls.budgetSheetArr['controls'];  let i=index;let lst=last;let fst=first;" [formGroupName]="i">
+              <div class="row mt-10">
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                  {{i+1}}
+                </div>
+                <div class="col-3 col-sm-3 col-md-4 col-lg-3 col-xl-3 no-mg">
+                  <ngx-select  [allowClear]="true" [items]="item?.value?.filteredBudgetList" (select)="budgetTypeChanged($event)" formControlName="budgetSheetType"
+                    placeholder="{{'common.labels.select' | translate}}">
+                  </ngx-select>
+                  <div class="text-danger" *ngIf="item.controls['budgetSheetType']?.errors?.checkRequired && (item.controls['budgetSheetType'].touched || addBudgetSheetForm)">{{'pages.errorMessages.fieldRequired'| translate}}
+                  </div>
+                </div>
+                <div class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                  <!-- <label for="file2" class="file-upload ">
+                    <button class="btn btn-default default-btn">{{'common.labels.upload'| translate}}</button>
+                    <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" (change)="fileChangeEvent($event,i)" />
+  
+                  </label>
+                  <div class="text-danger" *ngIf="item.controls['budgetSheetFileId']?.errors?.checkRequired && (item.controls['budgetSheetFileId'].touched || addBudgetSheetForm)">{{'pages.errorMessages.fieldRequired'| translate}}
+                  </div> -->
+                  <ul class="list-inline mb-0" style="display: inline-flex;">
+                      <li>
+                          <label for="file2" class="file-upload">
+                              <button class="btn btn-default default-btn">{{'common.labels.upload'| translate}}</button>
+                              <input id="file2" type="file" title="{{'common.labels.noFileChosen' | translate}}" (change)="fileChangeEvent($event,i)" />
+            
+                            </label>
+                      </li>
+                      <li>
+                        <div class="textElipses">
+                            <i *ngIf="item?.value?.showLoader" class="fa fa-spinner fa-spin ml-2"></i>
+                            <span *ngIf="item?.value?.budgetSheetName && !item?.value?.showLoader" class="ml-15" title="{{item?.value?.budgetSheetName}}">{{item?.value?.budgetSheetName}}</span>
+                        </div>
+                      </li>
+                    </ul>
+  
+                    <div class="text-danger" *ngIf="item.controls['budgetSheetFileId']?.errors?.checkRequired && (item.controls['budgetSheetFileId'].touched || addBudgetSheetForm)">{{'pages.errorMessages.fieldRequired'| translate}}
+                      </div>
+                </div>
+                <!-- <div class="text-overflow-ellipsis col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 text-left no-mg">
+                  <i *ngIf="item?.value?.showLoader" class="fa fa-spinner fa-spin ml-2"></i>
+                  <span *ngIf="item?.value?.budgetSheetName && !item?.value?.showLoader" class="ml-15" title="{{item?.value?.budgetSheetName}}">{{item?.value?.budgetSheetName}}</span>
+                </div> -->
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 add-minus text-right">
+                  <a class="ml-2 click-cursor" (click)="removeRole(i,item)" *ngIf="addBudgetForm.controls.budgetSheetArr['controls'].length > 1">
+                    <i class="fa fa-minus"></i>
+                  </a>
+                  <a (click)="addBudgetSheet(true,i)" class="click-cursor ml-2" *ngIf="lst && addBudgetForm.controls.budgetSheetArr['controls'].length > 0  && addBudgetForm.controls.budgetSheetArr['controls'].length < budgetTypesArr.length">
+                    <i class="fa fa-plus"></i>
+                  </a>
+                </div>
+                <!-- <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+  
+                </div>
+                <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
+                  <a class="click-cursor">
+                    <i class="fa fa-plus"></i>
+                  </a>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+      <div class="form-group">
+        <button [disabled]="disableButton" (click)="addBudget()" class="btn save-btn btn-success">{{'common.labels.ok'| translate}}</button>
+        <button (click)="bsModalRef.hide()" class="btn cancel-btn btn-danger ml-1">{{'common.labels.cancel'| translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- </div> -->
+<!-- </div>
+</div> -->

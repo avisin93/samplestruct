@@ -1,0 +1,151 @@
+<div class="panel panel-primary">
+
+    <div class="panel-body">
+
+
+      <div class="form-group">
+        <h5 class="text-dark mt-1 ml-3">
+          <strong>{{'projects.labels.payAdvance'| translate}} - {{'common.labels.location'| translate}}</strong>
+          <button class="btn btn-primary pull-right mr-3 btl-btn" (click)="navigateTo(ROUTER_LINKS?.advancesList)">{{'common.labels.backToList'| translate}}</button>
+        </h5>
+      </div>
+
+
+
+
+    <div class="form-group">
+      <label class="col-md-12 col-xs-12 col-sm-8">{{'common.labels.date'| translate}}
+        <span style="color:red;">*</span>
+      </label>
+      <div class="row col-xs-12 col-sm-8">
+        <div class="col-md-9">
+          <my-date-picker class="bbdate" placeholder="{{'projects.labels.paymentDate'| translate}}"></my-date-picker>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-12 col-xs-12 col-sm-8">{{'projects.labels.selectLocation'| translate}}
+        <span style="color:red;">*</span>
+      </label>
+      <div class="row col-xs-12 col-sm-8">
+        <div class="col-md-9">
+          <select class="form-control">
+            <option value="">{{'common.labels.selectMode' | translate}}</option>
+            <option *ngFor = "let location of locations;let i = index;" value="location.locationId">{{location.locationName}}</option>
+           </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-11">
+      <div class="row mt-1">
+        <div class="col-md-5 no-mg">
+          <div class="form-group">
+            <label class="col-md-12 col-xs-12 col-sm-8">{{'projects.labels.selectBudgetLine'| translate}}
+              <span style="color:red;">*</span>
+            </label>
+            <div class="col-md-12 col-xs-12 col-sm-8 mt-1">
+              <div style="width:100%;">
+                  <ngx-select [items]="ages"></ngx-select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1 no-mg">
+          <div class="form-group">
+            <label class="col-md-12 col-xs-12 col-sm-8">
+
+            </label>
+            <div class="col-md-12 col-xs-12 col-sm-8 mt-3">
+              <div style="width:100%;">
+            {{'pages.labels.or' | translate}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5 no-mg">
+          <div class="form-group">
+            <label class="col-md-12 col-xs-12 col-sm-8">{{'projects.labels.selectPO'| translate}}
+              <span style="color:red;">*</span>
+            </label>
+            <div class="col-md-12 col-xs-12 col-sm-8 mt-1">
+              <div style="width:100%;">
+                  <ngx-select [items]="po"></ngx-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-11">
+      <div class="row mt-1">
+        <div class="col-md-5 no-mg">
+          <div class="form-group">
+            <label class="col-md-12 col-xs-12 col-sm-8">{{'common.labels.amount'| translate}}
+              <span style="color:red;">*</span>
+            </label>
+            <div class="col-md-12 col-xs-12 col-sm-8 mt-1">
+              <div style="width:100%;">
+                <input type="text" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="col-md-5 no-mg">
+          <div class="form-group">
+            <label class="col-md-12 col-xs-12 col-sm-8">{{'common.labels.currency'| translate}}
+              <span style="color:red;">*</span>
+            </label>
+            <div class="col-md-6 col-xs-12 col-sm-8 mt-1">
+              <div style="width:100%;">
+                <select class="form-control">
+                  <option value="">{{'common.labels.select'| translate}}</option>
+                  <option value="">PESO</option>
+                  <option value="">GBP</option>
+                  <option value="">EURO</option>
+                  <option value="">USD</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-12 col-xs-12 col-sm-8">{{'projects.labels.modeOfPayment'| translate}}
+        <span style="color:red;">*</span>
+      </label>
+      <div class="row col-xs-12 col-sm-8">
+        <div class="col-md-9">
+          <select class="form-control">
+            <option value="">{{'common.labels.select'| translate}}</option>
+            <option value="">Cash</option>
+            <option value="">Cheque</option>
+            <option value="">Wire Transfer</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-12 col-xs-12 col-sm-8">{{'projects.labels.purpose'| translate}}
+        <span style="color:red;">*</span>
+      </label>
+      <div class="row col-xs-12 col-sm-8">
+        <div class="col-md-9">
+          <textarea type="text" class="form-control"></textarea>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-12 mt-3">
+
+      <button (click)="navigateTo(ROUTER_LINKS?.advancesList)" class="btn btn-success save-btn" >{{'common.labels.save'| translate}}</button>
+      <button (click)="navigateTo(ROUTER_LINKS?.advancesList)" [routerLink]="ROUTER_LINKS_FULL_PATH.projects" class="btn btn-danger ml-1 cancel-btn">{{'common.labels.cancel'| translate}}</button>
+
+    </div>
+
+  </div>
+
+
+</div>

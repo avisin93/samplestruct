@@ -1,0 +1,100 @@
+// import variables scss
+@import "../../../../../assets/styles/variables.style.scss";
+// import mixins scss
+@import "../../../../../assets/styles/mixins.style.scss";
+
+#basic-info {
+  .pull-right {
+    float: right;
+  }
+
+  .panel-outer-body {
+    // background-color: #f3f6f7;
+  }
+
+  .panel-inner-wrapper {
+    // background-color: #fafafa;
+    // box-shadow: 0 0px 0px 0px rgba(0, 0, 0, 0.14), 0 0px 1px 0 rgba(0, 0, 0, 0.098), 0 0px 5px 0 rgba(0, 0, 0, 0.084);
+    box-shadow: 0 0px 4px 0px rgba(0, 0, 0, 0.14), 0 1px 1px 0 rgba(0, 0, 0, 0.098), 0 1px 5px 0 rgba(0, 0, 0, 0.084);
+  }
+
+  .panel-inner-body {
+    // background-color: #f5f8f9;
+    box-shadow: none;
+    padding: 15px;
+  }
+
+  .item-center {
+    align-items: center;
+  }
+
+
+  .item-center.d-flex .fa {
+    padding-top: 15px;
+  }
+
+  .custom-fa-wrapper .fa {
+    padding-top: 0px !important;
+    padding-bottom: 20px;
+  }
+  .project-image-container {
+    width: 150px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+  }
+
+
+  .project-image-container .project-image-hover {
+    display: none;
+  }
+
+  .project-image-container:hover .project-image-hover {
+    display: block;
+  }
+
+  .project-image-container .upload-logo {
+    color: #fff;
+    font-weight: 700;
+    padding-top: 60px;
+    position: absolute;
+    text-align: center;
+    z-index: 9999999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .project-image-container .project-logo {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    margin: auto;
+    vertical-align: middle;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .project-image-container .image-container {
+    height: 150px;
+    width: 150px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    position: relative;
+    border: 1px solid #ccc;
+  }
+
+  .display-none {
+    display: none;
+  }
+
+  .h-inherit {
+    height: inherit;
+  }
+}

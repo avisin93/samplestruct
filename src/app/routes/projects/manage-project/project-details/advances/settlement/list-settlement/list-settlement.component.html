@@ -1,0 +1,110 @@
+<div class="list-settlement">
+  <div class="container-fluid">
+    <div class="row no-mg">
+      <div class="col-md-12 no-mg">
+        <div class="panel panel-primary mr-1">
+          <!-- <div class="panel-body"> -->
+            <div class="container">
+              <!-- <div class="card card-default"> -->
+                <div class="card-body">
+                  <form [formGroup]="settlementFilterForm" class="form-inline">
+                    <div class="row col-md-12 col-sm-12 col-xs-12 mt-3 no-pd">
+                      <div class="col-md-4">
+                        <ngx-select [items]="SETTLEMENT_TYPE" formControlName="type" placeholder="{{'payments.labels.type' | translate}}" data-toggle="tooltip" data-placement="top" title="{{'payments.labels.type' | translate}}">
+                        </ngx-select>
+                      </div>
+                      <div class="col-md-4">
+                        <input class="form-control mb-3 mr-sm-3" id="name" formControlName="name" type="text" placeholder="{{'common.labels.name'| translate}}" data-toggle="tooltip" data-placement="top" title="{{'common.labels.name'| translate}}"
+                        />
+
+                      </div>
+                      <div class="col-md-4">
+                        <ngx-select [items]="SETTLEMENT_STATUS" formControlName="status" placeholder="{{'common.labels.status' | translate}}" data-toggle="tooltip" data-placement="top" title="{{'common.labels.status' | translate}}">
+                        </ngx-select>
+                      </div>
+                    </div>
+
+                    <div class="row col-md-12 col-sm-12 col-xs-12 no-pd">
+                      <div class="col-md-4">
+                        <my-date-range-picker class="range-picker" formControlName="dateRange" id="dateRange" name="mydaterange" [options]="myDateRangePickerOptions"
+                          placeholder="{{'common.labels.daterange' | translate}}" data-toggle="tooltip" data-placement="top" title="{{'common.labels.daterange' | translate}}"></my-date-range-picker>
+                      </div>
+                      <div class="col-md-8">
+                        <button type="submit" (click)="search()" [disabled] = "isSearchClicked" class="btn btn-primary  mb-3 mr-sm-3"> {{'common.labels.search'| translate}}</button>
+                        <button  (click)="clear()" [disabled] = "isSearchClicked" class="btn btn-primary  mb-3 mr-sm-3" type="button"> {{'common.labels.clear'| translate}}</button>
+                      </div>
+                    </div>
+                  </form>
+                  <form [formGroup]="settlementFilterForm" class="form-inline">
+                    <div class="col-sm-12 no-pd" >
+                        <div *ngIf="showLoadingFlg">
+                      <app-loader class="col-md-12" [loading]="showLoadingFlg"></app-loader>
+                  </div>
+                      <div class="col-sm-12 table-responsive no-pd" [ngClass]="{'hide-content': showLoadingFlg}">
+                        <table class="table table-bordered text-center" style="width:100%;">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>{{'common.labels.name' | translate}}</th>
+                              <th>{{'common.labels.budgetLines' | translate}}</th>
+                              <th>{{'common.labels.settlementAmount' | translate}}</th>
+                              <th>{{'common.labels.status' | translate}}</th>
+                              <th *ngIf="!uiAccessPermissionsObj?.removeActions?.editSettlement && !uiAccessPermissionsObj?.removeActions?.cancelSettlement">{{'projects.labels.action' | translate}}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-container *ngIf="settlementList?.length == 0">
+                              <tr>
+                                <td colspan="12">
+                                  <p class="text-danger text-center">{{'common.labels.noRecord' | translate}}</p>
+                                </td>
+                              </tr>
+                            </ng-container>
+                            <tr *ngFor="let settlement of settlementList;let i=index">
+                              <td>{{i+index}}</td>
+                              <td>{{settlement?.i18n?.name}}
+                                <span *ngIf="settlement.settlementFor == 0">(Freelancer)</span>
+                                <span *ngIf="settlement.settlementFor == 1">(Vendor)</span>
+                              </td>
+                              <td>{{settlement?.budgetLines}}</td>
+                              <td>{{getConvertedValue(settlement?.defaultCurrencyAmount,settlement?.settlementAmount)}}</td>
+                              <td *ngIf="settlement?.status == 1">Draft</td>
+                              <td *ngIf="!settlement?.status">-</td>
+                              <td *ngIf="settlement?.status == 2">Settled</td>
+                              <td *ngIf="settlement?.status == 3">Cancelled</td>
+                              <ng-container *ngIf="!uiAccessPermissionsObj?.removeActions?.editSettlement && !uiAccessPermissionsObj?.removeActions?.cancelSettlement">
+                                <td>
+                                  <ui-control-permission [fieldName]="'editSettlement'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions" [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <i *ngIf="!(settlement?.status == 2 || settlement?.status == 3) && !settlement?.ownSettlement" class="edit fa fa-edit edit-ico f-17 c-pointer ml-2" tooltip="Edit"
+                                      (click)="navigateTo()"></i>
+                                  </ui-control-permission>
+                                  <ui-control-permission [fieldName]="'cancelSettlement'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions" [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <i *ngIf="!(settlement?.status == 2 || settlement?.status == 3) && !settlement?.ownSettlement" tooltip="Cancel"
+                                      class="fa fa-times-circle cancel-icon f-18 ml-2 ptr" (click)="deleteSettlement(settlement)"></i>
+                                  </ui-control-permission>
+                                </td>
+                              </ng-container>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+               <div class="row">
+                <div class="col-md-12" *ngIf="totalItems>itemsPerPage">
+                  <!-- <pagination class="pagination-sm" ></pagination> -->
+                  <pagination *ngIf="config.paging" class="pagination-sm" [(ngModel)]="currentPage" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage"
+                  [firstText]="'common.labels.first' | translate" [lastText]="'common.labels.last' | translate"
+                  [previousText]="'common.labels.previous' | translate" [nextText]="'common.labels.next' | translate" [maxSize]="maxSize" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)" (numPages)="numPages = $event">
+                  </pagination>
+                </div>
+             </div>
+              <!-- </div> -->
+            </div>
+          <!-- </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

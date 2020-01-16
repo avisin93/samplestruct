@@ -1,0 +1,210 @@
+<div class="list-advances">
+  <div class="container-fluid">
+
+
+    <div class="row no-mg">
+
+      <div class="col-md-12 no-mg">
+        <div class="panel panel-primary mr-1">
+          <!-- <div class="panel-body"> -->
+          <div class="container">
+            <!-- <br/> -->
+
+            <!-- <div class="card card-default"> -->
+            <div class="card-body">
+              <form [formGroup]="advancesFilterForm" novalidate>
+                <div class="row no-pd">
+                  <div class="row mb-3 col-md-8 no-mg" [ngClass]="(hideAddAdvancesFlag && hideSettleAdvancesFlag) ? 'col-md-12' : (hideAddAdvancesFlag || hideSettleAdvancesFlag) ? 'col-md-10 col-lg-10' : 'col-md-8 col-lg-8'">
+                    <div class="col-md-4">
+                      <ngx-select formControlName="type" [items]="ADVANCES_FOR_TYPE" placeholder="{{'common.labels.type'| translate}}" data-toggle="tooltip" data-placement="top" title="{{'common.labels.type'| translate}}">
+                      </ngx-select>
+                    </div>
+                    <div class="col-md-4">
+                      <input formControlName="name" class="form-control" id="" type="text" placeholder="{{'common.labels.name'| translate}}" data-toggle="tooltip" data-placement="top" title="{{'common.labels.name'| translate}}"/>
+                    </div>
+                    <div class="col-md-4">
+                      <ngx-select formControlName="status" [items]="ADVANCES_STATUS_CONST" placeholder="{{'common.labels.status'| translate}}" data-toggle="tooltip" data-placement="top" title="{{'common.labels.status'| translate}}">
+
+                      </ngx-select>
+                    </div>
+                  </div>
+                  <div class="col-md-4" [ngClass]="(hideAddAdvancesFlag && hideSettleAdvancesFlag) ? '' : (hideAddAdvancesFlag || hideSettleAdvancesFlag) ? 'col-md-2 col-lg-2' : 'col-md-4 col-lg-4'">
+                    <ui-control-permission [fieldName]="'addAdvance'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions" [uiPermissionObj]="uiAccessPermissionsObj">
+                      <button class="mr-sm-3 btn btn-primary dropdown-toggle default-btn" type="button" data-toggle="dropdown">{{'projects.labels.payAdvances'| translate}}
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" style="padding: 1%;">
+                        <li>
+                          <a style="text-decoration: none;cursor: pointer;" (click)="navigateTo(ROUTER_LINKS_FULL_PATH?.manageFreelancerAdvance)">{{'common.labels.freelancer'| translate}}</a>
+                        </li>
+                        <li>
+                          <a style="text-decoration: none;cursor: pointer;" (click)="navigateTo(ROUTER_LINKS_FULL_PATH?.manageVendorAdvance)">{{'common.labels.vendor'| translate}}</a>
+                        </li>
+                        <!-- <li>
+                          <a style="text-decoration: none;cursor: pointer;" (click)="navigateTo(ROUTER_LINKS?.advancesLocation)">{{'common.labels.location'| translate}}</a>
+                        </li> -->
+                        <!-- <li>
+                            <a style="text-decoration: none;cursor: pointer;" (click)="navigateTo(ROUTER_LINKS?.advancesTalent)">{{'common.labels.talent'| translate}}</a>
+                          </li> -->
+                      </ul>
+                    </ui-control-permission>
+                    <!-- </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12"> -->
+                    <!-- <div class="col-md-4"> -->
+                    <ui-control-permission [fieldName]="'settleAdvance'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions" [uiPermissionObj]="uiAccessPermissionsObj">
+                      <button class="mr-sm-3 btn btn-primary default-btn" [disabled]="disableSettleButton" (click)="settleAdvances()" type="button">{{'projects.labels.settleAdvances'| translate}}</button>
+                    </ui-control-permission>
+                    <!-- </div> -->
+                  </div>
+                </div>
+
+                <div class="row no-pd table-row">
+                  <div class="row no-mg col-md-12">
+                    <div class="col-md-4">
+                      <my-date-range-picker class="range-picker" formControlName="dateRange" name="mydaterange" [options]="myDateRangePickerOptions"
+                        placeholder="{{'common.labels.daterange'| translate}}" data-toggle="tooltip" data-placement="top" title="{{'common.labels.daterange'| translate}}"></my-date-range-picker>
+                    </div>
+                    <div class="col-md-5">
+                      <button (click)="search()" [disabled] = "isSearchClicked" class="btn btn-primary  mb-3 mr-sm-3" type="submit"> {{'common.labels.search'| translate}}</button>
+                      <button class="btn btn-primary  mb-3 mr-sm-3" [disabled] = "isSearchClicked" (click)="clear()" type="button"> {{'common.labels.clear'| translate}}</button>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+              <form [formGroup]="settleAdvancesForm">
+                <div class="col-sm-12 no-pd">
+                  <div *ngIf="showLoadingFlg">
+                    <app-loader class="col-md-12" [loading]="showLoadingFlg"></app-loader>
+                  </div>
+                  <div class="col-sm-12 table-responsive no-pd" [ngClass]="{'hide-content': showLoadingFlg}">
+
+                    <table class="table table-bordered text-center" style="width:100%;">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+
+                          <ng-container *ngIf="!uiAccessPermissionsObj?.removeActions?.settleAdvance">
+                            <th>
+                              <!-- <div class="checkbox c-checkbox">
+                                    <label>
+                                      <input type="checkbox" (change)="checkAll()" class="check-box" formControlName="checkAll" />
+                                      <span class="fa fa-check"></span>
+                                    </label>
+                                  </div> -->
+                            </th>
+                          </ng-container>
+                          <th>{{'common.labels.name'| translate}}</th>
+                          <th>{{'common.labels.amount'| translate}}</th>
+                          <th>{{'common.labels.status'| translate}}</th>
+                          <th>Settlement status</th>
+                          <th>{{'common.labels.date'| translate}}</th>
+                          <th *ngIf="!uiAccessPermissionsObj?.removeActions?.editAdvance && !uiAccessPermissionsObj?.removeActions?.cancelAdvance">{{'common.labels.action'| translate}}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngIf="advancesList?.length == 0">
+                          <tr>
+                            <td colspan="12">
+                              <p class="text-danger text-center">{{'common.labels.recordNotFound' | translate}}</p>
+                            </td>
+                          </tr>
+                        </ng-container>
+                        <ng-container formArrayName="advancesArr">
+                          <tr *ngFor="let item of settleAdvancesForm.controls.advancesArr['controls']; let i=index;let lst=last;">
+                            <ng-container [formGroupName]="i">
+                              <td>{{i+index}}</td>
+                              <ng-container *ngIf="!uiAccessPermissionsObj?.removeActions?.settleAdvance">
+                                <td>
+                                  <div class="checkbox c-checkbox mt-2" *ngIf="!item?.value?.ownAdvance">
+                                    <label>
+                                      <input type="checkbox" (change)="checkSettlementAdvances(item,i)" class="check-box" formControlName="checkAdvances" />
+                                      <span class="fa fa-check"></span>
+                                    </label>
+                                  </div>
+                                </td>
+                              </ng-container>
+                              <td>{{item?.value?.name}}
+                                <div *ngIf="item?.value?.advancesFor == 0">
+                                  <p> ({{'common.labels.freelancer'| translate}})</p>
+                                </div>
+                                <div *ngIf="item?.value?.advancesFor == 1">
+                                  <p> ({{'common.labels.vendor'| translate}})</p>
+                                </div>
+                              </td>
+                              <td>{{getConvertedValue(item?.value?.totalAmountUsd,item?.value?.amount)}}</td>
+                              <td>
+                                <p *ngIf="item?.value?.approvalStatus == ADVANCES_STATUS_FLAG.generated && item?.value?.cancelStatus != ADVANCES_STATUS_FLAG.cancelled">
+                                  {{item?.value?.approverName}} ({{'projects.labels.generated'| translate}})
+                                </p>
+                                <p *ngIf="item?.value?.approvalStatus == ADVANCES_STATUS_FLAG.underreview && item?.value?.cancelStatus != ADVANCES_STATUS_FLAG.cancelled">
+                                  {{item?.value?.approverName}} ({{'projects.labels.underreview'| translate}})
+                                </p>
+                                <p *ngIf="item?.value?.approvalStatus == ADVANCES_STATUS_FLAG.approved && item?.value?.cancelStatus != ADVANCES_STATUS_FLAG.cancelled">
+                                  {{item?.value?.approverName}} ({{'projects.labels.approved'| translate}})
+                                </p>
+                                <p *ngIf="item?.value?.approvalStatus == ADVANCES_STATUS_FLAG.disapproved && item?.value?.cancelStatus != ADVANCES_STATUS_FLAG.cancelled">
+                                  {{item?.value?.approverName}} ({{'projects.labels.rejected'| translate}})
+                                </p>
+                                <p *ngIf="item?.value?.cancelStatus == ADVANCES_STATUS_FLAG.cancelled">
+                                  {{'projects.labels.cancelled'| translate}}
+                                </p>
+                                <p *ngIf="item?.value?.approvalStatus == ADVANCES_STATUS_FLAG.autoappved && item?.value?.cancelStatus != ADVANCES_STATUS_FLAG.cancelled">
+                                  {{item?.value?.approverName}} ({{'projects.labels.autoapproved'| translate}})
+                                </p>
+                              </td>
+                              <td>{{settlementStatusKeyArr[item?.value?.settlementStatus]}}</td>
+                              <td>{{item?.value?.paymentDate | dateFormat}}</td>
+                              <ng-container *ngIf="!uiAccessPermissionsObj?.removeActions?.editAdvance && !uiAccessPermissionsObj?.removeActions?.cancelAdvance">
+                                <td>
+                                  <ui-control-permission [fieldName]="'editAdvance'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions" [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <i tooltip="{{'common.labels.edit'|translate}}" *ngIf="item?.value?.canEdit == true && item?.value?.canCancel && !item?.value?.ownAdvance"
+                                      (click)="editAdvance(item?.value?.id,item?.value?.advancesFor)" class="edit fa fa-edit edit-ico f-17 c-pointer ml-2"></i>
+                                  </ui-control-permission>
+                                  <ui-control-permission [fieldName]="'cancelAdvance'" [disableProperty]="UI_ACCESS_PERMISSION_CONST.removeActions" [uiPermissionObj]="uiAccessPermissionsObj">
+                                    <i tooltip="{{'common.labels.cancel'|translate}}" (click)="cancleAdvance(item?.value?.id)" *ngIf="item?.value?.canCancel == true  && !item?.value?.ownAdvance"
+                                      class="fa fa-times-circle f-18 ml-1 ptr"></i>
+                                  </ui-control-permission>
+                                </td>
+                              </ng-container>
+                            </ng-container>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </form>
+              <div class="row">
+                <div class="col-md-12" *ngIf="totalItems>itemsPerPage">
+                  <pagination *ngIf="config.paging" class="pagination-sm" [(ngModel)]="currentPage" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage"
+                  [firstText]="'common.labels.first' | translate" [lastText]="'common.labels.last' | translate"
+                  [previousText]="'common.labels.previous' | translate" [nextText]="'common.labels.next' | translate" [maxSize]="maxSize" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)" (numPages)="numPages = $event">
+                  </pagination>
+                </div>
+              </div>
+            </div>
+
+            <!-- </div> -->
+
+
+          </div>
+
+
+          <!-- </div> -->
+
+        </div>
+        <!-- <div class="col-md-12 mt-3 no-mg">
+
+          <button [routerLink]="ROUTER_LINKS_FULL_PATH.projects" (click)="addProject()" class="btn btn-success" style="color: aliceblue">{{'common.labels.save'| translate}}</button>
+          <button [routerLink]="ROUTER_LINKS_FULL_PATH.projects" class="btn btn-danger ml-1" style="color: aliceblue">{{'common.labels.cancel'| translate}}</button>
+
+        </div> -->
+      </div>
+    </div>
+
+
+  </div>
+</div>
