@@ -1,5 +1,0 @@
-<div [ngClass]="oneSubtab ? 'col-md-4' : 'col-md-6'" style="padding-top: 1.5rem;" [formGroup]="formGroup">
-  <mat-radio-group class="col-md-12" [formControl]="formGroup.controls[field.database_column_name]">
-    <mat-radio-button *ngFor="let opt of arrayData" [value]="opt.code">{{opt.value}}</mat-radio-button>
-  </mat-radio-group>
-</div>
