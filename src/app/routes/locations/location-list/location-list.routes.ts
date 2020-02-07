@@ -1,6 +1,6 @@
 /**
 * Component     : locationlist
-* Author        : Boston Byte LLC
+ 
 * Creation Date : 11th July 2018
 */
 

@@ -1,6 +1,6 @@
 /**
 * Service       : ManageReviewService
-* Author        : Boston Byte LLC
+ 
 * Creation Date : 1 july 2019
 */
 

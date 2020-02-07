@@ -1,7 +1,7 @@
 /**
 * Component     : LoginService
-* Author        : Boston Byte LLC
-* Creation Date : 3rd August 2017
+ 
+* Creation Date : 3rd Jan 2020
 */
 
 import { Injectable } from '@angular/core';

@@ -1,6 +1,6 @@
 /**
 * Component     : RecoverComponent
-* Author        : Boston Byte LLC
+ 
 * Creation Date : 23 May 2018
 */
 

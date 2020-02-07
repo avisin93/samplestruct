@@ -1,6 +1,6 @@
 /**
 * Component     : Locations Review
-* Author        : Boston Byte LLC
+ 
 * Creation Date : 24th June 2019
 */
 

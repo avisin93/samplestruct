@@ -1,6 +1,6 @@
 /**
 * Component     : ResetpasswordService
-* Author        : Boston Byte LLC
+ 
 * Creation Date : 23 rd May 2018
 */
 

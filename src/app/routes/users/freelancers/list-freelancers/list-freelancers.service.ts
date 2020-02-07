@@ -1,7 +1,7 @@
 /**
 * Service       : ListAccommodationService
-* Author        : Boston Byte LLC
-* Creation Date : 4th Dec 2017
+ 
+* Creation Date : 4th Dec 2020
 */
 
 import { Injectable } from '@angular/core';

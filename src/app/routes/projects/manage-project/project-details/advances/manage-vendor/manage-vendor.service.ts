@@ -1,6 +1,6 @@
 /**
 * Component     : LoginService
-* Author        : Boston Byte LLC
+ 
 * Creation Date : 27 July 2018
 */
 

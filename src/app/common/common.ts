@@ -4,7 +4,7 @@ declare var $: any;
 
 export class Ng2DataTableMethods {
 
-  /**
+  /** 
 method to get data for current page
 @param page as number
 @param data as array

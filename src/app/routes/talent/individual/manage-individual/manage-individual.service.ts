@@ -1,6 +1,6 @@
 /**
 * Service     : ManageIndividualService
-* Author        : Boston Byte LLC
+ 
 * Creation Date : 19th April, 2019
 */
 

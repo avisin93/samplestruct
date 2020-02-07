@@ -1,6 +1,6 @@
 /**
 * Service       : ListScouterService
-* Author        : Boston Byte LLC
+ 
 * Creation Date : 6th Mar 2019
 */
 

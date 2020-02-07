@@ -1,7 +1,7 @@
 /**
 * Component     : Configuration
-* Author        : Boston Byte LLC
-* Creation Date : 3rd August 2017
+ 
+* Creation Date : 3rd Jan 2020
 */
 
 import { environment as env } from '../../environments/environment';
